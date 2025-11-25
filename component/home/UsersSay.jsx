@@ -10,7 +10,7 @@ export default function TestimonialsSection() {
       role: "CEO, company",
       rating: 4,
       text: "I've tried many platforms, but UI Wiki stands out for its attention to detail and clean aesthetics. Highly recommend!",
-      avatar: "👨‍💼",
+      avatar: "/client/Ellipse  (1).png",
     },
     {
       id: 2,
@@ -18,7 +18,7 @@ export default function TestimonialsSection() {
       role: "CFO, company",
       rating: 4,
       text: "UI Wiki transformed our design process! The templates are modern, user-friendly, and saved us countless hours",
-      avatar: "👨‍💼",
+      avatar: "/client/Ellipse  (3).png",
     },
     {
       id: 3,
@@ -26,7 +26,7 @@ export default function TestimonialsSection() {
       role: "CTO, company",
       rating: 4,
       text: "As a freelance designer, UI Wiki has become my go-to design solution for all my projects",
-      avatar: "👩‍💼",
+      avatar: "/client/Ellipse  (2).png",
     },
   ];
 
@@ -37,7 +37,7 @@ export default function TestimonialsSection() {
       role: "CEO, company",
       rating: 3,
       text: "The user interface and sleek templates of UI Wiki helped me create a stunning portfolio website in just a day!",
-      avatar: "👨‍💼",
+      avatar: "/client/Ellipse  (4).png",
     },
     {
       id: 5,
@@ -45,7 +45,7 @@ export default function TestimonialsSection() {
       role: "UI Designer, company",
       rating: 4,
       text: "UI Wiki's grid section templates are visually impressive and easy to customize. They've elevated my project presentations.",
-      avatar: "👨‍💼",
+      avatar: "/client/Ellipse  (5).png",
     },
     {
       id: 6,
@@ -53,7 +53,7 @@ export default function TestimonialsSection() {
       role: "UX Designer, company",
       rating: 5,
       text: "We revamped our company website using UI Wiki, and the feedback has been overwhelmingly positive!",
-      avatar: "👨‍💼",
+      avatar: "/client/Ellipse  (2).png",
     },
   ];
 
@@ -83,7 +83,11 @@ export default function TestimonialsSection() {
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center text-3xl overflow-hidden">
-            {testimonial.avatar}
+            <img
+              src={testimonial.avatar}
+              alt="Profile/client"
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
           <div>
             <h4 className="font-bold text-gray-800 text-lg">
