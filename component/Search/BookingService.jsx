@@ -515,6 +515,20 @@ export default function BookingModal({ isOpen, onClose, providerData }) {
             </div>
           </div>
 
+          <div>
+            <span className="font-semibold text-black font-montserrat">
+              Schedule
+            </span>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="border rounded-lg p-4 text-xs">
+                Specific dates
+                </div>
+              <div className="border rounded-lg p-4 text-xs">
+                Repeat Weekly
+                </div>
+            </div>
+          </div>
+
           {/* Start/End Date and Time */}
           <div className="grid grid-cols-2 gap-3">
             <div>

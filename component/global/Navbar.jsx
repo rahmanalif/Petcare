@@ -1,11 +1,12 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md">
       <nav className="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto">
-      <div className="relative w-32 h-12">
+      <Link href="/" className="relative w-32 h-12 cursor-pointer">
         <Image
           src="/Logo.png"
           alt="Wuffoos Logo"
@@ -13,7 +14,7 @@ export default function Navbar() {
           className="object-contain"
           priority
         />
-      </div>
+      </Link>
       <div className="hidden md:flex items-center gap-8">
         <a href="#" className="text-gray-700 hover:text-teal-600 transition">Home</a>
         <a href="#" className="text-gray-700 hover:text-teal-600 transition">Home</a>

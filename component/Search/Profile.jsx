@@ -471,17 +471,17 @@ export default function ProviderProfilePage() {
                   };
 
                   return (
-                    <div key={index} className="py-3 border-b last:border-b-0">
+                    <div key={index} className={`py-3 ${index === 0 || index === 9 ? 'border-b' : ''} ${index !== 0 && index !== 9 ? 'border-b-0' : ''}`}>
                       <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 ">
                           <div className="flex items-center gap-2">
                             {getIcon()}
                             <div className="flex-1">
-                              <div className="text-sm font-semibold font-montserrat text-gray-900">
+                              <div className="text-sm  font-semibold font-montserrat text-gray-900">
                                 {service.name}
                               </div>
                               {service.note && (
-                                <div className="text-xs text-gray-500 mt-0.5 font-montserrat">
+                                <div className="text-xs  text-gray-500 mt-0.5 font-montserrat">
                                   {service.note}
                                 </div>
                               )}
