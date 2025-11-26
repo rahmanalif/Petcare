@@ -6,14 +6,14 @@ import { MapPin, Star, RefreshCw, CheckCircle } from "lucide-react";
 const SitterCard = ({ sitter }) => {
   return (
     <Link href="/profile">
-      <Card className="hover:shadow-md transition-shadow">
-        <CardContent className="p-6">
+      <Card className="hover:shadow-md transition-shadow p-4 m-4">
+        <CardContent className="p-4 ">
           <div className="flex items-start justify-between">
             <div className="flex flex-col gap-3">
               {/* Top Section - Profile and Name */}
               <div className="flex gap-4">
                 {/* Profile Image */}
-                <div className="w-16 h-16 rounded-full bg-gray-300 shrink-0">
+                <div className="w-28 h-28 rounded-full bg-gray-300 shrink-0">
                   <img
                     src="/Ellipse 52.png"
                     alt="Profile"
@@ -23,7 +23,7 @@ const SitterCard = ({ sitter }) => {
 
                 {/* Name and Location */}
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg text-gray-900 font-montserrat">
+                  <h3 className="font-semibold text-lg text-gray-900 pt-8 font-montserrat">
                     {sitter.name}
                   </h3>
                   <div className="flex items-center gap-1 text-sm text-gray-600 font-montserrat">
@@ -39,13 +39,27 @@ const SitterCard = ({ sitter }) => {
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-current text-gray-700" />
                   <span className="font-semibold">{sitter.rating}</span>
-                  <span className="text-gray-600">({sitter.reviews} reviews)</span>
-                </div>
-
-                {/* Repeat pet owners */}
-                <div className="flex items-center gap-1 text-gray-600">
-                  <RefreshCw className="w-4 h-4" />
-                  <span>Repeat pet owners</span>
+                  <span className="text-gray-600">
+                    ({sitter.reviews} reviews)
+                  </span>
+                  {/* Repeat pet owners */}
+                  <div className="flex items-center gap-1 pl-26 text-gray-600">
+                    <svg
+                      width="16"
+                      height="14"
+                      viewBox="0 0 16 14"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M5.18336 0.15771C5.39364 -0.0525701 5.73458 -0.0525701 5.94486 0.15771L7.38074 1.59361C7.53474 1.74761 7.58083 1.97921 7.49748 2.18042C7.41412 2.38163 7.21776 2.51282 7.00001 2.51282H5.56411C3.08591 2.51282 1.07692 4.5218 1.07692 7.00001C1.07692 9.47815 3.08608 11.4872 5.56431 11.4872H5.92308C6.22047 11.4872 6.46155 11.7283 6.46155 12.0257C6.46155 12.323 6.22047 12.5641 5.92308 12.5641H5.56431C2.49136 12.5641 0 10.073 0 7.00001C0 3.92703 2.49113 1.4359 5.56411 1.4359H5.70005L5.18336 0.919211C4.97308 0.70893 4.97308 0.367991 5.18336 0.15771ZM8.97437 1.97436C8.97437 1.67698 9.21546 1.4359 9.51283 1.4359H9.87181C12.9448 1.4359 15.4359 3.92703 15.4359 7.00001C15.4359 10.073 12.9448 12.5641 9.87181 12.5641H9.7359L10.2525 13.0808C10.4628 13.2911 10.4628 13.632 10.2525 13.8423C10.0422 14.0526 9.70137 14.0526 9.49108 13.8423L8.05518 12.4064C7.90118 12.2524 7.85509 12.0208 7.93844 11.8196C8.0218 11.6184 8.21815 11.4872 8.43591 11.4872H9.87181C12.35 11.4872 14.359 9.47823 14.359 7.00001C14.359 4.5218 12.35 2.51282 9.87181 2.51282H9.51283C9.21546 2.51282 8.97437 2.27174 8.97437 1.97436Z"
+                        fill="#035F75"
+                      />
+                    </svg>
+                    <span>Repeat pet owners</span>
+                  </div>
                 </div>
 
                 {/* Availability */}

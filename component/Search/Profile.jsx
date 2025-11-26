@@ -352,8 +352,8 @@ export default function ProviderProfilePage() {
             {!showBooking ? (
               <>
                 {/* Profile Card */}
-                <Card>
-              <CardContent className="p-6">
+                <Card >
+              <CardContent className="p-6 m-2">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-16 h-16 rounded-full bg-gray-300">
                     <img

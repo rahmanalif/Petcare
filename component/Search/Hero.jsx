@@ -142,6 +142,16 @@ export default function FindMatchSection() {
   const [endTime, setEndTime] = useState("11:00pm");
   const [selectedPet, setSelectedPet] = useState("bob");
   const [showMap, setShowMap] = useState(false);
+  const [schedule, setSchedule] = useState("oneTime"); // "oneTime" or "repeatWeekly"
+  const [daycareDate, setDaycareDate] = useState("");
+  const [selectedDays, setSelectedDays] = useState({
+    M: false,
+    T: false,
+    W: false,
+    T2: false,
+    F: false,
+    S: false,
+  });
 
   const [filters, setFilters] = useState({
     sitterAtHome: true,
@@ -162,6 +172,39 @@ export default function FindMatchSection() {
     dogFirstAid: false,
   });
 
+  // Daycare specific filters
+  const [daycareFilters, setDaycareFilters] = useState({
+    sitterAtHome: true,
+    atSittersFacility: false,
+    atYourHome: false,
+    home: true,
+    flats: false,
+    allTypes: false,
+    sitterHomeFullTime: true,
+    otherAtHomeFullTime: false,
+    hasFencedGarden: true,
+    petsAllowedOnFurniture: false,
+    noSmokingHome: false,
+    doesntOwnDogs: true,
+    doesntOwnCats: false,
+    onlyOneBooking: false,
+    doesntOwnCagedPets: false,
+    hasNoChildren: true,
+    hasNoChildren0to3: false,
+    hasNoChildren6to12: false,
+    acceptsNonSpayed: true,
+    acceptsNonNeutered: false,
+    bathingGrooming: false,
+    dogFirstAid: false,
+  });
+
+  // Dog Walking specific filters
+  const [walkingFilters, setWalkingFilters] = useState({
+    availableTime11am3am: false,
+    availableTime3am10am: false,
+    dogFirstAid: false,
+  });
+
   const sitters = Array(6).fill({
     name: "Seam Rahman",
     location: "New York, NY",
@@ -176,6 +219,20 @@ export default function FindMatchSection() {
 
   const toggleFilter = (filterKey) => {
     setFilters((prev) => ({
+      ...prev,
+      [filterKey]: !prev[filterKey],
+    }));
+  };
+
+  const toggleDaycareFilter = (filterKey) => {
+    setDaycareFilters((prev) => ({
+      ...prev,
+      [filterKey]: !prev[filterKey],
+    }));
+  };
+
+  const toggleWalkingFilter = (filterKey) => {
+    setWalkingFilters((prev) => ({
       ...prev,
       [filterKey]: !prev[filterKey],
     }));
@@ -205,10 +262,11 @@ export default function FindMatchSection() {
                 {/* Filter and Location Buttons */}
                 <div className="flex gap-2">
                   <Button
-                    className={`font-montserrat transition-all duration-200 ${
+                    variant="outline"
+                    className={`font-montserrat border-2 ${
                       !showMap
-                        ? 'bg-[#035F75] text-white hover:bg-[#024a5c]'
-                        : 'bg-white text-[#035F75] border-2 border-[#035F75] hover:bg-[#035F75] hover:text-white'
+                        ? 'bg-[#035F75] text-white border-[#035F75]'
+                        : 'bg-white text-[#035F75] border-[#035F75]'
                     }`}
                     onClick={() => setShowMap(false)}
                   >
@@ -217,10 +275,10 @@ export default function FindMatchSection() {
                   </Button>
                   <Button
                     variant="outline"
-                    className={`border-2 border-[#035F75] font-montserrat transition-all duration-200 ${
+                    className={`border-2 border-[#035F75] font-montserrat ${
                       showMap
-                        ? 'bg-[#035F75] text-white hover:bg-[#024a5c]'
-                        : 'text-[#035F75] bg-white hover:bg-[#035F75] hover:text-white'
+                        ? 'bg-[#035F75] text-white'
+                        : 'bg-white text-[#035F75]'
                     }`}
                     onClick={() => setShowMap(true)}
                   >
@@ -267,66 +325,264 @@ export default function FindMatchSection() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="boarding" className={"font-montserrat"}><BoardingIcon className="inline-block mr-2" /> Boarding</SelectItem>
-                      <SelectItem value="daycare" className={"font-montserrat"}><DaycareIcon className="inline-block mr-2" />Daycare</SelectItem>
-                      <SelectItem value="walking" className={"font-montserrat"}><WalkingIcon className="inline-block mr-2" />Walking</SelectItem>
+                      <SelectItem value="Doggy Day Care" className={"font-montserrat"}><DaycareIcon className="inline-block mr-2" />Doggy Day Care</SelectItem>
+                      <SelectItem value="Dog Walking" className={"font-montserrat"}><WalkingIcon className="inline-block mr-2" />Dog Walking</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+                  
 
-                {/* Date and Time Inputs - Grouped */}
-                <div className="border border-gray-200 rounded-lg p-4 space-y-4">
-                  {/* Date Inputs */}
-                  <div className="grid grid-cols-2 gap-3">
+                {/* Date and Time Inputs - Conditional based on lookingFor */}
+                {lookingFor === "Doggy Day Care" ? (
+                  /* Daycare specific fields */
+                  <>
+                    {/* Schedule */}
                     <div>
-                      <label className="block text-xs font-semibold mb-1 font-montserrat">
-                        Start date
+                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                        Schedule
                       </label>
-                      <Input
-                        type="text"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
-                      />
+                      <div className="grid grid-cols-2 gap-3">
+                        <div
+                          onClick={() => setSchedule("oneTime")}
+                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                            schedule === "oneTime"
+                              ? "border-[#035F75] bg-[#035F75]/5"
+                              : "border-gray-200 hover:border-[#035F75]"
+                          }`}
+                        >
+                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <label className="cursor-pointer font-montserrat">One Time</label>
+                        </div>
+                        <div
+                          onClick={() => setSchedule("repeatWeekly")}
+                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                            schedule === "repeatWeekly"
+                              ? "border-[#035F75] bg-[#035F75]/5"
+                              : "border-gray-200 hover:border-[#035F75]"
+                          }`}
+                        >
+                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <label className="cursor-pointer font-montserrat">Repeat Weekly</label>
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Days of the week - Show only when Repeat Weekly is selected */}
+                    {schedule === "repeatWeekly" && (
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 font-montserrat">
+                          Days of the week
+                        </label>
+                        <div className="flex gap-2 justify-between">
+                          {[
+                            { key: "M", label: "M" },
+                            { key: "T", label: "T" },
+                            { key: "W", label: "W" },
+                            { key: "T2", label: "T" },
+                            { key: "F", label: "F" },
+                            { key: "S", label: "S" },
+                          ].map((day) => (
+                            <button
+                              key={day.key}
+                              onClick={() =>
+                                setSelectedDays((prev) => ({
+                                  ...prev,
+                                  [day.key]: !prev[day.key],
+                                }))
+                              }
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold font-montserrat transition-colors ${
+                                selectedDays[day.key]
+                                  ? "bg-[#035F75] text-white"
+                                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                              }`}
+                            >
+                              {day.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Dates */}
                     <div>
-                      <label className="block text-xs font-semibold mb-1 font-montserrat">
-                        End date
+                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                        Dates
                       </label>
-                      <Input
-                        type="text"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
-                      />
+                      <div className="relative">
+                        <Input
+                          type="text"
+                          placeholder="DD/MM/YY"
+                          value={daycareDate}
+                          onChange={(e) => setDaycareDate(e.target.value)}
+                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 font-montserrat focus-visible:ring-0"
+                        />
+                        <svg
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="2" />
+                          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2" />
+                          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" />
+                          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" />
+                        </svg>
+                      </div>
+                    </div>
+                  </>
+                ) : lookingFor === "Dog Walking" ? (
+                  /* Dog Walking specific fields */
+                  <>
+                    {/* Schedule */}
+                    <div>
+                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                        Schedule
+                      </label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div
+                          onClick={() => setSchedule("oneTime")}
+                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                            schedule === "oneTime"
+                              ? "border-[#035F75] bg-[#035F75]/5"
+                              : "border-gray-200 hover:border-[#035F75]"
+                          }`}
+                        >
+                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <label className="cursor-pointer font-montserrat">One Time</label>
+                        </div>
+                        <div
+                          onClick={() => setSchedule("repeatWeekly")}
+                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                            schedule === "repeatWeekly"
+                              ? "border-[#035F75] bg-[#035F75]/5"
+                              : "border-gray-200 hover:border-[#035F75]"
+                          }`}
+                        >
+                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <label className="cursor-pointer font-montserrat">Repeat Weekly</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Days of the week - Show only when Repeat Weekly is selected */}
+                    {schedule === "repeatWeekly" && (
+                      <div>
+                        <label className="block text-sm font-semibold mb-2 font-montserrat">
+                          Days of the week
+                        </label>
+                        <div className="flex gap-2 justify-between">
+                          {[
+                            { key: "M", label: "M" },
+                            { key: "T", label: "T" },
+                            { key: "W", label: "W" },
+                            { key: "T2", label: "T" },
+                            { key: "F", label: "F" },
+                            { key: "S", label: "S" },
+                          ].map((day) => (
+                            <button
+                              key={day.key}
+                              onClick={() =>
+                                setSelectedDays((prev) => ({
+                                  ...prev,
+                                  [day.key]: !prev[day.key],
+                                }))
+                              }
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold font-montserrat transition-colors ${
+                                selectedDays[day.key]
+                                  ? "bg-[#035F75] text-white"
+                                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                              }`}
+                            >
+                              {day.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Dates */}
+                    <div>
+                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                        Dates
+                      </label>
+                      <div className="relative">
+                        <Input
+                          type="text"
+                          placeholder="DD/MM/YY"
+                          value={daycareDate}
+                          onChange={(e) => setDaycareDate(e.target.value)}
+                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 font-montserrat focus-visible:ring-0"
+                        />
+                        <svg
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="2" />
+                          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2" />
+                          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" />
+                          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" />
+                        </svg>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  /* Boarding fields */
+                  <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+                    {/* Date Inputs */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                          Start date
+                        </label>
+                        <Input
+                          type="text"
+                          value={startDate}
+                          onChange={(e) => setStartDate(e.target.value)}
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                          End date
+                        </label>
+                        <Input
+                          type="text"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Time Inputs */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                          Start time
+                        </label>
+                        <Input
+                          type="text"
+                          value={startTime}
+                          onChange={(e) => setStartTime(e.target.value)}
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                          End time
+                        </label>
+                        <Input
+                          type="text"
+                          value={endTime}
+                          onChange={(e) => setEndTime(e.target.value)}
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                        />
+                      </div>
                     </div>
                   </div>
-
-                  {/* Time Inputs */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold mb-1 font-montserrat">
-                        Start time
-                      </label>
-                      <Input
-                        type="text"
-                        value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
-                        className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold mb-1 font-montserrat">
-                        End time
-                      </label>
-                      <Input
-                        type="text"
-                        value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
-                        className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
-                      />
-                    </div>
-                  </div>
-                </div>
+                )}
 
                 {/* Pet Selection */}
                 <div>
@@ -367,118 +623,313 @@ export default function FindMatchSection() {
                 <div className="border-t pt-4">
                   <h3 className="font-semibold mb-4 font-montserrat">Filters</h3>
 
-                  {/* Daytime availability */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold mb-2 font-montserrat">
-                      Daytime availability
-                    </h4>
-                    {/* <FilterOption
-                      label="Sitter is home full-time"
-                      checked={filters.sitterAtHome}
-                      type="radio"
-                    /> */}
-                  </div>
+                  {lookingFor === "Dog Walking" ? (
+                    /* Dog Walking Filters */
+                    <>
+                      {/* Available time */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Available time
+                        </h4>
+                        <FilterOption
+                          label="11am-3am"
+                          checked={walkingFilters.availableTime11am3am}
+                          onToggle={() => toggleWalkingFilter("availableTime11am3am")}
+                        />
+                        <FilterOption
+                          label="3am-10am"
+                          checked={walkingFilters.availableTime3am10am}
+                          onToggle={() => toggleWalkingFilter("availableTime3am10am")}
+                        />
+                      </div>
 
-                  {/* Home features */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold mb-2 font-montserrat">
-                      Home features
-                    </h4>
-                    <FilterOption
-                      label="Has fenced garden"
-                      checked={filters.hasFencedGarden}
-                      onToggle={() => toggleFilter("hasFencedGarden")}
-                    />
-                    <FilterOption
-                      label="Pets allowed on furniture"
-                      checked={filters.petsAllowed}
-                      onToggle={() => toggleFilter("petsAllowed")}
-                    />
-                    <FilterOption
-                      label="No smoking home"
-                      checked={filters.noSmokingHome}
-                      onToggle={() => toggleFilter("noSmokingHome")}
-                    />
-                    <FilterOption
-                      label="All types"
-                      checked={filters.allTypes}
-                      onToggle={() => toggleFilter("allTypes")}
-                    />
-                  </div>
+                      {/* Other */}
+                      <div>
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">Other</h4>
+                        <FilterOption
+                          label="Dog first aid / CPR"
+                          checked={walkingFilters.dogFirstAid}
+                          onToggle={() => toggleWalkingFilter("dogFirstAid")}
+                        />
+                      </div>
+                    </>
+                  ) : lookingFor === "Doggy Day Care" ? (
+                    /* Daycare Filters */
+                    <>
+                      {/* Day care type */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Day care type
+                        </h4>
+                        <FilterOption
+                          label="In a sitter's home"
+                          checked={daycareFilters.sitterAtHome}
+                          onToggle={() => toggleDaycareFilter("sitterAtHome")}
+                        />
+                        <FilterOption
+                          label="At a sitter's facility"
+                          checked={daycareFilters.atSittersFacility}
+                          onToggle={() => toggleDaycareFilter("atSittersFacility")}
+                        />
+                        <FilterOption
+                          label="At your home"
+                          checked={daycareFilters.atYourHome}
+                          onToggle={() => toggleDaycareFilter("atYourHome")}
+                        />
+                      </div>
 
-                  {/* Pets in the home */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold mb-2">
-                      Pets in the home
-                    </h4>
-                    <FilterOption
-                      label="Doesn't own dogs"
-                      checked={filters.doesntOwnDogs}
-                      onToggle={() => toggleFilter("doesntOwnDogs")}
-                    />
-                    <FilterOption
-                      label="Doesn't own cats"
-                      checked={filters.doesntOwnCats}
-                      onToggle={() => toggleFilter("doesntOwnCats")}
-                    />
-                    <FilterOption
-                      label="Accepts only one booking at a time"
-                      checked={filters.onlyOneBooking}
-                      onToggle={() => toggleFilter("onlyOneBooking")}
-                    />
-                    <FilterOption
-                      label="Does not own caged pets"
-                      checked={filters.doesntOwnCagedPets}
-                      onToggle={() => toggleFilter("doesntOwnCagedPets")}
-                    />
-                  </div>
+                      {/* Type of home */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Type of home
+                        </h4>
+                        <FilterOption
+                          label="Home"
+                          checked={daycareFilters.home}
+                          onToggle={() => toggleDaycareFilter("home")}
+                        />
+                        <FilterOption
+                          label="Flats"
+                          checked={daycareFilters.flats}
+                          onToggle={() => toggleDaycareFilter("flats")}
+                        />
+                        <FilterOption
+                          label="All types"
+                          checked={daycareFilters.allTypes}
+                          onToggle={() => toggleDaycareFilter("allTypes")}
+                        />
+                      </div>
 
-                  {/* Children in the home */}
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold mb-2">
-                      Children in the home
-                    </h4>
-                    <FilterOption
-                      label="Has no children"
-                      checked={filters.hasNoChildren}
-                      onToggle={() => toggleFilter("hasNoChildren")}
-                    />
-                    <FilterOption
-                      label="Has no children 0-3 years old"
-                      checked={filters.hasNoChildren0to3}
-                      onToggle={() => toggleFilter("hasNoChildren0to3")}
-                    />
-                    <FilterOption
-                      label="Has no children 6-12 years old"
-                      checked={filters.hasNoChildren6to12}
-                      onToggle={() => toggleFilter("hasNoChildren6to12")}
-                    />
-                  </div>
+                      {/* Daytime availability */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Daytime availability
+                        </h4>
+                        <FilterOption
+                          label="Sitter is home full time"
+                          checked={daycareFilters.sitterHomeFullTime}
+                          onToggle={() => toggleDaycareFilter("sitterHomeFullTime")}
+                        />
+                        <FilterOption
+                          label="Other is at home full time"
+                          checked={daycareFilters.otherAtHomeFullTime}
+                          onToggle={() => toggleDaycareFilter("otherAtHomeFullTime")}
+                        />
+                      </div>
 
-                  {/* Others */}
-                  <div>
-                    <h4 className="text-sm font-semibold mb-2">Others</h4>
-                    <FilterOption
-                      label="Accepts non-spayed female dogs"
-                      checked={filters.acceptsNonSpayed}
-                      onToggle={() => toggleFilter("acceptsNonSpayed")}
-                    />
-                    <FilterOption
-                      label="Accepts non-neutered male dogs"
-                      checked={filters.acceptsNonNeutered}
-                      onToggle={() => toggleFilter("acceptsNonNeutered")}
-                    />
-                    <FilterOption
-                      label="Bathing/Grooming"
-                      checked={filters.bathingGrooming}
-                      onToggle={() => toggleFilter("bathingGrooming")}
-                    />
-                    <FilterOption
-                      label="Dog first aid / CPR"
-                      checked={filters.dogFirstAid}
-                      onToggle={() => toggleFilter("dogFirstAid")}
-                    />
-                  </div>
+                      {/* Home features */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Home features
+                        </h4>
+                        <FilterOption
+                          label="Has fenced garden"
+                          checked={daycareFilters.hasFencedGarden}
+                          onToggle={() => toggleDaycareFilter("hasFencedGarden")}
+                        />
+                        <FilterOption
+                          label="Pets allowed on furniture"
+                          checked={daycareFilters.petsAllowedOnFurniture}
+                          onToggle={() => toggleDaycareFilter("petsAllowedOnFurniture")}
+                        />
+                        <FilterOption
+                          label="No smoking home"
+                          checked={daycareFilters.noSmokingHome}
+                          onToggle={() => toggleDaycareFilter("noSmokingHome")}
+                        />
+                      </div>
+
+                      {/* Pets in the home */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Pets in the home
+                        </h4>
+                        <FilterOption
+                          label="Doesn't own dogs"
+                          checked={daycareFilters.doesntOwnDogs}
+                          onToggle={() => toggleDaycareFilter("doesntOwnDogs")}
+                        />
+                        <FilterOption
+                          label="Doesn't own cats"
+                          checked={daycareFilters.doesntOwnCats}
+                          onToggle={() => toggleDaycareFilter("doesntOwnCats")}
+                        />
+                        <FilterOption
+                          label="Accepts only one booking at a time"
+                          checked={daycareFilters.onlyOneBooking}
+                          onToggle={() => toggleDaycareFilter("onlyOneBooking")}
+                        />
+                        <FilterOption
+                          label="Does not own caged pets"
+                          checked={daycareFilters.doesntOwnCagedPets}
+                          onToggle={() => toggleDaycareFilter("doesntOwnCagedPets")}
+                        />
+                      </div>
+
+                      {/* Children in the home */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Children in the home
+                        </h4>
+                        <FilterOption
+                          label="Has no children"
+                          checked={daycareFilters.hasNoChildren}
+                          onToggle={() => toggleDaycareFilter("hasNoChildren")}
+                        />
+                        <FilterOption
+                          label="Has no children 0-3 years old"
+                          checked={daycareFilters.hasNoChildren0to3}
+                          onToggle={() => toggleDaycareFilter("hasNoChildren0to3")}
+                        />
+                        <FilterOption
+                          label="Has no children 6-12 years old"
+                          checked={daycareFilters.hasNoChildren6to12}
+                          onToggle={() => toggleDaycareFilter("hasNoChildren6to12")}
+                        />
+                      </div>
+
+                      {/* Others */}
+                      <div>
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">Others</h4>
+                        <FilterOption
+                          label="Accepts non-spayed female dogs"
+                          checked={daycareFilters.acceptsNonSpayed}
+                          onToggle={() => toggleDaycareFilter("acceptsNonSpayed")}
+                        />
+                        <FilterOption
+                          label="Accepts non-neutered male dogs"
+                          checked={daycareFilters.acceptsNonNeutered}
+                          onToggle={() => toggleDaycareFilter("acceptsNonNeutered")}
+                        />
+                        <FilterOption
+                          label="Bathing/Grooming"
+                          checked={daycareFilters.bathingGrooming}
+                          onToggle={() => toggleDaycareFilter("bathingGrooming")}
+                        />
+                        <FilterOption
+                          label="Dog first aid / CPR"
+                          checked={daycareFilters.dogFirstAid}
+                          onToggle={() => toggleDaycareFilter("dogFirstAid")}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    /* Boarding/Walking Filters */
+                    <>
+                      {/* Daytime availability */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Daytime availability
+                        </h4>
+                        <FilterOption
+                          label="Sitter is home full-time"
+                          checked={filters.sitterAtHome}
+                          onToggle={() => toggleFilter("sitterAtHome")}
+                        />
+                      </div>
+
+                      {/* Home features */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Home features
+                        </h4>
+                        <FilterOption
+                          label="Has fenced garden"
+                          checked={filters.hasFencedGarden}
+                          onToggle={() => toggleFilter("hasFencedGarden")}
+                        />
+                        <FilterOption
+                          label="Pets allowed on furniture"
+                          checked={filters.petsAllowed}
+                          onToggle={() => toggleFilter("petsAllowed")}
+                        />
+                        <FilterOption
+                          label="No smoking home"
+                          checked={filters.noSmokingHome}
+                          onToggle={() => toggleFilter("noSmokingHome")}
+                        />
+                        <FilterOption
+                          label="All types"
+                          checked={filters.allTypes}
+                          onToggle={() => toggleFilter("allTypes")}
+                        />
+                      </div>
+
+                      {/* Pets in the home */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Pets in the home
+                        </h4>
+                        <FilterOption
+                          label="Doesn't own dogs"
+                          checked={filters.doesntOwnDogs}
+                          onToggle={() => toggleFilter("doesntOwnDogs")}
+                        />
+                        <FilterOption
+                          label="Doesn't own cats"
+                          checked={filters.doesntOwnCats}
+                          onToggle={() => toggleFilter("doesntOwnCats")}
+                        />
+                        <FilterOption
+                          label="Accepts only one booking at a time"
+                          checked={filters.onlyOneBooking}
+                          onToggle={() => toggleFilter("onlyOneBooking")}
+                        />
+                        <FilterOption
+                          label="Does not own caged pets"
+                          checked={filters.doesntOwnCagedPets}
+                          onToggle={() => toggleFilter("doesntOwnCagedPets")}
+                        />
+                      </div>
+
+                      {/* Children in the home */}
+                      <div className="mb-4">
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                          Children in the home
+                        </h4>
+                        <FilterOption
+                          label="Has no children"
+                          checked={filters.hasNoChildren}
+                          onToggle={() => toggleFilter("hasNoChildren")}
+                        />
+                        <FilterOption
+                          label="Has no children 0-3 years old"
+                          checked={filters.hasNoChildren0to3}
+                          onToggle={() => toggleFilter("hasNoChildren0to3")}
+                        />
+                        <FilterOption
+                          label="Has no children 6-12 years old"
+                          checked={filters.hasNoChildren6to12}
+                          onToggle={() => toggleFilter("hasNoChildren6to12")}
+                        />
+                      </div>
+
+                      {/* Others */}
+                      <div>
+                        <h4 className="text-sm font-semibold mb-2 font-montserrat">Others</h4>
+                        <FilterOption
+                          label="Accepts non-spayed female dogs"
+                          checked={filters.acceptsNonSpayed}
+                          onToggle={() => toggleFilter("acceptsNonSpayed")}
+                        />
+                        <FilterOption
+                          label="Accepts non-neutered male dogs"
+                          checked={filters.acceptsNonNeutered}
+                          onToggle={() => toggleFilter("acceptsNonNeutered")}
+                        />
+                        <FilterOption
+                          label="Bathing/Grooming"
+                          checked={filters.bathingGrooming}
+                          onToggle={() => toggleFilter("bathingGrooming")}
+                        />
+                        <FilterOption
+                          label="Dog first aid / CPR"
+                          checked={filters.dogFirstAid}
+                          onToggle={() => toggleFilter("dogFirstAid")}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
                   </>
                 )}
@@ -487,7 +938,7 @@ export default function FindMatchSection() {
           </div>
 
           {/* Right Section - Sitter Cards */}
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 space-y-6">
             {sitters.map((sitter, index) => (
               <SitterCard key={index} sitter={sitter} />
             ))}
