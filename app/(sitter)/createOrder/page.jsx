@@ -32,7 +32,7 @@ export default function ServiceSetupForm() {
     "Three day",
   ]);
 
-  // Handle service type change
+  // Handle service type change - update form data based on selected service
   useEffect(() => {
     if (serviceType === "Dog Walking") {
       setBaseRate("28.00");
@@ -115,13 +115,104 @@ export default function ServiceSetupForm() {
           </div>
         </div>
 
+        {/* Update Rates Checkbox */}
+        <div className="mb-6">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={updateRates}
+              onChange={(e) => setUpdateRates(e.target.checked)}
+              className="w-5 h-5 mt-0.5 rounded border-gray-300 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+            />
+            <div>
+              <span className="text-gray-900 font-medium">
+                Update my additional rates based on my base rate
+              </span>
+              <p className="text-sm text-gray-600 mt-1">
+                Turn off to adjust your rate manually
+              </p>
+            </div>
+          </label>
+        </div>
+
+        {/* Show Additional Rates Button */}
+        <button
+          onClick={() => setShowAdditionalRates(!showAdditionalRates)}
+          className="w-full px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2 mb-8"
+        >
+          {showAdditionalRates ? 'Hide additional rates' : 'Show additional rates'}
+          <ChevronDown className={`w-5 h-5 transition-transform ${showAdditionalRates ? 'rotate-180' : ''}`} />
+        </button>
+
+        {/* Additional Rates Section */}
+        {showAdditionalRates && (
+          <div className="mb-8 space-y-6">
+            {/* 60 minute rate */}
+            <div>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">60 minute rate</h4>
+              <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+                <span className="text-gray-700">Per day</span>
+                <span className="text-gray-900 font-semibold">$28.00</span>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+            </div>
+
+            {/* Holiday Rate */}
+            <div>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">Holiday Rate</h4>
+              <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+                <span className="text-gray-700">Per day</span>
+                <span className="text-gray-900 font-semibold">$28.00</span>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+            </div>
+
+            {/* Additional Rate */}
+            <div>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">Additional Rate</h4>
+              <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+                <span className="text-gray-700">Per day</span>
+                <span className="text-gray-900 font-semibold">$28.00</span>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+            </div>
+
+            {/* Puppy Rate */}
+            <div>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">Puppy Rate</h4>
+              <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+                <span className="text-gray-700">Per day</span>
+                <span className="text-gray-900 font-semibold">$28.00</span>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+
+              <label className="flex items-center gap-3 cursor-pointer mt-3">
+                <input
+                  type="checkbox"
+                  defaultChecked
+                  className="w-5 h-5 rounded border-gray-300 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+                />
+                <span className="text-gray-700">Offer for free</span>
+              </label>
+            </div>
+
+            {/* Daily Sitter Pick-Up/Drop-Off */}
+            <div>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">Daily Sitter Pick-Up/Drop-Off</h4>
+              <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+                <span className="text-gray-700">Per day</span>
+                <span className="text-gray-900 font-semibold">$28.00</span>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">You keep: 80%</p>
+            </div>
+          </div>
+        )}
+
         {/* Render appropriate form based on service type */}
         {serviceType === "Dog Walking" && (
           <DogWalkingForm
             baseRate={baseRate}
             setBaseRate={setBaseRate}
-            updateRates={updateRates}
-            setUpdateRates={setUpdateRates}
             walksPerDay={walksPerDay}
             setWalksPerDay={setWalksPerDay}
             selectedDays={selectedDays}
@@ -137,8 +228,6 @@ export default function ServiceSetupForm() {
           <DoggyDayCareForm
             baseRate={baseRate}
             setBaseRate={setBaseRate}
-            updateRates={updateRates}
-            setUpdateRates={setUpdateRates}
             petsPerDay={petsPerDay}
             setPetsPerDay={setPetsPerDay}
             selectedDays={selectedDays}
@@ -152,15 +241,6 @@ export default function ServiceSetupForm() {
             cancellationOptions={cancellationOptions}
           />
         )}
-
-        {/* Show Additional Rates Button */}
-        <button
-          onClick={() => setShowAdditionalRates(!showAdditionalRates)}
-          className="w-full px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2 mb-8"
-        >
-          Show additional rates
-          <ChevronDown className={`w-5 h-5 transition-transform ${showAdditionalRates ? 'rotate-180' : ''}`} />
-        </button>
 
         {/* Location Section */}
         <div className="mb-8">

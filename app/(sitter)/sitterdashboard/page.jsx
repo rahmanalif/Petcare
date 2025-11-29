@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardOverview() {
+  const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date(2025, 10, 1)); // November 2025
   const bookedDays = [12, 14];
 
@@ -201,7 +203,11 @@ export default function DashboardOverview() {
 
             <div className="space-y-4">
               {bookings.map((booking) => (
-                <div key={booking.id} className="border border-gray-200 rounded-lg p-4">
+                <div 
+                  key={booking.id} 
+                  className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow duration-200"
+                  onClick={() => router.push("/settingForSitter/ongoing")}
+                >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">

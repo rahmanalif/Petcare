@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import SplitText from "@/components/SplitText";
 
 // Custom icons to match the design
 const BoardingIcon = ({ className }) => (
@@ -324,14 +325,54 @@ export default function HeroSection() {
         <div className="max-w-7xl mx-auto px-8 pt-8 pb-16">
           {/* Left Content */}
           <div className="max-w-xl py-24">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight mb-6 font-bakso">
-              Trusted Pet Care,
+            <h1 className=" mb-6 font-bakso">
+              <SplitText
+                text="trusted Pet Care,"
+                className="text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight"
+                delay={100}
+                duration={0.6}
+                ease="power3.out"
+                splitType="chars"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-100px"
+                textAlign="center"
+                
+              />
               <br />
-              Whenever You Need It.
+              <SplitText
+                text="Whenever You Need It."
+                className="text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight"
+                delay={100}
+                duration={0.6}
+                ease="power3.out"
+                splitType="chars"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-100px"
+                textAlign="between"
+                
+              />
+              
             </h1>
-            <p className="text-gray-600 text-lg mb-8 uppercase tracking-wide font-bakso">
-              Find reliable sitters, walkers, and groomers near you—book in
-              minutes.
+            <p className="text-gray-600 text-lg mb-8 uppercase  font-bakso">
+              <SplitText
+                text="Find reliable sitters, walkers, and groomers near you—book in minutes."
+                className="text-gray-600 text-lg tracking-wide"
+                delay={100}
+                duration={0.6}
+                ease="power3.out"
+                splitType="chars"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-100px"
+                textAlign="between"
+                
+              />
+              
             </p>
           </div>
         </div>

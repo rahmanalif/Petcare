@@ -1,11 +1,8 @@
 import React from "react";
-import { Info } from "lucide-react";
 
 export default function DogWalkingForm({
   baseRate,
   setBaseRate,
-  updateRates,
-  setUpdateRates,
   walksPerDay,
   setWalksPerDay,
   selectedDays,
@@ -29,26 +26,6 @@ export default function DogWalkingForm({
         <p className="text-sm text-gray-600 mt-2">
           What you will earn per service: ${(parseFloat(baseRate) * 0.86).toFixed(2)}
         </p>
-      </div>
-
-      {/* Update Rates Checkbox */}
-      <div className="mb-6">
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={updateRates}
-            onChange={(e) => setUpdateRates(e.target.checked)}
-            className="w-5 h-5 mt-0.5 rounded border-gray-300 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
-          />
-          <div>
-            <span className="text-gray-900 font-medium">
-              Update my additional rates based on my base rate
-            </span>
-            <p className="text-sm text-gray-600 mt-1">
-              Turn off to adjust your rate manually
-            </p>
-          </div>
-        </label>
       </div>
 
       {/* Availability Section */}

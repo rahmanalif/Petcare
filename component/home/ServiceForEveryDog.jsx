@@ -1,6 +1,7 @@
 "use client";
 import { Calendar, Home, Footprints, Shield } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ServicesSection() {
   return (
@@ -314,9 +315,9 @@ export default function ServicesSection() {
               </div>
 
               {/* CTA Button */}
-              <button className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-4 rounded-xl transition-all hover:shadow-lg">
+              <Link href="/search" className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-4 rounded-xl transition-all hover:shadow-lg block text-center">
                 Book a local sitter
-              </button>
+              </Link>
             </div>
           </div>
         </div>
