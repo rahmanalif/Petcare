@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import {
   loginStart,
@@ -87,16 +87,26 @@ const GlassSurface = ({
 // Main Register Component
 export default function WuffoosRegister() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('english');
+  const [userRole, setUserRole] = useState('pet_owner'); // Default to pet_owner
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
   });
+
+  // Check URL parameter for role
+  useEffect(() => {
+    const roleParam = searchParams.get('role');
+    if (roleParam === 'pet_sitter') {
+      setUserRole('pet_sitter');
+    }
+  }, [searchParams]);
 
   const handleSubmit = async () => {
     if (!acceptTerms) {
@@ -123,11 +133,17 @@ export default function WuffoosRegister() {
           name: formData.username,
           email: formData.username,
         },
-        role: "pet_owner", // Default role for new users
+        role: userRole, // Use the role from URL parameter or default
       };
 
       dispatch(loginSuccess(userData));
-      router.push("/");
+
+      // Role-based routing
+      if (userRole === 'pet_sitter') {
+        router.push("/sitterdashboard");
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       dispatch(loginFailure(error.message || "Signup failed"));
     }
@@ -245,7 +261,7 @@ export default function WuffoosRegister() {
                     }`}
                   >
                     <span className="m-2">
-                      <img src="/flag/english.png" alt="English" className="w-8 h-8" />
+                      <img src="/flag/English.png" alt="English" className="w-8 h-8" />
                     </span>
                     English
                   </button>
@@ -259,7 +275,7 @@ export default function WuffoosRegister() {
                     }`}
                   >
                     <span className="m-2">
-                      <img src="/flag/mexico.png" alt="Spanish" className="w-8 h-8" />
+                      <img src="/flag/Mexico.png" alt="Spanish" className="w-8 h-8" />
                     </span>
                     Spanish
                   </button>

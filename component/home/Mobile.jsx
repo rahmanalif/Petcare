@@ -30,7 +30,7 @@ export default function MobileAppSection() {
             >
               <div className="w-full h-full flex items-center justify-center text-white">
                 <div className="text-center">
-                  <img src="/flag/apple.png" alt="Google Play" className="h-20" />
+                  <img src="/flag/Vector 1.png" alt="App Store" className="h-20" />
                 </div>
               </div>
             </a>
@@ -41,7 +41,7 @@ export default function MobileAppSection() {
               className="block w-[280px] h-[84px] bg-black rounded-xl overflow-hidden hover:opacity-90 transition-opacity"
             >
               <div className="w-full h-full flex items-center justify-center text-white">
-                <img src="/flag/google.png" alt="Google Play" className="h-20" />
+                <img src="/flag/Vector.png" alt="Google Play" className="h-20" />
               </div>
             </a>
           </div>

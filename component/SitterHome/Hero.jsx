@@ -1,7 +1,9 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function HeroSection() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section with Background Image */}
@@ -25,7 +27,10 @@ export default function HeroSection() {
               Wuffoos makes it <span className="font-normal font-montserrat">easy</span> and promotes you to the nation's largest network of pet owners, delivering dog-walking, connecting you love.
             </p>
             <div className="flex justify-center">
-              <button className="bg-[#035F75] hover:bg-[#044c5e] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105">
+              <button
+                onClick={() => router.push('/signup?role=pet_sitter')}
+                className="bg-[#035F75] hover:bg-[#044c5e] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105"
+              >
                 Get started
               </button>
             </div>

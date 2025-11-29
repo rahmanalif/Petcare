@@ -1,7 +1,9 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function HowItWorks() {
+  const router = useRouter();
   return (
     <div className=" py-16 px-4">
         <div className=" border border-gray-200 rounded-lg bg-white shadow-lg bg-linear-to-br from-blue-50 via-cyan-50 to-teal-50 p-8 mx-50">
@@ -85,7 +87,10 @@ export default function HowItWorks() {
           </div>
 
           {/* CTA Button */}
-          <button className="bg-[#035F75] hover:bg-[#044c5e] text-white font-semibold px-12 py-4 rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105 font-montserrat">
+          <button
+            onClick={() => router.push('/signup?role=pet_sitter')}
+            className="bg-[#035F75] hover:bg-[#044c5e] text-white font-semibold px-12 py-4 rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105 font-montserrat"
+          >
             Get started
           </button>
         </div>
