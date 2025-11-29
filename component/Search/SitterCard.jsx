@@ -23,10 +23,10 @@ const SitterCard = ({ sitter }) => {
 
                 {/* Name and Location */}
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg text-gray-900 pt-8 font-montserrat">
+                  <h3 className="font-semibold text-lg text-gray-900 pt-8">
                     {sitter.name}
                   </h3>
-                  <div className="flex items-center gap-1 text-sm text-gray-600 font-montserrat">
+                  <div className="flex items-center gap-1 text-sm text-gray-600">
                     <MapPin className="w-4 h-4" />
                     <span>{sitter.location}</span>
                   </div>
@@ -34,7 +34,7 @@ const SitterCard = ({ sitter }) => {
               </div>
 
               {/* Bottom Section - Stats under profile */}
-              <div className="flex flex-col gap-2 text-sm font-montserrat">
+              <div className="flex flex-col gap-2 text-sm">
                 {/* Rating */}
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-current text-gray-700" />
@@ -75,13 +75,13 @@ const SitterCard = ({ sitter }) => {
               {sitter.backgroundCheck && (
                 <div className="flex items-center gap-1 text-sm bg-[#FCF0D994] text-orange-500 mb-2">
                   <CheckCircle className="w-4 h-4" />
-                  <span className="font-montserrat">Background Check</span>
+                  <span className="">Background Check</span>
                 </div>
               )}
-              <div className="font-bold text-[#035F75] font-montserrat">
+              <div className="font-bold text-[#035F75]">
                 ${sitter.price}
               </div>
-              <div className="text-xs text-gray-500 font-montserrat">
+              <div className="text-xs text-gray-500">
                 Total per day
               </div>
             </div>

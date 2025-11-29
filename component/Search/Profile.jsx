@@ -344,7 +344,7 @@ export default function ProviderProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 font-montserrat">
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex gap-6">
           {/* Left Sidebar */}
@@ -375,7 +375,7 @@ export default function ProviderProfilePage() {
                   <div className="text-2xl font-normal text-[#035F75] font-bakso">
                     $25
                   </div>
-                  <div className="text-xs text-[#E26A15] font-montserrat">
+                  <div className="text-xs text-[#E26A15]">
                     Total per day
                   </div>
                 </div>
@@ -425,7 +425,7 @@ export default function ProviderProfilePage() {
 
                 <div className="py-3 text-sm">
                   
-                  <Badge className="bg-[#E7F4F6] text-[#035F75] mb-2 font-montserrat text-xs leading-relaxed whitespace-normal">
+                  <Badge className="bg-[#E7F4F6] text-[#035F75] mb-2 text-xs leading-relaxed whitespace-normal">
                     <div className="px-2">
                         <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -450,7 +450,7 @@ export default function ProviderProfilePage() {
                 </div>
 
                 <Button
-                  className="w-full bg-[#035F75] hover:bg-[#024a5c] text-white mb-3 font-montserrat"
+                  className="w-full bg-[#035F75] hover:bg-[#024a5c] text-white mb-3"
                   onClick={() => setShowBooking(true)}
                 >
                   Book Service
@@ -477,11 +477,11 @@ export default function ProviderProfilePage() {
                           <div className="flex items-center gap-2">
                             {getIcon()}
                             <div className="flex-1">
-                              <div className="text-sm  font-semibold font-montserrat text-gray-900">
+                              <div className="text-sm  font-semibold text-gray-900">
                                 {service.name}
                               </div>
                               {service.note && (
-                                <div className="text-xs  text-gray-500 mt-0.5 font-montserrat">
+                                <div className="text-xs  text-gray-500 mt-0.5">
                                   {service.note}
                                 </div>
                               )}
@@ -490,17 +490,17 @@ export default function ProviderProfilePage() {
                         </div>
                         <div className="text-right shrink-0 flex items-center gap-2">
                           {index !== 0 && index !== 9 && (
-                            <span className="text-gray-400 font-montserrat">
+                            <span className="text-gray-400">
                               -
                             </span>
                           )}
                           <div>
-                            <div className="font-semibold font-montserrat text-gray-900">
+                            <div className="font-semibold text-gray-900">
                               {service.price < 0 ? "+" : ""}$
                               {Math.abs(service.price)}
                             </div>
                             {service.unit && (
-                              <div className="text-xs text-gray-500 font-montserrat whitespace-nowrap">
+                              <div className="text-xs text-gray-500 whitespace-nowrap">
                                 {service.unit}
                               </div>
                             )}
@@ -516,16 +516,16 @@ export default function ProviderProfilePage() {
             {/* Calendar */}
             <Card>
               <CardContent className="p-4">
-                <h3 className="font-semibold mb-3 font-montserrat">Calendar</h3>
+                <h3 className="font-semibold mb-3">Calendar</h3>
 
                 <div className="flex items-center gap-3 mb-3 flex-wrap">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#FF4747] rounded shrink-0"></div>
-                    <span className="text-xs font-montserrat">Book</span>
+                    <span className="text-xs">Book</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 bg-[#008364] rounded shrink-0"></div>
-                    <span className="text-xs font-montserrat">Available</span>
+                    <span className="text-xs">Available</span>
                   </div>
                 </div>
 
@@ -533,18 +533,18 @@ export default function ProviderProfilePage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="font-montserrat"
+                    className=""
                     onClick={goToPreviousMonth}
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
-                  <span className="font-semibold font-montserrat text-sm">
+                  <span className="font-semibold text-sm">
                     {monthNames[currentMonth]} {currentYear}
                   </span>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="font-montserrat"
+                    className=""
                     onClick={goToNextMonth}
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -556,7 +556,7 @@ export default function ProviderProfilePage() {
                     (day) => (
                       <div
                         key={day}
-                        className="text-center text-xs font-semibold text-gray-600 py-1 font-montserrat"
+                        className="text-center text-xs font-semibold text-gray-600 py-1"
                       >
                         {day}
                       </div>
@@ -579,7 +579,7 @@ export default function ProviderProfilePage() {
                         key={index}
                         onClick={() => handleDateClick(dayInfo)}
                         className={`
-                          aspect-square flex items-center justify-center text-sm rounded font-montserrat
+                          aspect-square flex items-center justify-center text-sm rounded
                           ${
                             !dayInfo.isCurrentMonth
                               ? "text-gray-300"
@@ -631,7 +631,7 @@ export default function ProviderProfilePage() {
                 <div className="flex gap-8 px-6 pt-6 border-b border-gray-200 justify-center">
                   <button
                     onClick={() => setActiveTab("about")}
-                    className={`pb-3 px-4 font-montserrat font-medium ${
+                    className={`pb-3 px-4 font-medium ${
                       activeTab === "about"
                         ? "text-[#035F75] border-b-2 border-[#035F75]"
                         : "text-gray-500 hover:text-gray-700"
@@ -641,7 +641,7 @@ export default function ProviderProfilePage() {
                   </button>
                   <button
                     onClick={() => setActiveTab("portfolio")}
-                    className={`pb-3 px-4 font-montserrat font-medium ${
+                    className={`pb-3 px-4 font-medium ${
                       activeTab === "portfolio"
                         ? "text-[#035F75] border-b-2 border-[#035F75]"
                         : "text-gray-500 hover:text-gray-700"
@@ -655,10 +655,10 @@ export default function ProviderProfilePage() {
                   <>
                     {/* About Section */}
                     <div className="p-6">
-                      <h2 className="font-semibold text-xl mb-3 font-montserrat">
+                      <h2 className="font-semibold text-xl mb-3">
                         Seam Rahman
                       </h2>
-                      <p className="text-gray-600 leading-relaxed font-montserrat">
+                      <p className="text-gray-600 leading-relaxed">
                         I turned loyal with 8+ years of professional pet care
                         experience. I provide personalized care for your furry
                         family members in a safe and nurturing environment.
@@ -679,13 +679,13 @@ export default function ProviderProfilePage() {
                   {/* Skills*/}
                   <Card className="p-2 m-4 mt-2">
                     <CardContent className="p-3">
-                      <h3 className="font-semibold mb-4 font-montserrat">
+                      <h3 className="font-semibold mb-4">
                         Skills
                       </h3>
                       <div className="flex flex-wrap gap-3">
                         <Badge
                           variant="outline"
-                          className="flex items-center gap-2 py-2 px-3 font-montserrat"
+                          className="flex items-center gap-2 py-2 px-3"
                         >
                           <svg
                             width="24"
@@ -714,7 +714,7 @@ export default function ProviderProfilePage() {
                         </Badge>
                         <Badge
                           variant="outline"
-                          className="flex items-center gap-2 py-2 px-3 font-montserrat"
+                          className="flex items-center gap-2 py-2 px-3"
                         >
                           <svg
                             width="24"
@@ -743,7 +743,7 @@ export default function ProviderProfilePage() {
                         </Badge>
                         <Badge
                           variant="outline"
-                          className="flex items-center gap-2 py-2 px-3 font-montserrat"
+                          className="flex items-center gap-2 py-2 px-3"
                         >
                           <svg
                             width="24"
@@ -772,7 +772,7 @@ export default function ProviderProfilePage() {
                         </Badge>
                         <Badge
                           variant="outline"
-                          className="flex items-center gap-2 py-2 px-3 font-montserrat"
+                          className="flex items-center gap-2 py-2 px-3"
                         >
                           <svg
                             width="24"
@@ -805,7 +805,7 @@ export default function ProviderProfilePage() {
                   {/* Home Details */}
                   <Card className="mt-6 mb-6 m-4">
                     <CardContent className="p-6">
-                      <h3 className="font-semibold mb-4 font-montserrat">
+                      <h3 className="font-semibold mb-4">
                         Home Details
                       </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1098,7 +1098,7 @@ export default function ProviderProfilePage() {
                   {/* Location */}
                   <Card className="mb-6 m-4">
                     <CardContent className="p-6">
-                      <h3 className="font-semibold mb-4 font-montserrat">
+                      <h3 className="font-semibold mb-4">
                         Location{" "}
                         <span className="text-sm font-normal text-gray-500">
                           - New York, NY
@@ -1116,7 +1116,7 @@ export default function ProviderProfilePage() {
                   {/* Reviews */}
                   <Card className="m-4">
                     <CardContent className="p-6 ">
-                      <h3 className="font-semibold mb-4 font-montserrat">
+                      <h3 className="font-semibold mb-4">
                         Top Reviews
                       </h3>
                       <div className="space-y-4">
@@ -1135,7 +1135,7 @@ export default function ProviderProfilePage() {
                                   />
                                 </div>
                                 <div className="min-w-0">
-                                  <div className="font-semibold font-montserrat truncate">
+                                  <div className="font-semibold truncate">
                                     {review.name}
                                   </div>
                                   <div className="flex items-center gap-1">
@@ -1148,11 +1148,11 @@ export default function ProviderProfilePage() {
                                   </div>
                                 </div>
                               </div>
-                              <span className=" text-gray-500 font-montserrat shrink-0">
+                              <span className=" text-gray-500 shrink-0">
                                 {review.date}
                               </span>
                             </div>
-                            <p className="text-sm text-gray-600 leading-relaxed font-montserrat">
+                            <p className="text-sm text-gray-600 leading-relaxed">
                               {review.text}
                             </p>
                           </div>
@@ -1172,7 +1172,7 @@ export default function ProviderProfilePage() {
 
 function DetailItem({ icon, text }) {
   return (
-    <div className="flex items-center gap-2 text-sm text-gray-700 font-montserrat">
+    <div className="flex items-center gap-2 text-sm text-gray-700">
       <span className="shrink-0">{icon}</span>
       <span className="wrap-break-word">{text}</span>
     </div>

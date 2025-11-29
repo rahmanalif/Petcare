@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "../component/global/Navbar";
-import Footer from "../component/global/Footer";
+import ReduxProvider from "../components/providers/ReduxProvider";
+import ConditionalLayout from "../components/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,13 +54,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${baksoSapi.variable} ${montserrat.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${baksoSapi.variable} ${montserrat.variable} font-montserrat antialiased`}
       >
-        <div className="min-h-screen bg-linear-to-br from-sky-50 via-white to-sky-100 overflow-hidden">
-          <Navbar />
-          <main className="pt-20">{children}</main>
-          <Footer />
-        </div>
+        <ReduxProvider>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
+        </ReduxProvider>
       </body>
     </html>
   );

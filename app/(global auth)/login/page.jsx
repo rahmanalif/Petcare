@@ -1,0 +1,253 @@
+"use client";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../../../store/authSlice';
+import Link from 'next/link';
+
+// Glassmorphism styles embedded
+const glassStyles = `
+  .glass-surface {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: opacity 0.26s ease-out;
+  }
+
+  .glass-surface__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: inherit;
+    position: relative;
+    z-index: 1;
+  }
+
+  .glass-surface--fallback {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+    -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+      0 8px 32px 0 rgba(31, 38, 135, 0.15),
+      0 2px 16px 0 rgba(31, 38, 135, 0.1),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-surface--fallback:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  @supports not (backdrop-filter: blur(10px)) {
+    .glass-surface--fallback {
+      background: rgba(255, 255, 255, 0.3);
+      box-shadow:
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 0 rgba(255, 255, 255, 0.2);
+    }
+  }
+`;
+
+// GlassSurface Component
+const GlassSurface = ({
+  children,
+  width = 200,
+  height = 80,
+  borderRadius = 20,
+  className = '',
+  style = {}
+}) => {
+  const containerStyle = {
+    ...style,
+    width: typeof width === 'number' ? `${width}px` : width,
+    height: typeof height === 'number' ? `${height}px` : height,
+    borderRadius: `${borderRadius}px`,
+  };
+
+  return (
+    <div
+      className={`glass-surface glass-surface--fallback ${className}`}
+      style={containerStyle}
+    >
+      <div className="glass-surface__content">{children}</div>
+    </div>
+  );
+};
+
+// Main Login Component
+export default function WuffoosLogin() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
+
+  const handleSubmit = async () => {
+    dispatch(loginStart());
+
+    // Demo login - replace with actual API call
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Demo user data
+      const userData = {
+        user: {
+          id: '1',
+          name: formData.username,
+          email: formData.username,
+        },
+        role: 'pet_owner' // Can be 'pet_owner', 'pet_sitter', 'admin'
+      };
+
+      dispatch(loginSuccess(userData));
+      router.push('/');
+    } catch (error) {
+      dispatch(loginFailure(error.message || 'Login failed'));
+    }
+  };
+
+  return (
+    <>
+      <style>{glassStyles}</style>
+      <div className="min-h-screen flex">
+      {/* Left Panel - Login Form */}
+      <div className="w-full lg:w-1/2 bg-[#0C6478] flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          <div className="mb-8">
+            <h1 className="text-white text-4xl font-bold mb-3">
+              Login to your account
+            </h1>
+            <p className="text-white/90 text-lg">
+              Don't have an account?{' '}
+              <Link href="/signup" className="text-[#FE6C5D] hover:underline font-medium">
+                Register
+              </Link>
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {/* Username Field */}
+            <div>
+              <label className="block text-white text-sm mb-2">
+                Username or Email
+              </label>
+              <input
+                type="text"
+                placeholder="Username or Email"
+                value={formData.username}
+                onChange={(e) => setFormData({...formData, username: e.target.value})}
+                className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label className="block text-white text-sm mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/90"
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+            </div>
+
+            {/* Forgot Password */}
+            <div className="text-left">
+              <Link href="/forgotpassword" className="text-white/80 hover:text-white text-sm">
+                Forgot Password?
+              </Link>
+            </div>
+
+            {/* Login Button */}
+            <button
+              onClick={handleSubmit}
+              className="w-full py-3 rounded-lg bg-[#FE6C5D] hover:bg-[#ff7a6d] text-white font-semibold transition-colors shadow-lg"
+            >
+              Login
+            </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 my-6">
+              <div className="flex-1 h-px bg-white/20"></div>
+              <span className="text-white/60 text-sm">Or continue with</span>
+              <div className="flex-1 h-px bg-white/20"></div>
+            </div>
+
+            {/* Google Button with Glassmorphism */}
+            <GlassSurface
+              width="100%"
+              height={56}
+              borderRadius={12}
+              className="cursor-pointer hover:opacity-90 transition-opacity"
+            >
+              <button
+                type="button"
+                className="w-full h-full flex items-center justify-center gap-3 text-white font-medium"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  />
+                </svg>
+                Google
+              </button>
+            </GlassSurface>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Panel - Logo */}
+      <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-50 to-gray-100 items-center justify-center p-8">
+        <div className="max-w-lg">
+          <svg width="462" height="129" viewBox="0 0 462 129" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path d="M82.062 46.897C82.0818 46.7411 82.1747 46.6067 82.3134 46.5372C83.2278 46.054 84.1635 45.6071 85.0824 45.1349C87.5089 43.8856 89.9019 42.5857 92.0934 40.9504C93.1909 40.1289 94.0938 39.1619 94.5943 37.8709C95.679 35.1006 95.8697 32.2974 94.7478 29.4909C94.2387 28.2143 93.2832 27.371 91.8553 27.3057C91.2088 27.2808 90.545 27.4494 89.9032 27.609C87.4167 28.2401 84.8954 28.6604 82.3464 28.9186C82.0693 28.9483 81.8799 28.878 81.6842 28.7137C80.8158 27.989 79.9111 27.2855 78.8692 26.8439C75.4099 25.3789 71.9328 25.4894 68.3888 26.3794C67.1007 26.9704 65.7778 27.4921 64.5345 28.1612C62.4263 29.2932 60.615 30.8052 59.4425 32.9365C58.8672 33.9816 58.3221 35.5093 57.9261 37.1817C57.9261 37.1817 57.4181 39.9476 58.2089 43.815C58.9997 47.6824 63.6661 80.5345 63.6661 80.5345C63.6478 80.7412 63.8594 81.2589 63.5518 81.4811C62.6518 81.2449 50.716 65.7309 48.3509 62.8865C46.438 60.6606 42.793 61.052 40.3039 62.0698C35.7553 63.9297 35.1608 67.3802 35.0755 71.8244C35.0102 81.4731 34.1759 83.7554 34.4031 93.3809C34.3848 93.5877 34.5139 94.1391 34.2007 94.3636C32.9078 93.8896 24.0649 73.2543 22.9075 70.4238C20.8719 65.4457 18.4908 62.8135 12.7417 65.1644C7.41665 67.3418 6.59995 70.4846 8.66934 75.5454C9.61733 77.8637 10.9405 80.1251 11.8885 82.4434C16.6236 93.5359 21.9199 105.498 29.0848 115.192C32.4788 119.814 36.6762 125.913 43.2844 123.211C49.8925 120.509 48.8076 113.439 48.9351 107.872C49.0795 99.8941 48.5899 92.0791 48.4417 84.1246C48.424 83.8297 48.4191 83.3304 48.7267 83.1082C49.0553 83.173 49.3679 83.4502 49.5956 83.7556C51.196 85.7043 52.6921 87.9014 54.2403 89.9743C56.6907 93.2788 59.3533 96.5993 61.9821 99.8373C65.2133 103.825 69.1618 111.029 75.3191 109.913C76.0773 109.802 76.7601 109.523 77.4485 109.241C83.9024 106.602 84.7174 98.6136 84.806 98.2174C87.6035 85.9603 82.0543 46.8938 82.0543 46.8938L82.062 46.897Z" fill="#FE6C5D"/>
+            <path d="M76.746 46.4555C76.9957 48.0567 76.4639 49.444 75.6265 50.7441C74.2245 52.9114 72.4552 54.7148 70.0434 55.7331C69.2825 56.0571 68.3979 56.2517 67.577 56.2403C65.9936 56.2193 64.938 55.2883 64.4517 53.816C62.803 48.8724 61.675 43.8188 61.5587 38.583C61.5219 36.9526 61.6022 35.3257 62.1759 33.7734C62.2332 33.615 62.2983 33.4598 62.4045 33.185C62.308 34.0022 62.184 34.6893 62.1474 35.3856C62.0287 37.4845 62.3715 39.549 62.7253 41.6089C63.2985 44.8969 64.2146 48.096 65.22 51.2779C65.4181 51.9039 65.6328 52.5231 65.8639 53.1356C66.2632 54.2064 67.3985 54.8606 68.5066 54.5682C69.7591 54.236 70.8222 53.5506 71.8137 52.7531C73.0753 51.7359 74.0657 50.4953 74.8481 49.0763C75.6425 47.6395 75.449 46.176 74.9396 44.726C74.08 42.2622 72.7933 40.0116 71.3197 37.8696C70.4594 36.6145 69.5605 35.3752 68.6804 34.1346C68.6011 34.0192 68.524 33.9093 68.4447 33.7939C68.47 33.7772 68.4875 33.7572 68.5128 33.7404C69.0986 34.3557 69.691 34.9555 70.2626 35.5831C72.4162 37.9419 74.3699 40.4404 75.7345 43.3532C76.2006 44.3517 76.5829 45.3652 76.7537 46.4588L76.746 46.4555Z" fill="white"/>
+            <path d="M38.6969 118.153C32.4649 111.542 26.2237 104.311 22.3106 96.1092C21.8267 95.0987 21.3208 95.5434 21.8015 96.5617C25.7796 104.891 31.0265 112.567 37.3599 119.284C38.1284 120.095 39.4644 118.977 38.6914 118.155L38.6969 118.153Z" fill="#F2F2F2"/>
+            <path d="M18.6734 88.5674C18.2541 88.7838 18.0403 89.2826 18.247 89.7252L19.7039 92.8638C19.8993 93.2788 19.9491 93.7149 20.3661 93.4929C20.7854 93.2765 20.9992 92.7777 20.7925 92.3351L19.8312 88.9938C19.6358 88.5788 19.0927 88.351 18.6734 88.5674Z" fill="#F2F2F2"/>
+            <path d="M144.181 76.5026C140.824 80.6997 135.864 83.6758 130.636 84.8205C111.406 89.0176 103.889 69.2913 100.608 54.3344C99.1199 47.5427 98.3186 39.9879 99.2343 33.0818C99.8067 29.1136 101.943 26.2901 105.912 25.4507C109.231 24.7258 113.924 25.3363 114.802 29.3045C114.954 30.0676 114.916 30.7162 114.802 31.5556C114 38.1565 114.458 44.5284 115.908 51.1293C116.786 55.0974 117.969 59.1419 119.38 62.9956C120.563 66.0862 124.531 74.5948 128.728 73.6791C130.102 73.3739 130.98 72.3819 131.666 71.3135C137.275 63.3772 135.291 44.91 133.307 35.7909C132.735 33.1581 132.162 30.4491 131.247 27.7782C130.56 25.4889 129.301 23.4285 128.767 20.9866C127.813 16.6368 131.247 14.1567 135.139 13.2792C138.725 12.516 141.854 13.2792 143.609 16.6368C145.937 21.33 147.386 26.4809 148.493 31.5556C151.355 44.6811 153.224 65.3994 144.22 76.5026H144.181Z" fill="#035F75"/>
+            <path d="M167.393 16.2171C168.843 8.62416 185.212 4.80863 191.698 4.00737C196.048 3.47319 206.846 2.74826 207.609 8.85312C208.067 12.4016 203.946 14.729 200.97 15.0724C198.719 15.3395 196.277 15.2632 194.026 15.5303C191.164 15.8737 185.86 16.8275 183.418 18.163C182.388 18.6972 182.808 29.457 182.999 31.0214C183.113 32.0134 183.724 32.7383 184.792 32.5857C186.852 32.3186 192.385 29.2281 196.925 28.6939C200.588 28.236 205.739 29.4188 206.273 33.9593C207.075 40.2931 189.981 42.2009 185.555 45.4441C184.716 46.0546 184.678 47.2374 184.792 48.2294C185.059 50.2898 186.318 57.4631 187.692 58.7985C189.065 60.1339 189.294 61.2023 189.523 63.0719C189.829 65.552 190.401 67.8795 190.706 70.3214C191.355 75.6632 188.836 78.6774 183.418 79.326C178.802 79.8984 175.635 77.8762 174.185 73.3357C170.903 63.0337 168.843 52.0831 167.546 41.4378C166.592 33.6541 165.867 23.9245 167.317 16.2171H167.393Z" fill="#035F75"/>
+            <path d="M231.303 3.70228C238.553 1.90898 248.092 1.10772 255.532 0.726168C259.386 0.535391 265.987 0.573549 266.254 5.9153C266.521 11.0663 259.309 12.0583 255.647 12.2491C251.869 12.4399 248.206 12.8214 244.543 13.0503C241.376 13.2411 242.368 15.1489 242.521 17.7434C242.712 21.1011 242.979 24.5733 243.17 27.9691C243.246 29.2664 244.276 30.1821 245.574 30.1439C250.038 29.915 264.231 27.3586 264.613 34.7226C264.918 40.2933 257.096 41.3998 253.128 41.5905C250.839 41.705 248.664 41.5143 246.375 41.6669C245.077 41.7432 244.124 42.5826 244.2 43.9562C244.429 48.1152 244.734 52.274 245.268 56.433C245.459 57.8066 246.108 59.1802 246.184 60.5538C246.413 64.8272 241.758 66.9639 238.095 67.1547C235.92 67.2692 233.402 66.8113 231.723 65.2087C228.9 62.6905 229.052 57.8829 228.861 54.4108C227.869 39.6446 226.687 24.764 225.885 9.9979C225.695 6.64022 228.175 4.50353 231.342 3.74042L231.303 3.70228Z" fill="#035F75"/>
+            <path d="M282.129 36.0576C282.243 20.8717 291.095 4.31234 307.12 1.75593C310.287 1.29806 313.492 0.916504 316.774 0.916504C333.18 1.03097 341.422 12.1341 341.308 27.816C341.155 46.8937 329.327 63.6821 309.028 63.5294C292.431 63.415 281.976 52.3881 282.129 35.9813V36.0576ZM298.039 35.5997C298.001 43.04 300.405 52.3118 309.448 52.3881C320.169 52.4644 325.473 37.2023 325.511 28.2739C325.511 24.3057 324.023 13.1644 318.758 13.1262C317.575 13.1262 316.468 13.3933 315.286 13.3933C313.912 13.3933 312.5 13.088 311.127 13.0499C302.694 12.9736 298.078 28.8462 298.039 35.5997Z" fill="#035F75"/>
+            <path d="M380.185 5.11386C384.535 5.34279 388.846 6.5638 393.082 7.89924C405.52 11.8674 412.617 22.093 411.892 35.1803C410.977 52.045 397.546 67.0401 379.994 66.0862C362.519 65.1323 353.171 50.4043 354.087 33.9593C354.85 19.4603 363.931 4.23628 380.223 5.11386H380.185ZM388.694 18.6209C386.862 17.8196 384.764 17.5144 382.703 17.3999C381.406 17.3236 380.261 16.8657 378.964 16.7894C378.354 16.7894 377.781 16.7894 377.247 17.2091C372.096 20.5286 370.15 28.7702 369.845 34.4172C369.731 36.5921 369.692 38.8814 369.998 40.9799C370.723 46.0928 374.805 54.983 380.757 55.2882C382.36 55.3645 383.848 54.8685 385.183 54.0291C392.166 50.1372 395.905 41.8575 396.325 34.1501C396.63 28.1979 394.646 21.2155 388.694 18.6209Z" fill="#035F75"/>
+            <path d="M460.337 8.58611C456.331 14.2713 446.029 8.28086 444.961 22.0549C443.663 38.8052 456.446 55.5935 455.186 71.6569C454.271 83.6377 444.465 87.9874 433.59 87.148C429.737 86.8428 421.839 85.9271 422.258 80.509C422.602 75.9685 427.753 75.0528 431.416 75.3199C435.002 75.587 438.398 76.6553 438.78 71.6951C439.924 56.6237 427.371 38.5381 428.745 20.834C429.584 9.92157 436.338 3.58773 446.601 0.993164C448.929 0.382678 451.256 -0.151498 453.736 0.0392793C457.705 0.344522 463.466 4.27453 460.337 8.62424V8.58611Z" fill="#FE6C5D"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    </>
+  );
+}

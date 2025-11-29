@@ -317,10 +317,10 @@ export default function BookingModal({ isOpen, onClose, providerData }) {
               />
             </div>
             <div>
-              <h3 className="font-semibold font-montserrat">Seam Rahman</h3>
+              <h3 className="font-semibold">Seam Rahman</h3>
               <div className="flex items-center gap-1 text-sm text-gray-600">
                 <MapPin className="w-3 h-3" />
-                <span className="font-montserrat">New York, NY</span>
+                <span className="">New York, NY</span>
               </div>
             </div>
           </div>
@@ -330,7 +330,7 @@ export default function BookingModal({ isOpen, onClose, providerData }) {
             <div className="text-2xl font-normal text-[#035F75] font-bakso">
               $25
             </div>
-            <div className="text-xs text-[#E26A15] font-montserrat">
+            <div className="text-xs text-[#E26A15]">
               Total per day
             </div>
           </div>
@@ -339,7 +339,7 @@ export default function BookingModal({ isOpen, onClose, providerData }) {
           <div className="space-y-2 text-sm">
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 fill-current text-gray-700" />
-              <span className="font-montserrat">5.0 (55 reviews)</span>
+              <span className="">5.0 (55 reviews)</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <svg
@@ -356,7 +356,7 @@ export default function BookingModal({ isOpen, onClose, providerData }) {
                   fill="#035F75"
                 />
               </svg>
-              <span className="font-montserrat">Repeat pet owners</span>
+              <span className="">Repeat pet owners</span>
             </div>
             <div className="flex items-center bg-[#FCF0D994] gap-2 text-sm text-[#E26A15]">
               <svg

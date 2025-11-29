@@ -30,24 +30,18 @@ export default function MobileAppSection() {
             >
               <div className="w-full h-full flex items-center justify-center text-white">
                 <div className="text-center">
-                  <div className="text-sm">Download on the</div>
-                  <div className="text-2xl font-semibold">App Store</div>
-                  <div className="text-xs text-gray-400 mt-1">[Replace SVG]</div>
+                  <img src="/flag/apple.png" alt="Google Play" className="h-20" />
                 </div>
               </div>
             </a>
 
             {/* Google Play Button Placeholder */}
-            <a 
-              href="#" 
+            <a
+              href="#"
               className="block w-[280px] h-[84px] bg-black rounded-xl overflow-hidden hover:opacity-90 transition-opacity"
             >
               <div className="w-full h-full flex items-center justify-center text-white">
-                <div className="text-center">
-                  <div className="text-sm">GET IT ON</div>
-                  <div className="text-2xl font-semibold">Google Play</div>
-                  <div className="text-xs text-gray-400 mt-1">[Replace SVG]</div>
-                </div>
+                <img src="/flag/google.png" alt="Google Play" className="h-20" />
               </div>
             </a>
           </div>

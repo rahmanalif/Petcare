@@ -6,7 +6,9 @@
       "WebFetch(domain:www.figma.com)",
       "Bash(npm ls:*)",
       "Bash(cat:*)",
-      "Bash(npx shadcn@latest add @shadcn-map/map)"
+      "Bash(npx shadcn@latest add @shadcn-map/map)",
+      "Bash(mkdir:*)",
+      "Bash(npx next build:*)"
     ],
     "deny": [],
     "ask": []

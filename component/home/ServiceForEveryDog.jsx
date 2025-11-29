@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ServicesSection() {
   return (
-    <div className="bg-linear-to-br from-gray-50 to-stone-100 py-36 px-8">
+    <div id="services" className="bg-linear-to-br from-gray-50 to-stone-100 py-36 px-8">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Services */}

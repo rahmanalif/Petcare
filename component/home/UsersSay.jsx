@@ -79,7 +79,7 @@ export default function TestimonialsSection() {
   };
 
   const TestimonialCard = ({ testimonial }) => (
-    <div className="bg-[#F8F8F8] rounded-2xl p-8 shadow-2xs hover:shadow-2xl transition-shadow shrink-0 w-[450px] mx-4 font-montserrat font-bold">
+    <div className="bg-[#F8F8F8] rounded-2xl p-8 shadow-2xs hover:shadow-2xl transition-shadow shrink-0 w-[450px] mx-4 font-bold">
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center text-3xl overflow-hidden">
@@ -125,7 +125,7 @@ export default function TestimonialsSection() {
         >
           What Our Users Say
         </h2>
-        <p className="text-gray-600 text-lg font-montserrat font-normal">
+        <p className="text-gray-600 text-lg font-normal">
           Hear the trusted feedback from customers who have put their faith in
           us
         </p>

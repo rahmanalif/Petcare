@@ -1,0 +1,212 @@
+"use client";
+import React, { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
+
+export default function BookingHistory() {
+  const [activeStatus, setActiveStatus] = useState("on-going");
+  const router = useRouter();
+
+  const bookingData = [
+    {
+      id: 1,
+      sitterName: "Tamim",
+      rating: 5,
+      ratingCount: "1200",
+      date: "02/09/2025",
+      service: "Dog walking",
+      price: "$99",
+      priceType: "Per walk",
+      contact: "(229) 555-0109",
+      pickupTime: "10:00 AM",
+      dropoffTime: "10:00 AM",
+      status: "on-going",
+    },
+    {
+      id: 2,
+      sitterName: "Tamim",
+      rating: 3,
+      ratingCount: "1200",
+      date: "02/09/2025",
+      service: "Dog walking",
+      price: "$99",
+      priceType: "Per walk",
+      contact: "(229) 555-0109",
+      pickupTime: "10:00 AM",
+      dropoffTime: "10:00 AM",
+      status: "on-going",
+    },
+    {
+      id: 3,
+      sitterName: "Tamim",
+      rating: 3,
+      ratingCount: "811,200",
+      date: "02/09/2025",
+      service: "Dog walking",
+      price: "$99",
+      priceType: "Per walk",
+      contact: "(229) 555-0109",
+      pickupTime: "10:00 AM",
+      dropoffTime: "10:00 AM",
+      status: "completed",
+    },
+  ];
+
+  const filteredBookings = bookingData.filter(
+    (booking) => booking.status === activeStatus
+  );
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "on-going":
+        return "text-[#035F75] border-b-2 border-[#035F75] rounded-none";
+      case "completed":
+        return "bg-gray-200 text-gray-700";
+      case "cancelled":
+        return "bg-red-100 text-red-700";
+      case "upcoming":
+        return "bg-blue-100 text-blue-700";
+      default:
+        return "bg-gray-200 text-gray-700";
+    }
+  };
+
+  const statuses = ["On going", "Completed", "Cancelled", "Upcoming"];
+
+  return (
+
+    <div className="bg-white rounded-lg border border-gray-200 p-8">            
+    <div className="grid grid-cols-2">
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">Order history</h2>
+
+      {/* Status Tabs */}
+      <div className="flex gap-2 mb-8">
+        {statuses.map((status) => {
+          const statusKey = status.toLowerCase().replace(" ", "-");
+          const isActive = activeStatus === statusKey;
+          return (
+            <button
+              key={status}
+              onClick={() => setActiveStatus(statusKey)}
+              className={`px-2 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
+                isActive
+                  ? "bg-[#035F75] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {status}
+            </button>
+          );
+        })}
+      </div>  
+    </div>
+      
+
+      {/* Bookings List */}
+      <div className="space-y-4">
+        {filteredBookings.length > 0 ? (
+          filteredBookings.map((booking) => (
+            <div
+              key={booking.id}
+              onClick={() => router.push('/settings/ongoing')}
+              className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow bg-white cursor-pointer"
+            >
+              {/* Header Row */}
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex gap-3 items-start">
+                  <div className="w-14 h-14 rounded-full shrink-0 overflow-hidden">
+                    <img
+                      src="/Ellipse.png"
+                      alt={booking.sitterName}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 text-lg">
+                      {booking.sitterName}
+                    </h3>
+                    <div className="flex items-center gap-1 text-sm">
+                      <span className="text-yellow-400">★</span>
+                      <span className="font-medium">
+                        {booking.rating}.{booking.rating > 0 ? "8" : "0"}({booking.ratingCount})
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  <div className="text-sm font-medium bg-[#D9F5FC] text-[#035F75] px-3 py-1 rounded">
+                    {booking.date}
+                  </div>
+                  <div className="text-2xl font-semibold text-gray-900">
+                    {booking.price}
+                    <span className="text-sm text-gray-500 font-normal ml-1">
+                      {booking.priceType}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Service Name */}
+              <div className="text-base font-semibold text-gray-900 mb-3">
+                {booking.service}
+              </div>
+
+              {/* Contact and Date Info */}
+              <div className="text-sm font-semibold text-gray-900 mb-2">Contact</div>
+
+              {/* 3 Column Grid Layout */}
+              <div className="grid grid-cols-3 gap-4">
+                {/* Column 1: Contact and Date */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <span>{booking.contact}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>{booking.date}</span>
+                  </div>
+                </div>
+
+                {/* Column 2: Pick-up and Drop-off times */}
+                <div className="space-y-2">
+                  <div className="text-sm text-gray-600">
+                    Pick-up time: <span className="font-semibold text-gray-900">{booking.pickupTime}</span>
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Drop-off time: <span className="font-semibold text-gray-900">{booking.dropoffTime}</span>
+                  </div>
+                </div>
+
+                {/* Column 3: Status Badge */}
+                <div className="flex justify-end items-start">
+                  <span
+                    className={`px-4 py-1.5 rounded-md text-sm font-medium ${getStatusColor(
+                      booking.status
+                    )}`}
+                  >
+                    {booking.status === "on-going"
+                      ? "On going"
+                      : booking.status.charAt(0).toUpperCase() +
+                        booking.status.slice(1)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-gray-500">No bookings found for this status.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

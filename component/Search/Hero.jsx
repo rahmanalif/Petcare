@@ -248,7 +248,7 @@ export default function FindMatchSection() {
           <h1 className="text-5xl font-bold text-gray-900 mb-2 font-bakso">
             Find a Match
           </h1>
-          <p className="text-gray-600 font-montserrat font-medium">
+          <p className="text-gray-600 font-medium">
             Add dates to see sitters who'll be available for your need. These
             are sitters in your area, but they might not be available.
           </p>
@@ -263,7 +263,7 @@ export default function FindMatchSection() {
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    className={`font-montserrat border-2 ${
+                    className={`border-2 ${
                       !showMap
                         ? 'bg-[#035F75] text-white border-[#035F75]'
                         : 'bg-white text-[#035F75] border-[#035F75]'
@@ -275,7 +275,7 @@ export default function FindMatchSection() {
                   </Button>
                   <Button
                     variant="outline"
-                    className={`border-2 border-[#035F75] font-montserrat ${
+                    className={`border-2 border-[#035F75] ${
                       showMap
                         ? 'bg-[#035F75] text-white'
                         : 'bg-white text-[#035F75]'
@@ -297,7 +297,7 @@ export default function FindMatchSection() {
                       {/* Sitter locations */}
                       <MapMarker position={[40.7128, -74.0060]}>
                         <MapPopup>
-                          <div className="font-montserrat">
+                          <div className="">
                             <div className="font-semibold">Seam Rahman</div>
                             <div className="text-sm text-gray-600">New York, NY</div>
                             <div className="text-sm font-semibold text-[#035F75] mt-1">$25/day</div>
@@ -316,17 +316,17 @@ export default function FindMatchSection() {
                   <>
                     {/* Looking For */}
                 <div>
-                  <label className="block text-sm font-semibold mb-2 font-montserrat">
+                  <label className="block text-sm font-semibold mb-2">
                     Looking For
                   </label>
-                  <Select value={lookingFor} onValueChange={setLookingFor} className="font-montserrat">
+                  <Select value={lookingFor} onValueChange={setLookingFor} className="">
                     <SelectTrigger className="w-full flex items-center justify-between px-4 py-3 border rounded-lg">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="boarding" className={"font-montserrat"}><BoardingIcon className="inline-block mr-2" /> Boarding</SelectItem>
-                      <SelectItem value="Doggy Day Care" className={"font-montserrat"}><DaycareIcon className="inline-block mr-2" />Doggy Day Care</SelectItem>
-                      <SelectItem value="Dog Walking" className={"font-montserrat"}><WalkingIcon className="inline-block mr-2" />Dog Walking</SelectItem>
+                      <SelectItem value="boarding" className={""}><BoardingIcon className="inline-block mr-2" /> Boarding</SelectItem>
+                      <SelectItem value="Doggy Day Care" className={""}><DaycareIcon className="inline-block mr-2" />Doggy Day Care</SelectItem>
+                      <SelectItem value="Dog Walking" className={""}><WalkingIcon className="inline-block mr-2" />Dog Walking</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -338,7 +338,7 @@ export default function FindMatchSection() {
                   <>
                     {/* Schedule */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                      <label className="block text-sm font-semibold mb-2">
                         Schedule
                       </label>
                       <div className="grid grid-cols-2 gap-3">
@@ -351,7 +351,7 @@ export default function FindMatchSection() {
                           }`}
                         >
                           <BoardingIcon className="w-6 h-6 mb-2" />
-                          <label className="cursor-pointer font-montserrat">One Time</label>
+                          <label className="cursor-pointer">One Time</label>
                         </div>
                         <div
                           onClick={() => setSchedule("repeatWeekly")}
@@ -362,7 +362,7 @@ export default function FindMatchSection() {
                           }`}
                         >
                           <BoardingIcon className="w-6 h-6 mb-2" />
-                          <label className="cursor-pointer font-montserrat">Repeat Weekly</label>
+                          <label className="cursor-pointer">Repeat Weekly</label>
                         </div>
                       </div>
                     </div>
@@ -370,7 +370,7 @@ export default function FindMatchSection() {
                     {/* Days of the week - Show only when Repeat Weekly is selected */}
                     {schedule === "repeatWeekly" && (
                       <div>
-                        <label className="block text-sm font-semibold mb-2 font-montserrat">
+                        <label className="block text-sm font-semibold mb-2">
                           Days of the week
                         </label>
                         <div className="flex gap-2 justify-between">
@@ -390,7 +390,7 @@ export default function FindMatchSection() {
                                   [day.key]: !prev[day.key],
                                 }))
                               }
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold font-montserrat transition-colors ${
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
                                 selectedDays[day.key]
                                   ? "bg-[#035F75] text-white"
                                   : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -405,7 +405,7 @@ export default function FindMatchSection() {
 
                     {/* Dates */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                      <label className="block text-sm font-semibold mb-2">
                         Dates
                       </label>
                       <div className="relative">
@@ -414,7 +414,7 @@ export default function FindMatchSection() {
                           placeholder="DD/MM/YY"
                           value={daycareDate}
                           onChange={(e) => setDaycareDate(e.target.value)}
-                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 font-montserrat focus-visible:ring-0"
+                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 focus-visible:ring-0"
                         />
                         <svg
                           className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -435,7 +435,7 @@ export default function FindMatchSection() {
                   <>
                     {/* Schedule */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                      <label className="block text-sm font-semibold mb-2">
                         Schedule
                       </label>
                       <div className="grid grid-cols-2 gap-3">
@@ -448,7 +448,7 @@ export default function FindMatchSection() {
                           }`}
                         >
                           <BoardingIcon className="w-6 h-6 mb-2" />
-                          <label className="cursor-pointer font-montserrat">One Time</label>
+                          <label className="cursor-pointer">One Time</label>
                         </div>
                         <div
                           onClick={() => setSchedule("repeatWeekly")}
@@ -459,7 +459,7 @@ export default function FindMatchSection() {
                           }`}
                         >
                           <BoardingIcon className="w-6 h-6 mb-2" />
-                          <label className="cursor-pointer font-montserrat">Repeat Weekly</label>
+                          <label className="cursor-pointer">Repeat Weekly</label>
                         </div>
                       </div>
                     </div>
@@ -467,7 +467,7 @@ export default function FindMatchSection() {
                     {/* Days of the week - Show only when Repeat Weekly is selected */}
                     {schedule === "repeatWeekly" && (
                       <div>
-                        <label className="block text-sm font-semibold mb-2 font-montserrat">
+                        <label className="block text-sm font-semibold mb-2">
                           Days of the week
                         </label>
                         <div className="flex gap-2 justify-between">
@@ -487,7 +487,7 @@ export default function FindMatchSection() {
                                   [day.key]: !prev[day.key],
                                 }))
                               }
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold font-montserrat transition-colors ${
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
                                 selectedDays[day.key]
                                   ? "bg-[#035F75] text-white"
                                   : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -502,7 +502,7 @@ export default function FindMatchSection() {
 
                     {/* Dates */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2 font-montserrat">
+                      <label className="block text-sm font-semibold mb-2">
                         Dates
                       </label>
                       <div className="relative">
@@ -511,7 +511,7 @@ export default function FindMatchSection() {
                           placeholder="DD/MM/YY"
                           value={daycareDate}
                           onChange={(e) => setDaycareDate(e.target.value)}
-                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 font-montserrat focus-visible:ring-0"
+                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 focus-visible:ring-0"
                         />
                         <svg
                           className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -533,25 +533,25 @@ export default function FindMatchSection() {
                     {/* Date Inputs */}
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                        <label className="block text-xs font-semibold mb-1">
                           Start date
                         </label>
                         <Input
                           type="text"
                           value={startDate}
                           onChange={(e) => setStartDate(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                        <label className="block text-xs font-semibold mb-1">
                           End date
                         </label>
                         <Input
                           type="text"
                           value={endDate}
                           onChange={(e) => setEndDate(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                     </div>
@@ -559,25 +559,25 @@ export default function FindMatchSection() {
                     {/* Time Inputs */}
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                        <label className="block text-xs font-semibold mb-1">
                           Start time
                         </label>
                         <Input
                           type="text"
                           value={startTime}
                           onChange={(e) => setStartTime(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold mb-1 font-montserrat">
+                        <label className="block text-xs font-semibold mb-1">
                           End time
                         </label>
                         <Input
                           type="text"
                           value={endTime}
                           onChange={(e) => setEndTime(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0 font-montserrat"
+                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                     </div>
@@ -586,11 +586,11 @@ export default function FindMatchSection() {
 
                 {/* Pet Selection */}
                 <div>
-                  <label className="block text-sm font-semibold mb-2 font-montserrat">
+                  <label className="block text-sm font-semibold mb-2">
                     Pet
                   </label>
                   <div className="mb-2 ">
-                    <span className=" text-sm text-black font-medium font-montserrat">Your pets</span>
+                    <span className=" text-sm text-black font-medium">Your pets</span>
                   </div>
                   <Select value={selectedPet} onValueChange={setSelectedPet}>
                     <SelectTrigger className="h-18 py-8 px-6">
@@ -600,35 +600,35 @@ export default function FindMatchSection() {
                           alt="Pet"
                           className="w-8 h-8 rounded-full object-cover"
                         />
-                        <div className="text-left font-montserrat">
-                          <div className="font-semibold text-sm font-montserrat ">Bob</div>
-                          <div className="text-xs text-gray-500 font-montserrat">
+                        <div className="text-left">
+                          <div className="font-semibold text-sm ">Bob</div>
+                          <div className="text-xs text-gray-500">
                             Australian Shepherds
                           </div>
                         </div>
                       </div>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="bob" className={"font-montserrat"}>
+                      <SelectItem value="bob" className={""}>
                         Bob - Australian Shepherds
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                  <p className="text-xs text-gray-500 mt-2 font-montserrat">
+                  <p className="text-xs text-gray-500 mt-2">
                     Select at least one pet to ensure a more accurate search
                   </p>
                 </div>
 
                 {/* Filters Section */}
                 <div className="border-t pt-4">
-                  <h3 className="font-semibold mb-4 font-montserrat">Filters</h3>
+                  <h3 className="font-semibold mb-4">Filters</h3>
 
                   {lookingFor === "Dog Walking" ? (
                     /* Dog Walking Filters */
                     <>
                       {/* Available time */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Available time
                         </h4>
                         <FilterOption
@@ -645,7 +645,7 @@ export default function FindMatchSection() {
 
                       {/* Other */}
                       <div>
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">Other</h4>
+                        <h4 className="text-sm font-semibold mb-2">Other</h4>
                         <FilterOption
                           label="Dog first aid / CPR"
                           checked={walkingFilters.dogFirstAid}
@@ -658,7 +658,7 @@ export default function FindMatchSection() {
                     <>
                       {/* Day care type */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Day care type
                         </h4>
                         <FilterOption
@@ -680,7 +680,7 @@ export default function FindMatchSection() {
 
                       {/* Type of home */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Type of home
                         </h4>
                         <FilterOption
@@ -702,7 +702,7 @@ export default function FindMatchSection() {
 
                       {/* Daytime availability */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Daytime availability
                         </h4>
                         <FilterOption
@@ -719,7 +719,7 @@ export default function FindMatchSection() {
 
                       {/* Home features */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Home features
                         </h4>
                         <FilterOption
@@ -741,7 +741,7 @@ export default function FindMatchSection() {
 
                       {/* Pets in the home */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Pets in the home
                         </h4>
                         <FilterOption
@@ -768,7 +768,7 @@ export default function FindMatchSection() {
 
                       {/* Children in the home */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Children in the home
                         </h4>
                         <FilterOption
@@ -790,7 +790,7 @@ export default function FindMatchSection() {
 
                       {/* Others */}
                       <div>
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">Others</h4>
+                        <h4 className="text-sm font-semibold mb-2">Others</h4>
                         <FilterOption
                           label="Accepts non-spayed female dogs"
                           checked={daycareFilters.acceptsNonSpayed}
@@ -818,7 +818,7 @@ export default function FindMatchSection() {
                     <>
                       {/* Daytime availability */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Daytime availability
                         </h4>
                         <FilterOption
@@ -830,7 +830,7 @@ export default function FindMatchSection() {
 
                       {/* Home features */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Home features
                         </h4>
                         <FilterOption
@@ -857,7 +857,7 @@ export default function FindMatchSection() {
 
                       {/* Pets in the home */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Pets in the home
                         </h4>
                         <FilterOption
@@ -884,7 +884,7 @@ export default function FindMatchSection() {
 
                       {/* Children in the home */}
                       <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">
+                        <h4 className="text-sm font-semibold mb-2">
                           Children in the home
                         </h4>
                         <FilterOption
@@ -906,7 +906,7 @@ export default function FindMatchSection() {
 
                       {/* Others */}
                       <div>
-                        <h4 className="text-sm font-semibold mb-2 font-montserrat">Others</h4>
+                        <h4 className="text-sm font-semibold mb-2">Others</h4>
                         <FilterOption
                           label="Accepts non-spayed female dogs"
                           checked={filters.acceptsNonSpayed}
@@ -955,7 +955,7 @@ function FilterOption({ label, checked, onToggle }) {
       className="flex items-center justify-between py-2 cursor-pointer"
       onClick={onToggle}
     >
-      <span className="text-sm text-gray-700 font-montserrat">{label}</span>
+      <span className="text-sm text-gray-700">{label}</span>
       {checked ? (
         <CheckedIcon className="w-5 h-5" />
       ) : (
