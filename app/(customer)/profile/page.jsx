@@ -1,4 +1,4 @@
-import Profile from "../../component/Search/Profile";
+import Profile from "@/component/Search/Profile";
 
 
 export default function WuffoosLanding() {
