@@ -75,12 +75,12 @@ export default function BookingHistory() {
 
   return (
 
-    <div className="bg-white rounded-lg border border-gray-200 p-8">            
-    <div className="grid grid-cols-2">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Order history</h2>
+    <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
+    <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-0">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">Order history</h2>
 
       {/* Status Tabs */}
-      <div className="flex gap-2 mb-8">
+      <div className="flex flex-wrap gap-2 mb-4 sm:mb-8">
         {statuses.map((status) => {
           const statusKey = status.toLowerCase().replace(" ", "-");
           const isActive = activeStatus === statusKey;
@@ -88,7 +88,7 @@ export default function BookingHistory() {
             <button
               key={status}
               onClick={() => setActiveStatus(statusKey)}
-              className={`px-2 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
+              className={`px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                 isActive
                   ? "bg-[#035F75] text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -98,7 +98,7 @@ export default function BookingHistory() {
             </button>
           );
         })}
-      </div>  
+      </div>
     </div>
       
 
@@ -109,12 +109,12 @@ export default function BookingHistory() {
             <div
               key={booking.id}
               onClick={() => router.push('/settings/ongoing')}
-              className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow bg-white cursor-pointer"
+              className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow bg-white cursor-pointer"
             >
               {/* Header Row */}
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex gap-3 items-start">
-                  <div className="w-14 h-14 rounded-full shrink-0 overflow-hidden">
+              <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
+                <div className="flex gap-3 items-start w-full sm:w-auto">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full shrink-0 overflow-hidden">
                     <img
                       src="/Ellipse.png"
                       alt={booking.sitterName}
@@ -122,10 +122,10 @@ export default function BookingHistory() {
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">
+                    <h3 className="font-semibold text-gray-900 text-base sm:text-lg">
                       {booking.sitterName}
                     </h3>
-                    <div className="flex items-center gap-1 text-sm">
+                    <div className="flex items-center gap-1 text-xs sm:text-sm">
                       <span className="text-yellow-400">★</span>
                       <span className="font-medium">
                         {booking.rating}.{booking.rating > 0 ? "8" : "0"}({booking.ratingCount})
@@ -133,13 +133,13 @@ export default function BookingHistory() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-2">
-                  <div className="text-sm font-medium bg-[#D9F5FC] text-[#035F75] px-3 py-1 rounded">
+                <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2 w-full sm:w-auto">
+                  <div className="text-xs sm:text-sm font-medium bg-[#D9F5FC] text-[#035F75] px-2 sm:px-3 py-1 rounded">
                     {booking.date}
                   </div>
-                  <div className="text-2xl font-semibold text-gray-900">
+                  <div className="text-xl sm:text-2xl font-semibold text-gray-900">
                     {booking.price}
-                    <span className="text-sm text-gray-500 font-normal ml-1">
+                    <span className="text-xs sm:text-sm text-gray-500 font-normal ml-1">
                       {booking.priceType}
                     </span>
                   </div>
@@ -147,7 +147,7 @@ export default function BookingHistory() {
               </div>
 
               {/* Service Name */}
-              <div className="text-base font-semibold text-gray-900 mb-3">
+              <div className="text-sm sm:text-base font-semibold text-gray-900 mb-3">
                 {booking.service}
               </div>
 
@@ -155,7 +155,7 @@ export default function BookingHistory() {
               <div className="text-sm font-semibold text-gray-900 mb-2">Contact</div>
 
               {/* 3 Column Grid Layout */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Column 1: Contact and Date */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm text-gray-600">

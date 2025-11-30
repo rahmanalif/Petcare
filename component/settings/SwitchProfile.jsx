@@ -10,14 +10,14 @@ export default function SwitchProfile() {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
         Switch profile
       </h2>
 
       {/* Toggle Switch */}
-      <div className="flex items-center justify-between mb-8">
-        <span className="text-base font-medium text-gray-900">
+      <div className="flex items-center justify-between mb-6 sm:mb-8">
+        <span className="text-sm sm:text-base font-medium text-gray-900">
           Switch as a provider
         </span>
         <button

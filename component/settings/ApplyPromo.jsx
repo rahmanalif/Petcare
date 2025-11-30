@@ -20,31 +20,31 @@ export default function ApplyPromo() {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
         Apply promo codes
       </h2>
 
       {/* Input Section */}
-      <div className="max-w-md mb-8">
+      <div className="max-w-md mb-6 sm:mb-8">
         <Label
           htmlFor="promo"
           className="text-sm font-medium text-gray-700 mb-2 block"
         >
           Promo Code
         </Label>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <Input
             id="promo"
             placeholder="Enter promo code"
             value={promoCode}
             onChange={(e) => setPromoCode(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleApplyPromo()}
-            className="flex-1"
+            className="flex-1 w-full"
           />
           <Button
             onClick={handleApplyPromo}
-            className="bg-teal-600 hover:bg-teal-700 text-white"
+            className="bg-teal-600 hover:bg-teal-700 text-white w-full sm:w-auto"
           >
             Apply
           </Button>

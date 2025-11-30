@@ -55,22 +55,22 @@ export default function AccountSettings() {
               onClick={handleNavigateToOngoing}
               className="cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition-colors"
             >
-              <p className="text-sm text-gray-600 mb-1">This Month</p>
+              <p className="text-sm text-gray-600 mb-1 ">This Month</p>
               <p className="text-lg font-bold text-gray-900 font-montserrat">$842.00</p>
             </div>
             <div
               onClick={handleNavigateToOngoing}
               className="cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition-colors"
             >
-              <p className="text-sm text-gray-600 mb-1">Last Month</p>
-              <p className="text-lg font-bold text-gray-900 font-montserrat">$753.50</p>
+              <p className="text-sm text-gray-600 mb-1 flex items-center justify-center">Last Month</p>
+              <p className="text-lg font-bold text-gray-900 font-montserrat flex items-center justify-center">$753.50</p>
             </div>
             <div
               onClick={handleNavigateToOngoing}
               className="cursor-pointer hover:bg-gray-50 p-3 rounded-lg transition-colors"
             >
-              <p className="text-sm text-gray-600 mb-1">Pending</p>
-              <p className="text-lg font-bold text-gray-900 font-montserrat">$135.00</p>
+              <p className="text-sm text-gray-600 mb-1 text-right">Pending</p>
+              <p className="text-lg font-bold text-gray-900 font-montserrat text-right">$135.00</p>
             </div>
           </div>
         </div>

@@ -33,7 +33,7 @@ export default function SitterNavbar() {
               Home
             </Link>
             <Link
-              href="/createServices"
+              href="/createOrder"
               className="text-gray-700 hover:text-teal-600 transition font-medium"
             >
               Create service

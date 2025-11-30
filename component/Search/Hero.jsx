@@ -241,29 +241,29 @@ export default function FindMatchSection() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-5xl font-bold text-gray-900 mb-2 font-bakso">
+        <div className="mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 font-bakso">
             Find a Match
           </h1>
-          <p className="text-gray-600 font-medium">
+          <p className="text-sm sm:text-base text-gray-600 font-medium">
             Add dates to see sitters who'll be available for your need. These
             are sitters in your area, but they might not be available.
           </p>
         </div>
 
-        <div className="flex gap-6 bg">
+        <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Left Sidebar - Filters or Map */}
-          <div className="w-80 shrink-0 bg">
+          <div className="w-full lg:w-80 lg:shrink-0">
             <div>
-              <CardContent className="p-6 space-y-6">
+              <CardContent className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
                 {/* Filter and Location Buttons */}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
-                    className={`border-2 ${
+                    className={`flex-1 sm:flex-none border-2 text-sm sm:text-base ${
                       !showMap
                         ? 'bg-[#035F75] text-white border-[#035F75]'
                         : 'bg-white text-[#035F75] border-[#035F75]'
@@ -275,7 +275,7 @@ export default function FindMatchSection() {
                   </Button>
                   <Button
                     variant="outline"
-                    className={`border-2 border-[#035F75] ${
+                    className={`flex-1 sm:flex-none border-2 text-sm sm:text-base border-[#035F75] ${
                       showMap
                         ? 'bg-[#035F75] text-white'
                         : 'bg-white text-[#035F75]'
@@ -289,7 +289,7 @@ export default function FindMatchSection() {
 
                 {showMap ? (
                   /* Map View */
-                  <div className="w-full h-[600px] rounded-lg overflow-hidden">
+                  <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] rounded-lg overflow-hidden">
                     <Map center={[40.7128, -74.0060]} zoom={13} className="h-full w-full">
                       <MapTileLayer />
                       <MapZoomControl />
@@ -338,30 +338,30 @@ export default function FindMatchSection() {
                   <>
                     {/* Schedule */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold mb-2">
                         Schedule
                       </label>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
                         <div
                           onClick={() => setSchedule("oneTime")}
-                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                          className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "oneTime"
                               ? "border-[#035F75] bg-[#035F75]/5"
                               : "border-gray-200 hover:border-[#035F75]"
                           }`}
                         >
-                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">One Time</label>
                         </div>
                         <div
                           onClick={() => setSchedule("repeatWeekly")}
-                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                          className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "repeatWeekly"
                               ? "border-[#035F75] bg-[#035F75]/5"
                               : "border-gray-200 hover:border-[#035F75]"
                           }`}
                         >
-                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">Repeat Weekly</label>
                         </div>
                       </div>
@@ -370,10 +370,10 @@ export default function FindMatchSection() {
                     {/* Days of the week - Show only when Repeat Weekly is selected */}
                     {schedule === "repeatWeekly" && (
                       <div>
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-xs sm:text-sm font-semibold mb-2">
                           Days of the week
                         </label>
-                        <div className="flex gap-2 justify-between">
+                        <div className="flex gap-1 sm:gap-2 justify-between">
                           {[
                             { key: "M", label: "M" },
                             { key: "T", label: "T" },
@@ -390,7 +390,7 @@ export default function FindMatchSection() {
                                   [day.key]: !prev[day.key],
                                 }))
                               }
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
+                              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-colors ${
                                 selectedDays[day.key]
                                   ? "bg-[#035F75] text-white"
                                   : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -435,30 +435,30 @@ export default function FindMatchSection() {
                   <>
                     {/* Schedule */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold mb-2">
                         Schedule
                       </label>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
                         <div
                           onClick={() => setSchedule("oneTime")}
-                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                          className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "oneTime"
                               ? "border-[#035F75] bg-[#035F75]/5"
                               : "border-gray-200 hover:border-[#035F75]"
                           }`}
                         >
-                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">One Time</label>
                         </div>
                         <div
                           onClick={() => setSchedule("repeatWeekly")}
-                          className={`p-3 border-2 rounded-lg text-center text-sm cursor-pointer flex flex-col items-center transition-colors ${
+                          className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "repeatWeekly"
                               ? "border-[#035F75] bg-[#035F75]/5"
                               : "border-gray-200 hover:border-[#035F75]"
                           }`}
                         >
-                          <BoardingIcon className="w-6 h-6 mb-2" />
+                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">Repeat Weekly</label>
                         </div>
                       </div>
@@ -467,10 +467,10 @@ export default function FindMatchSection() {
                     {/* Days of the week - Show only when Repeat Weekly is selected */}
                     {schedule === "repeatWeekly" && (
                       <div>
-                        <label className="block text-sm font-semibold mb-2">
+                        <label className="block text-xs sm:text-sm font-semibold mb-2">
                           Days of the week
                         </label>
-                        <div className="flex gap-2 justify-between">
+                        <div className="flex gap-1 sm:gap-2 justify-between">
                           {[
                             { key: "M", label: "M" },
                             { key: "T", label: "T" },
@@ -487,7 +487,7 @@ export default function FindMatchSection() {
                                   [day.key]: !prev[day.key],
                                 }))
                               }
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
+                              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-colors ${
                                 selectedDays[day.key]
                                   ? "bg-[#035F75] text-white"
                                   : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -529,9 +529,9 @@ export default function FindMatchSection() {
                   </>
                 ) : (
                   /* Boarding fields */
-                  <div className="border border-gray-200 rounded-lg p-4 space-y-4">
+                  <div className="border border-gray-200 rounded-lg p-3 sm:p-4 space-y-3 sm:space-y-4">
                     {/* Date Inputs */}
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="block text-xs font-semibold mb-1">
                           Start date
@@ -557,7 +557,7 @@ export default function FindMatchSection() {
                     </div>
 
                     {/* Time Inputs */}
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="block text-xs font-semibold mb-1">
                           Start time
@@ -938,7 +938,7 @@ export default function FindMatchSection() {
           </div>
 
           {/* Right Section - Sitter Cards */}
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 space-y-4 sm:space-y-6">
             {sitters.map((sitter, index) => (
               <SitterCard key={index} sitter={sitter} />
             ))}

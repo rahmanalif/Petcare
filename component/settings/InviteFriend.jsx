@@ -10,14 +10,14 @@ export default function InviteFriend() {
   };
   const referralLink = "Wuffoos.com/ambas-refer-a-friend";
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
       <div className="">
-        <h3 className="text-xl font-semibold text-gray-900 mb-6">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
           Invite friends
         </h3>
         <div className="border-b-2 border-gray-600 mb-4"></div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div>
             <h4 className="text-base font-semibold text-gray-900 mb-2">
               Share Wuffoos with a friend
@@ -35,8 +35,8 @@ export default function InviteFriend() {
             <p className="text-sm font-medium text-gray-900 mb-4">
               Scan your QR Code in person
             </p>
-            <div className="flex justify-center bg-white border border-gray-200 rounded-lg p-8 mb-6">
-              <div className="w-32 h-32 bg-white rounded-lg flex shadow-2xl items-center justify-center">
+            <div className="flex justify-center bg-white border border-gray-200 rounded-lg p-4 sm:p-8 mb-4 sm:mb-6">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 bg-white rounded-lg flex shadow-2xl items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="110"
@@ -58,18 +58,18 @@ export default function InviteFriend() {
             <p className="text-sm font-medium text-gray-900 mb-3">
               Share your referral link
             </p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center gap-2 flex-1 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mb-4">
+              <div className="flex items-center gap-2 flex-1 bg-gray-50 rounded-lg px-3 sm:px-4 py-3 border border-gray-200">
                 <div className="w-8 h-8 bg-red-500 rounded flex items-center justify-center shrink-0">
                   <span className="text-white font-bold text-sm">W</span>
                 </div>
-                <span className="text-sm text-gray-700 truncate">
+                <span className="text-xs sm:text-sm text-gray-700 truncate">
                   {referralLink}
                 </span>
               </div>
               <button
                 onClick={copyToClipboard}
-                className="p-3 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-3 hover:bg-gray-100 rounded-lg transition-colors self-center sm:self-auto"
                 aria-label="Copy link"
               >
                 <svg
@@ -99,7 +99,7 @@ export default function InviteFriend() {
               </button>
             </div>
 
-            <button className="w-full bg-[#035F75] hover:bg-[#03566b] text-white font-medium py-3 px-4 rounded-lg transition-colors">
+            <button className="w-full bg-[#035F75] hover:bg-[#03566b] text-white font-medium py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">
               Share Now
             </button>
           </div>

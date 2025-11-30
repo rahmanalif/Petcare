@@ -11,17 +11,17 @@ export default function AccountDetail() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-xl font-semibold text-gray-900">Account</h2>
+    <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
+      <div className="flex justify-between items-center mb-6 sm:mb-8">
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Account</h2>
         <Button variant="outline" size="sm">
           Edit
         </Button>
       </div>
 
       {/* Avatar */}
-      <div className="flex mb-8">
-        <div className="w-24 h-24 bg-teal-500 rounded-full flex items-center justify-center">
+      <div className="flex justify-center sm:justify-start mb-6 sm:mb-8">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-teal-500 rounded-full flex items-center justify-center">
           <svg
             width="140"
             height="140"
@@ -47,7 +47,7 @@ export default function AccountDetail() {
       </div>
 
       {/* Form Fields */}
-      <div className="space-y-6 max-w-2xl mx-auto">
+      <div className="space-y-4 sm:space-y-6 max-w-2xl mx-auto">
         {/* Full Name */}
         <div>
           <Label
@@ -90,7 +90,7 @@ export default function AccountDetail() {
         </div>
 
         {/* State and Zip Code */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label
               htmlFor="state"

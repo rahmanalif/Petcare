@@ -82,7 +82,9 @@ export default function ServiceSetupForm() {
 
   const toggleCancellationPolicy = (policy) => {
     setCancellationPolicies((prev) =>
-      prev.includes(policy) ? prev.filter((p) => p !== policy) : [...prev, policy]
+      prev.includes(policy)
+        ? prev.filter((p) => p !== policy)
+        : [...prev, policy]
     );
   };
 
@@ -107,10 +109,38 @@ export default function ServiceSetupForm() {
             <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
           </div>
 
-          <div className="mt-4 flex gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+          <div className="mt-4 flex gap-2 p-3 bg-[#E3E6F0] border border-grey-200 rounded-lg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="50"
+              height="50"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_2973_14392)">
+                <path
+                  d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"
+                  fill="#585858"
+                />
+                <path
+                  d="M15.3156 4H8.68444L4 8.68444V15.3156L8.68444 20H15.3156L20 15.3156V8.68444L15.3156 4ZM18.2222 14.5778L14.5778 18.2222H9.42222L5.77778 14.5778V9.42222L9.42222 5.77778H14.5778L18.2222 9.42222V14.5778Z"
+                  fill="#585858"
+                />
+                <path
+                  d="M11.1094 7.55566H12.8872V13.7779H11.1094V7.55566Z"
+                  fill="#585858"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_2973_14392">
+                  <rect width="24" height="24" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
             <p className="text-sm text-gray-700">
-              We have suggested some default settings based on what works well for new sitters and walkers. You can edit now, or at any time in the future.
+              We have suggested some default settings based on what works well
+              for new sitters and walkers. You can edit now, or at any time in
+              the future.
             </p>
           </div>
         </div>
@@ -140,8 +170,14 @@ export default function ServiceSetupForm() {
           onClick={() => setShowAdditionalRates(!showAdditionalRates)}
           className="w-full px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2 mb-8"
         >
-          {showAdditionalRates ? 'Hide additional rates' : 'Show additional rates'}
-          <ChevronDown className={`w-5 h-5 transition-transform ${showAdditionalRates ? 'rotate-180' : ''}`} />
+          {showAdditionalRates
+            ? "Hide additional rates"
+            : "Show additional rates"}
+          <ChevronDown
+            className={`w-5 h-5 transition-transform ${
+              showAdditionalRates ? "rotate-180" : ""
+            }`}
+          />
         </button>
 
         {/* Additional Rates Section */}
@@ -149,7 +185,9 @@ export default function ServiceSetupForm() {
           <div className="mb-8 space-y-6">
             {/* 60 minute rate */}
             <div>
-              <h4 className="text-base font-semibold text-gray-900 mb-3">60 minute rate</h4>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">
+                60 minute rate
+              </h4>
               <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                 <span className="text-gray-700">Per day</span>
                 <span className="text-gray-900 font-semibold">$28.00</span>
@@ -159,7 +197,9 @@ export default function ServiceSetupForm() {
 
             {/* Holiday Rate */}
             <div>
-              <h4 className="text-base font-semibold text-gray-900 mb-3">Holiday Rate</h4>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">
+                Holiday Rate
+              </h4>
               <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                 <span className="text-gray-700">Per day</span>
                 <span className="text-gray-900 font-semibold">$28.00</span>
@@ -169,7 +209,9 @@ export default function ServiceSetupForm() {
 
             {/* Additional Rate */}
             <div>
-              <h4 className="text-base font-semibold text-gray-900 mb-3">Additional Rate</h4>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">
+                Additional Rate
+              </h4>
               <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                 <span className="text-gray-700">Per day</span>
                 <span className="text-gray-900 font-semibold">$28.00</span>
@@ -179,7 +221,9 @@ export default function ServiceSetupForm() {
 
             {/* Puppy Rate */}
             <div>
-              <h4 className="text-base font-semibold text-gray-900 mb-3">Puppy Rate</h4>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">
+                Puppy Rate
+              </h4>
               <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                 <span className="text-gray-700">Per day</span>
                 <span className="text-gray-900 font-semibold">$28.00</span>
@@ -198,7 +242,9 @@ export default function ServiceSetupForm() {
 
             {/* Daily Sitter Pick-Up/Drop-Off */}
             <div>
-              <h4 className="text-base font-semibold text-gray-900 mb-3">Daily Sitter Pick-Up/Drop-Off</h4>
+              <h4 className="text-base font-semibold text-gray-900 mb-3">
+                Daily Sitter Pick-Up/Drop-Off
+              </h4>
               <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
                 <span className="text-gray-700">Per day</span>
                 <span className="text-gray-900 font-semibold">$28.00</span>
@@ -281,7 +327,9 @@ export default function ServiceSetupForm() {
           </p>
 
           <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 mb-4">
-            <div className="text-sm font-medium text-gray-900 mb-2">Location</div>
+            <div className="text-sm font-medium text-gray-900 mb-2">
+              Location
+            </div>
             <div className="text-sm text-gray-600 mb-3">New York, NY</div>
             <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
               <MapPin className="w-8 h-8 text-gray-400" />
@@ -337,7 +385,10 @@ export default function ServiceSetupForm() {
           </label>
           <div className="space-y-3 mb-8">
             {travelOptions.map((mode) => (
-              <label key={mode} className="flex items-center gap-3 cursor-pointer">
+              <label
+                key={mode}
+                className="flex items-center gap-3 cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={travelModes.includes(mode)}
@@ -357,7 +408,10 @@ export default function ServiceSetupForm() {
           </label>
           <div className="space-y-3 mb-6">
             {petSizeOptions.map((size) => (
-              <label key={size} className="flex items-center gap-3 cursor-pointer">
+              <label
+                key={size}
+                className="flex items-center gap-3 cursor-pointer"
+              >
                 <input
                   type="checkbox"
                   checked={petSizes.includes(size)}

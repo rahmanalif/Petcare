@@ -21,12 +21,12 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-3 sm:p-4 md:p-6">
       <div className="max-w-5xl mx-auto">
         {/* Pet Profile and Add Pet Section */}
-        <div className="flex gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 mb-4 sm:mb-6">
           {/* Pet Profile */}
-          <div className="bg-[#E7F4F6] rounded-lg p-3 border-2 border-[#035F75] flex items-center gap-3 w-fit">
+          <div className="bg-[#E7F4F6] rounded-lg p-3 border-2 border-[#035F75] flex items-center gap-3 w-full sm:w-fit">
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
               <img
                 src="/Ellipse.png"
@@ -41,20 +41,20 @@ export default function AccountSettings() {
           </div>
 
           {/* Add another Pet */}
-          <button className="text-[#035F75] border-2 border-dashed border-[#035F75] rounded-lg px-4 py-3 text-xs font-medium hover:bg-[#E7F4F6] transition-colors flex items-center justify-center gap-2 w-fit">
+          <button className="text-[#035F75] border-2 border-dashed border-[#035F75] rounded-lg px-4 py-3 text-xs font-medium hover:bg-[#E7F4F6] transition-colors flex items-center justify-center gap-2 w-full sm:w-fit">
             <span className="text-lg">+</span>
             <span>Add another Pet</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-12 gap-6 boarder-2 rounded-2xl bg-[#FFF] p-4 shadow-md">
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 rounded-2xl bg-[#FFF] p-3 sm:p-4 shadow-md">
           {/* Left Sidebar */}
-          <div className="col-span-3 space-y-2">
+          <div className="lg:col-span-3 space-y-2">
             {/* Navigation Menu */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mt-4">
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mt-0 lg:mt-4">
               <button
                 onClick={() => setActiveTab("account")}
-                className={`w-full text-left px-4 py-3 border-l-4 ${
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
                   activeTab === "account"
                     ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
                     : "border-transparent hover:bg-gray-50"
@@ -64,7 +64,7 @@ export default function AccountSettings() {
               </button>
               <button
                 onClick={() => setActiveTab("booking")}
-                className={`w-full text-left px-4 py-3 border-l-4 ${
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
                   activeTab === "booking"
                     ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
                     : "border-transparent hover:bg-gray-50"
@@ -74,7 +74,7 @@ export default function AccountSettings() {
               </button>
               <button
                 onClick={() => setActiveTab("payments")}
-                className={`w-full text-left px-4 py-3 border-l-4 ${
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
                   activeTab === "payments"
                     ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
                     : "border-transparent hover:bg-gray-50"
@@ -84,7 +84,7 @@ export default function AccountSettings() {
               </button>
               <button
                 onClick={() => setActiveTab("switch")}
-                className={`w-full text-left px-4 py-3 border-l-4 ${
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
                   activeTab === "switch"
                     ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
                     : "border-transparent hover:bg-gray-50"
@@ -94,35 +94,35 @@ export default function AccountSettings() {
               </button>
             </div>
 
-            <div className="pt-4 space-y-2">
-              <button 
+            <div className="pt-2 sm:pt-4 space-y-2">
+              <button
                 onClick={() => setActiveTab("friend")}
-                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 hover:bg-gray-100 rounded"
               >
                 Invite a friend to Wuffoos
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab("promo")}
-                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded"
+                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 hover:bg-gray-100 rounded"
               >
                 Apply promo codes
               </button>
             </div>
-            <div className="pt-4 space-y-2">
+            <div className="pt-2 sm:pt-4 space-y-2">
               <div
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded cursor-pointer"
+                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 hover:bg-gray-100 rounded cursor-pointer"
               >
                 Logout
               </div>
-              <div className="w-full text-left px-4 py-2 text-[#FE6C5D] hover:bg-gray-100 rounded cursor-pointer">
+              <div className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-[#FE6C5D] hover:bg-gray-100 rounded cursor-pointer">
                 Delete account
               </div>
             </div>
           </div>
 
           {/* Account Detail*/}
-          <div className="col-span-9">
+          <div className="lg:col-span-9 mt-4 lg:mt-0">
             {activeTab === "account" && <AccountDetail />}
             {activeTab === "booking" && <BookingHistory />}
             {activeTab === "payments" && <Payments />}

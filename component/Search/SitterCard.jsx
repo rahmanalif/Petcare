@@ -6,14 +6,14 @@ import { MapPin, Star, RefreshCw, CheckCircle } from "lucide-react";
 const SitterCard = ({ sitter }) => {
   return (
     <Link href="/profile">
-      <Card className="hover:shadow-md transition-shadow p-4 m-4">
-        <CardContent className="p-4 ">
-          <div className="flex items-start justify-between">
-            <div className="flex flex-col gap-3">
+      <Card className="hover:shadow-md transition-shadow p-2 sm:p-3 md:p-4 m-2 sm:m-3 md:m-4">
+        <CardContent className="p-2 sm:p-3 md:p-4">
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+            <div className="flex flex-col gap-2 sm:gap-3 w-full sm:w-auto">
               {/* Top Section - Profile and Name */}
-              <div className="flex gap-4">
+              <div className="flex gap-3 sm:gap-4">
                 {/* Profile Image */}
-                <div className="w-28 h-28 rounded-full bg-gray-300 shrink-0">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gray-300 shrink-0">
                   <img
                     src="/Ellipse 52.png"
                     alt="Profile"
@@ -23,33 +23,36 @@ const SitterCard = ({ sitter }) => {
 
                 {/* Name and Location */}
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg text-gray-900 pt-8">
+                  <h3 className="font-semibold text-base sm:text-lg text-gray-900 pt-4 sm:pt-6 md:pt-8">
                     {sitter.name}
                   </h3>
-                  <div className="flex items-center gap-1 text-sm text-gray-600">
-                    <MapPin className="w-4 h-4" />
+                  <div className="flex items-center gap-1 text-xs sm:text-sm text-gray-600">
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>{sitter.location}</span>
                   </div>
                 </div>
               </div>
 
               {/* Bottom Section - Stats under profile */}
-              <div className="flex flex-col gap-2 text-sm">
+              <div className="flex flex-col gap-2 text-xs sm:text-sm">
                 {/* Rating */}
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-current text-gray-700" />
-                  <span className="font-semibold">{sitter.rating}</span>
-                  <span className="text-gray-600">
-                    ({sitter.reviews} reviews)
-                  </span>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current text-gray-700" />
+                    <span className="font-semibold">{sitter.rating}</span>
+                    <span className="text-gray-600">
+                      ({sitter.reviews} reviews)
+                    </span>
+                  </div>
                   {/* Repeat pet owners */}
-                  <div className="flex items-center gap-1 pl-26 text-gray-600">
+                  <div className="flex items-center gap-1 text-gray-600">
                     <svg
-                      width="16"
-                      height="14"
+                      width="14"
+                      height="12"
                       viewBox="0 0 16 14"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
+                      className="w-3 h-3 sm:w-4 sm:h-4"
                     >
                       <path
                         fill-rule="evenodd"
@@ -63,26 +66,30 @@ const SitterCard = ({ sitter }) => {
                 </div>
 
                 {/* Availability */}
-                <div className="flex items-center gap-2 text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  <span>{sitter.availability}</span>
+                <div className="flex items-start gap-2 text-gray-700">
+                  <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mt-0.5 shrink-0 text-green-600" />
+                  <span className="text-xs sm:text-sm">{sitter.availability}</span>
                 </div>
               </div>
             </div>
 
             {/* Price and Background Check */}
-            <div className="text-right">
-              {sitter.backgroundCheck && (
-                <div className="flex items-center gap-1 text-sm bg-[#FCF0D994] text-orange-500 mb-2">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="">Background Check</span>
-                </div>
-              )}
-              <div className="font-bold text-[#035F75]">
-                ${sitter.price}
+            <div className="text-right sm:text-right w-full sm:w-auto flex sm:flex-col justify-between sm:justify-start items-center sm:items-end">
+              <div className="order-2 sm:order-1">
+                {sitter.backgroundCheck && (
+                  <div className="flex items-center gap-1 text-xs sm:text-sm bg-[#FCF0D994] text-orange-500 mb-0 sm:mb-2 px-2 py-1 rounded">
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span>Background Check</span>
+                  </div>
+                )}
               </div>
-              <div className="text-xs text-gray-500">
-                Total per day
+              <div className="order-1 sm:order-2">
+                <div className="font-bold text-lg sm:text-xl text-[#035F75]">
+                  ${sitter.price}
+                </div>
+                <div className="text-xs text-gray-500">
+                  Total per day
+                </div>
               </div>
             </div>
           </div>

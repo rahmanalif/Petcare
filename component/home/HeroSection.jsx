@@ -186,49 +186,49 @@ export default function HeroSection() {
     if (activeService === "boarding") {
       // Boarding: 4 columns - Start date, End date, Start time, End time
       return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 border-2 border-gray-200 shadow-amber-50 rounded-lg  p-3">
-          <div className="space-y-2 ">
-            <label className="text-sm text-gray-500 font-medium">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6 border-2 border-gray-200 shadow-amber-50 rounded-lg p-3 sm:p-4">
+          <div className="space-y-2">
+            <label className="text-xs sm:text-sm text-gray-500 font-medium">
               Start date
             </label>
             <input
               type="text"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-[#035F75] font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#035F75] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm text-gray-500 font-medium">
+            <label className="text-xs sm:text-sm text-gray-500 font-medium">
               End date
             </label>
             <input
               type="text"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm text-gray-500 font-medium">
+            <label className="text-xs sm:text-sm text-gray-500 font-medium">
               Start time
             </label>
             <input
               type="text"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-[#035F75] font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#035F75] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm text-gray-500 font-medium">
+            <label className="text-xs sm:text-sm text-gray-500 font-medium">
               End time
             </label>
             <input
               type="text"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -236,61 +236,61 @@ export default function HeroSection() {
     } else {
       // Daycare & Walking: 5 columns - Start date, End date, Start time, End time, Schedule
       return (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6 items-stretch">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-2 border-gray-200 shadow-amber-50 rounded-lg p-3 col-span-4">
-            <div className="space-y-2 ">
-              <label className="text-sm text-gray-500 font-medium">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 border-2 border-gray-200 shadow-amber-50 rounded-lg p-3 sm:p-4 lg:col-span-4">
+            <div className="space-y-2">
+              <label className="text-xs sm:text-sm text-gray-500 font-medium">
                 Start date
               </label>
               <input
                 type="text"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-teal-600 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-teal-600 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-500 font-medium">
+              <label className="text-xs sm:text-sm text-gray-500 font-medium">
                 End date
               </label>
               <input
                 type="text"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-500 font-medium">
+              <label className="text-xs sm:text-sm text-gray-500 font-medium">
                 Start time
               </label>
               <input
                 type="text"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-teal-600 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-teal-600 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm text-gray-500 font-medium">
+              <label className="text-xs sm:text-sm text-gray-500 font-medium">
                 End time
               </label>
               <input
                 type="text"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
           </div>
-          <div className="space-y-2 border-2 border-gray-200 rounded-lg p-3 h-full flex flex-col">
-            <label className="text-sm text-gray-500 font-medium">
+          <div className="space-y-2 border-2 border-gray-200 rounded-lg p-3 sm:p-4 h-full flex flex-col">
+            <label className="text-xs sm:text-sm text-gray-500 font-medium">
               Schedule
             </label>
             <div className="flex border border-gray-200 rounded-lg overflow-hidden flex-1">
               <button
                 onClick={() => setSchedule("onetime")}
-                className={`flex-1 px-2 py-2 text-sm font-medium transition-colors ${
+                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
                   schedule === "onetime"
                     ? "bg-white text-teal-600 border-r border-gray-200"
                     : "bg-gray-50 text-gray-500 border-r border-gray-200 hover:bg-gray-100"
@@ -300,7 +300,7 @@ export default function HeroSection() {
               </button>
               <button
                 onClick={() => setSchedule("repeat")}
-                className={`flex-1 px-2 py-2 text-sm font-medium transition-colors ${
+                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
                   schedule === "repeat"
                     ? "bg-white text-teal-600"
                     : "bg-gray-50 text-gray-500 hover:bg-gray-100"
@@ -316,19 +316,19 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="relative w-full max-w-[1669px] mx-auto pb-8">
+    <div className="relative w-full max-w-[1669px] mx-auto pb-8 px-4 sm:px-6 lg:px-8">
       {/* Background Image Container */}
       <div
-        className="w-full h-[777px] bg-cover bg-center bg-no-repeat"
+        className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-cover bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl"
         style={{ backgroundImage: "url('/IMAGE (2).png')" }}
       >
-        <div className="max-w-7xl mx-auto px-8 pt-8 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-12 lg:pt-16 pb-8 sm:pb-12 lg:pb-16">
           {/* Left Content */}
-          <div className="max-w-xl py-24">
-            <h1 className=" mb-6 font-bakso">
+          <div className="max-w-xl py-8 sm:py-12 md:py-16 lg:py-24">
+            <h1 className="mb-4 sm:mb-6 font-bakso">
               <SplitText
                 text="trusted Pet Care,"
-                className="text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-gray-800 leading-tight"
                 delay={100}
                 duration={0.6}
                 ease="power3.out"
@@ -338,12 +338,12 @@ export default function HeroSection() {
                 threshold={0.1}
                 rootMargin="-100px"
                 textAlign="center"
-                
+
               />
               <br />
               <SplitText
                 text="Whenever You Need It."
-                className="text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-gray-800 leading-tight"
                 delay={100}
                 duration={0.6}
                 ease="power3.out"
@@ -353,14 +353,14 @@ export default function HeroSection() {
                 threshold={0.1}
                 rootMargin="-100px"
                 textAlign="between"
-                
+
               />
-              
+
             </h1>
-            <p className="text-gray-600 text-lg mb-8 uppercase  font-bakso">
+            <p className="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 uppercase font-bakso">
               <SplitText
                 text="Find reliable sitters, walkers, and groomers near you—book in minutes."
-                className="text-gray-600 text-lg tracking-wide"
+                className="text-gray-600 tracking-wide"
                 delay={100}
                 duration={0.6}
                 ease="power3.out"
@@ -370,36 +370,36 @@ export default function HeroSection() {
                 threshold={0.1}
                 rootMargin="-100px"
                 textAlign="between"
-                
+
               />
-              
+
             </p>
           </div>
         </div>
       </div>
 
       {/* Service Selection Cards - positioned to overlap the background */}
-      <div className="bg-white rounded-2xl shadow-xl p-6 max-w-5xl mx-auto -mt-32 relative z-10">
+      <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 max-w-5xl mx-auto -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-32 relative z-10">
         {/* Service Tabs */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           {services.map((service) => (
             <button
               key={service.id}
               onClick={() => setActiveService(service.id)}
-              className={`flex flex-col items-center gap-3 p-6 rounded-xl border-2 transition-all ${
+              className={`flex flex-row sm:flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${
                 activeService === service.id
                   ? "border-teal-600 bg-white"
                   : "border-gray-200 hover:border-gray-300"
               }`}
             >
               <service.icon
-                className={`w-8 h-8 ${
+                className={`w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 ${
                   activeService === service.id
                     ? "text-teal-600"
                     : "text-teal-600"
                 }`}
               />
-              <span className="font-semibold uppercase tracking-wide text-sm font-bakso text-gray-800">
+              <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm font-bakso text-gray-800">
                 {service.label}
               </span>
             </button>
@@ -410,18 +410,21 @@ export default function HeroSection() {
         {renderFormFields()}
 
         {/* Bottom row with paw and search button */}
-        <div className="flex items-center justify-between pt-4">
-          <PawIcon className="w-16 h-16 text-teal-600" />
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+          <div className="hidden sm:block">
+            <PawIcon className="w-12 h-12 md:w-16 md:h-16 text-teal-600" />
+          </div>
           <Link
             href="/search"
-            className="flex items-center gap-2 bg-[#035F75] hover:bg-teal-700 text-white px-8 py-4 rounded-xl font-medium transition-colors"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#035F75] hover:bg-teal-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-colors"
           >
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="sm:w-6 sm:h-6"
             >
               <path
                 d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
