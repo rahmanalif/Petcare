@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { ChevronDown, MapPin } from "lucide-react";
 
-export default function DoggyDayCareForm() {
-  const [baseRate, setBaseRate] = useState("35.00");
+export default function BoardingForm() {
+  const [baseRate, setBaseRate] = useState("45.00");
   const [updateRates, setUpdateRates] = useState(true);
   const [showAdditionalRates, setShowAdditionalRates] = useState(false);
   const [petsPerDay, setPetsPerDay] = useState("3");
@@ -11,6 +11,7 @@ export default function DoggyDayCareForm() {
   const [useHomeAddress, setUseHomeAddress] = useState(true);
   const [location, setLocation] = useState("1000, BD");
   const [distanceType, setDistanceType] = useState("miles");
+  const [TimeType, settimeType] = useState("Yes");
   const [serviceArea, setServiceArea] = useState("0");
   const [travelModes, setTravelModes] = useState(["Walking"]);
   const [petSizes, setPetSizes] = useState([
@@ -92,6 +93,20 @@ export default function DoggyDayCareForm() {
         </label>
       </div>
 
+      {/* Base Rate Section */}
+      <div className="mb-8">
+        <label className="block text-base font-semibold text-gray-900 mb-3">
+          Set your base rate
+        </label>
+        <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+          <span className="text-gray-700">Per night</span>
+          <span className="text-gray-900 font-semibold">${baseRate}</span>
+        </div>
+        <p className="text-sm text-gray-600 mt-2">
+          What you will earn per service: ${(parseFloat(baseRate) * 0.86).toFixed(2)}
+        </p>
+      </div>
+
       {/* Show Additional Rates Button */}
       <button
         onClick={() => setShowAdditionalRates(!showAdditionalRates)}
@@ -107,6 +122,7 @@ export default function DoggyDayCareForm() {
         />
       </button>
 
+
       {/* Additional Rates Section */}
       {showAdditionalRates && (
         <div className="mb-8 space-y-6">
@@ -116,10 +132,10 @@ export default function DoggyDayCareForm() {
               60 minute rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per day</span>
-              <span className="text-gray-900 font-semibold">$35.00</span>
+              <span className="text-gray-700">Per night</span>
+              <span className="text-gray-900 font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $30.00</p>
+            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
           </div>
 
           {/* Holiday Rate */}
@@ -128,10 +144,10 @@ export default function DoggyDayCareForm() {
               Holiday Rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per day</span>
-              <span className="text-gray-900 font-semibold">$35.00</span>
+              <span className="text-gray-700">Per night</span>
+              <span className="text-gray-900 font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $30.00</p>
+            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
           </div>
 
           {/* Additional Rate */}
@@ -140,10 +156,10 @@ export default function DoggyDayCareForm() {
               Additional Rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per day</span>
-              <span className="text-gray-900 font-semibold">$35.00</span>
+              <span className="text-gray-700">Per night</span>
+              <span className="text-gray-900 font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $30.00</p>
+            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
           </div>
 
           {/* Puppy Rate */}
@@ -152,10 +168,10 @@ export default function DoggyDayCareForm() {
               Puppy Rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per day</span>
-              <span className="text-gray-900 font-semibold">$35.00</span>
+              <span className="text-gray-700">Per night</span>
+              <span className="text-gray-900 font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $30.00</p>
+            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
 
             <label className="flex items-center gap-3 cursor-pointer mt-3">
               <input
@@ -173,44 +189,46 @@ export default function DoggyDayCareForm() {
               Daily Sitter Pick-Up/Drop-Off
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per day</span>
-              <span className="text-gray-900 font-semibold">$35.00</span>
+              <span className="text-gray-700">Per night</span>
+              <span className="text-gray-900 font-semibold">$45.00</span>
             </div>
             <p className="text-sm text-gray-600 mt-2">You keep: 80%</p>
           </div>
         </div>
       )}
 
-      {/* Base Rate Section */}
-      <div className="mb-8">
-        <label className="block text-base font-semibold text-gray-900 mb-3">
-          Set your base rate
-        </label>
-        <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-          <span className="text-gray-700">Per day</span>
-          <span className="text-gray-900 font-semibold">${baseRate}</span>
-        </div>
-        <p className="text-sm text-gray-600 mt-2">
-          What you will earn per service: ${(parseFloat(baseRate) * 0.86).toFixed(2)}
-        </p>
-      </div>
+      
 
       {/* Availability Section */}
       <div className="mb-8">
         <h3 className="text-base font-semibold text-gray-900 mb-4">Availability</h3>
 
         <label className="block text-sm font-medium text-gray-900 mb-3">
-          How many pets can you care for per day?
+          Are you home full-time during the week?
         </label>
-        <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white mb-4">
-          <span className="text-gray-700">Per day</span>
-          <input
-            type="number"
-            value={petsPerDay}
-            onChange={(e) => setPetsPerDay(e.target.value)}
-            className="text-gray-900 font-semibold bg-transparent border-none outline-none text-right w-16"
-            min="1"
-          />
+        <div className="flex gap-4 mb-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="timeType"
+              value="Yes"
+              checked={TimeType === "Yes"}
+              onChange={(e) => settimeType(e.target.value)}
+              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+            />
+            <span className="text-gray-700">Yes</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="timeType"
+              value="No"
+              checked={TimeType === "No"}
+              onChange={(e) => settimeType(e.target.value)}
+              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+            />
+            <span className="text-gray-700">No</span>
+          </label>
         </div>
 
         <p className="text-sm text-gray-700 mb-3">
@@ -236,7 +254,7 @@ export default function DoggyDayCareForm() {
 
         {/* Time Slots */}
         <label className="block text-sm font-medium text-gray-900 mb-3">
-          What times are you available for Doggy Day Care?
+          What times are you available for boarding check-in/check-out?
         </label>
         <div className="grid grid-cols-2 gap-3 mb-8">
           {timeSlots.map((slot) => (
@@ -256,7 +274,7 @@ export default function DoggyDayCareForm() {
       {/* Cancellation Policy */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-gray-900 mb-3">
-          What is your cancellation policy for Doggy Day Care?
+          What is your cancellation policy for boarding?
         </label>
         <div className="space-y-3">
           {cancellationOptions.map((policy) => (
@@ -329,7 +347,7 @@ export default function DoggyDayCareForm() {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
-              name="distanceType"
+              name="distanceTypeBoarding"
               value="miles"
               checked={distanceType === "miles"}
               onChange={(e) => setDistanceType(e.target.value)}
@@ -340,7 +358,7 @@ export default function DoggyDayCareForm() {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
-              name="distanceType"
+              name="distanceTypeBoarding"
               value="minutes"
               checked={distanceType === "minutes"}
               onChange={(e) => setDistanceType(e.target.value)}
@@ -416,7 +434,7 @@ export default function DoggyDayCareForm() {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
-              name="acceptPuppiesDaycare"
+              name="acceptPuppiesBoarding"
               value="yes"
               checked={acceptPuppies === "yes"}
               onChange={(e) => setAcceptPuppies(e.target.value)}
@@ -427,7 +445,7 @@ export default function DoggyDayCareForm() {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
-              name="acceptPuppiesDaycare"
+              name="acceptPuppiesBoarding"
               value="no"
               checked={acceptPuppies === "no"}
               onChange={(e) => setAcceptPuppies(e.target.value)}

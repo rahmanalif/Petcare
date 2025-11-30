@@ -1,19 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { Map, MapTileLayer, MapMarker, MapZoomControl, MapCircle } from "@/components/ui/map";
 
-export default function DogWalkingForm({
-  baseRate,
-  setBaseRate,
-  walksPerDay,
-  setWalksPerDay,
-  selectedDays,
-  toggleDay,
-  selectedTimeSlots,
-  toggleTimeSlot,
-  days,
-  timeSlots,
-}) {
+export default function DogWalkingForm() {
+  const [baseRate, setBaseRate] = useState("28.00");
+  const [updateRates, setUpdateRates] = useState(true);
+  const [showAdditionalRates, setShowAdditionalRates] = useState(false);
+  const [walksPerDay, setWalksPerDay] = useState("4");
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
+  const [useHomeAddress, setUseHomeAddress] = useState(true);
+  const [location, setLocation] = useState("1000, BD");
+  const [distanceType, setDistanceType] = useState("miles");
+  const [serviceArea, setServiceArea] = useState("0");
+  const [travelModes, setTravelModes] = useState(["Walking"]);
+  const [petSizes, setPetSizes] = useState([
+    "Small dog (0-15 lbs)",
+    "Medium dog (16-40 lbs)",
+    "Large dog (41-100 lbs)",
+    "Giant dog (100+ lbs)",
+  ]);
+  const [petPolicy, setPolicy] = useState([
+    "Same day",
+    "One day",
+    "Two day",
+    "Three day",
+  ]); 
+
+  const [acceptPuppies, setAcceptPuppies] = useState("yes");
+
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const timeSlots = ["6am - 11am", "11am - 3am", "3am - 10am", "None"];
+  const travelOptions = ["Walking", "Cycling", "Driving"];
+  const petSizeOptions = [
+    "Small dog (0-15 lbs)",
+    "Medium dog (16-40 lbs)",
+    "Large dog (41-100 lbs)",
+    "Giant dog (100+ lbs)",
+  ];
+
+  const toggleDay = (day) => {
+    setSelectedDays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+    );
+  };
+
+  const toggleTimeSlot = (slot) => {
+    setSelectedTimeSlots((prev) =>
+      prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]
+    );
+  };
+
+  const toggleTravelMode = (mode) => {
+    setTravelModes((prev) =>
+      prev.includes(mode) ? prev.filter((m) => m !== mode) : [...prev, mode]
+    );
+  };
+
+  const togglePetSize = (size) => {
+    setPetSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+    );
+  };
+
   return (
     <>
+      {/* Update Rates Checkbox */}
+      <div className="mb-6">
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={updateRates}
+            onChange={(e) => setUpdateRates(e.target.checked)}
+            className="custom-checkbox mt-0.5"
+          />
+          <div>
+            <span className="text-gray-900 font-medium">
+              Update my additional rates based on my base rate
+            </span>
+            <p className="text-sm text-gray-600 mt-1">
+              Turn off to adjust your rate manually
+            </p>
+          </div>
+        </label>
+      </div>
+
       {/* Base Rate Section */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-gray-900 mb-3">
@@ -28,11 +99,102 @@ export default function DogWalkingForm({
         </p>
       </div>
 
+      {/* Show Additional Rates Button */}
+      <button
+        onClick={() => setShowAdditionalRates(!showAdditionalRates)}
+        className="w-full px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2 mb-8"
+      >
+        {showAdditionalRates
+          ? "Hide additional rates"
+          : "Show additional rates"}
+        <ChevronDown
+          className={`w-5 h-5 transition-transform ${
+            showAdditionalRates ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      {/* Additional Rates Section */}
+      {showAdditionalRates && (
+        <div className="mb-8 space-y-6">
+          {/* 60 minute rate */}
+          <div>
+            <h4 className="text-base font-semibold text-gray-900 mb-3">
+              60 minute rate
+            </h4>
+            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+              <span className="text-gray-700">Per day</span>
+              <span className="text-gray-900 font-semibold">$28.00</span>
+            </div>
+            <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+          </div>
+
+          {/* Holiday Rate */}
+          <div>
+            <h4 className="text-base font-semibold text-gray-900 mb-3">
+              Holiday Rate
+            </h4>
+            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+              <span className="text-gray-700">Per day</span>
+              <span className="text-gray-900 font-semibold">$28.00</span>
+            </div>
+            <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+          </div>
+
+          {/* Additional Rate */}
+          <div>
+            <h4 className="text-base font-semibold text-gray-900 mb-3">
+              Additional Rate
+            </h4>
+            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+              <span className="text-gray-700">Per day</span>
+              <span className="text-gray-900 font-semibold">$28.00</span>
+            </div>
+            <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+          </div>
+
+          {/* Puppy Rate */}
+          <div>
+            <h4 className="text-base font-semibold text-gray-900 mb-3">
+              Puppy Rate
+            </h4>
+            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+              <span className="text-gray-700">Per day</span>
+              <span className="text-gray-900 font-semibold">$28.00</span>
+            </div>
+            <p className="text-sm text-gray-600 mt-2">You keep: $24.00</p>
+
+            <label className="flex items-center gap-3 cursor-pointer mt-3">
+              <input
+                type="checkbox"
+                defaultChecked
+                className="custom-checkbox"
+              />
+              <span className="text-gray-700">Offer for free</span>
+            </label>
+          </div>
+
+          {/* Daily Sitter Pick-Up/Drop-Off */}
+          <div>
+            <h4 className="text-base font-semibold text-gray-900 mb-3">
+              Daily Sitter Pick-Up/Drop-Off
+            </h4>
+            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+              <span className="text-gray-700">Per day</span>
+              <span className="text-gray-900 font-semibold">$28.00</span>
+            </div>
+            <p className="text-sm text-gray-600 mt-2">You keep: 80%</p>
+          </div>
+        </div>
+      )}
+
+      
+
       {/* Availability Section */}
       <div className="mb-8">
         <h3 className="text-base font-semibold text-gray-900 mb-4">Availability</h3>
 
-        <label className="block text-sm font-medium text-gray-900 mb-3">
+        <label className="block text-base font-semibold text-gray-900 mb-4">
           How many walks can you do per day?
         </label>
         <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white mb-4">
@@ -46,7 +208,7 @@ export default function DogWalkingForm({
           />
         </div>
 
-        <p className="text-sm text-gray-700 mb-3">
+        <p className="text-base font-semibold text-gray-900 mb-4">
           You can edit any date individually by going to your calendar.
         </p>
 
@@ -56,9 +218,9 @@ export default function DogWalkingForm({
             <button
               key={day}
               onClick={() => toggleDay(day)}
-              className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${
+              className={`flex-1 px-3 py-2 border-2 border-[#9ABFC8] rounded-lg text-sm font-medium transition-colors ${
                 selectedDays.includes(day)
-                  ? "bg-[#035F75] text-white border-[#035F75]"
+                  ? "bg-[#035F75] text-white border-[#9ABFC8]"
                   : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
               }`}
             >
@@ -68,7 +230,7 @@ export default function DogWalkingForm({
         </div>
 
         {/* Time Slots */}
-        <label className="block text-sm font-medium text-gray-900 mb-3">
+        <label className="block text-base font-semibold text-gray-900 mb-4">
           What times are you available for Dog walking on weekdays?
         </label>
         <div className="grid grid-cols-2 gap-3 mb-8">
@@ -78,12 +240,207 @@ export default function DogWalkingForm({
                 type="checkbox"
                 checked={selectedTimeSlots.includes(slot)}
                 onChange={() => toggleTimeSlot(slot)}
-                className="w-5 h-5 rounded border-gray-300 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+                className="custom-checkbox"
               />
               <span className="text-gray-700">{slot}</span>
             </label>
           ))}
         </div>
+      </div>
+
+      {/* Location Section */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <label className="text-base font-semibold text-gray-900">
+            Use my home address
+          </label>
+          <button
+            onClick={() => setUseHomeAddress(!useHomeAddress)}
+            className={`relative w-12 h-6 rounded-full transition-colors ${
+              useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"
+            }`}
+          >
+            <div
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
+                useHomeAddress ? "translate-x-6" : ""
+              }`}
+            />
+          </button>
+        </div>
+
+        <label className="block text-sm font-semibold text-gray-900 mb-2">
+          Location
+        </label>
+        <input
+          type="text"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent mb-6"
+        />
+
+        {/* Service Area */}
+        <label className="block text-base font-semibold text-gray-900 mb-2">
+          Service Area
+        </label>
+        <p className="text-sm text-gray-700 mb-4">
+          The service area you define here will be for house sitting.
+        </p>
+
+        <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 mb-4">
+          <div className="text-sm font-medium text-gray-900 mb-2">
+            Location
+          </div>
+          <div className="text-sm text-gray-600 mb-3">{location || "New York, NY"}</div>
+          <div className="w-full h-64 rounded-lg overflow-hidden">
+            <Map center={[40.7128, -74.0060]} zoom={13}>
+              <MapTileLayer />
+              <MapZoomControl />
+              <MapMarker position={[40.7128, -74.0060]} />
+              <MapCircle
+                center={[40.7128, -74.0060]}
+                radius={parseInt(serviceArea || 0) * 1609.34}
+                className="fill-teal-500/20 stroke-teal-600 stroke-2"
+              />
+            </Map>
+          </div>
+        </div>
+
+        {/* Distance Type */}
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
+          Distance type
+        </label>
+        <div className="flex gap-4 mb-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="distanceType"
+              value="miles"
+              checked={distanceType === "miles"}
+              onChange={(e) => setDistanceType(e.target.value)}
+              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+            />
+            <span className="text-gray-700">Miles</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="distanceType"
+              value="minutes"
+              checked={distanceType === "minutes"}
+              onChange={(e) => setDistanceType(e.target.value)}
+              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+            />
+            <span className="text-gray-700">Minutes</span>
+          </label>
+        </div>
+
+        {/* Service Area Input */}
+        <label className="block text-sm font-semibold text-gray-900 mb-2">
+          Service area
+        </label>
+        <div className="flex items-center gap-2 mb-4">
+          <input
+            type="text"
+            value={serviceArea}
+            onChange={(e) => setServiceArea(e.target.value)}
+            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent"
+          />
+          <span className="text-gray-600">Miles</span>
+        </div>
+
+        {/* Travel Mode */}
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
+          Travel mode
+        </label>
+        <div className="space-y-3 mb-8">
+          {travelOptions.map((mode) => (
+            <label
+              key={mode}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                checked={travelModes.includes(mode)}
+                onChange={() => toggleTravelMode(mode)}
+                className="custom-checkbox"
+              />
+              <span className="text-gray-700">{mode}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Pet Types Section */}
+      <div className="mb-8">
+        <label className="block text-base font-semibold text-gray-900 mb-3">
+          What type of pets can you host in your home?
+        </label>
+        <div className="space-y-3 mb-6">
+          {petSizeOptions.map((size) => (
+            <label
+              key={size}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                checked={petSizes.includes(size)}
+                onChange={() => togglePetSize(size)}
+                className="custom-checkbox"
+              />
+              <span className="text-gray-700">{size}</span>
+            </label>
+          ))}
+        </div>
+
+        {/* Accept Puppies */}
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
+          Do you accept puppies under 1 year old?
+        </label>
+        <div className="flex gap-4 mb-8">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="acceptPuppies"
+              value="yes"
+              checked={acceptPuppies === "yes"}
+              onChange={(e) => setAcceptPuppies(e.target.value)}
+              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+            />
+            <span className="text-gray-700">Yes</span>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="acceptPuppies"
+              value="no"
+              checked={acceptPuppies === "no"}
+              onChange={(e) => setAcceptPuppies(e.target.value)}
+              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
+            />
+            <span className="text-gray-700">No</span>
+          </label>
+        </div>
+
+        <label className="block text-base font-semibold text-gray-900 mb-3">
+          What is your cancellation policy for Doggy Day Care?
+        </label>
+        <div className="space-y-3 mb-6">
+          {petPolicy.map((size) => (
+            <label
+              key={size}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                checked={petSizes.includes(size)}
+                onChange={() => togglePetSize(size)}
+                className="custom-checkbox"
+              />
+              <span className="text-gray-700">{size}</span>
+            </label>
+          ))}
+        </div>
+
       </div>
     </>
   );

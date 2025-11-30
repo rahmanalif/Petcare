@@ -48,6 +48,9 @@ const montserrat = localFont({
 export const metadata = {
   title: "Wuffoos - Pet Care Services",
   description: "Book your next pet care service in seconds with AI assistance",
+  icons: {
+    icon: "/Ellipse.png",
+  },
 };
 
 export default function RootLayout({ children }) {
