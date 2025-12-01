@@ -10,14 +10,14 @@ export default function SwitchProfile() {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
+      <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">
         Switch profile
       </h2>
 
       {/* Toggle Switch */}
-      <div className="flex items-center justify-between mb-8">
-        <span className="text-base font-medium text-gray-900">
+      <div className="flex items-center justify-between mb-6 md:mb-8">
+        <span className="text-sm md:text-base font-medium text-gray-900">
           Switch as a provider
         </span>
         <button
@@ -35,7 +35,7 @@ export default function SwitchProfile() {
       </div>
 
       {/* Invite Friends Section - Shows when toggle is ON */}
-      
+
     </div>
   );
 }

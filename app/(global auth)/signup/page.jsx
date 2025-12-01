@@ -261,7 +261,7 @@ export default function WuffoosRegister() {
                     }`}
                   >
                     <span className="m-2">
-                      <img src="/flag/English.png" alt="English" className="w-8 h-8" />
+                      <img src="/flag/usa.png" alt="English" className="w-8 h-8" />
                     </span>
                     English
                   </button>

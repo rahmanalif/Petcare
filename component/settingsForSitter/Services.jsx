@@ -87,34 +87,34 @@ export default function Services() {
   ];
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8 max-w-3xl">
-      <div className="mb-6 pb-4 border-b border-gray-200">
-        <h2 className="text-2xl font-medium text-gray-800">Services</h2>
+    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8 max-w-3xl">
+      <div className="mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200">
+        <h2 className="text-lg md:text-2xl font-medium text-gray-800">Services</h2>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 md:space-y-4">
         {services.map((service) => (
           <div
             key={service.id}
             onClick={() => setSelectedService(service.id)}
-            className={`flex items-center justify-between p-5 rounded-lg border-2 transition-all cursor-pointer ${
+            className={`flex items-center justify-between p-3 md:p-5 rounded-lg border-2 transition-all cursor-pointer ${
               selectedService === service.id
                 ? "border-[#035F75] bg-[#E7F4F6]"
                 : "border-gray-200 bg-white hover:border-gray-300"
             }`}
           >
-            <div className="flex items-center gap-4">
-              <div className={`${selectedService === service.id ? "text-[#035F75]" : "text-gray-500"}`}>
+            <div className="flex items-center gap-2 md:gap-4">
+              <div className={`flex-shrink-0 ${selectedService === service.id ? "text-[#035F75]" : "text-gray-500"}`}>
                 {service.icon}
               </div>
               <div>
-                <h3 className="text-base font-medium text-gray-900">{service.name}</h3>
-                <p className="text-sm text-gray-600 mt-0.5">{service.location}</p>
+                <h3 className="text-sm md:text-base font-medium text-gray-900">{service.name}</h3>
+                <p className="text-xs md:text-sm text-gray-600 mt-0.5">{service.location}</p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-base font-semibold text-gray-900">{service.price}</div>
-              <div className="text-sm text-gray-600 mt-0.5">{service.priceUnit}</div>
+            <div className="text-right flex-shrink-0 ml-2">
+              <div className="text-sm md:text-base font-semibold text-gray-900">{service.price}</div>
+              <div className="text-xs md:text-sm text-gray-600 mt-0.5">{service.priceUnit}</div>
             </div>
           </div>
         ))}

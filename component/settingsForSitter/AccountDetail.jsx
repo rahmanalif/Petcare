@@ -11,17 +11,17 @@ export default function AccountDetail() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
-      <div className="flex justify-between items-center mb-8 pb-2 border-b-2 border-grey-600 ">
-        <h2 className="text-xl font-semibold text-gray-900 ">Account</h2>
-        <Button variant="outline" size="sm">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
+      <div className="flex justify-between items-center mb-6 md:mb-8 pb-2 border-b-2 border-grey-600">
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900">Account</h2>
+        <Button variant="outline" size="sm" className="text-xs md:text-sm">
           Edit
         </Button>
       </div>
 
       {/* Avatar */}
-      <div className="flex mb-8">
-        <div className="w-24 h-24 bg-teal-500 rounded-full flex items-center justify-center">
+      <div className="flex mb-6 md:mb-8 justify-center md:justify-start">
+        <div className="w-20 h-20 md:w-24 md:h-24 bg-teal-500 rounded-full flex items-center justify-center">
           <svg
             width="140"
             height="140"
@@ -47,30 +47,30 @@ export default function AccountDetail() {
       </div>
 
       {/* Form Fields */}
-      <div className="space-y-6 max-w-2xl mx-auto">
+      <div className="space-y-4 md:space-y-6 max-w-2xl mx-auto">
         {/* Full Name */}
         <div>
           <Label
             htmlFor="fullName"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
             Full Name
           </Label>
-          <Input id="fullName" placeholder="Name" className="mt-1" />
+          <Input id="fullName" placeholder="Name" className="mt-1 text-sm md:text-base" />
         </div>
 
         {/* Email or Phone */}
         <div>
           <Label
             htmlFor="contact"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
-            E-mail address 
+            E-mail address
           </Label>
           <Input
             id="contact"
             placeholder="E-mail address"
-            className="mt-1"
+            className="mt-1 text-sm md:text-base"
           />
         </div>
 
@@ -78,41 +78,41 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="contact"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
-            Phone Number 
+            Phone Number
           </Label>
           <Input
             id="contact"
             placeholder="Phone Number"
-            className="mt-1"
+            className="mt-1 text-sm md:text-base"
           />
         </div>
 
         {/* Street Address */}
-        <div >
+        <div>
           <Label
             htmlFor="street"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
             Street
           </Label>
           <Input
             id="street"
             placeholder="Street Number and Name"
-            className="mt-1"
+            className="mt-1 text-sm md:text-base"
           />
         </div>
         {/* State and Zip Code */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           <div>
-            <Input id="state" placeholder="State" className="mt-1" />
+            <Input id="state" placeholder="State" className="mt-1 text-sm md:text-base" />
           </div>
           <div>
             <Input
               id="zipCode"
               placeholder="Zip Code"
-              className="mt-1"
+              className="mt-1 text-sm md:text-base"
             />
           </div>
         </div>
@@ -121,7 +121,7 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="dob"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
             About
           </Label>
@@ -129,7 +129,7 @@ export default function AccountDetail() {
             <Input
               id="textarea"
               placeholder="Introduce yourself to potential clients..."
-              className="pb-20 w-full h-32 "
+              className="pb-20 w-full h-32 text-sm md:text-base"
             />
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="currentPassword"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
             Pet number
           </Label>
@@ -146,7 +146,7 @@ export default function AccountDetail() {
             <Input
               id="pet"
               placeholder="03"
-              className="mt-1"
+              className="mt-1 text-sm md:text-base"
             />
           </div>
         </div>
@@ -155,7 +155,7 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="currentPassword"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
             Home Size (sq ft)
           </Label>
@@ -163,18 +163,18 @@ export default function AccountDetail() {
             <Input
               id="size"
               placeholder="e.g. 800"
-              className="mt-1"
+              className="mt-1 text-sm md:text-base"
             />
           </div>
         </div>
 
-        
+
 
         {/* Confirm Password */}
        <div>
           <Label
             htmlFor="currentPassword"
-            className="text-sm font-medium text-gray-700"
+            className="text-xs md:text-sm font-medium text-gray-700"
           >
             Outdoor Space
           </Label>
@@ -182,7 +182,7 @@ export default function AccountDetail() {
             <Input
               id="zipCode"
               placeholder="No outdoor space"
-              className="mt-1"
+              className="mt-1 text-sm md:text-base"
             />
           </div>
         </div>

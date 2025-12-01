@@ -10,19 +10,19 @@ export default function InviteFriend() {
   };
   const referralLink = "Wuffoos.com/ambas-refer-a-friend";
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-8">
+    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
       <div className="">
-        <h3 className="text-xl font-semibold text-gray-900 mb-6">
+        <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">
           Invite friends
         </h3>
-        <div className="border-b-2 border-gray-600 mb-4"></div>
+        <div className="border-b-2 border-gray-600 mb-3 md:mb-4"></div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-2">
+            <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-2">
               Share Wuffoos with a friend
             </h4>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
               Invite a friend to book a setter on Wuffoos & you'll both receive
               $10 in Wuffoos credit.
               <br />
@@ -32,10 +32,10 @@ export default function InviteFriend() {
 
           {/* QR Code Section */}
           <div>
-            <p className="text-sm font-medium text-gray-900 mb-4">
+            <p className="text-xs md:text-sm font-medium text-gray-900 mb-3 md:mb-4">
               Scan your QR Code in person
             </p>
-            <div className="flex justify-center bg-white border border-gray-200 rounded-lg p-8 mb-6">
+            <div className="flex justify-center bg-white border border-gray-200 rounded-lg p-4 md:p-6 lg:p-8 mb-4 md:mb-6">
               <div className="w-32 h-32 bg-white rounded-lg flex shadow-2xl items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -55,25 +55,25 @@ export default function InviteFriend() {
 
           {/* Referral Link Section */}
           <div>
-            <p className="text-sm font-medium text-gray-900 mb-3">
+            <p className="text-xs md:text-sm font-medium text-gray-900 mb-2 md:mb-3">
               Share your referral link
             </p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center gap-2 flex-1 bg-gray-50 rounded-lg px-4 py-3 border border-gray-200">
-                <div className="w-8 h-8 bg-red-500 rounded flex items-center justify-center shrink-0">
-                  <span className="text-white font-bold text-sm">W</span>
+            <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+              <div className="flex items-center gap-2 flex-1 bg-gray-50 rounded-lg px-2 md:px-4 py-2 md:py-3 border border-gray-200">
+                <div className="w-6 h-6 md:w-8 md:h-8 bg-red-500 rounded flex items-center justify-center shrink-0">
+                  <span className="text-white font-bold text-xs md:text-sm">W</span>
                 </div>
-                <span className="text-sm text-gray-700 truncate">
+                <span className="text-xs md:text-sm text-gray-700 truncate">
                   {referralLink}
                 </span>
               </div>
               <button
                 onClick={copyToClipboard}
-                className="p-3 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 md:p-3 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
                 aria-label="Copy link"
               >
                 <svg
-                  className="w-5 h-5 text-gray-600"
+                  className="w-4 h-4 md:w-5 md:h-5 text-gray-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -99,7 +99,7 @@ export default function InviteFriend() {
               </button>
             </div>
 
-            <button className="w-full bg-[#035F75] hover:bg-[#03566b] text-white font-medium py-3 px-4 rounded-lg transition-colors">
+            <button className="w-full bg-[#035F75] hover:bg-[#03566b] text-white font-medium py-2.5 md:py-3 px-4 rounded-lg transition-colors text-sm md:text-base">
               Share Now
             </button>
           </div>
