@@ -1,26 +1,25 @@
 "use client";
-import { Calendar, Home, Footprints, Shield } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ServicesSection() {
   return (
-    <div id="services" className="bg-linear-to-br from-gray-50 to-stone-100 py-36 px-8">
+    <div id="services" className="bg-linear-to-br from-gray-50 to-stone-100 py-12 sm:py-16 md:py-24 lg:py-36 px-4 sm:px-6 md:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-start">
           {/* Left Column - Services */}
           <div>
             <h2
-              className="text-4xl md:text-3xl text-gray-800 mb-12  tracking-wide font-bakso"
+              className="text-2xl sm:text-3xl md:text-4xl text-gray-800 mb-8 sm:mb-10 md:mb-12 tracking-wide font-bakso"
               //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
             >
               Services for Every Dog and Cat
             </h2>
 
             {/* Dog Boarding */}
-            <div className="flex gap-4 mb-10">
+            <div className="flex gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
               <div className="shrink-0">
-                <div className="w-12 h-12 flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
                   <svg
                     width="41"
                     height="43"
@@ -61,12 +60,12 @@ export default function ServicesSection() {
               </div>
               <div>
                 <h3
-                  className="text-xl  text-gray-800 mb-2  font-bakso"
+                  className="text-lg sm:text-xl text-gray-800 mb-2 font-bakso"
                   //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Dog Boarding
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Your pets stay overnight in your sitter's home. They'll be
                   treated like part of the family in a familiar environment.
                 </p>
@@ -74,9 +73,9 @@ export default function ServicesSection() {
             </div>
 
             {/* Doggy Day Care */}
-            <div className="flex gap-4 mb-10 ">
+            <div className="flex gap-3 sm:gap-4 mb-6 sm:mb-8 md:mb-10">
               <div className="shrink-0">
-                <div className="w-12 h-12 flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
                   <svg
                     width="43"
                     height="43"
@@ -145,12 +144,12 @@ export default function ServicesSection() {
               </div>
               <div>
                 <h3
-                  className="text-xl  text-gray-800 mb-2  font-bakso"
+                  className="text-lg sm:text-xl text-gray-800 mb-2 font-bakso"
                   //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Doggy Day Care
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Your dog spends the day at your sitter's home. Drop them off
                   in the morning and pick your pup in the evening.
                 </p>
@@ -158,9 +157,9 @@ export default function ServicesSection() {
             </div>
 
             {/* Dog Walking */}
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               <div className="shrink-0">
-                <div className="w-12 h-12  flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
                   <svg
                     width="43"
                     height="43"
@@ -201,12 +200,12 @@ export default function ServicesSection() {
               </div>
               <div>
                 <h3
-                  className="text-xl text-gray-800 mb-2 font-bakso"
+                  className="text-lg sm:text-xl text-gray-800 mb-2 font-bakso"
                   //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Dog Walking
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Your dog gets a walk around your neighborhood. Perfect for
                   busy days and dogs with extra energy to burn.
                 </p>
@@ -215,9 +214,9 @@ export default function ServicesSection() {
           </div>
 
           {/* Right Column - Wuffoos Protect Card */}
-          <div className="relative ">
+          <div className="relative mt-8 lg:mt-0">
             {/* Image Container - Half outside card */}
-            <div className="absolute -top-32 right-2 w-64 h-64 z-10">
+            <div className="absolute -top-16 sm:-top-20 md:-top-24 lg:-top-32 right-2 sm:right-4 w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 z-10">
               <Image
                 src="/Union.png"
                 alt="Pet sitter with dog"
@@ -225,17 +224,18 @@ export default function ServicesSection() {
                 className="object-contain"
               />
             </div>
-            <div className="bg-white rounded-3xl shadow-xl p-8 relative">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-6 md:p-8 relative pt-28 sm:pt-32 md:pt-36 lg:pt-8">
 
               {/* Header */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 flex items-center justify-center">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center">
                   <svg
                     width="48"
                     height="48"
                     viewBox="0 0 48 48"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    className="w-full h-full"
                   >
                     <path
                       d="M23.9964 4.00024C17.9809 4.00024 14.0804 8.03823 9.46743 9.51005C7.59177 10.1085 6.65394 10.4077 6.2744 10.8295C5.89486 11.2514 5.78372 11.8677 5.56144 13.1005C3.18287 26.2922 8.3818 38.4882 20.7806 43.2352C22.1128 43.7452 22.7789 44.0003 24.003 44.0002C25.2271 44.0002 25.8931 43.7452 27.2252 43.2352C39.6232 38.4881 44.8172 26.2922 42.4379 13.1005C42.2156 11.8675 42.1044 11.251 41.7248 10.8292C41.3451 10.4074 40.4074 10.1083 38.5318 9.51022C33.9171 8.03853 30.0122 4.00024 23.9964 4.00024Z"
@@ -253,7 +253,7 @@ export default function ServicesSection() {
                   </svg>
                 </div>
                 <h3
-                  className="text-2xl text-gray-800 font-bakso"
+                  className="text-xl sm:text-2xl text-gray-800 font-bakso"
                 //   style={{ fontFamily: "Comic Sans MS, cursive" }}
                 >
                   Wuffoos Protect
@@ -261,18 +261,19 @@ export default function ServicesSection() {
               </div>
 
               <p
-                className="text-gray-800 mb-6 text-2xl font-bakso"
+                className="text-gray-800 mb-4 sm:mb-6 text-lg sm:text-xl md:text-2xl font-bakso"
                 // style={{ fontFamily: "Comic Sans MS, cursive" }}
               >
-                Find peace of mind with every 
-                <br />
+                Find peace of mind with every
+                <br className="hidden sm:block" />
+                <span className="sm:hidden"> </span>
                 booking.
               </p>
 
               {/* Features List */}
-              <div className="space-y-4 mb-8">
+              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
                 <div>
-                  <p className="text-gray-700">
+                  <p className="text-sm sm:text-base text-gray-700">
                     <span className="text-[#357F91] font-semibold">
                       Screened pet sitters
                     </span>{" "}
@@ -282,7 +283,7 @@ export default function ServicesSection() {
                 </div>
 
                 <div>
-                  <p className="text-gray-700">
+                  <p className="text-sm sm:text-base text-gray-700">
                     <span className="text-[#357F91] font-semibold">
                       Messaging & photo updates
                     </span>{" "}
@@ -291,7 +292,7 @@ export default function ServicesSection() {
                 </div>
 
                 <div>
-                  <p className="text-gray-700">
+                  <p className="text-sm sm:text-base text-gray-700">
                     <span className="text-[#357F91] font-semibold">
                       The Rover Guarantee
                     </span>{" "}
@@ -304,7 +305,7 @@ export default function ServicesSection() {
                 </div>
 
                 <div>
-                  <p className="text-gray-700">
+                  <p className="text-sm sm:text-base text-gray-700">
                     <span className="text-[#357F91] font-semibold">
                       24/7 support
                     </span>{" "}
@@ -315,7 +316,7 @@ export default function ServicesSection() {
               </div>
 
               {/* CTA Button */}
-              <Link href="/search" className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-4 rounded-xl transition-all hover:shadow-lg block text-center">
+              <Link href="/search" className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-3 sm:py-4 rounded-xl transition-all hover:shadow-lg block text-center text-sm sm:text-base">
                 Book a local sitter
               </Link>
             </div>
