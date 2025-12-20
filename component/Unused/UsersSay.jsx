@@ -1,6 +1,6 @@
 "use client";
 
-import Star from "./StarIcon";
+import Star from "../home/StarIcon";
 
 export default function TestimonialsSection() {
   const testimonials = [

@@ -58,10 +58,10 @@ export default function Faq() {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className={`rounded-lg p-6 transition-colors duration-300 ${
+                className={`border rounded-lg p-6 transition-colors duration-300 ${
                   openFaq === index
-                    ? "bg-[#035F75] text-white divide-white/20"
-                    : "bg-gray-50 text-gray-900 divide-gray-900/10"
+                    ? "bg-[#035F75] divide-white/20"
+                    : "bg-[#F8F4EF] divide-gray-900/10"
                 }`}
               >
                 <dt>
@@ -69,13 +69,15 @@ export default function Faq() {
                     onClick={() => toggleFaq(index)}
                     className="flex w-full items-start justify-between text-left"
                   >
-                    <span className="text-base font-semibold leading-7">
+                    <span className={`text-base font-semibold leading-7 ${
+                      openFaq === index ? "text-white" : "text-[#024B5E]"
+                    }`}>
                       {faq.question}
                     </span>
                     <span className="ml-6 flex h-7 items-center">
                       <ChevronDown
                         className={`h-6 w-6 transition-transform duration-300 ${
-                          openFaq === index ? "rotate-180" : ""
+                          openFaq === index ? "rotate-180 text-white" : "text-[#024B5E]"
                         }`}
                         aria-hidden="true"
                       />
@@ -84,11 +86,7 @@ export default function Faq() {
                 </dt>
                 {openFaq === index && (
                   <dd className="mt-6 pr-12">
-                    <p
-                      className={`text-base leading-7 ${
-                        openFaq === index ? "text-gray-200" : "text-gray-600"
-                      }`}
-                    >
+                    <p className="text-base leading-7 text-white">
                       {faq.answer}
                     </p>
                   </dd>
