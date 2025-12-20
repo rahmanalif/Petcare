@@ -5,13 +5,16 @@ import Link from "next/link";
 
 export default function ServicesSection() {
   return (
-    <div id="services" className="bg-linear-to-br from-gray-50 to-stone-100 py-16 md:py-24 lg:py-36 px-4 md:px-6 lg:px-8">
+    <div
+      id="services"
+      className="bg-[#F8F4EF] py-16 md:py-24 lg:py-36 px-4 md:px-6 lg:px-8"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-start">
           {/* Left Column - Services */}
           <div>
             <h2
-              className="text-2xl md:text-3xl lg:text-4xl text-gray-800 mb-8 md:mb-12 tracking-wide font-bakso"
+              className="text-2xl md:text-3xl lg:text-4xl text-[#024B5E] mb-8 md:mb-12 tracking-wide font-bakso"
               //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
             >
               Services for Every Dog and Cat
@@ -20,48 +23,17 @@ export default function ServicesSection() {
             {/* Dog Boarding */}
             <div className="flex gap-3 md:gap-4 mb-8 md:mb-10">
               <div className="shrink-0">
-                <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                  <svg
-                    width="41"
-                    height="43"
-                    viewBox="0 0 41 43"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M32.5 1.5V5.5M8.5 1.5V5.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M18.6 41.5C10.539 41.5 6.50847 41.5 4.00424 38.7927C1.5 36.0854 1.5 31.7281 1.5 23.0135V21.9865C1.5 13.2719 1.5 8.91457 4.00424 6.20728C6.50847 3.5 10.539 3.5 18.6 3.5H22.4C30.461 3.5 34.4915 3.5 36.9958 6.20728C39.453 8.86371 39.4991 13.1088 39.5 21.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M2.5 13.5H38.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M22.5 33.5H38.5M30.5 25.5L30.5 41.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                <div className="w-20 h-20 md:w-20 md:h-12 flex items-center justify-center">
+                  <img
+                    src="/icons/boardingIcon.png"
+                    alt="Boarding"
+                    className={""}
+                  />
                 </div>
               </div>
               <div>
                 <h3
-                  className="text-lg md:text-xl text-gray-800 mb-2 font-bakso"
+                  className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
                   //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Dog Boarding
@@ -77,75 +49,16 @@ export default function ServicesSection() {
             <div className="flex gap-3 md:gap-4 mb-8 md:mb-10">
               <div className="shrink-0">
                 <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                  <svg
-                    width="43"
-                    height="43"
-                    viewBox="0 0 43 43"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M21.5 1.5V17.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M7.35938 19.36L10.1794 22.18"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M1.5 33.5H5.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M37.5 33.5H41.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M35.6403 19.36L32.8203 22.18"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M41.5 41.5H1.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M13.5 9.5L21.5 1.5L29.5 9.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M29.5 33.5C29.5 31.3783 28.6571 29.3434 27.1569 27.8431C25.6566 26.3429 23.6217 25.5 21.5 25.5C19.3783 25.5 17.3434 26.3429 15.8431 27.8431C14.3429 29.3434 13.5 31.3783 13.5 33.5"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                  <img
+                    src="/icons/doggy.png"
+                    alt="Doggy Day Care"
+                    className={""}
+                  />
                 </div>
               </div>
               <div>
                 <h3
-                  className="text-lg md:text-xl text-gray-800 mb-2 font-bakso"
+                  className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
                   //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Doggy Day Care
@@ -161,47 +74,16 @@ export default function ServicesSection() {
             <div className="flex gap-3 md:gap-4">
               <div className="shrink-0">
                 <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                  <svg
-                    width="43"
-                    height="43"
-                    viewBox="0 0 43 43"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M19.4883 9.5C21.6974 9.5 23.4883 7.70914 23.4883 5.5C23.4883 3.29086 21.6974 1.5 19.4883 1.5C17.2791 1.5 15.4883 3.29086 15.4883 5.5C15.4883 7.70914 17.2791 9.5 19.4883 9.5Z"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M33.4883 17.5C35.6974 17.5 37.4883 15.7091 37.4883 13.5C37.4883 11.2909 35.6974 9.5 33.4883 9.5C31.2791 9.5 29.4883 11.2909 29.4883 13.5C29.4883 15.7091 31.2791 17.5 33.4883 17.5Z"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M37.4883 33.5C39.6974 33.5 41.4883 31.7091 41.4883 29.5C41.4883 27.2909 39.6974 25.5 37.4883 25.5C35.2791 25.5 33.4883 27.2909 33.4883 29.5C33.4883 31.7091 35.2791 33.5 37.4883 33.5Z"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M15.4878 17.5C16.801 17.5 18.1014 17.7587 19.3146 18.2612C20.5279 18.7638 21.6303 19.5003 22.5588 20.4289C23.4874 21.3575 24.224 22.4599 24.7266 23.6732C25.2291 24.8864 25.4878 26.1868 25.4878 27.5V34.5C25.4872 36.1729 24.8876 37.7903 23.7974 39.0593C22.7073 40.3282 21.1987 41.1648 19.545 41.4174C17.8912 41.6701 16.2017 41.3221 14.7824 40.4366C13.363 39.551 12.3078 38.1864 11.8078 36.59C10.9544 33.8367 9.15445 32.0333 6.40778 31.18C4.81215 30.6802 3.44811 29.6258 2.5625 28.2075C1.67689 26.7893 1.32821 25.1008 1.57955 23.4478C1.8309 21.7947 2.66566 20.2862 3.93279 19.1952C5.19992 18.1043 6.81571 17.5029 8.48778 17.5H15.4878Z"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                  <img
+                    src="/icons/walking.png"
+                    alt="Doggy Day Care"
+                    className={""}
+                  />
                 </div>
               </div>
               <div>
                 <h3
-                  className="text-lg md:text-xl text-gray-800 mb-2 font-bakso"
+                  className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
                   //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Dog Walking
@@ -226,7 +108,6 @@ export default function ServicesSection() {
               />
             </div>
             <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl p-6 md:p-8 relative pt-28 md:pt-32 lg:pt-8">
-
               {/* Header */}
               <div className="flex items-center gap-2 md:gap-3 mb-4">
                 <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
@@ -253,15 +134,15 @@ export default function ServicesSection() {
                   </svg>
                 </div>
                 <h3
-                  className="text-xl md:text-2xl text-gray-800 font-bakso"
-                //   style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  className="text-xl md:text-2xl text-[#024B5E] font-bakso"
+                  //   style={{ fontFamily: "Comic Sans MS, cursive" }}
                 >
                   Wuffoos Protect
                 </h3>
               </div>
 
               <p
-                className="text-gray-800 mb-6 text-lg md:text-2xl font-bakso"
+                className="text-[#024B5E] mb-6 text-lg md:text-2xl font-bakso"
                 // style={{ fontFamily: "Comic Sans MS, cursive" }}
               >
                 Find peace of mind with every
@@ -316,7 +197,10 @@ export default function ServicesSection() {
               </div>
 
               {/* CTA Button */}
-              <Link href="/search" className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-3 md:py-4 rounded-xl transition-all hover:shadow-lg block text-center text-sm md:text-base">
+              <Link
+                href="/search"
+                className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-3 md:py-4 rounded-xl transition-all hover:shadow-lg block text-center text-sm md:text-base"
+              >
                 Book a local sitter
               </Link>
             </div>

@@ -25,7 +25,7 @@ export default function ConditionalLayout({ children }) {
 
   // Render with appropriate Navbar and Footer for all other pages
   return (
-    <div className="min-h-screen bg-linear-to-br from-sky-50 via-white to-sky-100 overflow-hidden">
+    <div className="min-h-screen bg-[#F8F4EF] overflow-hidden">
       <NavbarComponent />
       <main className="pt-20">{children}</main>
       <Footer />

@@ -2,152 +2,30 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import SplitText from "@/components/SplitText";
 
 // Custom icons to match the design
 const BoardingIcon = ({ className }) => (
-  <svg
-    width="41"
-    height="43"
-    viewBox="0 0 41 43"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M32.5 1.5V5.5M8.5 1.5V5.5"
-      stroke="#035F75"
-      stroke-width="3"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M18.6 41.5C10.539 41.5 6.50847 41.5 4.00424 38.7927C1.5 36.0854 1.5 31.7281 1.5 23.0135V21.9865C1.5 13.2719 1.5 8.91457 4.00424 6.20728C6.50847 3.5 10.539 3.5 18.6 3.5H22.4C30.461 3.5 34.4915 3.5 36.9958 6.20728C39.453 8.86371 39.4991 13.1088 39.5 21.5"
-      stroke="#035F75"
-      stroke-width="3"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M2.5 13.5H38.5"
-      stroke="#035F75"
-      stroke-width="3"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M22.5 33.5H38.5M30.5 25.5L30.5 41.5"
-      stroke="#035F75"
-      stroke-width="3"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
+  <img
+    src="/icons/boardingIcon.png"
+    alt="Boarding"
+    className={`${className} object-contain`}
+  />
 );
 
 const DaycareIcon = ({ className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
-    fill="none"
-  >
-    <path
-      d="M20 3.33337V16.6667"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M8.2168 18.2162L10.5668 20.5662"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M3.33398 30H6.66732"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M33.334 30H36.6673"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M31.7836 18.2162L29.4336 20.5662"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M36.6673 36.6666H3.33398"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M13.334 10L20.0007 3.33337L26.6673 10"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M26.6673 30C26.6673 28.2319 25.9649 26.5362 24.7147 25.286C23.4645 24.0358 21.7688 23.3334 20.0007 23.3334C18.2325 23.3334 16.5368 24.0358 15.2866 25.286C14.0364 26.5362 13.334 28.2319 13.334 30"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
+  <img
+    src="/icons/doggy.png"
+    alt="Doggy Day Care"
+    className={`${className} object-contain`}
+  />
 );
 
 const WalkingIcon = ({ className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
-    fill="none"
-  >
-    <path
-      d="M18.3333 10C20.1743 10 21.6667 8.50766 21.6667 6.66671C21.6667 4.82576 20.1743 3.33337 18.3333 3.33337C16.4924 3.33337 15 4.82576 15 6.66671C15 8.50766 16.4924 10 18.3333 10Z"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M29.9993 16.6667C31.8403 16.6667 33.3327 15.1743 33.3327 13.3333C33.3327 11.4924 31.8403 10 29.9993 10C28.1584 10 26.666 11.4924 26.666 13.3333C26.666 15.1743 28.1584 16.6667 29.9993 16.6667Z"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M33.3333 30C35.1743 30 36.6667 28.5077 36.6667 26.6667C36.6667 24.8258 35.1743 23.3334 33.3333 23.3334C31.4924 23.3334 30 24.8258 30 26.6667C30 28.5077 31.4924 30 33.3333 30Z"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M15.0002 16.6666C16.0946 16.6666 17.1782 16.8822 18.1893 17.301C19.2003 17.7198 20.119 18.3336 20.8928 19.1074C21.6666 19.8812 22.2804 20.7999 22.6992 21.8109C23.118 22.822 23.3336 23.9056 23.3336 25V30.8333C23.3331 32.2274 22.8334 33.5752 21.9249 34.6327C21.0165 35.6901 19.7593 36.3873 18.3812 36.5978C17.0031 36.8084 15.5952 36.5184 14.4124 35.7804C13.2296 35.0425 12.3503 33.9053 11.9336 32.575C11.2225 30.2805 9.72246 28.7777 7.43357 28.0666C6.10387 27.6502 4.96718 26.7715 4.22917 25.5896C3.49116 24.4077 3.20059 23.0006 3.41004 21.6231C3.6195 20.2455 4.31513 18.9884 5.37108 18.0793C6.42702 17.1702 7.77351 16.6691 9.1669 16.6666H15.0002Z"
-      stroke="#035F75"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-  </svg>
+  <img
+    src="/icons/walking.png"
+    alt="Dog Walking"
+    className={`${className} object-contain`}
+  />
 );
 
 const PawIcon = ({ className }) => (
@@ -174,6 +52,7 @@ export default function HeroSection() {
   const [startTime, setStartTime] = useState("11:00pm");
   const [endTime, setEndTime] = useState("11:00pm");
   const [schedule, setSchedule] = useState("onetime");
+  const [selectedDays, setSelectedDays] = useState([]);
 
   const services = [
     { id: "boarding", label: "Boarding", icon: BoardingIcon },
@@ -181,14 +60,32 @@ export default function HeroSection() {
     { id: "walking", label: "Dog Walking", icon: WalkingIcon },
   ];
 
+  const daysOfWeek = [
+    { id: "S", label: "S", full: "Sunday" },
+    { id: "M", label: "M", full: "Monday" },
+    { id: "T", label: "T", full: "Tuesday" },
+    { id: "W", label: "W", full: "Wednesday" },
+    { id: "Th", label: "T", full: "Thursday" },
+    { id: "F", label: "F", full: "Friday" },
+    { id: "Sa", label: "S", full: "Saturday" },
+  ];
+
+  const toggleDay = (dayId) => {
+    setSelectedDays((prev) =>
+      prev.includes(dayId)
+        ? prev.filter((id) => id !== dayId)
+        : [...prev, dayId]
+    );
+  };
+
   // Render form fields based on active service
   const renderFormFields = () => {
     if (activeService === "boarding") {
       // Boarding: 4 columns - Start date, End date, Start time, End time
       return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6 border-2 border-gray-200 shadow-amber-50 rounded-lg p-3 sm:p-4">
-          <div className="space-y-2">
-            <label className="text-xs sm:text-sm text-gray-500 font-medium">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6 border-2 border-gray-200 shadow-amber-50 rounded-lg p-7 sm:p-7">
+          <div className="space-y-2 ">
+            <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
               Start date
             </label>
             <input
@@ -199,18 +96,18 @@ export default function HeroSection() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs sm:text-sm text-gray-500 font-medium">
+            <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
               End date
             </label>
             <input
               type="text"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs sm:text-sm text-gray-500 font-medium">
+            <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
               Start time
             </label>
             <input
@@ -221,14 +118,14 @@ export default function HeroSection() {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs sm:text-sm text-gray-500 font-medium">
+            <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
               End time
             </label>
             <input
               type="text"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -239,14 +136,14 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6 items-stretch">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 border-2 border-gray-200 shadow-amber-50 rounded-lg p-3 sm:p-4 lg:col-span-4">
             <div className="space-y-2">
-              <label className="text-xs sm:text-sm text-gray-500 font-medium">
+              <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                 Start date
               </label>
               <input
                 type="text"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-teal-600 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
             <div className="space-y-2">
@@ -257,34 +154,34 @@ export default function HeroSection() {
                 type="text"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs sm:text-sm text-gray-500 font-medium">
+              <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                 Start time
               </label>
               <input
                 type="text"
                 value={startTime}
                 onChange={(e) => setStartTime(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-teal-600 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs sm:text-sm text-gray-500 font-medium">
+              <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                 End time
               </label>
               <input
                 type="text"
                 value={endTime}
                 onChange={(e) => setEndTime(e.target.value)}
-                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-gray-400 text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
           </div>
           <div className="space-y-2 border-2 border-gray-200 rounded-lg p-3 sm:p-4 h-full flex flex-col">
-            <label className="text-xs sm:text-sm text-gray-500 font-medium">
+            <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
               Schedule
             </label>
             <div className="flex border border-gray-200 rounded-lg overflow-hidden flex-1">
@@ -292,8 +189,8 @@ export default function HeroSection() {
                 onClick={() => setSchedule("onetime")}
                 className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
                   schedule === "onetime"
-                    ? "bg-white text-teal-600 border-r border-gray-200"
-                    : "bg-gray-50 text-gray-500 border-r border-gray-200 hover:bg-gray-100"
+                    ? "bg-white text-[#024B5E] border-r border-gray-200"
+                    : "bg-gray-50 text-[#024B5E] border-r border-gray-200 hover:bg-gray-100"
                 }`}
               >
                 One Time
@@ -302,8 +199,8 @@ export default function HeroSection() {
                 onClick={() => setSchedule("repeat")}
                 className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
                   schedule === "repeat"
-                    ? "bg-white text-teal-600"
-                    : "bg-gray-50 text-gray-500 hover:bg-gray-100"
+                    ? "bg-white text-[#024B5E]"
+                    : "bg-gray-50 text-[#024B5E] hover:bg-gray-100"
                 }`}
               >
                 Repeat Weekly
@@ -316,7 +213,8 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="relative w-full max-w-[1669px] mx-auto pb-8 px-4 sm:px-6 lg:px-8">
+    <div className="bg-[#F8F4EF] w-full">
+      <div className="relative w-full max-w-[1669px] mx-auto pb-8 px-4 sm:px-6 lg:px-8">
       {/* Background Image Container */}
       <div
         className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-cover bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl"
@@ -326,53 +224,18 @@ export default function HeroSection() {
           {/* Left Content */}
           <div className="max-w-xl py-8 sm:py-12 md:py-16 lg:py-24">
             <h1 className="mb-4 sm:mb-6 font-bakso">
-              <SplitText
-                text="trusted Pet Care,"
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-gray-800 leading-tight"
-                delay={100}
-                duration={0.6}
-                ease="power3.out"
-                splitType="chars"
-                from={{ opacity: 0, y: 40 }}
-                to={{ opacity: 1, y: 0 }}
-                threshold={0.1}
-                rootMargin="-100px"
-                textAlign="center"
-
-              />
+              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
+                trusted Pet Care,
+              </span>
               <br />
-              <SplitText
-                text="Whenever You Need It."
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-gray-800 leading-tight"
-                delay={100}
-                duration={0.6}
-                ease="power3.out"
-                splitType="chars"
-                from={{ opacity: 0, y: 40 }}
-                to={{ opacity: 1, y: 0 }}
-                threshold={0.1}
-                rootMargin="-100px"
-                textAlign="between"
-
-              />
-
+              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
+                Whenever You Need It.
+              </span>
             </h1>
-            <p className="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 uppercase font-bakso">
-              <SplitText
-                text="Find reliable sitters, walkers, and groomers near you—book in minutes."
-                className="text-gray-600 tracking-wide"
-                delay={100}
-                duration={0.6}
-                ease="power3.out"
-                splitType="chars"
-                from={{ opacity: 0, y: 40 }}
-                to={{ opacity: 1, y: 0 }}
-                threshold={0.1}
-                rootMargin="-100px"
-                textAlign="between"
-
-              />
-
+            <p className="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 font-montserrat">
+              <span className=" tracking-wide font-bakso text-[#666666]">
+                Find reliable sitters, walkers, and groomers near you—book in minutes.
+              </span>
             </p>
           </div>
         </div>
@@ -393,13 +256,13 @@ export default function HeroSection() {
               }`}
             >
               <service.icon
-                className={`w-6 h-6 sm:w-8 sm:h-8 flex-shrink-0 ${
+                className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${
                   activeService === service.id
                     ? "text-teal-600"
                     : "text-teal-600"
                 }`}
               />
-              <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm font-bakso text-gray-800">
+              <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm font-bakso text-[#024B5E]">
                 {service.label}
               </span>
             </button>
@@ -409,10 +272,30 @@ export default function HeroSection() {
         {/* Dynamic Form Fields */}
         {renderFormFields()}
 
-        {/* Bottom row with paw and search button */}
+        {/* Bottom row with paw, day selector (for daycare), and search button */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-          <div className="hidden sm:block">
-            <PawIcon className="w-12 h-12 md:w-16 md:h-16 text-teal-600" />
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:block">
+              <PawIcon className="w-12 h-12 md:w-16 md:h-16 text-teal-600" />
+            </div>
+            {activeService === "daycare" && (
+              <div className="flex gap-2">
+                {daysOfWeek.map((day) => (
+                  <button
+                    key={day.id}
+                    onClick={() => toggleDay(day.id)}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${
+                      selectedDays.includes(day.id)
+                        ? "bg-[#024B5E] text-white"
+                        : "bg-white text-[#024B5E] border-2 border-gray-200 hover:border-[#024B5E]"
+                    }`}
+                    title={day.full}
+                  >
+                    {day.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <Link
             href="/search"
@@ -444,6 +327,7 @@ export default function HeroSection() {
             Search here
           </Link>
         </div>
+      </div>
       </div>
     </div>
   );

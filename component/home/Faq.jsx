@@ -43,13 +43,13 @@ export default function Faq() {
   };
 
   return (
-    <div id="faqs" className="bg-white py-24 sm:py-32">
+    <div id="faqs" className="bg-[#F8F4EF] py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl font-bakso">
+          <h2 className="text-3xl font-bold tracking-tight text-[#024B5E] sm:text-4xl font-bakso">
             Frequently Asked Questions
           </h2>
-          <p className="mt-4 text-lg leading-8 text-gray-600">
+          <p className="mt-4 text-lg leading-8 text-[#024B5E]">
             This section gives you clear and simple answers about how our AI assistant helps your business handle calls, messages, and customer requests more efficiently.
           </p>
         </div>

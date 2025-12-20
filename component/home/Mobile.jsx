@@ -3,10 +3,10 @@ import React from 'react';
 
 export default function MobileAppSection() {
   return (
-    <div className=" bg-white py-8 px-8">
+    <div className=" bg-[#F8F4EF] py-8 px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <h1 className="text-4xl md:text-5xl text-center text-gray-900 mb-16  font-bakso">
+        <h1 className="text-4xl md:text-5xl text-center text-[#024B5E] mb-16  font-bakso">
           Connect Anywhere with the Wuffoos App
         </h1>
 

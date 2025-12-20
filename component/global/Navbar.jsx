@@ -31,16 +31,16 @@ export default function Navbar() {
         <div className="flex items-center gap-4 md:gap-8">
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-gray-700 hover:text-teal-600 transition">
+            <Link href="/" className="text-[#024B5E] hover:text-[#022b35] transition">
               Home
             </Link>
-            <a href="#services" className="text-gray-700 hover:text-teal-600 transition">
+            <a href="#services" className="text-[#024B5E] hover:text-[#022b35] transition">
               Services
             </a>
-            <a href="/sitterhome" className="text-gray-700 hover:text-teal-600 transition">
+            <a href="/sitterhome" className="text-[#024B5E] hover:text-[#022b35] transition">
               Become a sitter
             </a>
-            <a href="#faqs" className="text-gray-700 hover:text-teal-600 transition">
+            <a href="#faqs" className="text-[#024B5E] hover:text-[#022b35] transition">
               FAQ's
             </a>
           </div>

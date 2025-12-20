@@ -79,7 +79,7 @@ export default function TestimonialsSection() {
   };
 
   const TestimonialCard = ({ testimonial }) => (
-    <div className="bg-[#F8F8F8] rounded-2xl p-8 shadow-2xs hover:shadow-2xl transition-shadow shrink-0 w-[450px] mx-4 font-bold">
+    <div className="bg-[#ffffff] rounded-2xl p-8 shadow-2xs hover:shadow-2xl transition-shadow shrink-0 w-[450px] mx-4 font-bold">
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-linear-to-br from-gray-200 to-gray-300 flex items-center justify-center text-3xl overflow-hidden">
@@ -117,15 +117,15 @@ export default function TestimonialsSection() {
   );
 
   return (
-    <div className="bg-white py-16 px-8 overflow-hidden">
+    <div className="bg-[#F8F4EF] py-16 px-8 overflow-hidden ">
       <div className="max-w-7xl mx-auto text-center mb-16">
         <h2
-          className="text-5xl md:text-6xl text-gray-800 mb-4 tracking-wide font-bakso"
+          className="text-5xl md:text-6xl text-[#024B5E] mb-4 tracking-wide font-bakso"
           //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
         >
           What Our Users Say
         </h2>
-        <p className="text-gray-600 text-lg font-normal">
+        <p className="text-[#024B5E] text-lg font-normal">
           Hear the trusted feedback from customers who have put their faith in
           us
         </p>
