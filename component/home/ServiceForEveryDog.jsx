@@ -15,7 +15,7 @@ export default function ServicesSection() {
           <div>
             <h2
               className="text-2xl md:text-3xl lg:text-4xl text-[#024B5E] mb-8 md:mb-12 tracking-wide font-bakso"
-              //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+            //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
             >
               Services for Every Dog and Cat
             </h2>
@@ -34,11 +34,11 @@ export default function ServicesSection() {
               <div>
                 <h3
                   className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
-                  //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+                //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Dog Boarding
                 </h3>
-                <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+                <p className="text-sm md:text-base text-[#024B5E] leading-relaxed">
                   Your pets stay overnight in your sitter's home. They'll be
                   treated like part of the family in a familiar environment.
                 </p>
@@ -59,11 +59,11 @@ export default function ServicesSection() {
               <div>
                 <h3
                   className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
-                  //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+                //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Doggy Day Care
                 </h3>
-                <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+                <p className="text-sm md:text-base text-[#024B5E] leading-relaxed">
                   Your dog spends the day at your sitter's home. Drop them off
                   in the morning and pick your pup in the evening.
                 </p>
@@ -84,11 +84,11 @@ export default function ServicesSection() {
               <div>
                 <h3
                   className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
-                  //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+                //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
                   Dog Walking
                 </h3>
-                <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+                <p className="text-sm md:text-base text-[#024B5E] leading-relaxed">
                   Your dog gets a walk around your neighborhood. Perfect for
                   busy days and dogs with extra energy to burn.
                 </p>
@@ -99,7 +99,7 @@ export default function ServicesSection() {
           {/* Right Column - Wuffoos Protect Card */}
           <div className="relative mt-8 lg:mt-0">
             {/* Image Container - Half outside card */}
-            <div className="absolute -top-16 md:-top-24 lg:-top-32 right-2 md:right-4 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 z-10">
+            <div className="absolute -top-16 md:-top-24 lg:-top-32 -right-4 md:-right-6 lg:-right-12 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 z-10">
               <Image
                 src="/Union.png"
                 alt="Pet sitter with dog"
@@ -135,7 +135,7 @@ export default function ServicesSection() {
                 </div>
                 <h3
                   className="text-xl md:text-2xl text-[#024B5E] font-bakso"
-                  //   style={{ fontFamily: "Comic Sans MS, cursive" }}
+                //   style={{ fontFamily: "Comic Sans MS, cursive" }}
                 >
                   Wuffoos Protect
                 </h3>
@@ -143,7 +143,7 @@ export default function ServicesSection() {
 
               <p
                 className="text-[#024B5E] mb-6 text-lg md:text-2xl font-bakso"
-                // style={{ fontFamily: "Comic Sans MS, cursive" }}
+              // style={{ fontFamily: "Comic Sans MS, cursive" }}
               >
                 Find peace of mind with every
                 <br className="hidden sm:block" />
@@ -154,7 +154,7 @@ export default function ServicesSection() {
               {/* Features List */}
               <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
                 <div>
-                  <p className="text-sm md:text-base text-gray-700">
+                  <p className="text-sm md:text-base text-[#024B5E]">
                     <span className="text-[#357F91] font-semibold">
                       Screened pet sitters
                     </span>{" "}
@@ -164,7 +164,7 @@ export default function ServicesSection() {
                 </div>
 
                 <div>
-                  <p className="text-sm md:text-base text-gray-700">
+                  <p className="text-sm md:text-base text-[#024B5E]">
                     <span className="text-[#357F91] font-semibold">
                       Messaging & photo updates
                     </span>{" "}
@@ -173,7 +173,7 @@ export default function ServicesSection() {
                 </div>
 
                 <div>
-                  <p className="text-sm md:text-base text-gray-700">
+                  <p className="text-sm md:text-base text-[#024B5E]">
                     <span className="text-[#357F91] font-semibold">
                       The Rover Guarantee
                     </span>{" "}
@@ -186,7 +186,7 @@ export default function ServicesSection() {
                 </div>
 
                 <div>
-                  <p className="text-sm md:text-base text-gray-700">
+                  <p className="text-sm md:text-base text-[#024B5E]">
                     <span className="text-[#357F91] font-semibold">
                       24/7 support
                     </span>{" "}

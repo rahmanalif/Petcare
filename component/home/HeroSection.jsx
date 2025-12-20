@@ -187,21 +187,19 @@ export default function HeroSection() {
             <div className="flex border border-gray-200 rounded-lg overflow-hidden flex-1">
               <button
                 onClick={() => setSchedule("onetime")}
-                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
-                  schedule === "onetime"
-                    ? "bg-white text-[#024B5E] border-r border-gray-200"
-                    : "bg-gray-50 text-[#024B5E] border-r border-gray-200 hover:bg-gray-100"
-                }`}
+                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${schedule === "onetime"
+                  ? "bg-white text-[#024B5E] border-r border-gray-200"
+                  : "bg-gray-50 text-[#024B5E] border-r border-gray-200 hover:bg-gray-100"
+                  }`}
               >
                 One Time
               </button>
               <button
                 onClick={() => setSchedule("repeat")}
-                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
-                  schedule === "repeat"
-                    ? "bg-white text-[#024B5E]"
-                    : "bg-gray-50 text-[#024B5E] hover:bg-gray-100"
-                }`}
+                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${schedule === "repeat"
+                  ? "bg-white text-[#024B5E]"
+                  : "bg-gray-50 text-[#024B5E] hover:bg-gray-100"
+                  }`}
               >
                 Repeat Weekly
               </button>
@@ -215,119 +213,116 @@ export default function HeroSection() {
   return (
     <div className="bg-[#F8F4EF] w-full">
       <div className="relative w-full max-w-[1669px] mx-auto pb-8 px-4 sm:px-6 lg:px-8">
-      {/* Background Image Container */}
-      <div
-        className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-cover bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl"
-        style={{ backgroundImage: "url('/IMAGE (2).png')" }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-12 lg:pt-16 pb-8 sm:pb-12 lg:pb-16">
-          {/* Left Content */}
-          <div className="max-w-xl py-8 sm:py-12 md:py-16 lg:py-24">
-            <h1 className="mb-4 sm:mb-6 font-bakso">
-              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
-                trusted Pet Care,
-              </span>
-              <br />
-              <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
-                Whenever You Need It.
-              </span>
-            </h1>
-            <p className="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 font-montserrat">
-              <span className=" tracking-wide font-bakso text-[#666666]">
-                Find reliable sitters, walkers, and groomers near you—book in minutes.
-              </span>
-            </p>
+        {/* Background Image Container */}
+        <div
+          className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-cover bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl"
+          style={{ backgroundImage: "url('/IMAGE (2).png')" }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-12 lg:pt-16 pb-8 sm:pb-12 lg:pb-16">
+            {/* Left Content */}
+            <div className="max-w-xl py-8 sm:py-12 md:py-16 lg:py-24">
+              <h1 className="mb-4 sm:mb-6 font-bakso">
+                <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
+                  trusted Pet Care,
+                </span>
+                <br />
+                <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
+                  Whenever You Need It.
+                </span>
+              </h1>
+              <p className="text-[#024B5E] text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 font-montserrat">
+                <span className=" tracking-wide font-bakso text-[#666666]">
+                  Find reliable sitters, walkers, and groomers near you—book in minutes.
+                </span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Service Selection Cards - positioned to overlap the background */}
-      <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 max-w-5xl mx-auto -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-32 relative z-10">
-        {/* Service Tabs */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-          {services.map((service) => (
-            <button
-              key={service.id}
-              onClick={() => setActiveService(service.id)}
-              className={`flex flex-row sm:flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${
-                activeService === service.id
+        {/* Service Selection Cards - positioned to overlap the background */}
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 max-w-5xl mx-auto -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-32 relative z-10">
+          {/* Service Tabs */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
+            {services.map((service) => (
+              <button
+                key={service.id}
+                onClick={() => setActiveService(service.id)}
+                className={`flex flex-row sm:flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${activeService === service.id
                   ? "border-teal-600 bg-white"
                   : "border-gray-200 hover:border-gray-300"
-              }`}
-            >
-              <service.icon
-                className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${
-                  activeService === service.id
+                  }`}
+              >
+                <service.icon
+                  className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${activeService === service.id
                     ? "text-teal-600"
                     : "text-teal-600"
-                }`}
-              />
-              <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm font-bakso text-[#024B5E]">
-                {service.label}
-              </span>
-            </button>
-          ))}
-        </div>
+                    }`}
+                />
+                <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm font-bakso text-[#024B5E]">
+                  {service.label}
+                </span>
+              </button>
+            ))}
+          </div>
 
-        {/* Dynamic Form Fields */}
-        {renderFormFields()}
+          {/* Dynamic Form Fields */}
+          {renderFormFields()}
 
-        {/* Bottom row with paw, day selector (for daycare), and search button */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:block">
-              <PawIcon className="w-12 h-12 md:w-16 md:h-16 text-teal-600" />
-            </div>
-            {activeService === "daycare" && (
-              <div className="flex gap-2">
-                {daysOfWeek.map((day) => (
-                  <button
-                    key={day.id}
-                    onClick={() => toggleDay(day.id)}
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${
-                      selectedDays.includes(day.id)
+          {/* Bottom row with paw, day selector (for daycare), and search button */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:block">
+                <PawIcon className="w-12 h-12 md:w-16 md:h-16 text-teal-600" />
+              </div>
+              {activeService === "daycare" && (
+                <div className="flex gap-2">
+                  {daysOfWeek.map((day) => (
+                    <button
+                      key={day.id}
+                      onClick={() => toggleDay(day.id)}
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${selectedDays.includes(day.id)
                         ? "bg-[#024B5E] text-white"
                         : "bg-white text-[#024B5E] border-2 border-gray-200 hover:border-[#024B5E]"
-                    }`}
-                    title={day.full}
-                  >
-                    {day.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <Link
-            href="/search"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#035F75] hover:bg-teal-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-colors"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="sm:w-6 sm:h-6"
+                        }`}
+                      title={day.full}
+                    >
+                      {day.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Link
+              href="/search"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#035F75] hover:bg-teal-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-colors"
             >
-              <path
-                d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M22 22L20 20"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Search here
-          </Link>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="sm:w-6 sm:h-6"
+              >
+                <path
+                  d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M22 22L20 20"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              Search here
+            </Link>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
