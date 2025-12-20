@@ -87,49 +87,26 @@ const LocationIcon = ({ className = "" }) => (
   </svg>
 );
 
-const BoardingIcon = ({ className = "" }) => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M18 2V4M6 2V4" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M11.05 22C7.01949 22 5.00424 22 3.75212 20.6464C2.5 19.2927 2.5 17.1141 2.5 12.7568V12.2432C2.5 7.88594 2.5 5.70728 3.75212 4.35364C5.00424 3 7.01949 3 11.05 3H12.95C16.9805 3 18.9958 3 20.2479 4.35364C21.4765 5.68186 21.4996 7.80438 21.5 12" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M3 8H21" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M13 18H21M17 14L17 22" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-
-);
-
-const DaycareIcon = ({ className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M12 2V10" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M4.92969 10.9297L6.33969 12.3397" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M2 18H4" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M20 18H22" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M19.0702 10.9297L17.6602 12.3397" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M22 22H2" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8 6L12 2L16 6" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M16 18C16 16.9391 15.5786 15.9217 14.8284 15.1716C14.0783 14.4214 13.0609 14 12 14C10.9391 14 9.92172 14.4214 9.17157 15.1716C8.42143 15.9217 8 16.9391 8 18" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-);
-
-const WalkingIcon = ({ className = "" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M11 6C12.1046 6 13 5.10457 13 4C13 2.89543 12.1046 2 11 2C9.89543 2 9 2.89543 9 4C9 5.10457 9.89543 6 11 6Z" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M18 10C19.1046 10 20 9.10457 20 8C20 6.89543 19.1046 6 18 6C16.8954 6 16 6.89543 16 8C16 9.10457 16.8954 10 18 10Z" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M20 18C21.1046 18 22 17.1046 22 16C22 14.8954 21.1046 14 20 14C18.8954 14 18 14.8954 18 16C18 17.1046 18.8954 18 20 18Z" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8.99975 10C9.65636 10 10.3065 10.1293 10.9132 10.3806C11.5198 10.6319 12.071 11.0002 12.5353 11.4645C12.9996 11.9288 13.3679 12.48 13.6191 13.0866C13.8704 13.6932 13.9997 14.3434 13.9997 15V18.5C13.9995 19.3365 13.6996 20.1452 13.1546 20.7796C12.6095 21.4141 11.8552 21.8324 11.0283 21.9587C10.2015 22.085 9.3567 21.9111 8.64704 21.4683C7.93738 21.0255 7.40976 20.3432 7.15975 19.545C6.73308 18.1683 5.83308 17.2667 4.45975 16.84C3.66193 16.5901 2.97991 16.0629 2.53711 15.3538C2.0943 14.6446 1.91996 13.8004 2.04564 12.9739C2.17131 12.1473 2.58869 11.3931 3.22226 10.8476C3.85582 10.3021 4.66372 10.0015 5.49975 10H8.99975Z" stroke="#101010" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+const CalendarIcon = ({ className = "" }) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <path d="M18 2V4M6 2V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M11.05 22C7.01949 22 5.00424 22 3.75212 20.6464C2.5 19.2927 2.5 17.1141 2.5 12.7568V12.2432C2.5 7.88594 2.5 5.70728 3.75212 4.35364C5.00424 3 7.01949 3 11.05 3H12.95C16.9805 3 18.9958 3 20.2479 4.35364C21.4765 5.68186 21.4996 7.80438 21.5 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M3 8H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13 18H21M17 14L17 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
 );
 
 const UncheckedIcon = ({ className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className={className}>
-    <path d="M11.9707 22.75C6.0507 22.75 1.2207 17.93 1.2207 12C1.2207 6.07 6.0507 1.25 11.9707 1.25C17.8907 1.25 22.7207 6.07 22.7207 12C22.7207 17.93 17.9007 22.75 11.9707 22.75ZM11.9707 2.75C6.8707 2.75 2.7207 6.9 2.7207 12C2.7207 17.1 6.8707 21.25 11.9707 21.25C17.0707 21.25 21.2207 17.1 21.2207 12C21.2207 6.9 17.0707 2.75 11.9707 2.75Z" fill="#585858"/>
-    <path d="M11.9995 16.98C9.24953 16.98 7.01953 14.75 7.01953 12C7.01953 9.25002 9.24953 7.02002 11.9995 7.02002C14.7495 7.02002 16.9795 9.25002 16.9795 12C16.9795 14.75 14.7495 16.98 11.9995 16.98ZM11.9995 8.52002C10.0795 8.52002 8.51953 10.08 8.51953 12C8.51953 13.92 10.0795 15.48 11.9995 15.48C13.9195 15.48 15.4795 13.92 15.4795 12C15.4795 10.08 13.9195 8.52002 11.9995 8.52002Z" fill="#585858"/>
+    <path d="M11.9707 22.75C6.0507 22.75 1.2207 17.93 1.2207 12C1.2207 6.07 6.0507 1.25 11.9707 1.25C17.8907 1.25 22.7207 6.07 22.7207 12C22.7207 17.93 17.9007 22.75 11.9707 22.75ZM11.9707 2.75C6.8707 2.75 2.7207 6.9 2.7207 12C2.7207 17.1 6.8707 21.25 11.9707 21.25C17.0707 21.25 21.2207 17.1 21.2207 12C21.2207 6.9 17.0707 2.75 11.9707 2.75Z" fill="#024B5E"/>
+    <path d="M11.9995 16.98C9.24953 16.98 7.01953 14.75 7.01953 12C7.01953 9.25002 9.24953 7.02002 11.9995 7.02002C14.7495 7.02002 16.9795 9.25002 16.9795 12C16.9795 14.75 14.7495 16.98 11.9995 16.98ZM11.9995 8.52002C10.0795 8.52002 8.51953 10.08 8.51953 12C8.51953 13.92 10.0795 15.48 11.9995 15.48C13.9195 15.48 15.4795 13.92 15.4795 12C15.4795 10.08 13.9195 8.52002 11.9995 8.52002Z" fill="#024B5E"/>
   </svg>
 );
 
 const CheckedIcon = ({ className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className={className}>
-    <path opacity="0.4" d="M11.9707 22C17.4936 22 21.9707 17.5228 21.9707 12C21.9707 6.47715 17.4936 2 11.9707 2C6.44786 2 1.9707 6.47715 1.9707 12C1.9707 17.5228 6.44786 22 11.9707 22Z" fill="#035F75"/>
-    <path d="M11.9995 16.23C14.3357 16.23 16.2295 14.3362 16.2295 12C16.2295 9.66386 14.3357 7.77002 11.9995 7.77002C9.66337 7.77002 7.76953 9.66386 7.76953 12C7.76953 14.3362 9.66337 16.23 11.9995 16.23Z" fill="#035F75"/>
+    <path opacity="0.4" d="M11.9707 22C17.4936 22 21.9707 17.5228 21.9707 12C21.9707 6.47715 17.4936 2 11.9707 2C6.44786 2 1.9707 6.47715 1.9707 12C1.9707 17.5228 6.44786 22 11.9707 22Z" fill="#024B5E"/>
+    <path d="M11.9995 16.23C14.3357 16.23 16.2295 14.3362 16.2295 12C16.2295 9.66386 14.3357 7.77002 11.9995 7.77002C9.66337 7.77002 7.76953 9.66386 7.76953 12C7.76953 14.3362 9.66337 16.23 11.9995 16.23Z" fill="#024B5E"/>
   </svg>
 );
 
@@ -241,14 +218,14 @@ export default function FindMatchSection() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6">
+    <div className="min-h-screen bg-[#F8F4EF] py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 text-[#024B5E]">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-4 sm:mb-6">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 font-bakso">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#024B5E] mb-2 font-bakso">
             Find a Match
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 font-medium">
+          <p className="text-sm sm:text-base text-[#024B5E] font-medium">
             Add dates to see sitters who'll be available for your need. These
             are sitters in your area, but they might not be available.
           </p>
@@ -256,7 +233,7 @@ export default function FindMatchSection() {
 
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Left Sidebar - Filters or Map */}
-          <div className="w-full lg:w-80 lg:shrink-0">
+          <div className="w-full lg:w-80 lg:shrink-0 bg-white rounded-lg shadow-md ">
             <div>
               <CardContent className="p-3 sm:p-4 md:p-6 space-y-4 sm:space-y-6">
                 {/* Filter and Location Buttons */}
@@ -265,8 +242,8 @@ export default function FindMatchSection() {
                     variant="outline"
                     className={`flex-1 sm:flex-none border-2 text-sm sm:text-base ${
                       !showMap
-                        ? 'bg-[#035F75] text-white border-[#035F75]'
-                        : 'bg-white text-[#035F75] border-[#035F75]'
+                        ? 'bg-[#024B5E] text-white border-[#024B5E]'
+                        : 'bg-white text-[#024B5E] border-[#024B5E]'
                     }`}
                     onClick={() => setShowMap(false)}
                   >
@@ -275,10 +252,10 @@ export default function FindMatchSection() {
                   </Button>
                   <Button
                     variant="outline"
-                    className={`flex-1 sm:flex-none border-2 text-sm sm:text-base border-[#035F75] ${
+                    className={`flex-1 sm:flex-none border-2 text-sm sm:text-base border-[#024B5E] ${
                       showMap
-                        ? 'bg-[#035F75] text-white'
-                        : 'bg-white text-[#035F75]'
+                        ? 'bg-[#024B5E] text-white'
+                        : 'bg-white text-[#024B5E]'
                     }`}
                     onClick={() => setShowMap(true)}
                   >
@@ -299,8 +276,8 @@ export default function FindMatchSection() {
                         <MapPopup>
                           <div className="">
                             <div className="font-semibold">Seam Rahman</div>
-                            <div className="text-sm text-gray-600">New York, NY</div>
-                            <div className="text-sm font-semibold text-[#035F75] mt-1">$25/day</div>
+                            <div className="text-sm text-[#024B5E]">New York, NY</div>
+                            <div className="text-sm font-semibold text-[#024B5E] mt-1">$25/day</div>
                           </div>
                         </MapPopup>
                       </MapMarker>
@@ -324,13 +301,21 @@ export default function FindMatchSection() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="boarding" className={""}><BoardingIcon className="inline-block mr-2" /> Boarding</SelectItem>
-                      <SelectItem value="Doggy Day Care" className={""}><DaycareIcon className="inline-block mr-2" />Doggy Day Care</SelectItem>
-                      <SelectItem value="Dog Walking" className={""}><WalkingIcon className="inline-block mr-2" />Dog Walking</SelectItem>
+                      <SelectItem value="boarding" className={""}>
+                        <img src="/icons/boardingIcon.png" alt="Boarding" className="inline-block mr-2 w-6 h-6" />
+                        Boarding
+                      </SelectItem>
+                      <SelectItem value="Doggy Day Care" className={""}>
+                        <img src="/icons/doggy.png" alt="Doggy Day Care" className="inline-block mr-2 w-6 h-6" />
+                        Doggy Day Care
+                      </SelectItem>
+                      <SelectItem value="Dog Walking" className={""}>
+                        <img src="/icons/walking.png" alt="Dog Walking" className="inline-block mr-2 w-6 h-6" />
+                        Dog Walking
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                  
 
                 {/* Date and Time Inputs - Conditional based on lookingFor */}
                 {lookingFor === "Doggy Day Care" ? (
@@ -346,22 +331,22 @@ export default function FindMatchSection() {
                           onClick={() => setSchedule("oneTime")}
                           className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "oneTime"
-                              ? "border-[#035F75] bg-[#035F75]/5"
-                              : "border-gray-200 hover:border-[#035F75]"
+                              ? "border-[#024B5E] bg-[#024B5E]/5"
+                              : "border-gray-200 hover:border-[#024B5E]"
                           }`}
                         >
-                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
+                          <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">One Time</label>
                         </div>
                         <div
                           onClick={() => setSchedule("repeatWeekly")}
                           className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "repeatWeekly"
-                              ? "border-[#035F75] bg-[#035F75]/5"
-                              : "border-gray-200 hover:border-[#035F75]"
+                              ? "border-[#024B5E] bg-[#024B5E]/5"
+                              : "border-gray-200 hover:border-[#024B5E]"
                           }`}
                         >
-                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
+                          <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">Repeat Weekly</label>
                         </div>
                       </div>
@@ -392,8 +377,8 @@ export default function FindMatchSection() {
                               }
                               className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-colors ${
                                 selectedDays[day.key]
-                                  ? "bg-[#035F75] text-white"
-                                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                                  ? "bg-[#024B5E] text-white"
+                                  : "bg-gray-200 text-[#024B5E] hover:bg-gray-300"
                               }`}
                             >
                               {day.label}
@@ -405,7 +390,7 @@ export default function FindMatchSection() {
 
                     {/* Dates */}
                     <div>
-                      <label className="block text-sm font-semibold mb-2">
+                      {/* <label className="block text-sm font-semibold mb-2">
                         Dates
                       </label>
                       <div className="relative">
@@ -414,10 +399,10 @@ export default function FindMatchSection() {
                           placeholder="DD/MM/YY"
                           value={daycareDate}
                           onChange={(e) => setDaycareDate(e.target.value)}
-                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 focus-visible:ring-0"
+                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-[#024B5E] focus-visible:ring-0"
                         />
                         <svg
-                          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-[#024B5E]"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -427,7 +412,60 @@ export default function FindMatchSection() {
                           <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" />
                           <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" />
                         </svg>
+                      </div> */}
+                      <div className="border border-gray-200 rounded-lg p-3 sm:p-4 space-y-3 sm:space-y-4">
+                    {/* Date Inputs */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          Start date
+                        </label>
+                        <Input
+                          type="text"
+                          value={startDate}
+                          onChange={(e) => setStartDate(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
                       </div>
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          End date
+                        </label>
+                        <Input
+                          type="text"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Time Inputs */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          Start time
+                        </label>
+                        <Input
+                          type="text"
+                          value={startTime}
+                          onChange={(e) => setStartTime(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          End time
+                        </label>
+                        <Input
+                          type="text"
+                          value={endTime}
+                          onChange={(e) => setEndTime(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
+                      </div>
+                    </div>
+                  </div>
                     </div>
                   </>
                 ) : lookingFor === "Dog Walking" ? (
@@ -443,22 +481,22 @@ export default function FindMatchSection() {
                           onClick={() => setSchedule("oneTime")}
                           className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "oneTime"
-                              ? "border-[#035F75] bg-[#035F75]/5"
-                              : "border-gray-200 hover:border-[#035F75]"
+                              ? "border-[#024B5E] bg-[#024B5E]/5"
+                              : "border-gray-200 hover:border-[#024B5E]"
                           }`}
                         >
-                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
+                          <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">One Time</label>
                         </div>
                         <div
                           onClick={() => setSchedule("repeatWeekly")}
                           className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${
                             schedule === "repeatWeekly"
-                              ? "border-[#035F75] bg-[#035F75]/5"
-                              : "border-gray-200 hover:border-[#035F75]"
+                              ? "border-[#024B5E] bg-[#024B5E]/5"
+                              : "border-gray-200 hover:border-[#024B5E]"
                           }`}
                         >
-                          <BoardingIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
+                          <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
                           <label className="cursor-pointer">Repeat Weekly</label>
                         </div>
                       </div>
@@ -489,8 +527,8 @@ export default function FindMatchSection() {
                               }
                               className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-colors ${
                                 selectedDays[day.key]
-                                  ? "bg-[#035F75] text-white"
-                                  : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                                  ? "bg-[#024B5E] text-white"
+                                  : "bg-gray-200 text-[#024B5E] hover:bg-gray-300"
                               }`}
                             >
                               {day.label}
@@ -500,36 +538,7 @@ export default function FindMatchSection() {
                       </div>
                     )}
 
-                    {/* Dates */}
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">
-                        Dates
-                      </label>
-                      <div className="relative">
-                        <Input
-                          type="text"
-                          placeholder="DD/MM/YY"
-                          value={daycareDate}
-                          onChange={(e) => setDaycareDate(e.target.value)}
-                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-gray-400 focus-visible:ring-0"
-                        />
-                        <svg
-                          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="2" />
-                          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2" />
-                          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" />
-                          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" />
-                        </svg>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  /* Boarding fields */
-                  <div className="border border-gray-200 rounded-lg p-3 sm:p-4 space-y-3 sm:space-y-4">
+                    <div className="border border-gray-200 rounded-lg p-3 sm:p-4 space-y-3 sm:space-y-4">
                     {/* Date Inputs */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
@@ -540,7 +549,7 @@ export default function FindMatchSection() {
                           type="text"
                           value={startDate}
                           onChange={(e) => setStartDate(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                       <div>
@@ -551,7 +560,7 @@ export default function FindMatchSection() {
                           type="text"
                           value={endDate}
                           onChange={(e) => setEndDate(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                     </div>
@@ -566,7 +575,7 @@ export default function FindMatchSection() {
                           type="text"
                           value={startTime}
                           onChange={(e) => setStartTime(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                       <div>
@@ -577,7 +586,64 @@ export default function FindMatchSection() {
                           type="text"
                           value={endTime}
                           onChange={(e) => setEndTime(e.target.value)}
-                          className="border-2 text-gray-400 border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                    
+                  </>
+                ) : (
+                  /* Boarding fields */
+                  <div className="border border-gray-200 rounded-lg p-3 sm:p-4 space-y-3 sm:space-y-4">
+                    {/* Date Inputs */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          Start date
+                        </label>
+                        <Input
+                          type="text"
+                          value={startDate}
+                          onChange={(e) => setStartDate(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          End date
+                        </label>
+                        <Input
+                          type="text"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Time Inputs */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          Start time
+                        </label>
+                        <Input
+                          type="text"
+                          value={startTime}
+                          onChange={(e) => setStartTime(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold mb-1">
+                          End time
+                        </label>
+                        <Input
+                          type="text"
+                          value={endTime}
+                          onChange={(e) => setEndTime(e.target.value)}
+                          className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
                         />
                       </div>
                     </div>
@@ -590,7 +656,7 @@ export default function FindMatchSection() {
                     Pet
                   </label>
                   <div className="mb-2 ">
-                    <span className=" text-sm text-black font-medium">Your pets</span>
+                    <span className=" text-sm text-[#024B5E] font-medium">Your pets</span>
                   </div>
                   <Select value={selectedPet} onValueChange={setSelectedPet}>
                     <SelectTrigger className="h-18 py-8 px-6">
@@ -602,7 +668,7 @@ export default function FindMatchSection() {
                         />
                         <div className="text-left">
                           <div className="font-semibold text-sm ">Bob</div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-[#024B5E]">
                             Australian Shepherds
                           </div>
                         </div>
@@ -614,7 +680,7 @@ export default function FindMatchSection() {
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-[#024B5E] mt-2">
                     Select at least one pet to ensure a more accurate search
                   </p>
                 </div>
@@ -626,26 +692,9 @@ export default function FindMatchSection() {
                   {lookingFor === "Dog Walking" ? (
                     /* Dog Walking Filters */
                     <>
-                      {/* Available time */}
-                      <div className="mb-4">
-                        <h4 className="text-sm font-semibold mb-2">
-                          Available time
-                        </h4>
-                        <FilterOption
-                          label="11am-3am"
-                          checked={walkingFilters.availableTime11am3am}
-                          onToggle={() => toggleWalkingFilter("availableTime11am3am")}
-                        />
-                        <FilterOption
-                          label="3am-10am"
-                          checked={walkingFilters.availableTime3am10am}
-                          onToggle={() => toggleWalkingFilter("availableTime3am10am")}
-                        />
-                      </div>
-
                       {/* Other */}
                       <div>
-                        <h4 className="text-sm font-semibold mb-2">Other</h4>
+                        
                         <FilterOption
                           label="Dog first aid / CPR"
                           checked={walkingFilters.dogFirstAid}
@@ -931,6 +980,15 @@ export default function FindMatchSection() {
                     </>
                   )}
                 </div>
+
+                {/* Apply Filters Button */}
+                <div className="pt-4">
+                  <Button
+                    className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-semibold py-3 rounded-lg transition-colors"
+                  >
+                    Apply filters
+                  </Button>
+                </div>
                   </>
                 )}
               </CardContent>
@@ -955,7 +1013,7 @@ function FilterOption({ label, checked, onToggle }) {
       className="flex items-center justify-between py-2 cursor-pointer"
       onClick={onToggle}
     >
-      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-sm text-[#024B5E]">{label}</span>
       {checked ? (
         <CheckedIcon className="w-5 h-5" />
       ) : (
