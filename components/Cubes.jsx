@@ -1,4 +1,7 @@
-import { useCallback, useEffect, useRef } from 'react';import gsap from 'gsap';
+"use client";
+
+import { useCallback, useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 const Cubes = ({
   gridSize = 10,
