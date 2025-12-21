@@ -224,7 +224,7 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-[#F8F4EF] py-8 px-4">
       <div className="max-w-7xl mx-auto ">
         <div className="flex gap-6">
           {/* Left Sidebar */}

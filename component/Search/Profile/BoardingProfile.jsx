@@ -211,9 +211,9 @@ export default function BoardingProfile({ sitterName = "Seam Rahman" }) {
   return (
     <div className="min-h-screen bg-[#F8F4EF] py-8 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="flex gap-6">
+        <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Sidebar */}
-          <div className="w-80 shrink-0 space-y-4">
+          <div className="w-full lg:w-80 shrink-0 space-y-4">
             {!showBooking ? (
               <Card>
                 {/* Profile Card */}

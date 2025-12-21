@@ -215,8 +215,7 @@ export default function HeroSection() {
       <div className="relative w-full max-w-[1669px] mx-auto pb-8 px-4 sm:px-6 lg:px-8">
         {/* Background Image Container */}
         <div
-          className="w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-cover bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl"
-          style={{ backgroundImage: "url('/IMAGE (2).png')" }}
+          className="w-full h-[600px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-size-[100%_auto] bg-bottom md:bg-cover md:bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl bg-[url('/MobileIMAGE%20.png')] md:bg-[url('/IMAGE%20(2).png')]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-12 lg:pt-16 pb-8 sm:pb-12 lg:pb-16">
             {/* Left Content */}
@@ -231,7 +230,7 @@ export default function HeroSection() {
                 </span>
               </h1>
               <p className="text-[#024B5E] text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 font-montserrat">
-                <span className=" tracking-wide font-bakso text-[#666666]">
+                <span className=" tracking-wide font-bakso text-[#024B5E]">
                   Find reliable sitters, walkers, and groomers near you—book in minutes.
                 </span>
               </p>

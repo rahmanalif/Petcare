@@ -94,7 +94,7 @@ export default function DashboardOverview() {
         <div className="grid grid-cols-  md:grid-cols-2 lg:grid-cols-2 gap-4 mb-8">
           {/* Total Bookings */}
           <div className="bg-linear-to-br from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl p-6">
-            <h3 className="text-gray-600 text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
               Total Bookings
             </h3>
             <p className="text-4xl font-bold text-teal-600 font-bakso">800</p>
@@ -102,7 +102,7 @@ export default function DashboardOverview() {
 
           {/* On Going Services */}
           <div className="bg-linear-to-br from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl p-6">
-            <h3 className="text-gray-600 text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
               On Going Services
             </h3>
             <p className="text-4xl font-bold text-blue-600 font-bakso">06</p>
@@ -110,7 +110,7 @@ export default function DashboardOverview() {
 
           {/* Completed Services */}
           <div className="bg-white border border-gray-200 rounded-xl p-6 ">
-            <h3 className="text-gray-600 text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
               Completed Services
             </h3>
             <p className="text-4xl font-bold text-teal-500 font-bakso">400</p>
@@ -118,7 +118,7 @@ export default function DashboardOverview() {
 
           {/* Upcoming Services */}
           <div className="bg-white border border-red-200 rounded-xl p-6">
-            <h3 className="text-gray-600 text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">
               Upcoming Services
             </h3>
             <p className="text-4xl font-bold text-red-400 font-bakso">14</p>
@@ -129,15 +129,15 @@ export default function DashboardOverview() {
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Calendar Section */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="text-lg font-semibold text-[#024B5E] mb-4">
               Pet sitter Availability
             </h2>
 
             {/* Legend */}
             <div className="flex gap-4 mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-[#FF4747] rounded"></div>
-                <span className="text-sm text-gray-700">Book</span>
+                <div className="w-4 h-4 bg-[#FF4747] rounded  "></div>
+                <span className="text-sm text-[#024B5E]">Book</span>
               </div>
             </div>
 
@@ -147,29 +147,29 @@ export default function DashboardOverview() {
                 onClick={() => navigateMonth(-1)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-[#024B5E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              <h3 className="text-base font-semibold text-gray-900">
+              <h3 className="text-base font-semibold text-[#024B5E]">
                 {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
               </h3>
               <button
                 onClick={() => navigateMonth(1)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-[#024B5E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
 
             {/* Calendar Grid */}
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-1 text-[#024B5E]">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
                 <div
                   key={day}
-                  className="text-center text-xs font-semibold text-gray-600 py-2"
+                  className="text-center text-xs font-semibold text-[#024B5E] py-2"
                 >
                   {day}
                 </div>
@@ -183,7 +183,7 @@ export default function DashboardOverview() {
                     key={index}
                     className={`
                       aspect-square flex items-center justify-center text-sm rounded
-                      ${!dayInfo.isCurrentMonth ? "text-gray-300" : "text-gray-700"}
+                      ${!dayInfo.isCurrentMonth ? "text-[#024B5E]" : "text-[#024B5E]"}
                       ${isBooked ? "bg-[#FF4747] text-white font-semibold" : ""}
                       ${dayInfo.isCurrentMonth && !isBooked ? "hover:bg-gray-100 cursor-pointer" : ""}
                     `}
@@ -197,7 +197,7 @@ export default function DashboardOverview() {
 
           {/* Recent Bookings Section */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="text-lg font-semibold text-[#024B5E] mb-4">
               Recent Bookings
             </h2>
 
@@ -215,8 +215,8 @@ export default function DashboardOverview() {
                         T
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">{booking.name}</h3>
-                        <div className="flex items-center gap-1 text-xs text-gray-500">
+                        <h3 className="font-semibold text-[#024B5E]">{booking.name}</h3>
+                        <div className="flex items-center gap-1 text-xs text-[#024B5E]">
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -225,16 +225,16 @@ export default function DashboardOverview() {
                         </div>
                       </div>
                     </div>
-                    <span className="text-xs text-gray-500">{booking.time}</span>
+                    <span className="text-xs text-[#024B5E]">{booking.time}</span>
                   </div>
 
                   {/* Service Details */}
                   <div className="mb-3">
-                    <p className="font-medium text-gray-900 mb-1">{booking.service}</p>
-                    <p className="text-xs text-gray-500 mb-2">{booking.date}</p>
+                    <p className="font-medium text-[#024B5E] mb-1">{booking.service}</p>
+                    <p className="text-xs text-[#024B5E] mb-2">{booking.date}</p>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">{booking.duration}</span>
-                      <span className="text-gray-900 font-medium">{booking.price}</span>
+                      <span className="text-[#024B5E]">{booking.duration}</span>
+                      <span className="text-[#024B5E] font-medium">{booking.price}</span>
                     </div>
                   </div>
 
@@ -249,11 +249,11 @@ export default function DashboardOverview() {
                         />
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-900 text-sm">{booking.pet.name}</p>
-                        <p className="text-xs text-gray-500">{booking.pet.breed}</p>
+                        <p className="font-semibold text-[#024B5E] text-sm">{booking.pet.name}</p>
+                        <p className="text-xs text-[#024B5E]">{booking.pet.breed}</p>
                       </div>
                     </div>
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-[#024B5E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>

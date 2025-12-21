@@ -30,19 +30,19 @@ export default function SitterNavbar() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/sitterdashboard"
-              className="text-gray-700 hover:text-teal-600 transition font-medium"
+              className="text-[#024B5E] hover:text-teal-600 transition font-medium"
             >
               Home
             </Link>
             <Link
               href="/createOrder"
-              className="text-gray-700 hover:text-teal-600 transition font-medium"
+              className="text-[#024B5E] hover:text-teal-600 transition font-medium"
             >
               Create service
             </Link>
             <Link
               href="/bookingHistory"
-              className="text-gray-700 hover:text-teal-600 transition font-medium"
+              className="text-[#024B5E] hover:text-teal-600 transition font-medium"
             >
               Bookings
             </Link>

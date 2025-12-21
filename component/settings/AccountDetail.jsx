@@ -13,7 +13,7 @@ export default function AccountDetail() {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
       <div className="flex justify-between items-center mb-6 sm:mb-8">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Account</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">Account</h2>
         <Button variant="outline" size="sm">
           Edit
         </Button>
@@ -52,25 +52,25 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="fullName"
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-[#024B5E]"
           >
             Full Name
           </Label>
-          <Input id="fullName" placeholder="Name" className="mt-1" />
+          <Input id="fullName" placeholder="Name" className="mt-1 text-[#024B5E]" />
         </div>
 
         {/* Email or Phone */}
         <div>
           <Label
             htmlFor="contact"
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-[#024B5E]"
           >
             E-mail address or phone number
           </Label>
           <Input
             id="contact"
             placeholder="E-mail address or phone number"
-            className="mt-1"
+            className="mt-1 text-[#024B5E]"
           />
         </div>
 
@@ -78,14 +78,14 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="street"
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-[#024B5E]"
           >
             Street
           </Label>
           <Input
             id="street"
             placeholder="Street Number and Name"
-            className="mt-1"
+            className="mt-1 text-[#024B5E]"
           />
         </div>
 
@@ -94,23 +94,23 @@ export default function AccountDetail() {
           <div>
             <Label
               htmlFor="state"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-[#024B5E]"
             >
               State
             </Label>
-            <Input id="state" placeholder="State" className="mt-1" />
+            <Input id="state" placeholder="State" className="mt-1 text-[#024B5E]" />
           </div>
           <div>
             <Label
               htmlFor="zipCode"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-[#024B5E]"
             >
               Zip Code
             </Label>
             <Input
               id="zipCode"
               placeholder="Zip Code"
-              className="mt-1"
+              className="mt-1 text-[#024B5E]"
             />
           </div>
         </div>
@@ -119,13 +119,13 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="dob"
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-[#024B5E]"
           >
-            Death of birth
+            Date of birth
           </Label>
           <div className="relative mt-1">
-            <Input id="dob" placeholder="DD/MM/YY" className="pr-10" />
-            <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Input id="dob" placeholder="DD/MM/YY" className="pr-10 text-[#024B5E]" />
+            <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#024B5E]" />
           </div>
         </div>
 
@@ -133,7 +133,7 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="currentPassword"
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-[#024B5E]"
           >
             Current Password
           </Label>
@@ -142,14 +142,14 @@ export default function AccountDetail() {
               id="currentPassword"
               type={showCurrentPassword ? "text" : "password"}
               placeholder="••••••••"
-              className="pr-10"
+              className="pr-10 text-[#024B5E]"
             />
             <button
               type="button"
               onClick={() =>
                 setShowCurrentPassword(!showCurrentPassword)
               }
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E] hover:text-[#013542]"
             >
               {showCurrentPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -164,7 +164,7 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="newPassword"
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-[#024B5E]"
           >
             New Password
           </Label>
@@ -173,12 +173,12 @@ export default function AccountDetail() {
               id="newPassword"
               type={showNewPassword ? "text" : "password"}
               placeholder="••••••••"
-              className="pr-10"
+              className="pr-10 text-[#024B5E]"
             />
             <button
               type="button"
               onClick={() => setShowNewPassword(!showNewPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E] hover:text-[#013542]"
             >
               {showNewPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -193,7 +193,7 @@ export default function AccountDetail() {
         <div>
           <Label
             htmlFor="confirmPassword"
-            className="text-sm font-medium text-gray-700"
+            className="text-sm font-medium text-[#024B5E]"
           >
             Confirm Password
           </Label>
@@ -202,14 +202,14 @@ export default function AccountDetail() {
               id="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               placeholder="••••••••"
-              className="pr-10"
+              className="pr-10 text-[#024B5E]"
             />
             <button
               type="button"
               onClick={() =>
                 setShowConfirmPassword(!showConfirmPassword)
               }
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E] hover:text-[#013542]"
             >
               {showConfirmPassword ? (
                 <EyeOff className="w-5 h-5" />

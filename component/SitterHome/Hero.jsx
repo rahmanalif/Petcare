@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 export default function HeroSection() {
   const router = useRouter();
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F8F4EF]">
       {/* Hero Section with Background Image */}
       <div className="relative h-[600px] w-full overflow-hidden">
         {/* Background Image Placeholder */}
@@ -20,10 +20,10 @@ export default function HeroSection() {
         {/* Glass Card */}
         <div className="relative h-full flex items-center justify-center px-4 mt-24">
           <div className="backdrop-blur-md bg-white/30 border border-white/40 rounded-2xl shadow-2xl p-8 md:p-12 max-w-2xl w-full">
-            <h1 className="text-4xl md:text-4xl font-bold text-black mb-4 text-center leading-tight font-bakso">
+            <h1 className="text-4xl md:text-4xl font-bold text-[#024B5E] mb-4 text-center leading-tight font-bakso">
               GET PAID TO PLAY WITH PETS
             </h1>
-            <p className="text-black text-center text-lg mb-8 leading-relaxed font-normal font-montserra">
+            <p className="text-[#024B5E] text-center text-lg mb-8 leading-relaxed font-normal font-montserra">
               Wuffoos makes it <span className="font-normal font-montserrat">easy</span> and promotes you to the nation's largest network of pet owners, delivering dog-walking, connecting you love.
             </p>
             <div className="flex justify-center">
@@ -43,7 +43,7 @@ export default function HeroSection() {
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
           {/* Left Column */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-8 font-montserrat">
+            <h2 className="text-3xl font-bold text-[#024B5E] mb-8 font-montserrat">
               Flexibility puts you in control
             </h2>
             <div className="space-y-6">
@@ -53,7 +53,7 @@ export default function HeroSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="text-gray-700 text-lg leading-relaxed font-montserrat">
+                <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
                   Set your own schedule and prices
                 </p>
               </div>
@@ -64,7 +64,7 @@ export default function HeroSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="text-gray-700 text-lg leading-relaxed font-montserrat">
+                <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
                   Offer any combination of pet care services
                 </p>
               </div>
@@ -75,7 +75,7 @@ export default function HeroSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="text-gray-700 text-lg leading-relaxed font-montserrat">
+                <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
                   Set the, age, and other pet preferences that work for you
                 </p>
               </div>
@@ -84,7 +84,7 @@ export default function HeroSection() {
 
           {/* Right Column */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">
+            <h2 className="text-3xl font-bold text-[#024B5E] mb-8">
               The tools to succeed
             </h2>
             <div className="space-y-6">
@@ -95,7 +95,7 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-gray-700 text-lg leading-relaxed ">
+                  <p className="text-[#024B5E] text-lg leading-relaxed ">
                     <span className="text-teal-600 font-semibold font-montserrat">The Wuffoos Guarantee</span> which includes up to $25,000 in vet cost reimbursement
                   </p>
                 </div>
@@ -107,7 +107,7 @@ export default function HeroSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="text-gray-700 text-lg leading-relaxed font-montserrat">
+                <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
                   Manage your pet sitting schedule and more with the Wuffoos app
                 </p>
               </div>
@@ -118,7 +118,7 @@ export default function HeroSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <p className="text-gray-700 text-lg leading-relaxed font-montserrat">
+                <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
                   24/7 support, including vet assistance
                 </p>
               </div>

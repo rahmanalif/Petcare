@@ -21,12 +21,14 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-3 sm:p-4 md:p-6">
+    <div className="min-h-screen bg-[#F8F4EF] p-3 sm:p-4 md:p-6">
       <div className="max-w-5xl mx-auto">
         {/* Pet Profile and Add Pet Section */}
         <div className="flex flex-col sm:flex-row gap-3 mb-4 sm:mb-6">
           {/* Pet Profile */}
-          <div className="bg-[#E7F4F6] rounded-lg p-3 border-2 border-[#035F75] flex items-center gap-3 w-full sm:w-fit">
+          <button
+            onClick={() => router.push('/settings/pet-Information')}
+            className="bg-[#E7F4F6] rounded-lg p-3 border-2 border-[#024B5E] flex items-center gap-3 w-full sm:w-fit">
             <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
               <img
                 src="/Ellipse.png"
@@ -35,13 +37,15 @@ export default function AccountSettings() {
               />
             </div>
             <div>
-              <div className="font-semibold text-gray-900 text-sm">Max</div>
-              <div className="text-xs text-gray-600">Australian Shepherds</div>
+              <div className="font-semibold text-left text-[#024B5E] text-sm">Max</div>
+              <div className="text-xs text-[#024B5E]">Australian Shepherds</div>
             </div>
-          </div>
+          </button>
 
           {/* Add another Pet */}
-          <button className="text-[#035F75] border-2 border-dashed border-[#035F75] rounded-lg px-4 py-3 text-xs font-medium hover:bg-[#E7F4F6] transition-colors flex items-center justify-center gap-2 w-full sm:w-fit">
+          <button
+            onClick={() => router.push('/settings/pet-form')}
+            className="text-[#024B5E] border-2 border-dashed border-[#024B5E] rounded-lg px-4 py-3 text-xs font-medium hover:bg-[#E7F4F6] transition-colors flex items-center justify-center gap-2 w-full sm:w-55">
             <span className="text-lg">+</span>
             <span>Add another Pet</span>
           </button>
@@ -54,41 +58,37 @@ export default function AccountSettings() {
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mt-0 lg:mt-4">
               <button
                 onClick={() => setActiveTab("account")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
-                  activeTab === "account"
-                    ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
-                    : "border-transparent hover:bg-gray-50"
-                }`}
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "account"
+                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
+                  : "border-transparent hover:bg-gray-50"
+                  }`}
               >
                 Account
               </button>
               <button
                 onClick={() => setActiveTab("booking")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
-                  activeTab === "booking"
-                    ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
-                    : "border-transparent hover:bg-gray-50"
-                }`}
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "booking"
+                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
+                  : "border-transparent hover:bg-gray-50"
+                  }`}
               >
                 Booking History
               </button>
               <button
                 onClick={() => setActiveTab("payments")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
-                  activeTab === "payments"
-                    ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
-                    : "border-transparent hover:bg-gray-50"
-                }`}
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "payments"
+                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
+                  : "border-transparent hover:bg-gray-50"
+                  }`}
               >
                 Payments
               </button>
               <button
                 onClick={() => setActiveTab("switch")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${
-                  activeTab === "switch"
-                    ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
-                    : "border-transparent hover:bg-gray-50"
-                }`}
+                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "switch"
+                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
+                  : "border-transparent hover:bg-gray-50"
+                  }`}
               >
                 Switch profile
               </button>
@@ -97,13 +97,13 @@ export default function AccountSettings() {
             <div className="pt-2 sm:pt-4 space-y-2">
               <button
                 onClick={() => setActiveTab("friend")}
-                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 hover:bg-gray-100 rounded"
+                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-[#024B5E] hover:bg-gray-100 rounded"
               >
                 Invite a friend to Wuffoos
               </button>
               <button
                 onClick={() => setActiveTab("promo")}
-                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 hover:bg-gray-100 rounded"
+                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-[#024B5E] hover:bg-gray-100 rounded"
               >
                 Apply promo codes
               </button>
@@ -111,7 +111,7 @@ export default function AccountSettings() {
             <div className="pt-2 sm:pt-4 space-y-2">
               <div
                 onClick={handleLogout}
-                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-700 hover:bg-gray-100 rounded cursor-pointer"
+                className="w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-[#024B5E] hover:bg-gray-100 rounded cursor-pointer"
               >
                 Logout
               </div>

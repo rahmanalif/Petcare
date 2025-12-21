@@ -20,6 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import BookingModalDaycare from "./BookingServiceDaycare";
+import BookingModalWalking from "./BookingServiceWalking";
 
 export default function BookingModalBoarding({ isOpen, onClose, providerData }) {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -145,6 +147,10 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
   const [selectedPet, setSelectedPet] = useState("bob");
   const [showMap, setShowMap] = useState(false);
 
+  const handleServiceChange = (value) => {
+    setLookingFor(value);
+  };
+
   const BoardingIcon = ({ className = "" }) => (
     <img
       src="/icons/boardingIcon.png"
@@ -169,6 +175,15 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
     />
   );
 
+  // If service changes to daycare or walking, render the appropriate component
+  if (lookingFor === "daycare") {
+    return <BookingModalDaycare isOpen={isOpen} onClose={onClose} providerData={providerData} />;
+  }
+
+  if (lookingFor === "walking") {
+    return <BookingModalWalking isOpen={isOpen} onClose={onClose} providerData={providerData} />;
+  }
+
   return (
     <>
       <div className="bg-white rounded-lg w-full">
@@ -185,8 +200,8 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
               />
             </div>
             <div>
-              <h3 className="font-semibold">Seam Rahman</h3>
-              <div className="flex items-center gap-1 text-sm text-gray-600">
+              <h3 className="font-semibold text-[#024B5E]">Seam Rahman</h3>
+              <div className="flex items-center gap-1 text-sm text-[#024B5E]">
                 <MapPin className="w-3 h-3" />
                 <span className="">New York, NY</span>
               </div>
@@ -205,11 +220,11 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
           {/* Stats */}
           <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 fill-current text-gray-700" />
+            <div className="flex items-center gap-2 text-[#024B5E]">
+              <Star className="w-4 h-4 fill-current text-[#024B5E]" />
               <span className="">5.0 (55 reviews)</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#024B5E]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -221,10 +236,10 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                   fillRule="evenodd"
                   clipRule="evenodd"
                   d="M9.18336 5.15771C9.39364 4.94743 9.73458 4.94743 9.94486 5.15771L11.3807 6.59361C11.5347 6.74761 11.5808 6.97921 11.4975 7.18042C11.4141 7.38163 11.2178 7.51282 11 7.51282H9.56411C7.08591 7.51282 5.07692 9.5218 5.07692 12C5.07692 14.4782 7.08608 16.4872 9.56431 16.4872H9.92308C10.2205 16.4872 10.4615 16.7283 10.4615 17.0257C10.4615 17.323 10.2205 17.5641 9.92308 17.5641H9.56431C6.49136 17.5641 4 15.073 4 12C4 8.92703 6.49113 6.4359 9.56411 6.4359H9.70005L9.18336 5.91921C8.97308 5.70893 8.97308 5.36799 9.18336 5.15771ZM12.9744 6.97436C12.9744 6.67698 13.2155 6.4359 13.5128 6.4359H13.8718C16.9448 6.4359 19.4359 8.92703 19.4359 12C19.4359 15.073 16.9448 17.5641 13.8718 17.5641H13.7359L14.2525 18.0808C14.4628 18.2911 14.4628 18.632 14.2525 18.8423C14.0422 19.0526 13.7014 19.0526 13.4911 18.8423L12.0552 17.4064C11.9012 17.2524 11.8551 17.0208 11.9384 16.8196C12.0218 16.6184 12.2182 16.4872 12.4359 16.4872H13.8718C16.35 16.4872 18.359 14.4782 18.359 12C18.359 9.5218 16.35 7.51282 13.8718 7.51282H13.5128C13.2155 7.51282 12.9744 7.27174 12.9744 6.97436Z"
-                  fill="#035F75"
+                  fill="#024B5E"
                 />
               </svg>
-              <span className="">Repeat pet owners</span>
+              <span className="text-[#024B5E]">Repeat pet owners</span>
             </div>
             <div className="flex items-center bg-[#FCF0D994] gap-2 text-sm text-[#E26A15]">
               <svg
@@ -272,10 +287,10 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
           {/* Looking For Section */}
           <div>
-            <h3 className="font-semibold mb-2 font-montserrat">Looking For</h3>
+            <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Looking For</h3>
             <Select
               value={lookingFor}
-              onValueChange={setLookingFor}
+              onValueChange={handleServiceChange}
               className="font-montserrat"
             >
               <SelectTrigger className="w-full flex items-center justify-between px-4 py-3 border rounded-lg">
@@ -298,7 +313,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
           </div>
 
           {/* Add your pet button */}
-          <button className="w-full border-2 border-dashed border-gray-300 rounded-lg py-3 text-gray-500 font-montserrat text-sm flex items-center justify-center  gap-4">
+          <button className="w-full border-2 border-dashed border-gray-300 rounded-lg py-3 text-[#024B5E] font-montserrat text-sm flex items-center justify-center  gap-4">
             <span className="text-xl">+</span> Add your pet
           </button>
 
@@ -331,7 +346,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
                   <div
                     key={day}
-                    className="text-center text-xs font-semibold text-gray-600 py-1 font-montserrat"
+                    className="text-center text-xs font-semibold text-[#024B5E] py-1 font-montserrat"
                   >
                     {day}
                   </div>
@@ -355,7 +370,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                         aspect-square flex items-center justify-center text-sm rounded font-montserrat
                         ${!dayInfo.isCurrentMonth
                           ? "text-gray-300"
-                          : "text-gray-700"
+                          : "text-[#024B5E]"
                         }
                         ${isBooked ? "bg-[#FF4747] text-white font-semibold" : ""}
                         ${isSelected && !isBooked
@@ -383,7 +398,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
             {/* Start/End Date and Time */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-montserrat text-black mb-1 block">
+                <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
                   Start date
                 </label>
                 <input
@@ -394,7 +409,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 />
               </div>
               <div>
-                <label className="text-sm font-montserrat text-black-700 mb-1 block">
+                <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
                   End date
                 </label>
                 <input
@@ -405,7 +420,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 />
               </div>
               <div>
-                <label className="text-sm font-montserrat text-black-700 mb-1 block">
+                <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
                   Start time
                 </label>
                 <input
@@ -415,7 +430,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 />
               </div>
               <div>
-                <label className="text-sm font-montserrat text-gray-700 mb-1 block">
+                <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
                   End time
                 </label>
                 <input
@@ -429,9 +444,9 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
           {/* Contact Section */}
           <div className="border-2 rounded-lg p-4">
-            <h3 className="font-semibold mb-2 font-montserrat">Contact</h3>
+            <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Contact</h3>
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm border-2 rounded-lg p-2 boarder-[#292D32] font-montserrat">
+              <div className="flex items-center gap-2 text-sm border-2 rounded-lg p-2 boarder-[#292D32] font-montserrat text-[#024B5E]">
                 <svg
                   width="24"
                   height="24"
@@ -441,28 +456,28 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 >
                   <path
                     d="M9.02 2.84016L3.63 7.04016C2.73 7.74016 2 9.23016 2 10.3602V17.7702C2 20.0902 3.89 21.9902 6.21 21.9902H17.79C20.11 21.9902 22 20.0902 22 17.7802V10.5002C22 9.29016 21.19 7.74016 20.2 7.05016L14.02 2.72016C12.62 1.74016 10.37 1.79016 9.02 2.84016Z"
-                    stroke="#292D32"
+                    stroke="#024B5E"
                     stroke-width="1.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   />
                   <path
                     d="M10.5 18H13.5C15.15 18 16.5 16.65 16.5 15V12C16.5 10.35 15.15 9 13.5 9H10.5C8.85 9 7.5 10.35 7.5 12V15C7.5 16.65 8.85 18 10.5 18Z"
-                    stroke="#292D32"
+                    stroke="#024B5E"
                     stroke-width="1.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   />
                   <path
                     d="M12 9V18"
-                    stroke="#292D32"
+                    stroke="#024B5E"
                     stroke-width="1.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                   />
                   <path
                     d="M7.5 13.5H16.5"
-                    stroke="#292D32"
+                    stroke="#024B5E"
                     stroke-width="1.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -471,7 +486,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
                 <span>Address</span>
               </div>
-              <div className="flex items-center gap-2 text-sm border-2 rounded-lg p-2 font-montserrat">
+              <div className="flex items-center gap-2 text-sm border-2 rounded-lg p-2 font-montserrat text-[#024B5E]">
                 <svg
                   width="22"
                   height="22"
@@ -481,7 +496,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 >
                   <path
                     d="M2.52762 10.6924C1.5796 9.03931 1.12185 7.68948 0.845837 6.32121C0.437622 4.29758 1.37181 2.32081 2.91938 1.05947C3.57345 0.526383 4.32323 0.708518 4.71 1.4024L5.58318 2.96891C6.27529 4.21057 6.62134 4.83139 6.5527 5.48959C6.48407 6.14779 6.01737 6.68386 5.08397 7.75601L2.52762 10.6924ZM2.52762 10.6924C4.44651 14.0383 7.45784 17.0513 10.8076 18.9724M10.8076 18.9724C12.4607 19.9204 13.8105 20.3782 15.1788 20.6542C17.2024 21.0624 19.1792 20.1282 20.4405 18.5806C20.9736 17.9266 20.7915 17.1768 20.0976 16.79L18.5311 15.9168C17.2894 15.2247 16.6686 14.8787 16.0104 14.9473C15.3522 15.0159 14.8161 15.4826 13.744 16.416L10.8076 18.9724Z"
-                    stroke="black"
+                    stroke="#024B5E"
                     stroke-width="1.5"
                     stroke-linejoin="round"
                   />
@@ -494,14 +509,14 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
           {/* Service Section */}
           <div>
-            <h3 className="font-semibold mb-2 font-montserrat">Service</h3>
+            <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Service</h3>
             <div className="space-y-2">
               {services.map((service, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between py-2"
                 >
-                  <span className="text-sm font-montserrat">
+                  <span className="text-sm font-montserrat text-[#024B5E]">
                     {service.name}
                   </span>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -516,18 +531,18 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
           <div className="border-2 rounded-lg p-4 mb-4">
             {/* Note Section */}
             <div className="mb-4">
-              <h3 className="font-semibold mb-2 text-[#035F75] font-montserrat">Note</h3>
+              <h3 className="font-semibold mb-2 text-[#024B5E] font-montserrat">Note</h3>
               <textarea
                 placeholder="Please make sure all windows are secure locked after cleaning. Kindly use eco-friendly cleaning products. Thank you!"
-                className="w-full px-3 py-2 border rounded-lg border-[#035F75] text-sm font-montserrat resize-none"
+                className="w-full px-3 py-2 border rounded-lg border-[#024B5E] text-sm font-montserrat resize-none text-[#024B5E]"
                 rows="4"
               />
             </div>
 
             {/* Pricing Section */}
             <div>
-              <h3 className="font-semibold mb-2 font-montserrat">Pricing</h3>
-              <div className="space-y-1 text-sm">
+              <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Pricing</h3>
+              <div className="space-y-1 text-sm text-[#024B5E]">
                 <div className="flex justify-between font-montserrat">
                   <span>Bathing/ Grooming</span>
                   <span>$60.00</span>
@@ -549,7 +564,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
           </div>
 
           {/* Book Service Button */}
-          <Button className="w-full bg-[#035F75] hover:bg-[#024a5c] text-white font-montserrat py-6">
+          <Button className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-montserrat py-6">
             Book Service
           </Button>
         </div>

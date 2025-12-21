@@ -1,102 +1,121 @@
+
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function HowItWorks() {
   const router = useRouter();
+
   return (
-    <div className="py-12 md:py-16 px-4">
-        <div className="border border-gray-200 rounded-lg bg-white shadow-lg bg-linear-to-br from-blue-50 via-cyan-50 to-teal-50 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
-            <div className="max-w-7xl mx-auto">
-        {/* Testimonial Images Section */}
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
-          {/* Left Testimonial */}
-          <div className="relative">
-            {/* Image Placeholder */}
-            <div className="w-full h-[250px] md:h-[350px] lg:h-[400px] bg-linear-to-br from-amber-200 to-orange-300 overflow-hidden rounded-t-lg md:rounded-t-none">
-              <img
-                src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&h=600&fit=crop"
-                alt="Happy dog"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {/* Quote Card */}
-            <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 bg-white rounded-lg shadow-lg p-3 md:p-4 lg:p-6">
-              <p className="text-gray-700 text-xs md:text-sm lg:text-base leading-relaxed">
+    <div className="bg-[#F8F4EF] py-12 md:py-16 px-4">
+      <div className="max-w-6xl mx-auto shadow-xl rounded-2xl overflow-hidden">
+        {/* Top Section: Images with Speech Bubbles */}
+        <div className="grid md:grid-cols-2 w-full">
+          {/* Left Image Section */}
+          <div className="relative h-[300px] md:h-[400px] w-full">
+            <img
+              src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&h=800&fit=crop"
+              alt="Beagle dog"
+              className="w-full h-full object-cover"
+            />
+            {/* Speech Bubble */}
+            <div className="absolute -bottom-6 right-8 md:right-12 max-w-[280px] z-10 hidden md:block">
+              <div className="bg-[#FF6E61] text-white p-6 rounded-2xl rounded-br-none shadow-lg text-sm font-medium leading-relaxed relative">
                 It's easy. I go to the calendar and mark myself as available when I want to be.
-              </p>
+                {/* Triangle Tail */}
+                <div className="absolute -bottom-2 right-0 w-4 h-4 bg-[#FF6E61] transform rotate-45 translate-x-[-50%] translate-y-[-50%]"></div>
+              </div>
+            </div>
+            {/* Mobile Speech Bubble (Adjusted position) */}
+            <div className="absolute bottom-4 right-4 max-w-[240px] z-10 md:hidden">
+              <div className="bg-[#FF6E61] text-white p-4 rounded-xl rounded-br-none shadow-lg text-xs font-medium leading-relaxed relative">
+                It's easy. I go to the calendar and mark myself as available when I want to be.
+              </div>
             </div>
           </div>
 
-          {/* Right Testimonial */}
-          <div className="relative">
-            {/* Image Placeholder */}
-            <div className="w-full h-[250px] md:h-[350px] lg:h-[400px] bg-linear-to-br from-blue-200 to-cyan-300 overflow-hidden rounded-t-lg md:rounded-t-none">
-              <img
-                src="https://images.unsplash.com/photo-1568572933382-74d440642117?w=800&h=600&fit=crop"
-                alt="Happy dog at beach"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {/* Quote Card */}
-            <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 bg-white rounded-lg shadow-lg p-3 md:p-4 lg:p-6">
-              <p className="text-gray-700 text-xs md:text-sm lg:text-base leading-relaxed">
+          {/* Right Image Section */}
+          <div className="relative h-[300px] md:h-[400px] w-full">
+            <img
+              src="https://images.unsplash.com/photo-1568572933382-74d440642117?w=800&h=800&fit=crop"
+              alt="Australian Shepherd dog"
+              className="w-full h-full object-cover"
+            />
+            {/* Speech Bubble */}
+            <div className="absolute -bottom-6 left-8 md:left-12 max-w-[280px] z-10 hidden md:block">
+              <div className="bg-[#FF6E61] text-white p-6 rounded-2xl rounded-bl-none shadow-lg text-sm font-medium leading-relaxed">
                 Thanks to the Wuffoos App, I know about my clients schedule immediately and I'm quick to respond!
-              </p>
+              </div>
+            </div>
+            {/* Mobile Speech Bubble */}
+            <div className="absolute bottom-4 left-4 max-w-[240px] z-10 md:hidden">
+              <div className="bg-[#FF6E61] text-white p-4 rounded-xl rounded-bl-none shadow-lg text-xs font-medium leading-relaxed">
+                Thanks to the Wuffoos App...
+              </div>
             </div>
           </div>
         </div>
 
-        {/* How It Works Section */}
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-8 md:mb-12 font-bakso">
-            HOW iT WORKS
-          </h2>
+        {/* Bottom Section: How It Works */}
+        <div className="bg-[#E7F4F6] py-16 px-8 md:px-16 pt-20">
+          <div className="max-w-5xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#035F75] mb-12 font-bakso">
+              HOW iT WORKS
+            </h2>
 
-          {/* Steps Grid */}
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8 lg:gap-12 text-left max-w-5xl mx-auto mb-8 md:mb-12">
-            {/* Step 1 */}
-            <div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2 md:mb-3 font-montserrat">
-                Create your profile
-              </h3>
-              <p className="text-sm md:text-base text-gray-600 leading-relaxed font-montserrat">
-                Tell us a little about yourself and what pet services you want to offer.
-              </p>
+            <div className="grid md:grid-cols-3 gap-8 md:gap-12 text-left mb-12">
+              {/* Step 1 */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    {/* Placeholder for Profile Icon */}
+                    <img src="/people.png" alt="people" />
+                  </div>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75]">Create your profile</h3>
+                </div>
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
+                  Tell us a little about yourself and what pet services you want to offer.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    <img src="/iconos.png" alt="W" className="w-full h-full object-contain" />
+                  </div>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75]">Accept requests</h3>
+                </div>
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
+                  Tell us the types of pets you want to care for and the dates that work for you. You make your own schedule.
+                </p>
+              </div>
+
+              {/* Step 3 */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    {/* Placeholder for Paw Icon */}
+                    <img src="/paw.png" alt="paw" />
+                  </div>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75]">Get paid</h3>
+                </div>
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
+                  Payments are sent directly to your bank once you have completed a service.
+                </p>
+              </div>
             </div>
 
-            {/* Step 2 */}
-            <div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2 md:mb-3 font-montserrat">
-                Accept requests
-              </h3>
-              <p className="text-sm md:text-base text-gray-600 leading-relaxed font-montserrat">
-                Tell us the types of pets you want to care for and the dates that work for you. You make your own schedule.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div>
-              <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2 md:mb-3 font-montserrat">
-                Get paid
-              </h3>
-              <p className="text-sm md:text-base text-gray-600 leading-relaxed font-montserrat">
-                Payments are sent directly to your bank once you have completed a service.
-              </p>
-            </div>
+            <button
+              onClick={() => router.push('/signup?role=pet_sitter')}
+              className="bg-[#035F75] hover:bg-[#034e61] text-white font-medium px-10 py-3 rounded-lg shadow-md transition-transform duration-200 hover:scale-105 text-sm md:text-base"
+            >
+              Get started
+            </button>
           </div>
-
-          {/* CTA Button */}
-          <button
-            onClick={() => router.push('/signup?role=pet_sitter')}
-            className="bg-[#035F75] hover:bg-[#044c5e] text-white font-semibold px-8 md:px-12 py-3 md:py-4 rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105 font-montserrat text-sm md:text-base"
-          >
-            Get started
-          </button>
         </div>
       </div>
-        </div>
-      
     </div>
   );
 }
