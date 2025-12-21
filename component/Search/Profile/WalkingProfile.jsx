@@ -3,54 +3,32 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  MapPin,
-  Star,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { MapPin, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { Map, MapTileLayer, MapMarker } from "@/components/ui/map";
 import Portfolio from "../Portfolio";
 import BookingModal from "../Booking/BookingServiceWalking";
 
 const BoardingIcon = ({ className = "" }) => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-  >
-    <path
-      d="M18 2V4M6 2V4"
-      stroke="#035F75"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M11.05 22C7.01949 22 5.00424 22 3.75212 20.6464C2.5 19.2927 2.5 17.1141 2.5 12.7568V12.2432C2.5 7.88594 2.5 5.70728 3.75212 4.35364C5.00424 3 7.01949 3 11.05 3H12.95C16.9805 3 18.9958 3 20.2479 4.35364C21.4765 5.68186 21.4996 7.80438 21.5 12"
-      stroke="#035F75"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M3 8H21"
-      stroke="#035F75"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M13 18H21M17 14L17 22"
-      stroke="#035F75"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
+  <img
+    src="/icons/boardingIcon.png"
+    alt="Boarding"
+    className={`${className} object-contain w-5 h-5`}
+  />
+);
+
+const DayCareIcon = ({ className = "" }) => (
+  <img
+    src="/icons/doggy.png"
+    alt="Day Care"
+    className={`${className} object-contain w-5 h-5`}
+  />
+);
+const WalkingIcon = ({ className = "" }) => (
+  <img
+    src="/icons/walking.png"
+    alt="Boarding"
+    className={`${className} object-contain w-5 h-5`}
+  />
 );
 
 export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
@@ -60,60 +38,56 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
   const [activeTab, setActiveTab] = useState("about");
   const [showBooking, setShowBooking] = useState(false);
 
-  const services = [
+  const serviceSections = [
     {
-      name: "Dog Walking",
-      price: 25,
-      unit: "per 30 min",
-      note: "Standard walk",
+      title: "Dog Walking",
+      subtitle: "In your neighbourhood",
+      price: 99,
+      unit: "Per walk",
+      icon: <WalkingIcon className="w-10 h-10" />,
+      items: [
+        { name: "60 minute rate", price: 15, unit: "Per walk", isPlus: true },
+        { name: "Holiday rate", price: 33, unit: "per dog per walk" },
+        { name: "Puppy Rate", price: 48, unit: "Per walk" },
+      ],
     },
     {
-      name: "Extended Walk",
-      price: 40,
-      unit: "per hour",
-      note: "Longer adventure",
+      title: "Boarding",
+      subtitle: "In the sitter's home",
+      price: 99,
+      unit: "per night",
+      icon: <BoardingIcon className="w-10 h-10" />,
+      items: [
+        { name: "Holiday Rate", price: 110, unit: "per night" },
+        { name: "Puppy Rate", price: 48, unit: "per night" },
+        { name: "Cat Care", price: 48, unit: "per night" },
+        { name: "Additional Cat", price: 48, unit: "per night" },
+        { name: "Stays of 8 Nights or more", price: 48, unit: "per night" },
+        { name: "Bathing/ Grooming", price: 48, unit: "each" },
+        {
+          name: "Sitter Pick-Up and Drop-Off",
+          price: 48,
+          note: "+ $110 per night",
+        },
+        {
+          name: "Extended Care",
+          price: 48,
+          note: "50-100% of nightly rate",
+        },
+      ],
     },
+
     {
-      name: "Puppy Visit",
-      price: 20,
-      unit: "per 20 min",
-      note: "Perfect for puppies",
-    },
-    {
-      name: "Weekly Package",
-      price: 110,
-      unit: "5 walks",
-      note: "Mon-Fri walks",
-    },
-    {
-      name: "Bi-Weekly Package",
-      price: 200,
-      unit: "10 walks",
-      note: "Best value",
-    },
-    {
-      name: "Group Walk",
-      price: 18,
-      unit: "per 30 min",
-      note: "Socialization included",
-    },
-    {
-      name: "Solo Walk",
-      price: 30,
-      unit: "per 30 min",
-      note: "One-on-one attention",
-    },
-    {
-      name: "Trail Hike",
-      price: 50,
-      unit: "per 2 hours",
-      note: "Weekend adventures",
-    },
-    {
-      name: "Senior Dog Walk",
-      price: 22,
-      unit: "per 30 min",
-      note: "Gentle pace",
+      title: "Doggy Day Care",
+      subtitle: "In the sitter's home",
+      price: 99,
+      unit: "Per visit",
+      icon: <DayCareIcon className="w-10 h-10" />,
+      items: [
+        { name: "Holiday rate", price: 33, unit: "Per day" },
+        { name: "Puppy Rate", price: 48, unit: "Per day" },
+        { name: "Bathing/ Grooming", price: 48, unit: "each" },
+      ],
     },
   ];
 
@@ -251,7 +225,7 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto ">
         <div className="flex gap-6">
           {/* Left Sidebar */}
           <div className="w-80 shrink-0 space-y-4">
@@ -348,7 +322,8 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                             />
                           </svg>
                         </div>
-                        Still available for 2 more pets today. (3 booked, 2 remaining)
+                        Still available for 2 more pets today. (3 booked, 2
+                        remaining)
                       </Badge>
                     </div>
 
@@ -358,67 +333,79 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                     >
                       Book Service
                     </Button>
-                  </CardContent>
-                </Card>
 
-                {/* Services List */}
-                <Card>
-                  <CardContent className="p-4">
-                    {services.map((service, index) => {
-                      const getIcon = () => {
-                        if (index === 0)
-                          return <BoardingIcon className="w-5 h-5 shrink-0" />;
-                        return null;
-                      };
+                    {/* Services List */}
+                    <div className="px- pb-4">
+                      {serviceSections.map((section, sectionIndex) => (
+                        <div key={sectionIndex}>
+                          {sectionIndex > 0 && (
+                            <div className="border-t my-4" />
+                          )}
 
-                      return (
-                        <div
-                          key={index}
-                          className={`py-3 ${index === 0 ? "border-b" : ""} ${index !== 0 ? "border-b-0" : ""
-                            }`}
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="flex-1 min-w-0 ">
-                              <div className="flex items-center gap-2">
-                                {getIcon()}
-                                <div className="flex-1">
-                                  <div className="text-sm  font-semibold text-gray-900">
-                                    {service.name}
+                          {/* Section Header */}
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 shrink-0">
+                                {section.icon}
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900 text-base">
+                                  {section.title}
+                                </h4>
+                                <p className="text-gray-500 text-xs mt-0.5">
+                                  {section.subtitle}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-semibold text-gray-900 text-base">
+                                ${section.price}
+                              </div>
+                              <div className="text-gray-500 text-xs">
+                                {section.unit}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Section Items */}
+                          <div className="space-y-3">
+                            {section.items.map((item, itemIndex) => (
+                              <div
+                                key={itemIndex}
+                                className="flex items-start justify-between"
+                              >
+                                <span className="text-gray-600 text-sm font-medium">
+                                  {item.name}
+                                </span>
+                                <div className="text-right">
+                                  <div className="flex items-center justify-end gap-2">
+                                    <span className="text-gray-400 text-sm">
+                                      -
+                                    </span>
+                                    <span className="font-bold text-gray-900 text-sm">
+                                      {item.isPlus ? "+" : ""}${item.price}
+                                    </span>
                                   </div>
-                                  {service.note && (
-                                    <div className="text-xs  text-gray-500 mt-0.5">
-                                      {service.note}
+                                  {item.unit && (
+                                    <div className="text-gray-500 text-xs">
+                                      {item.unit}
+                                    </div>
+                                  )}
+                                  {item.note && (
+                                    <div className="text-gray-500 text-xs text-right max-w-[120px]">
+                                      {item.note}
                                     </div>
                                   )}
                                 </div>
                               </div>
-                            </div>
-                            <div className="text-right shrink-0 flex items-center gap-2">
-                              {index !== 0 && (
-                                <span className="text-gray-400">-</span>
-                              )}
-                              <div>
-                                <div className="font-semibold text-gray-900">
-                                  {service.price < 0 ? "+" : ""}$
-                                  {Math.abs(service.price)}
-                                </div>
-                                {service.unit && (
-                                  <div className="text-xs text-gray-500 whitespace-nowrap">
-                                    {service.unit}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
+                            ))}
                           </div>
                         </div>
-                      );
-                    })}
-                  </CardContent>
-                </Card>
+                      ))}
+                    </div>
 
-                {/* Calendar */}
-                <Card>
-                  <CardContent className="p-4">
+                    {/* Calendar */}
+
                     <h3 className="font-semibold mb-3">Calendar</h3>
 
                     <div className="flex items-center gap-3 mb-3 flex-wrap">
@@ -483,25 +470,30 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                             onClick={() => handleDateClick(dayInfo)}
                             className={`
                               aspect-square flex items-center justify-center text-sm rounded
-                              ${!dayInfo.isCurrentMonth
-                                ? "text-gray-300"
-                                : "text-gray-700"
+                              ${
+                                !dayInfo.isCurrentMonth
+                                  ? "text-gray-300"
+                                  : "text-gray-700"
                               }
-                              ${isBooked
-                                ? "bg-[#FF4747] text-white font-semibold"
-                                : ""
+                              ${
+                                isBooked
+                                  ? "bg-[#FF4747] text-white font-semibold"
+                                  : ""
                               }
-                              ${isSelected && !isBooked
-                                ? "bg-[#008364] text-white font-semibold"
-                                : ""
+                              ${
+                                isSelected && !isBooked
+                                  ? "bg-[#008364] text-white font-semibold"
+                                  : ""
                               }
-                              ${isToday && !isBooked && !isSelected
-                                ? "border-2 border-[#008364]"
-                                : ""
+                              ${
+                                isToday && !isBooked && !isSelected
+                                  ? "border-2 border-[#008364]"
+                                  : ""
                               }
-                              ${dayInfo.isCurrentMonth && !isBooked
-                                ? "hover:bg-gray-100 cursor-pointer"
-                                : ""
+                              ${
+                                dayInfo.isCurrentMonth && !isBooked
+                                  ? "hover:bg-gray-100 cursor-pointer"
+                                  : ""
                               }
                               ${!dayInfo.isCurrentMonth ? "cursor-default" : ""}
                             `}
@@ -529,19 +521,21 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                 <div className="flex gap-8 px-6 pt-6 border-b border-gray-200 justify-center">
                   <button
                     onClick={() => setActiveTab("about")}
-                    className={`pb-3 px-4 font-medium ${activeTab === "about"
-                      ? "text-[#035F75] border-b-2 border-[#035F75]"
-                      : "text-gray-500 hover:text-gray-700"
-                      }`}
+                    className={`pb-3 px-4 font-medium ${
+                      activeTab === "about"
+                        ? "text-[#035F75] border-b-2 border-[#035F75]"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
                   >
                     About
                   </button>
                   <button
                     onClick={() => setActiveTab("portfolio")}
-                    className={`pb-3 px-4 font-medium ${activeTab === "portfolio"
-                      ? "text-[#035F75] border-b-2 border-[#035F75]"
-                      : "text-gray-500 hover:text-gray-700"
-                      }`}
+                    className={`pb-3 px-4 font-medium ${
+                      activeTab === "portfolio"
+                        ? "text-[#035F75] border-b-2 border-[#035F75]"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
                   >
                     Portfolio
                   </button>

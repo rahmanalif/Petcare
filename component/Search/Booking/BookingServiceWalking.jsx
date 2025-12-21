@@ -145,7 +145,7 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
     { name: "Bathing/ Grooming", price: 60.0 },
     { name: "Sitter Pick-Up and Drop-off", price: 48.0 },
     { name: "Extended Care", price: 10.0 },
-    { name: "Additional Pet Rate", price: 10.0 },
+    // { name: "Additional Pet Rate", price: 10.0 },
   ];
 
   const [lookingFor, setLookingFor] = useState("boarding");
@@ -157,148 +157,27 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
   const [showMap, setShowMap] = useState(false);
 
   const BoardingIcon = ({ className = "" }) => (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M18 2V4M6 2V4"
-        stroke="black"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M11.05 22C7.01949 22 5.00424 22 3.75212 20.6464C2.5 19.2927 2.5 17.1141 2.5 12.7568V12.2432C2.5 7.88594 2.5 5.70728 3.75212 4.35364C5.00424 3 7.01949 3 11.05 3H12.95C16.9805 3 18.9958 3 20.2479 4.35364C21.4765 5.68186 21.4996 7.80438 21.5 12"
-        stroke="black"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M3 8H21"
-        stroke="black"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M13 18H21M17 14L17 22"
-        stroke="black"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+    <img
+    src="/icons/boardingIcon.png"
+    alt="Boarding"
+    className={`${className} object-contain w-5 h-5`}
+  />
   );
 
   const DaycareIcon = ({ className = "" }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d="M12 2V10"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M4.92969 10.9297L6.33969 12.3397"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M2 18H4"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M20 18H22"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M19.0702 10.9297L17.6602 12.3397"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M22 22H2"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M8 6L12 2L16 6"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M16 18C16 16.9391 15.5786 15.9217 14.8284 15.1716C14.0783 14.4214 13.0609 14 12 14C10.9391 14 9.92172 14.4214 9.17157 15.1716C8.42143 15.9217 8 16.9391 8 18"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+    <img
+    src="/icons/doggy.png"
+    alt="Day Care"
+    className={`${className} object-contain w-5 h-5`}
+  />
   );
 
   const WalkingIcon = ({ className = "" }) => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        d="M11 6C12.1046 6 13 5.10457 13 4C13 2.89543 12.1046 2 11 2C9.89543 2 9 2.89543 9 4C9 5.10457 9.89543 6 11 6Z"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M18 10C19.1046 10 20 9.10457 20 8C20 6.89543 19.1046 6 18 6C16.8954 6 16 6.89543 16 8C16 9.10457 16.8954 10 18 10Z"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M20 18C21.1046 18 22 17.1046 22 16C22 14.8954 21.1046 14 20 14C18.8954 14 18 14.8954 18 16C18 17.1046 18.8954 18 20 18Z"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M8.99975 10C9.65636 10 10.3065 10.1293 10.9132 10.3806C11.5198 10.6319 12.071 11.0002 12.5353 11.4645C12.9996 11.9288 13.3679 12.48 13.6191 13.0866C13.8704 13.6932 13.9997 14.3434 13.9997 15V18.5C13.9995 19.3365 13.6996 20.1452 13.1546 20.7796C12.6095 21.4141 11.8552 21.8324 11.0283 21.9587C10.2015 22.085 9.3567 21.9111 8.64704 21.4683C7.93738 21.0255 7.40976 20.3432 7.15975 19.545C6.73308 18.1683 5.83308 17.2667 4.45975 16.84C3.66193 16.5901 2.97991 16.0629 2.53711 15.3538C2.0943 14.6446 1.91996 13.8004 2.04564 12.9739C2.17131 12.1473 2.58869 11.3931 3.22226 10.8476C3.85582 10.3021 4.66372 10.0015 5.49975 10H8.99975Z"
-        stroke="#101010"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
+    <img
+    src="/icons/walking.png"
+    alt="Boarding"
+    className={`${className} object-contain w-5 h-5`}
+  />
   );
 
   return (
@@ -326,14 +205,14 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
           </div>
 
           {/* Price Badge */}
-          <div className="text-center bg-[#FCF0D980] py-3 border-2 border-amber-50 rounded-lg">
+          {/* <div className="text-center bg-[#FCF0D980] py-3 border-2 border-amber-50 rounded-lg">
             <div className="text-2xl font-normal text-[#035F75] font-bakso">
               $25
             </div>
             <div className="text-xs text-[#E26A15]">
               Total per day
             </div>
-          </div>
+          </div> */}
 
           {/* Stats */}
           <div className="space-y-2 text-sm">
@@ -679,10 +558,10 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
                 <span>Sitter Pick-Up and Drop-off</span>
                 <span>$48.00</span>
               </div>
-              <div className="flex justify-between font-montserrat">
+              {/* <div className="flex justify-between font-montserrat">
                 <span>Additional Pet Rate</span>
                 <span>$10.00</span>
-              </div>
+              </div> */}
               <div className="flex justify-between font-semibold font-montserrat pt-2 border-t">
                 <span>Total</span>
                 <span>$170.00</span>
