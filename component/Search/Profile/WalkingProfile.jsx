@@ -10,8 +10,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Map, MapTileLayer, MapMarker } from "@/components/ui/map";
-import Portfolio from "./Portfolio";
-import BookingModal from "./BookingService";
+import Portfolio from "../Portfolio";
+import BookingModal from "../Booking/BookingServiceWalking";
 
 const BoardingIcon = ({ className = "" }) => (
   <svg
@@ -277,12 +277,12 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                       </div>
                     </div>
 
-                    <div className="text-center bg-[#FCF0D980] py-4 border-2 border-amber-50 rounded-lg">
+                    {/* <div className="text-center bg-[#FCF0D980] py-4 border-2 border-amber-50 rounded-lg">
                       <div className="text-2xl font-normal text-[#035F75] font-bakso">
                         $25
                       </div>
                       <div className="text-xs text-[#E26A15]">Per 30 min</div>
-                    </div>
+                    </div> */}
 
                     <div className="py-3 space-y-2 border-b">
                       <div className="flex items-center gap-2 text-sm">
@@ -374,9 +374,8 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                       return (
                         <div
                           key={index}
-                          className={`py-3 ${index === 0 ? "border-b" : ""} ${
-                            index !== 0 ? "border-b-0" : ""
-                          }`}
+                          className={`py-3 ${index === 0 ? "border-b" : ""} ${index !== 0 ? "border-b-0" : ""
+                            }`}
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex-1 min-w-0 ">
@@ -484,30 +483,25 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                             onClick={() => handleDateClick(dayInfo)}
                             className={`
                               aspect-square flex items-center justify-center text-sm rounded
-                              ${
-                                !dayInfo.isCurrentMonth
-                                  ? "text-gray-300"
-                                  : "text-gray-700"
+                              ${!dayInfo.isCurrentMonth
+                                ? "text-gray-300"
+                                : "text-gray-700"
                               }
-                              ${
-                                isBooked
-                                  ? "bg-[#FF4747] text-white font-semibold"
-                                  : ""
+                              ${isBooked
+                                ? "bg-[#FF4747] text-white font-semibold"
+                                : ""
                               }
-                              ${
-                                isSelected && !isBooked
-                                  ? "bg-[#008364] text-white font-semibold"
-                                  : ""
+                              ${isSelected && !isBooked
+                                ? "bg-[#008364] text-white font-semibold"
+                                : ""
                               }
-                              ${
-                                isToday && !isBooked && !isSelected
-                                  ? "border-2 border-[#008364]"
-                                  : ""
+                              ${isToday && !isBooked && !isSelected
+                                ? "border-2 border-[#008364]"
+                                : ""
                               }
-                              ${
-                                dayInfo.isCurrentMonth && !isBooked
-                                  ? "hover:bg-gray-100 cursor-pointer"
-                                  : ""
+                              ${dayInfo.isCurrentMonth && !isBooked
+                                ? "hover:bg-gray-100 cursor-pointer"
+                                : ""
                               }
                               ${!dayInfo.isCurrentMonth ? "cursor-default" : ""}
                             `}
@@ -535,21 +529,19 @@ export default function WalkingProfile({ sitterName = "Alex Martinez" }) {
                 <div className="flex gap-8 px-6 pt-6 border-b border-gray-200 justify-center">
                   <button
                     onClick={() => setActiveTab("about")}
-                    className={`pb-3 px-4 font-medium ${
-                      activeTab === "about"
-                        ? "text-[#035F75] border-b-2 border-[#035F75]"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
+                    className={`pb-3 px-4 font-medium ${activeTab === "about"
+                      ? "text-[#035F75] border-b-2 border-[#035F75]"
+                      : "text-gray-500 hover:text-gray-700"
+                      }`}
                   >
                     About
                   </button>
                   <button
                     onClick={() => setActiveTab("portfolio")}
-                    className={`pb-3 px-4 font-medium ${
-                      activeTab === "portfolio"
-                        ? "text-[#035F75] border-b-2 border-[#035F75]"
-                        : "text-gray-500 hover:text-gray-700"
-                    }`}
+                    className={`pb-3 px-4 font-medium ${activeTab === "portfolio"
+                      ? "text-[#035F75] border-b-2 border-[#035F75]"
+                      : "text-gray-500 hover:text-gray-700"
+                      }`}
                   >
                     Portfolio
                   </button>

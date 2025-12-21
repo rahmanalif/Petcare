@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useSearchParams } from "next/navigation";
-import BoardingProfile from "./BoardingProfile";
-import DaycareProfile from "./DaycareProfile";
-import WalkingProfile from "./WalkingProfile";
+import BoardingProfile from "./Profile/BoardingProfile";
+import DaycareProfile from "./Profile/DaycareProfile";
+import WalkingProfile from "./Profile/WalkingProfile";
 
 export default function Profile() {
   const searchParams = useSearchParams();
