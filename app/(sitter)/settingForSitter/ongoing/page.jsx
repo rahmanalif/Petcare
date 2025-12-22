@@ -156,7 +156,7 @@ export default function OngoingDetails() {
                   className="p-2 hover:bg-[#024B5E] rounded-lg transition-colors"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-[#024B5E]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -177,7 +177,7 @@ export default function OngoingDetails() {
                   className="p-2 hover:bg-[#024B5E] rounded-lg transition-colors"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-[#024B5E]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -323,7 +323,7 @@ export default function OngoingDetails() {
           /* Chat View */
           <div className="p-6">
             <div className="max-w-4xl mx-auto bg-white rounded-lg border border-gray-200 p-6 min-h-[600px] flex flex-col">
-              <h2 className="text-xl font-semibold text-gray-900 text-center mb-6">Chat</h2>
+              <h2 className="text-xl font-semibold text-[#024B5E] text-center mb-6">Chat</h2>
 
               {/* Chat Messages */}
               <div className="flex-1 space-y-4 mb-6 overflow-y-auto">
@@ -439,7 +439,7 @@ export default function OngoingDetails() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
             {/* Calendar Section */}
             <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <h2 className="text-lg font-semibold text-[#024B5E] mb-4">
                 Pet sitter Availability
               </h2>
 
@@ -447,11 +447,11 @@ export default function OngoingDetails() {
               <div className="flex gap-4 mb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-[#FF4747] rounded"></div>
-                  <span className="text-sm text-gray-700">Book</span>
+                  <span className="text-sm text-[#024B5E]">Book</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-[#008364] rounded"></div>
-                  <span className="text-sm text-gray-700">Available</span>
+                  <span className="text-sm text-[#024B5E]">Available</span>
                 </div>
               </div>
 
@@ -462,7 +462,7 @@ export default function OngoingDetails() {
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-[#024B5E]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -475,7 +475,7 @@ export default function OngoingDetails() {
                     />
                   </svg>
                 </button>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-[#024B5E]">
                   {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
                 </h3>
                 <button
@@ -483,7 +483,7 @@ export default function OngoingDetails() {
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <svg
-                    className="w-5 h-5 text-gray-600"
+                    className="w-5 h-5 text-[#024B5E]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -503,7 +503,7 @@ export default function OngoingDetails() {
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
                   <div
                     key={day}
-                    className="text-center text-xs font-semibold text-gray-600 py-1"
+                    className="text-center text-xs font-semibold text-[#024B5E] py-1"
                   >
                     {day}
                   </div>
@@ -526,8 +526,8 @@ export default function OngoingDetails() {
                       className={`
                         aspect-square flex items-center justify-center text-sm rounded
                         ${!dayInfo.isCurrentMonth
-                          ? "text-gray-300"
-                          : "text-gray-700"
+                          ? "text-[#024B5E]"
+                          : "text-[#024B5E]"
                         }
                         ${isBooked ? "bg-[#FF4747] text-white font-semibold" : ""}
                         ${isSelected && !isBooked
@@ -565,25 +565,25 @@ export default function OngoingDetails() {
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Tamim</h3>
+                    <h3 className="font-semibold text-[#024B5E]">Tamim</h3>
                     <div className="flex items-center gap-1 text-sm">
                       <span className="text-yellow-400">⭐</span>
-                      <span className="text-gray-700">3.8(1,200)</span>
+                      <span className="text-[#024B5E]">3.8(1,200)</span>
                     </div>
                   </div>
                 </div>
-                <span className="text-sm text-gray-600">02/09/2025</span>
+                <span className="text-sm text-[#024B5E]">02/09/2025</span>
               </div>
 
               {/* Service Type */}
               <div className="mb-4">
-                <p className="text-gray-900 font-medium">Dog walking</p>
+                <p className="text-[#024B5E] font-medium">Dog walking</p>
               </div>
 
               {/* Contact Info */}
               <div className="mb-4 space-y-2">
-                <h4 className="font-semibold text-gray-900">Contact</h4>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <h4 className="font-semibold text-[#024B5E]">Contact</h4>
+                <div className="flex items-center gap-2 text-sm text-[#024B5E]">
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -599,7 +599,7 @@ export default function OngoingDetails() {
                   </svg>
                   <span>(229) 555-0109</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-[#024B5E]">
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -619,16 +619,16 @@ export default function OngoingDetails() {
 
               {/* Time Info */}
               <div className="mb-4 space-y-1 text-sm">
-                <p className="text-gray-700">
+                <p className="text-[#024B5E]">
                   Pick-up time: <span className="font-medium">10:00 AM</span>
                 </p>
-                <p className="text-gray-700">
+                <p className="text-[#024B5E]">
                   Drop-off time: <span className="font-medium">10:00 AM</span>
                 </p>
               </div>
 
               {/* Live Location */}
-              <div className="flex items-center gap-2 text-sm text-gray-700 mb-6">
+              <div className="flex items-center gap-2 text-sm text-[#024B5E] mb-6">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -653,27 +653,27 @@ export default function OngoingDetails() {
 
               {/* Pricing */}
               <div className="border-t border-gray-200 pt-4 mb-4">
-                <h4 className="font-semibold text-gray-900 mb-3">Pricing</h4>
+                <h4 className="font-semibold text-[#024B5E] mb-3">Pricing</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-700">Bathing / Grooming</span>
-                    <span className="font-medium text-gray-900">$60.00</span>
+                    <span className="text-[#024B5E]">Bathing / Grooming</span>
+                    <span className="font-medium text-[#024B5E]">$60.00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-700">Extended Care</span>
-                    <span className="font-medium text-gray-900">$40.00</span>
+                    <span className="text-[#024B5E]">Extended Care</span>
+                    <span className="font-medium text-[#024B5E]">$40.00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-700">Additional Pet Rate</span>
-                    <span className="font-medium text-gray-900">$10.00</span>
+                    <span className="text-[#024B5E]">Additional Pet Rate</span>
+                    <span className="font-medium text-[#024B5E]">$10.00</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-700">Pick Up And Drop Off</span>
-                    <span className="font-medium text-gray-900">$50.00</span>
+                    <span className="text-[#024B5E]">Pick Up And Drop Off</span>
+                    <span className="font-medium text-[#024B5E]">$50.00</span>
                   </div>
                   <div className="flex justify-between pt-2 border-t border-gray-200">
-                    <span className="font-semibold text-gray-900">Total</span>
-                    <span className="font-semibold text-gray-900">$170.00</span>
+                    <span className="font-semibold text-[#024B5E]">Total</span>
+                    <span className="font-semibold text-[#024B5E]">$170.00</span>
                   </div>
                 </div>
               </div>
@@ -693,12 +693,12 @@ export default function OngoingDetails() {
                       />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Max</h4>
-                      <p className="text-sm text-gray-600">Labrador</p>
+                      <h4 className="font-semibold text-[#024B5E]">Max</h4>
+                      <p className="text-sm text-[#024B5E]">Labrador</p>
                     </div>
                   </div>
                   <svg
-                    className={`w-5 h-5 text-gray-400 transition-transform ${showPetDetails ? "rotate-180" : ""
+                    className={`w-5 h-5 text-[#024B5E] transition-transform ${showPetDetails ? "rotate-180" : ""
                       }`}
                     fill="none"
                     stroke="currentColor"
@@ -727,112 +727,112 @@ export default function OngoingDetails() {
                           />
                         </div>
                         <div>
-                          <h2 className="text-xl font-semibold text-gray-900">
+                          <h2 className="text-xl font-semibold text-[#024B5E]">
                             Max
                           </h2>
-                          <p className="text-sm text-gray-600">Labrador</p>
+                          <p className="text-sm text-[#024B5E]">Labrador</p>
                         </div>
                       </div>
                     </div>
 
                     {/* Pet Information */}
                     <div className="p-4 border-b border-gray-200">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                      <h3 className="text-lg font-semibold text-[#024B5E] mb-4">
                         Pet Information
                       </h3>
                       <div className="space-y-3 text-sm">
                         <div className="flex">
-                          <span className="font-medium text-gray-700 w-40">
+                          <span className="font-medium text-[#024B5E] w-40">
                             Pet Name:
                           </span>
-                          <span className="text-gray-600">Max boy</span>
+                          <span className="text-[#024B5E]">Max boy</span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium text-gray-700 w-40">
+                          <span className="font-medium text-[#024B5E] w-40">
                             Type:
                           </span>
-                          <span className="text-gray-600">Dog</span>
+                          <span className="text-[#024B5E]">Dog</span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium text-gray-700 w-40">
+                          <span className="font-medium text-[#024B5E] w-40">
                             Weight (lbs):
                           </span>
-                          <span className="text-gray-600">8kg</span>
+                          <span className="text-[#024B5E]">8kg</span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium text-gray-700 w-40">
+                          <span className="font-medium text-[#024B5E] w-40">
                             Age:
                           </span>
-                          <span className="text-gray-600">3 Yer 4Month</span>
+                          <span className="text-[#024B5E]">3 Yer 4Month</span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium text-gray-700 w-40">
+                          <span className="font-medium text-[#024B5E] w-40">
                             Breed:
                           </span>
-                          <span className="text-gray-600">Mix</span>
+                          <span className="text-[#024B5E]">Mix</span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium text-gray-700 w-40">
+                          <span className="font-medium text-[#024B5E] w-40">
                             Gender:
                           </span>
-                          <span className="text-gray-600">Male</span>
+                          <span className="text-[#024B5E]">Male</span>
                         </div>
                         <div className="flex">
-                          <span className="font-medium text-gray-700 w-40">
+                          <span className="font-medium text-[#024B5E] w-40">
                             Dates of birth:
                           </span>
-                          <span className="text-gray-600">5kg</span>
+                          <span className="text-[#024B5E]">5kg</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Additional Details */}
                     <div className="p-4 border-b border-gray-200">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                      <h3 className="text-lg font-semibold text-[#024B5E] mb-4">
                         Additional details
                       </h3>
                       <div className="space-y-3 text-sm">
                         <div>
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-[#024B5E]">
                             Microchipped?
                           </p>
-                          <p className="text-gray-600">Microchipped</p>
+                          <p className="text-[#024B5E]">Microchipped</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-[#024B5E]">
                             Spayed/Neutered?
                           </p>
-                          <p className="text-gray-600">Spayed/Neutered</p>
+                          <p className="text-[#024B5E]">Spayed/Neutered</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-[#024B5E]">
                             House Trained?
                           </p>
-                          <p className="text-gray-600">Not House Trained</p>
+                          <p className="text-[#024B5E]">Not House Trained</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-[#024B5E]">
                             friendly with children?
                           </p>
-                          <p className="text-gray-600">Friendly with children</p>
+                          <p className="text-[#024B5E]">Friendly with children</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-[#024B5E]">
                             Friendly with dogs?
                           </p>
-                          <p className="text-gray-600">Friendly with children</p>
+                          <p className="text-[#024B5E]">Friendly with children</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-[#024B5E]">
                             Adoption Date
                           </p>
-                          <p className="text-gray-600">10/12/2025</p>
+                          <p className="text-[#024B5E]">10/12/2025</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-[#024B5E]">
                             About your pet
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Good for eating my share 😋
                           </p>
                         </div>
@@ -854,56 +854,56 @@ export default function OngoingDetails() {
                             stroke="#035F75"
                           />
                         </svg>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-[#024B5E]">
                           Care info
                         </h3>
                       </div>
 
                       <div className="space-y-4 text-sm">
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">
+                          <p className="font-medium text-[#024B5E] mb-1">
                             Potty break
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Needs a potty break every hour
                           </p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">
+                          <p className="font-medium text-[#024B5E] mb-1">
                             Energy level
                           </p>
-                          <p className="text-gray-600">High energy level</p>
+                          <p className="text-[#024B5E]">High energy level</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">
+                          <p className="font-medium text-[#024B5E] mb-1">
                             Feeding schedule
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Needs to be fed in the morning
                           </p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">
+                          <p className="font-medium text-[#024B5E] mb-1">
                             Can be left alone
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Can be left alone for 1 hour or less
                           </p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">
+                          <p className="font-medium text-[#024B5E] mb-1">
                             Medications
                           </p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">Pill</p>
-                          <p className="text-gray-600">ABCD Pill</p>
+                          <p className="font-medium text-[#024B5E] mb-1">Pill</p>
+                          <p className="text-[#024B5E]">ABCD Pill</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700 mb-1 ">
+                          <p className="font-medium text-[#024B5E] mb-1 ">
                             Anything else a sitter should know?
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Add instructions for walking, feeding or other care
                           </p>
                         </div>
@@ -925,36 +925,36 @@ export default function OngoingDetails() {
                             stroke="#035F75"
                           />
                         </svg>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-[#024B5E]">
                           Veterinary info
                         </h3>
                       </div>
 
                       <div className="space-y-4 text-sm">
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">
+                          <p className="font-medium text-[#024B5E] mb-1">
                             Veterinary info
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Vet's Name: Dr. Emily Carter
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Clinic: Happy Paws Animal Clinic
                           </p>
-                          <p className="text-gray-600">
+                          <p className="text-[#024B5E]">
                             Address: 45 Green Park Rd, Boston,MA
                           </p>
-                          <p className="text-gray-600">Number: (406) 555-0120</p>
+                          <p className="text-[#024B5E]">Number: (406) 555-0120</p>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-700 mb-1">
+                          <p className="font-medium text-[#024B5E] mb-1">
                             Pet insurance provider
                           </p>
-                          <p className="text-gray-600">Labrador</p>
+                          <p className="text-[#024B5E]">Labrador</p>
                         </div>
                         <div className="border rounded-sm m-2 p-2">
-                          <p className="font-medium text-gray-700 mb-1">Note</p>
-                          <p className="text-gray-600">
+                          <p className="font-medium text-[#024B5E] mb-1">Note</p>
+                          <p className="text-[#024B5E]">
                             Lorem ipsum dolor sit amet, consectetur adipiscing
                             elit.
                           </p>

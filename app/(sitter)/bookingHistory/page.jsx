@@ -89,13 +89,13 @@ export default function BookingHistory() {
       case "on-going":
         return "text-green-700";
       case "completed":
-        return "text-gray-700";
+        return "text-[#024B5E]";
       case "cancelled":
         return "text-red-700";
       case "upcoming":
         return "text-blue-700";
       default:
-        return "text-gray-700";
+        return "text-[#024B5E]";
     }
   };
 
@@ -104,9 +104,30 @@ export default function BookingHistory() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-start justify-center p-2 sm:p-4 pt-4 sm:pt-8">
       <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-6 w-full max-w-6xl">
+        <div className="pb-4">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-[#024B5E] hover:underline mb-2"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+            Back
+          </button>
+        </div>
         {/* Header with Title and Status Tabs */}
         <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Order history</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">Order history</h2>
 
           {/* Status Tabs */}
           <div className="flex flex-wrap gap-2">
@@ -117,11 +138,10 @@ export default function BookingHistory() {
                 <button
                   key={status}
                   onClick={() => setActiveStatus(statusKey)}
-                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
-                    isActive
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${isActive
                       ? "bg-[#035F75] text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                      : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
+                    }`}
                 >
                   {status}
                 </button>
@@ -152,10 +172,10 @@ export default function BookingHistory() {
                         />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-sm">
+                        <h3 className="font-semibold text-[#024B5E] text-sm">
                           {booking.sitterName}
                         </h3>
-                        <p className="text-xs text-gray-600 flex items-center gap-1">
+                        <p className="text-xs text-[#024B5E] flex items-center gap-1">
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                             <circle cx="12" cy="10" r="3"></circle>
@@ -177,19 +197,19 @@ export default function BookingHistory() {
                   </div>
 
                   {/* Service Name */}
-                  <div className="text-sm font-semibold text-gray-900">
+                  <div className="text-sm font-semibold text-[#024B5E]">
                     {booking.service}
                   </div>
 
                   {/* Price & Times */}
                   <div className="flex justify-between items-start">
-                    <div className="text-lg font-bold text-gray-900">
+                    <div className="text-lg font-bold text-[#024B5E]">
                       {booking.price}
-                      <span className="text-xs text-gray-500 font-normal ml-1">
+                      <span className="text-xs text-[#024B5E] font-normal ml-1">
                         {booking.priceType}
                       </span>
                     </div>
-                    <div className="text-xs text-gray-700 text-right">
+                    <div className="text-xs text-[#024B5E] text-right">
                       <div>Pick-up: <span className="font-semibold">{booking.pickupTime}</span></div>
                       <div>Drop-off: <span className="font-semibold">{booking.dropoffTime}</span></div>
                     </div>
@@ -197,8 +217,8 @@ export default function BookingHistory() {
 
                   {/* Contact Section */}
                   <div>
-                    <h4 className="text-xs font-semibold text-gray-900 mb-1">Contact</h4>
-                    <div className="flex items-center gap-2 text-xs text-gray-700">
+                    <h4 className="text-xs font-semibold text-[#024B5E] mb-1">Contact</h4>
+                    <div className="flex items-center gap-2 text-xs text-[#024B5E]">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                       </svg>
@@ -231,10 +251,10 @@ export default function BookingHistory() {
                         />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-base">
+                        <h3 className="font-semibold text-[#024B5E] text-base">
                           {booking.sitterName}
                         </h3>
-                        <p className="text-sm text-gray-600 flex items-center gap-1">
+                        <p className="text-sm text-[#024B5E] flex items-center gap-1">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                             <circle cx="12" cy="10" r="3"></circle>
@@ -245,20 +265,20 @@ export default function BookingHistory() {
                     </div>
 
                     {/* Service Name */}
-                    <div className="text-base font-semibold text-gray-900">
+                    <div className="text-base font-semibold text-[#024B5E]">
                       {booking.service}
                     </div>
 
                     {/* Contact Section */}
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-900 mb-2">Contact</h4>
-                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                      <h4 className="text-sm font-semibold text-[#024B5E] mb-2">Contact</h4>
+                      <div className="flex items-center gap-2 text-sm text-[#024B5E]">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                         </svg>
                         <span>{booking.contact}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-700 mt-1">
+                      <div className="flex items-center gap-2 text-sm text-[#024B5E] mt-1">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                           <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -302,20 +322,20 @@ export default function BookingHistory() {
                     </span>
 
                     {/* Price */}
-                    <div className="text-xl font-bold text-gray-900 text-right">
+                    <div className="text-xl font-bold text-[#024B5E] text-right">
                       {booking.price}
-                      <span className="text-sm text-gray-500 font-normal ml-1">
+                      <span className="text-sm text-[#024B5E] font-normal ml-1">
                         {booking.priceType}
                       </span>
                     </div>
 
                     {/* Times */}
-                    <div className="text-sm text-gray-700 text-right">
+                    <div className="text-sm text-[#024B5E] text-right">
                       <div>
-                        Pick-up time: <span className="font-semibold text-gray-900">{booking.pickupTime}</span>
+                        Pick-up time: <span className="font-semibold text-[#024B5E]">{booking.pickupTime}</span>
                       </div>
                       <div className="mt-1">
-                        Drop-off time: <span className="font-semibold text-gray-900">{booking.dropoffTime}</span>
+                        Drop-off time: <span className="font-semibold text-[#024B5E]">{booking.dropoffTime}</span>
                       </div>
                     </div>
 
@@ -329,7 +349,7 @@ export default function BookingHistory() {
             ))
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-500">No bookings found for this status.</p>
+              <p className="text-[#024B5E]">No bookings found for this status.</p>
             </div>
           )}
         </div>

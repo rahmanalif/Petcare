@@ -13,20 +13,20 @@ export default function ServiceSetupForm() {
       <div className="bg-white rounded-lg border border-gray-200 p-8 w-full max-w-2xl">
         {/* Service Name Section */}
         <div className="mb-8">
-          <label className="block text-base font-semibold text-gray-900 mb-3">
+          <label className="block text-base font-semibold text-[#024B5E] mb-3">
             Service name
           </label>
           <div className="relative">
             <select
               value={serviceType}
               onChange={(e) => setServiceType(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg appearance-none bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg appearance-none bg-white text-[#024B5E] focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent"
             >
               <option>Dog Walking</option>
               <option>Boarding</option>
               <option>Doggy Day Care</option>
             </select>
-            <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+            <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#024B5E] pointer-events-none" />
           </div>
 
           <div className="mt-4 flex gap-2 p-3 bg-[#E3E6F0] border border-grey-200 rounded-lg">
@@ -40,15 +40,15 @@ export default function ServiceSetupForm() {
               <g clipPath="url(#clip0_2973_14392)">
                 <path
                   d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"
-                  fill="#585858"
+                  fill="#024B5E"
                 />
                 <path
                   d="M15.3156 4H8.68444L4 8.68444V15.3156L8.68444 20H15.3156L20 15.3156V8.68444L15.3156 4ZM18.2222 14.5778L14.5778 18.2222H9.42222L5.77778 14.5778V9.42222L9.42222 5.77778H14.5778L18.2222 9.42222V14.5778Z"
-                  fill="#585858"
+                  fill="#024B5E"
                 />
                 <path
                   d="M11.1094 7.55566H12.8872V13.7779H11.1094V7.55566Z"
-                  fill="#585858"
+                  fill="#024B5E"
                 />
               </g>
               <defs>
@@ -57,7 +57,7 @@ export default function ServiceSetupForm() {
                 </clipPath>
               </defs>
             </svg>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-[#024B5E]">
               We have suggested some default settings based on what works well
               for new sitters and walkers. You can edit now, or at any time in
               the future.

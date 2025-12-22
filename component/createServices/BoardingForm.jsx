@@ -83,10 +83,10 @@ export default function BoardingForm() {
             className="custom-checkbox mt-0.5"
           />
           <div>
-            <span className="text-gray-900 font-medium">
+            <span className="text-[#024B5E] font-medium">
               Update my additional rates based on my base rate
             </span>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-[#024B5E] mt-1">
               Turn off to adjust your rate manually
             </p>
           </div>
@@ -95,14 +95,14 @@ export default function BoardingForm() {
 
       {/* Base Rate Section */}
       <div className="mb-8">
-        <label className="block text-base font-semibold text-gray-900 mb-3">
+        <label className="block text-base font-semibold text-[#024B5E] mb-3">
           Set your base rate
         </label>
         <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-          <span className="text-gray-700">Per night</span>
-          <span className="text-gray-900 font-semibold">${baseRate}</span>
+          <span className="text-[#024B5E]">Per night</span>
+          <span className="text-[#024B5E] font-semibold">${baseRate}</span>
         </div>
-        <p className="text-sm text-gray-600 mt-2">
+        <p className="text-sm text-[#024B5E] mt-2">
           What you will earn per service: ${(parseFloat(baseRate) * 0.86).toFixed(2)}
         </p>
       </div>
@@ -116,9 +116,8 @@ export default function BoardingForm() {
           ? "Hide additional rates"
           : "Show additional rates"}
         <ChevronDown
-          className={`w-5 h-5 transition-transform ${
-            showAdditionalRates ? "rotate-180" : ""
-          }`}
+          className={`w-5 h-5 transition-transform ${showAdditionalRates ? "rotate-180" : ""
+            }`}
         />
       </button>
 
@@ -128,50 +127,50 @@ export default function BoardingForm() {
         <div className="mb-8 space-y-6">
           {/* 60 minute rate */}
           <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-3">
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
               60 minute rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per night</span>
-              <span className="text-gray-900 font-semibold">$45.00</span>
+              <span className="text-[#024B5E]">Per night</span>
+              <span className="text-[#024B5E] font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
+            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
           </div>
 
           {/* Holiday Rate */}
           <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-3">
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
               Holiday Rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per night</span>
-              <span className="text-gray-900 font-semibold">$45.00</span>
+              <span className="text-[#024B5E]">Per night</span>
+              <span className="text-[#024B5E] font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
+            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
           </div>
 
           {/* Additional Rate */}
           <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-3">
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
               Additional Rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per night</span>
-              <span className="text-gray-900 font-semibold">$45.00</span>
+              <span className="text-[#024B5E]">Per night</span>
+              <span className="text-[#024B5E] font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
+            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
           </div>
 
           {/* Puppy Rate */}
           <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-3">
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
               Puppy Rate
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per night</span>
-              <span className="text-gray-900 font-semibold">$45.00</span>
+              <span className="text-[#024B5E]">Per night</span>
+              <span className="text-[#024B5E] font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: $38.70</p>
+            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
 
             <label className="flex items-center gap-3 cursor-pointer mt-3">
               <input
@@ -179,31 +178,31 @@ export default function BoardingForm() {
                 defaultChecked
                 className="custom-checkbox"
               />
-              <span className="text-gray-700">Offer for free</span>
+              <span className="text-[#024B5E]">Offer for free</span>
             </label>
           </div>
 
           {/* Daily Sitter Pick-Up/Drop-Off */}
           <div>
-            <h4 className="text-base font-semibold text-gray-900 mb-3">
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
               Daily Sitter Pick-Up/Drop-Off
             </h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-gray-700">Per night</span>
-              <span className="text-gray-900 font-semibold">$45.00</span>
+              <span className="text-[#024B5E]">Per night</span>
+              <span className="text-[#024B5E] font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-gray-600 mt-2">You keep: 80%</p>
+            <p className="text-sm text-[#024B5E] mt-2">You keep: 80%</p>
           </div>
         </div>
       )}
 
-      
+
 
       {/* Availability Section */}
       <div className="mb-8">
-        <h3 className="text-base font-semibold text-gray-900 mb-4">Availability</h3>
+        <h3 className="text-base font-semibold text-[#024B5E] mb-4">Availability</h3>
 
-        <label className="block text-sm font-medium text-gray-900 mb-3">
+        <label className="block text-sm font-medium text-[#024B5E] mb-3">
           Are you home full-time during the week?
         </label>
         <div className="flex gap-4 mb-4">
@@ -216,7 +215,7 @@ export default function BoardingForm() {
               onChange={(e) => settimeType(e.target.value)}
               className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
             />
-            <span className="text-gray-700">Yes</span>
+            <span className="text-[#024B5E]">Yes</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -227,11 +226,11 @@ export default function BoardingForm() {
               onChange={(e) => settimeType(e.target.value)}
               className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
             />
-            <span className="text-gray-700">No</span>
+            <span className="text-[#024B5E]">No</span>
           </label>
         </div>
 
-        <p className="text-sm text-gray-700 mb-3">
+        <p className="text-sm text-[#024B5E] mb-3">
           You can edit any date individually by going to your calendar.
         </p>
 
@@ -241,11 +240,10 @@ export default function BoardingForm() {
             <button
               key={day}
               onClick={() => toggleDay(day)}
-              className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${
-                selectedDays.includes(day)
+              className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${selectedDays.includes(day)
                   ? "bg-[#035F75] text-white border-[#035F75]"
-                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-              }`}
+                  : "bg-white text-[#024B5E] border-gray-300 hover:bg-gray-50"
+                }`}
             >
               {day}
             </button>
@@ -253,7 +251,7 @@ export default function BoardingForm() {
         </div>
 
         {/* Time Slots */}
-        <label className="block text-sm font-medium text-gray-900 mb-3">
+        <label className="block text-sm font-medium text-[#024B5E] mb-3">
           What times are you available for boarding check-in/check-out?
         </label>
         <div className="grid grid-cols-2 gap-3 mb-8">
@@ -265,7 +263,7 @@ export default function BoardingForm() {
                 onChange={() => toggleTimeSlot(slot)}
                 className="custom-checkbox"
               />
-              <span className="text-gray-700">{slot}</span>
+              <span className="text-[#024B5E]">{slot}</span>
             </label>
           ))}
         </div>
@@ -273,7 +271,7 @@ export default function BoardingForm() {
 
       {/* Cancellation Policy */}
       <div className="mb-8">
-        <label className="block text-base font-semibold text-gray-900 mb-3">
+        <label className="block text-base font-semibold text-[#024B5E] mb-3">
           What is your cancellation policy for boarding?
         </label>
         <div className="space-y-3">
@@ -285,7 +283,7 @@ export default function BoardingForm() {
                 onChange={() => toggleCancellationPolicy(policy)}
                 className="custom-checkbox"
               />
-              <span className="text-gray-700">{policy}</span>
+              <span className="text-[#024B5E]">{policy}</span>
             </label>
           ))}
         </div>
@@ -294,24 +292,22 @@ export default function BoardingForm() {
       {/* Location Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <label className="text-base font-semibold text-gray-900">
+          <label className="text-base font-semibold text-[#024B5E]">
             Use my home address
           </label>
           <button
             onClick={() => setUseHomeAddress(!useHomeAddress)}
-            className={`relative w-12 h-6 rounded-full transition-colors ${
-              useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"
-            }`}
+            className={`relative w-12 h-6 rounded-full transition-colors ${useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"
+              }`}
           >
             <div
-              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
-                useHomeAddress ? "translate-x-6" : ""
-              }`}
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${useHomeAddress ? "translate-x-6" : ""
+                }`}
             />
           </button>
         </div>
 
-        <label className="block text-sm font-semibold text-gray-900 mb-2">
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">
           Location
         </label>
         <input
@@ -322,25 +318,25 @@ export default function BoardingForm() {
         />
 
         {/* Service Area */}
-        <label className="block text-base font-semibold text-gray-900 mb-2">
+        <label className="block text-base font-semibold text-[#024B5E] mb-2">
           Service Area
         </label>
-        <p className="text-sm text-gray-700 mb-4">
+        <p className="text-sm text-[#024B5E] mb-4">
           The service area you define here will be for house sitting.
         </p>
 
         <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 mb-4">
-          <div className="text-sm font-medium text-gray-900 mb-2">
+          <div className="text-sm font-medium text-[#024B5E] mb-2">
             Location
           </div>
-          <div className="text-sm text-gray-600 mb-3">New York, NY</div>
+          <div className="text-sm text-[#024B5E] mb-3">New York, NY</div>
           <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-            <MapPin className="w-8 h-8 text-gray-400" />
+            <MapPin className="w-8 h-8 text-[#024B5E]" />
           </div>
         </div>
 
         {/* Distance Type */}
-        <label className="block text-sm font-semibold text-gray-900 mb-3">
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">
           Distance type
         </label>
         <div className="flex gap-4 mb-4">
@@ -353,7 +349,7 @@ export default function BoardingForm() {
               onChange={(e) => setDistanceType(e.target.value)}
               className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
             />
-            <span className="text-gray-700">Miles</span>
+            <span className="text-[#024B5E]">Miles</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -364,12 +360,12 @@ export default function BoardingForm() {
               onChange={(e) => setDistanceType(e.target.value)}
               className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
             />
-            <span className="text-gray-700">Minutes</span>
+            <span className="text-[#024B5E]">Minutes</span>
           </label>
         </div>
 
         {/* Service Area Input */}
-        <label className="block text-sm font-semibold text-gray-900 mb-2">
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">
           Service area
         </label>
         <div className="flex items-center gap-2 mb-4">
@@ -379,11 +375,11 @@ export default function BoardingForm() {
             onChange={(e) => setServiceArea(e.target.value)}
             className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent"
           />
-          <span className="text-gray-600">Miles</span>
+          <span className="text-[#024B5E]">Miles</span>
         </div>
 
         {/* Travel Mode */}
-        <label className="block text-sm font-semibold text-gray-900 mb-3">
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">
           Travel mode
         </label>
         <div className="space-y-3 mb-8">
@@ -398,7 +394,7 @@ export default function BoardingForm() {
                 onChange={() => toggleTravelMode(mode)}
                 className="custom-checkbox"
               />
-              <span className="text-gray-700">{mode}</span>
+              <span className="text-[#024B5E]">{mode}</span>
             </label>
           ))}
         </div>
@@ -406,7 +402,7 @@ export default function BoardingForm() {
 
       {/* Pet Types Section */}
       <div className="mb-8">
-        <label className="block text-base font-semibold text-gray-900 mb-3">
+        <label className="block text-base font-semibold text-[#024B5E] mb-3">
           What type of pets can you host in your home?
         </label>
         <div className="space-y-3 mb-6">
@@ -421,13 +417,13 @@ export default function BoardingForm() {
                 onChange={() => togglePetSize(size)}
                 className="custom-checkbox"
               />
-              <span className="text-gray-700">{size}</span>
+              <span className="text-[#024B5E]">{size}</span>
             </label>
           ))}
         </div>
 
         {/* Accept Puppies */}
-        <label className="block text-sm font-semibold text-gray-900 mb-3">
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">
           Do you accept puppies under 1 year old?
         </label>
         <div className="flex gap-4 mb-8">
@@ -440,7 +436,7 @@ export default function BoardingForm() {
               onChange={(e) => setAcceptPuppies(e.target.value)}
               className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
             />
-            <span className="text-gray-700">Yes</span>
+            <span className="text-[#024B5E]">Yes</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -451,7 +447,7 @@ export default function BoardingForm() {
               onChange={(e) => setAcceptPuppies(e.target.value)}
               className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
             />
-            <span className="text-gray-700">No</span>
+            <span className="text-[#024B5E]">No</span>
           </label>
         </div>
       </div>
