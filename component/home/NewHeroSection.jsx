@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { DatePicker } from "@/components/ui/date-picker";
+import { TimePicker } from "@/components/ui/time-picker";
 
 const LeftImage = ({ className }) => (
   <img
@@ -205,44 +207,40 @@ export default function NewHeroSection() {
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                   Start date
                 </label>
-                <input
-                  type="text"
+                <DatePicker
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  onChange={setStartDate}
+                  className="w-full text-[#024B5E] text-sm sm:text-base font-medium border-gray-200"
                 />
               </div>
               <div className="space-y-1">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                   End date
                 </label>
-                <input
-                  type="text"
+                <DatePicker
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  onChange={setEndDate}
+                  className="w-full text-[#024B5E] text-sm sm:text-base font-medium border-gray-200"
                 />
               </div>
               <div className="space-y-1">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                   Start time
                 </label>
-                <input
-                  type="text"
+                <TimePicker
                   value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  onChange={setStartTime}
+                  className="w-full text-[#024B5E] text-sm sm:text-base font-medium border-gray-200"
                 />
               </div>
               <div className="space-y-1">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                   End time
                 </label>
-                <input
-                  type="text"
+                <TimePicker
                   value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-[#024B5E] text-sm sm:text-base font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  onChange={setEndTime}
+                  className="w-full text-[#024B5E] text-sm sm:text-base font-medium border-gray-200"
                 />
               </div>
             </div>
@@ -254,44 +252,40 @@ export default function NewHeroSection() {
                   <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                     Start date
                   </label>
-                  <input
-                    type="text"
+                  <DatePicker
                     value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-[#024B5E] text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    onChange={setStartDate}
+                    className="w-full text-[#024B5E] text-xs sm:text-sm font-medium border-gray-200 h-9"
                   />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs sm:text-sm text-gray-400 font-medium">
                     End date
                   </label>
-                  <input
-                    type="text"
+                  <DatePicker
                     value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-gray-400 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    onChange={setEndDate}
+                    className="w-full text-gray-400 text-xs sm:text-sm font-medium border-gray-200 h-9"
                   />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                     Start time
                   </label>
-                  <input
-                    type="text"
+                  <TimePicker
                     value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-[#024B5E] text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    onChange={setStartTime}
+                    className="w-full text-[#024B5E] text-xs sm:text-sm font-medium border-gray-200 h-9"
                   />
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                     End time
                   </label>
-                  <input
-                    type="text"
+                  <TimePicker
                     value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-[#024B5E] text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    onChange={setEndTime}
+                    className="w-full text-[#024B5E] text-xs sm:text-sm font-medium border-gray-200 h-9"
                   />
                 </div>
               </div>
@@ -325,10 +319,10 @@ export default function NewHeroSection() {
             </div>
           )}
 
-          {/* Bottom row with day selector (for daycare) and search button */}
+          {/* Bottom row with day selector (for daycare and walking when repeat weekly) and search button */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
             <div className="flex items-center gap-4">
-              {activeService === "daycare" && (
+              {(activeService === "daycare" || activeService === "walking") && schedule === "repeat" && (
                 <div className="flex gap-2">
                   {daysOfWeek.map((day) => (
                     <button
