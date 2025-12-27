@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
 export default function Portfolio({ images }) {
   const [imageDimensions, setImageDimensions] = useState({});
@@ -21,9 +22,11 @@ export default function Portfolio({ images }) {
           imageDimensions[0] ? "bg-transparent" : "bg-gray-100"
         }`}
       >
-        <img
+        <Image
           src={images[0]?.src}
           alt={images[0]?.alt}
+          width={500}
+          height={500}
           onLoad={(e) => handleImageLoad(0, e)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
@@ -33,9 +36,11 @@ export default function Portfolio({ images }) {
           imageDimensions[1] ? "bg-transparent" : "bg-gray-100"
         }`}
       >
-        <img
+        <Image
           src={images[1]?.src}
           alt={images[1]?.alt}
+          width={500}
+          height={500}
           onLoad={(e) => handleImageLoad(1, e)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
@@ -47,9 +52,11 @@ export default function Portfolio({ images }) {
           imageDimensions[2] ? "bg-transparent" : "bg-gray-100"
         }`}
       >
-        <img
+        <Image
           src={images[2]?.src}
           alt={images[2]?.alt}
+          width={500}
+          height={500}
           onLoad={(e) => handleImageLoad(2, e)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
@@ -59,9 +66,11 @@ export default function Portfolio({ images }) {
           imageDimensions[3] ? "bg-transparent" : "bg-gray-100"
         }`}
       >
-        <img
+        <Image
           src={images[3]?.src}
           alt={images[3]?.alt}
+          width={500}
+          height={500}
           onLoad={(e) => handleImageLoad(3, e)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
@@ -73,9 +82,11 @@ export default function Portfolio({ images }) {
           imageDimensions[4] ? "bg-transparent" : "bg-gray-100"
         }`}
       >
-        <img
+        <Image
           src={images[4]?.src}
           alt={images[4]?.alt}
+          width={500}
+          height={500}
           onLoad={(e) => handleImageLoad(4, e)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
@@ -85,9 +96,11 @@ export default function Portfolio({ images }) {
           imageDimensions[5] ? "bg-transparent" : "bg-gray-100"
         }`}
       >
-        <img
+        <Image
           src={images[5]?.src}
           alt={images[5]?.alt}
+          width={500}
+          height={500}
           onLoad={(e) => handleImageLoad(5, e)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
@@ -99,9 +112,11 @@ export default function Portfolio({ images }) {
           imageDimensions[6] ? "bg-transparent" : "bg-gray-100"
         }`}
       >
-        <img
+        <Image
           src={images[6]?.src}
           alt={images[6]?.alt}
+          width={500}
+          height={500}
           onLoad={(e) => handleImageLoad(6, e)}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
