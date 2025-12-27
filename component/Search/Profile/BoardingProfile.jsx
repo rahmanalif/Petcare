@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -99,13 +98,13 @@ export default function BoardingProfile({ sitterName = "Seam Rahman" }) {
   ];
 
   const portfolioImages = [
-    { id: 1, src: "/portfolio/1.png", alt: "Pet 1" },
-    { id: 2, src: "/portfolio/2.png", alt: "Pet 2" },
-    { id: 3, src: "/portfolio/3.png", alt: "Pet 3" },
-    { id: 4, src: "/portfolio/4.png", alt: "Pet 4" },
-    { id: 5, src: "/portfolio/5.png", alt: "Pet 5" },
-    { id: 6, src: "/portfolio/6.png", alt: "Pet 6" },
-    { id: 7, src: "/portfolio/7.png", alt: "Pet 7" },
+    { id: 1, src: "/Portfolio/1.png", alt: "Pet 1" },
+    { id: 2, src: "/Portfolio/2.png", alt: "Pet 2" },
+    { id: 3, src: "/Portfolio/3.png", alt: "Pet 3" },
+    { id: 4, src: "/Portfolio/4.png", alt: "Pet 4" },
+    { id: 5, src: "/Portfolio/5.png", alt: "Pet 5" },
+    { id: 6, src: "/Portfolio/6.png", alt: "Pet 6" },
+    { id: 7, src: "/Portfolio/7.png", alt: "Pet 7" },
   ];
 
   // Generate calendar days for current month
