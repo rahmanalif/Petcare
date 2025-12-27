@@ -20,16 +20,16 @@ export default function HowItWorks() {
               className="w-full h-full object-cover"
             />
             {/* Speech Bubble */}
-            <div className="absolute -bottom-6 right-8 md:right-12 max-w-[280px] z-10 hidden md:block">
-              <div className="bg-[#FF6E61] text-white p-6 rounded-2xl rounded-br-none shadow-lg text-sm font-medium leading-relaxed relative">
+            <div className="absolute -bottom-15 right-12 md:right-12 max-w-[280px] z-10 hidden md:block">
+              <div className=" bg-[#F8F4EF] text-[#024B5E] p-6 rounded-2xl shadow-lg text-sm font-medium leading-relaxed relative">
                 It's easy. I go to the calendar and mark myself as available when I want to be.
                 {/* Triangle Tail */}
-                <div className="absolute -bottom-2 right-0 w-4 h-4 bg-[#FF6E61] transform rotate-45 translate-x-[-50%] translate-y-[-50%]"></div>
+                {/* <div className="absolute -bottom-2 right-0 w-4 h-4 bg-[#FF6E61] transform rotate-45 translate-x-[-50%] translate-y-[-50%]"></div> */}
               </div>
             </div>
             {/* Mobile Speech Bubble (Adjusted position) */}
-            <div className="absolute bottom-4 right-4 max-w-[240px] z-10 md:hidden">
-              <div className="bg-[#FF6E61] text-white p-4 rounded-xl rounded-br-none shadow-lg text-xs font-medium leading-relaxed relative">
+            <div className="absolute bottom-4 right-4 max-w-60 z-10 md:hidden">
+              <div className="bg-[#F8F4EF] text-[white] p-4 rounded-xl  shadow-lg text-xs font-medium leading-relaxed relative">
                 It's easy. I go to the calendar and mark myself as available when I want to be.
               </div>
             </div>
@@ -43,14 +43,14 @@ export default function HowItWorks() {
               className="w-full h-full object-cover"
             />
             {/* Speech Bubble */}
-            <div className="absolute -bottom-6 left-8 md:left-12 max-w-[280px] z-10 hidden md:block">
-              <div className="bg-[#FF6E61] text-white p-6 rounded-2xl rounded-bl-none shadow-lg text-sm font-medium leading-relaxed">
+            <div className="absolute -bottom-17 left-8 md:left-12 max-w-[280px] z-10 hidden md:block">
+              <div className="bg-[#F8F4EF] text-[#024B5E] p-6 text-justify rounded-2xl  shadow-lg text-sm font-medium leading-relaxed">
                 Thanks to the Wuffoos App, I know about my clients schedule immediately and I'm quick to respond!
               </div>
             </div>
             {/* Mobile Speech Bubble */}
-            <div className="absolute bottom-4 left-4 max-w-[240px] z-10 md:hidden">
-              <div className="bg-[#FF6E61] text-white p-4 rounded-xl rounded-bl-none shadow-lg text-xs font-medium leading-relaxed">
+            <div className="absolute bottom-4 left-4 max-w-60 z-10 md:hidden">
+              <div className="bg-[#FF6E61] text-white p-4 rounded-xl  shadow-lg text-xs font-medium leading-relaxed">
                 Thanks to the Wuffoos App...
               </div>
             </div>
