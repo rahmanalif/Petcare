@@ -43,12 +43,12 @@ export default function WuffoosFooter() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
+                <a href="/terms" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
                   Terms & Condition
                 </a>
               </li>
               <li>
-                <a href="#" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
+                <a href="/privacy" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
                   Privacy Policy
                 </a>
               </li>

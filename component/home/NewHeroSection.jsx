@@ -65,7 +65,7 @@ const PawIcon = ({ className }) => (
       fillRule="evenodd"
       clipRule="evenodd"
       d="M25.4559 37.117C32.8586 44.2371 35.202 53.5918 30.2215 57.2494C25.2409 60.9069 15.1165 58.3626 7.40195 50.8134C-0.000628678 43.6933 -2.3441 34.3386 2.63633 30.681C7.61693 27.0235 17.6637 29.8991 25.4559 37.117ZM46.7011 16.8613C50.2124 26.5102 47.6495 35.6849 40.7204 37.0995C33.7914 38.5138 25.0657 31.7622 21.5544 22.1135C18.0431 12.4648 20.6055 3.29081 27.5345 1.87619C34.3859 0.792804 42.8002 7.11484 46.7011 16.8613ZM79.0949 19.3968C78.7912 29.4895 72.5673 36.692 65.3251 35.924C57.6936 35.058 52.314 26.3425 52.5401 16.5811C52.7662 6.81962 59.0678 -0.713979 66.3099 0.0538818C73.9414 0.919741 79.3209 9.63543 79.0949 19.3968ZM81.151 59.887C98.2125 71.5383 97.2868 82.5261 88.4123 85.2052C79.5376 87.8841 70.0311 79.1838 59.9869 79.8155C49.9426 80.4472 43.6421 89.7346 34.1411 88.0483C24.2507 86.264 19.7266 75.6592 32.7201 62.4437C41.8236 53.5105 42.8285 43.9445 54.1187 43.2751C65.3312 42.937 69.3872 52.0215 81.151 59.887ZM100.203 26.0984C106.435 29.4179 107.61 38.4801 102.477 46.307C97.7329 54.2318 88.6252 57.9041 82.3933 54.5848C76.1616 51.2655 74.9867 42.204 80.1196 34.377C85.2528 26.55 94.361 22.8769 100.203 26.0984Z"
-      fill="#EB5B13"
+      fill="#FE6C5D"
     />
   </svg>
 );
@@ -107,7 +107,7 @@ export default function NewHeroSection() {
     <div className="w-full bg-[#024B5E] relative">
       {/* Paw decorations */}
       <div className="absolute bottom-32 left-4 sm:left-8 md:left-12 lg:left-20 z-5 w-10 sm:w-14 md:w-16 -rotate-32">
-        <PawIcon className="text-[#EB5B13] opacity-80" />
+        <PawIcon className="text-[#FE6C5D] opacity-80" />
       </div>
       <div className="absolute bottom-32 right-4 sm:right-8 md:right-12 lg:-right-0.5 z-5 w-10 sm:w-14 md:w-16 -rotate-50 ">
         <PawIcon className="text-[#EB5B13] opacity-80" />
@@ -175,7 +175,7 @@ export default function NewHeroSection() {
       </div>
 
       {/* Booking Card - Overlapping Section */}
-      <div className="relative z-20 -mt-24 md:-mt-80 pb-12 px-4 sm:px-6 lg:px-8">
+      <div id="booking-section" className="relative z-20 -mt-24 md:-mt-80 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 max-w-7xl mx-auto">
           {/* Service Tabs */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">

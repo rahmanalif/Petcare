@@ -2,6 +2,27 @@
 
 import Image from "next/image";
 
+const handleBookNowClick = () => {
+    console.log('BOOK NOW clicked');
+    const element = document.getElementById('booking-section');
+    console.log('Found element:', element);
+
+    if (element) {
+        // Get the element's position
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - 100; // 100px offset for header
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+    } else {
+        console.error('booking-section element not found');
+        // Fallback: scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+};
+
 const PawImage = ({className}) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="42" height="41" viewBox="0 0 42 41" fill="none">
   <g opacity="0.5">
@@ -35,20 +56,20 @@ const DogWalkingIcon = ({className}) => (
 
 export default function Services() {
     return (
-        <div className="relative py-46 px-8 md:px-16 lg:px-24 overflow-hidden" style={{ backgroundColor: '#024B5E' }}>
+        <div className="relative py-46 px-8 md:px-16 lg:px-24 overflow-hidden " style={{ backgroundColor: '#012e3a' }}>
             {/* Background Image */}
-            <div className="absolute inset-0  z-20">
+            <div className="absolute inset-0 z-0">
                 <BgImage />
             </div>
 
             {/* Decorative Paw Prints */}
-            <div className="absolute top-8 right-[55%]">
+            <div className="absolute top-8 right-[55%] z-5">
                 <PawImage />
             </div>
-            <div className="absolute top-20 right-[52%]">
+            <div className="absolute top-20 right-[52%] z-5">
                 <PawImage />
             </div>
-            <div className="absolute bottom-16 left-8">
+            <div className="absolute bottom-16 left-8 z-5">
                 <PawImage />
             </div>
 
@@ -61,7 +82,11 @@ export default function Services() {
                     <p className="text-base md:text-lg text-justify leading-relaxed mb-8 max-w-md">
                         We offer reliable and loving pet care services to ensure your pets receive the attention, comfort, and care they deserve. Whether it's safe boarding, engaging doggy day care, or regular dog walking, our experienced caregivers focus on your pet's well-being, happiness, and daily routine, giving you complete peace of mind.
                     </p>
-                    <button className="bg-white text-[#FF6B6B] font-bold py-3 px-8 rounded-full text-lg flex items-center gap-2 hover:bg-gray-100 transition-colors font-bakso">
+                    <button
+                        onClick={handleBookNowClick}
+                        type="button"
+                        className="bg-white text-[#FF6B6B] hover:text-[#FF6B6B] font-bold py-3 px-8 rounded-full text-lg flex items-center gap-2 hover:bg-gray-100 transition-colors font-bakso"
+                    >
                         BOOK NOW
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="#FF6B6B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

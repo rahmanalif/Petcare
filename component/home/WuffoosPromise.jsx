@@ -1,7 +1,7 @@
 "use client";
 import { Calendar, Home, Footprints, Shield } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "next/link";   
 
 export default function ServicesSection() {
   return (
@@ -55,7 +55,7 @@ export default function ServicesSection() {
               </div>
               <div>
                 <p className="text-sm md:text-base text-[#024B5E] leading-relaxed">
-                  Verified pet sitters have already passed a third party background check and show verified reviews from other pet parents, like you
+                  Live location, messaging & photo updates from your sitter during each stay
                 </p>
               </div>
             </div>
@@ -71,8 +71,8 @@ export default function ServicesSection() {
                   />
                 </div>
               </div>
-              <div>
-                Verified pet sitters have already passed a third party background check and show verified reviews from other pet parents, like you
+              <div className="text-[#024B5E]">
+                24/7 support and Pet Assistance
               </div>
             </div>
           </div>
@@ -104,9 +104,12 @@ export default function ServicesSection() {
 
               {/* Book a Local Sitter Button */}
               <div className="absolute bottom-12 left-1/3 transform -translate-x-1/3">
-                <button className="bg-[#FE6C5D] text-white px-10 py-4 rounded-full font-bakso text-sm md:text-base uppercase tracking-wide hover:bg-[#ff5744] transition-colors">
+              <Link href="/search">
+              <button className="bg-[#FE6C5D] text-white px-10 py-4 rounded-full font-bakso text-sm md:text-base uppercase tracking-wide hover:bg-[#ff5744] transition-colors">
                   Book a local sitter
                 </button>
+              </Link>
+                
               </div>
             </div>
           </div>
