@@ -64,7 +64,7 @@ export default function HowItWorks() {
               HOW iT WORKS
             </h2>
 
-            <div className="grid md:grid-cols-3 gap-8 md:gap-12 text-left mb-12">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-6 xl:gap-8 text-left mb-12">
               {/* Step 1 */}
               <div>
                 <div className="flex items-center gap-3 mb-3">
@@ -72,7 +72,7 @@ export default function HowItWorks() {
                     {/* Placeholder for Profile Icon */}
                     <img src="/people.png" alt="people" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75]">Create your profile</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Create your profile</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
                   Tell us a little about yourself and what pet services you want to offer.
@@ -85,7 +85,7 @@ export default function HowItWorks() {
                   <div className="w-6 h-6 flex items-center justify-center">
                     <img src="/iconos.png" alt="W" className="w-full h-full object-contain" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75]">Accept requests</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Accept requests</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
                   Tell us the types of pets you want to care for and the dates that work for you. You make your own schedule.
@@ -99,10 +99,24 @@ export default function HowItWorks() {
                     {/* Placeholder for Paw Icon */}
                     <img src="/paw.png" alt="paw" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75]">Get paid</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Get paid</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
                   Payments are sent directly to your bank once you have completed a service.
+                </p>
+              </div>
+
+              {/* Step 4 */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 flex items-center justify-center">
+                    {/* Placeholder for Paw Icon */}
+                    <img src="/paw.png" alt="paw" />
+                  </div>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Join a trusted care community</h3>
+                </div>
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
+                  Sign up, then complete your $199 MXN document validation + background check in seconds.
                 </p>
               </div>
             </div>

@@ -68,64 +68,62 @@ export default function WhatUserSay() {
   };
 
   return (
-    <div className="bg-[#FE6C5D] py-16 px-4">
+    <div className="bg-[#FE6C5D] py-8 sm:py-12 md:py-16 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header with paw prints */}
-        <div className="flex justify-between items-start mb-8">
-          <div className="w-16">
-            <PawImage className="" />
+        <div className="flex justify-between items-start mb-6 sm:mb-8 md:mb-12">
+          {/* Left paw - Hidden on mobile */}
+          <div className="hidden md:block w-12 lg:w-16 shrink-0">
+            <PawImage className="w-full h-full" />
           </div>
-          <div className="flex-1 text-center px-8">
-            <h1 className="font-bakso text-[48px] text-[#FFF] mb-4">
+
+          <div className="flex-1 text-center px-2 sm:px-4 md:px-8">
+            <h1 className="font-bakso text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[48px] text-[#FFF] mb-2 sm:mb-3 md:mb-4">
               WHAT OUR USERS SAY
             </h1>
-            <p className="font-montserrat text-[18px] text-[#FFF]">
+            <p className="font-montserrat text-sm sm:text-base md:text-lg text-[#FFF] max-w-2xl mx-auto">
               Hear the trusted feedback from customers who have put their faith
               in us
             </p>
           </div>
-          <div className="w-16 mt-28">
-            <PawImage className="" />
+
+          {/* Right paw - Hidden on mobile */}
+          <div className="hidden md:block w-12 lg:w-16 shrink-0 mt-12 lg:mt-28">
+            <PawImage className="w-full h-full" />
           </div>
-          
         </div>
 
-
-
         {/* Testimonial Cards with side paw prints */}
-        <div className="flex gap-8 mt-12 items-center">
-          {/* Left side paw prints */}
-          <div className="flex flex-col gap-32">
-            {/* <div className="w-16">
-              <PawImage className="" />
-            </div> */}
-            <div className="w-16 mt-38 ">
-              <PawImage className="" />
+        <div className="flex gap-4 sm:gap-6 lg:gap-8 mt-6 sm:mt-8 md:mt-12 items-center">
+          {/* Left side paw prints - Hidden on mobile and tablet */}
+          <div className="hidden lg:flex flex-col gap-32 shrink-0">
+            <div className="w-12 xl:w-16 mt-38">
+              <PawImage className="w-full h-full" />
             </div>
           </div>
 
           {/* Testimonial Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 bg-white overflow-hidden shadow-md hover:shadow-lg transition-shadow p-6 rounded-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 flex-1 bg-white overflow-hidden shadow-md hover:shadow-lg transition-shadow p-4 sm:p-5 md:p-6 rounded-lg">
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className=""
+                className="flex flex-col"
               >
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden rounded-t-lg">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="p-6">
-                  <h3 className="font-montserrat font-semibold text-lg text-[#024B5E] mb-2">
+                <div className="p-3 sm:p-4 md:p-6">
+                  <h3 className="font-montserrat font-semibold text-base sm:text-lg text-[#024B5E] mb-2">
                     {testimonial.name}
                   </h3>
-                  <div className="mb-3">
+                  <div className="mb-2 sm:mb-3">
                     <StarRating rating={testimonial.rating} />
                   </div>
-                  <p className="font-montserrat text-sm text-[#024B5E] leading-relaxed">
+                  <p className="font-montserrat text-xs sm:text-sm text-[#024B5E] leading-relaxed">
                     {testimonial.text}
                   </p>
                 </div>
@@ -133,10 +131,10 @@ export default function WhatUserSay() {
             ))}
           </div>
 
-          {/* Right side paw prints */}
-          <div className="flex flex-col gap-32">
-            <div className="w-16 mt-92 ">
-              <PawImage className="" />
+          {/* Right side paw prints - Hidden on mobile and tablet */}
+          <div className="hidden lg:flex flex-col gap-32 flex-shrink-0">
+            <div className="w-12 xl:w-16 mt-92">
+              <PawImage className="w-full h-full" />
             </div>
           </div>
         </div>
