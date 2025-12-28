@@ -116,7 +116,7 @@ export default function NewHeroSection() {
       </div>
 
       {/* Hero Background Section */}
-      <div className="relative w-full pb-32 md:pb-40 lg:-mt-20">
+      <div className="relative w-full  pb-32 md:pb-40 lg:-mt-40 xl:-mt-20 2xl:-mt-1">
         {/* Mobile/Tablet Layout - Stack vertically */}
         <div className="block lg:hidden relative">
           {/* Images Row - Top */}
@@ -156,14 +156,14 @@ export default function NewHeroSection() {
           {/* Center Content */}
           <div className="relative z-20 flex flex-col items-center justify-center px-4 text-center max-w-4xl mx-auto">
             <h1 className="font-bakso text-white mb-4">
-              <span className="block text-5xl lg:text-6xl xl:text-7xl leading-tight">
+              <span className="block text-3xl lg:text-4xl xl:text-6xl leading-tight">
                 Trusted Pet Care,
               </span>
-              <span className="block text-5xl lg:text-6xl xl:text-7xl leading-tight">
+              <span className="block text-3xl lg:text-4xl xl:text-6xl leading-tight">
                 Whenever You Need It.
               </span>
             </h1>
-            <p className="text-white text-lg max-w-2xl font-montserrat">
+            <p className="text-white text-lg max-w-md xl:max-w-2xl font-montserrat">
               Trusted sitters, flexible bookings, and quality pet care—all in one
               place.
             </p>
@@ -377,7 +377,7 @@ export default function NewHeroSection() {
         </div>
         {/* Dog Man Image - Below the card in teal background */}
       <div className="absolute top-2 left-75 -z-10  pb-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
-        <div className="  w-[300px] sm:w-[350px] md:w-[400px] lg:w-full xl:w-[1200px]">
+        <div className="  w-[300px] sm:w-[350px] md:w-[400px] lg:w-full xl:w-[11px]">
           <DogMan />
         </div>
       </div>
