@@ -10,7 +10,7 @@ const LeftImage = ({ className }) => (
   <img
     src="/icons/HeroImage01.png"
     alt="Left Hero Image"
-    className="w-full h-full object-contain rounded-tl-[150px]"
+    className="w-full h-full object-contain "
   />
 );
 
@@ -18,7 +18,7 @@ const RightImage = ({ className }) => (
   <img
     src="/icons/HeroImage02.png"
     alt="Right Hero Image"
-    className="w-full h-full object-contain rounded-tr-[150px]"
+    className="w-full h-full object-contain "
   />
 );
 
@@ -130,12 +130,12 @@ export default function NewHeroSection() {
           </div>
 
           {/* Text Content - Bottom */}
-          <div className="px-4 pb-12 sm:pb-16 pt-6 sm:pt-8 text-center relative z-10">
+          <div className="px-4 pb-12 sm:pb-16 pt-6 sm:pt-8 text-center relative z-10 md:-top-10">
             <h1 className="font-bakso text-white mb-4">
-              <span className="block text-3xl sm:text-4xl md:text-5xl leading-tight">
+              <span className="block text-3xl sm:text-4xl md:text-4xl  leading-tight">
                 Trusted Pet Care,
               </span>
-              <span className="block text-3xl sm:text-4xl md:text-5xl leading-tight">
+              <span className="block text-3xl sm:text-4xl md:text-4xl leading-tight">
                 Whenever You Need It.
               </span>
             </h1>
@@ -177,7 +177,7 @@ export default function NewHeroSection() {
       </div>
 
       {/* Booking Card - Overlapping Section */}
-      <div id="booking-section" className="relative z-20 -mt-24 md:-mt-80 pb-12 px-4 sm:px-6 lg:px-8">
+      <div id="booking-section" className="relative z-20 -mt-24 md:-mt-60 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 max-w-7xl mx-auto">
           {/* Service Tabs */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
