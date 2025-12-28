@@ -1,4 +1,6 @@
-"Use client" ;
+"use client";
+
+import { useRouter } from "next/navigation";
 
 const HeroImage = ({className}) => (
     <img src="/Hero01.png" className={className} alt="heroImage" />
@@ -29,6 +31,7 @@ const PawWhiteImage = ({className}) => (
 );
 
 export default function NewHero() {
+    const router = useRouter();
     return (
         <div className="relative bg-[#F5F3EF] min-h-screen overflow-hidden">
             {/* Top Right Orange Background */}
@@ -67,7 +70,9 @@ export default function NewHero() {
                         </div>
 
                         {/* CTA Button */}
-                        <button className="bg-[#FE6C5D] hover:bg-[#FF5252] text-white font-bakso text-lg px-8 py-4 rounded-lg transition-colors flex items-center gap-2">
+                        <button 
+                        onClick={() => router.push('/signup?role=pet_sitter')}
+                        className="bg-[#FE6C5D] hover:bg-[#FF5252] text-white font-bakso text-lg px-8 py-4 rounded-lg transition-colors flex items-center gap-2">
                             GET STARTED
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

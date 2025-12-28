@@ -37,19 +37,19 @@ const PawImage = ({className}) => (
 );
 
 const BgImage = ({className}) => (  
-    <Image src="/bg.png" alt="BackGroundImage" className="w-full h-full object-cover" />
+    <img src="/bg.png" alt="BackGroundImage" className="w-full h-full object-cover" />
 );
 
 const DogBoardingIcon = ({className}) => (
-    <Image src="icons/boardingIcon01.png" alt="Dog Boarding Icon" />
+    <img src="icons/boardingIcon01.png" alt="Dog Boarding Icon" />
 );
 
 const DogDayCareIcon = ({className}) => (
-    <Image src="icons/doggy.png" alt="Dog Day Care Icon" />
+    <img src="icons/doggy.png" alt="Dog Day Care Icon" />
 );
 
 const DogWalkingIcon = ({className}) => (
-    <Image src="icons/walking.png" alt="Dog Walking Icon" />
+    <img src="icons/walking.png" alt="Dog Walking Icon" />
 );
 
 
