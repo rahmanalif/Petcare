@@ -246,7 +246,7 @@ export default function ServicesSection() {
 
               {/* CTA Button */}
               <Link
-                href="/search"
+                href="/signup"
                 className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-3 md:py-4 rounded-xl transition-all hover:shadow-lg block text-center text-sm md:text-base"
               >
                 Start creating your profile

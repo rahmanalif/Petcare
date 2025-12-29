@@ -184,7 +184,7 @@ export default function DashboardOverview() {
                     className={`
                       aspect-square flex items-center justify-center text-sm rounded
                       ${!dayInfo.isCurrentMonth ? "text-[#024B5E]" : "text-[#024B5E]"}
-                      ${isBooked ? "bg-[#FF4747] text-white font-semibold" : ""}
+                      ${isBooked ? "bg-[#FE6C5D] text-white font-semibold" : ""}
                       ${dayInfo.isCurrentMonth && !isBooked ? "hover:bg-gray-100 cursor-pointer" : ""}
                     `}
                   >
@@ -212,7 +212,6 @@ export default function DashboardOverview() {
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-linear-to-br from-pink-400 to-red-400 flex items-center justify-center text-white font-semibold">
-                        T
                       </div>
                       <div>
                         <h3 className="font-semibold text-[#024B5E]">{booking.name}</h3>
@@ -263,7 +262,7 @@ export default function DashboardOverview() {
                     <button className="flex-1 bg-[#FE6C5D] hover:bg-[#f16859] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
                       Cancel
                     </button>
-                    <button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <button className="flex-1 bg-[#024B5E] hover:bg-[#023846] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
                       Accept
                     </button>
                   </div>
