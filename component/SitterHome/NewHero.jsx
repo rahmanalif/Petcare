@@ -35,47 +35,47 @@ export default function NewHero() {
     return (
         <div className="relative bg-[#F5F3EF] min-h-screen overflow-hidden">
             {/* Top Right Orange Background - Responsive sizing */}
-            <div className="absolute top-0 right-0 w-[300px] h-[400px] sm:w-[400px] sm:h-[600px] md:w-[450px] md:h-[700px] lg:w-[500px] lg:h-[850px] xl:w-[600px] xl:h-[900px] bg-[#FE6C5D]"></div>
+            <div className="absolute top-0 right-0 w-[300px] h-[400px] sm:w-[400px] sm:h-[600px] md:w-[500px] md:h-[750px] lg:w-[600px] lg:h-[900px] xl:w-[700px] xl:h-[1000px] bg-[#FE6C5D]"></div>
 
             {/* Bottom Right Paw - Hidden on small screens, visible on larger */}
-            <div className="hidden sm:block absolute bottom-4 right-4 sm:bottom-8 sm:right-8 md:bottom-12 md:right-12 lg:bottom-16 lg:right-16 w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 opacity-60">
+            <div className="hidden xl:block absolute bottom-16 right-16 w-32 h-32 opacity-60">
                 <PawWhiteImage className="w-full h-full" />
             </div>
 
-            <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 xl:py-20">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 xl:gap-16 items-center">
-                    {/* Left Content */}
-                    <div className="space-y-4 sm:space-y-6 order-2 lg:order-1">
+            {/* Right Image - Positioned at top middle of orange area */}
+            <div className="absolute right-65 top-0 lg:top-8 xl:top-12 w-full lg:w-1/2 flex justify-center lg:justify-end z-20 pt-8 sm:pt-12 md:pt-16 lg:pt-20">
+                <HeroImage className="w-full max-w-[300px] h-auto sm:max-w-[380px] md:max-w-[550px] lg:max-w-[500px] xl:max-w-[600px] object-contain"/>
+            </div>
+
+            <div className="relative z-10 container mx-auto px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 min-h-[calc(100vh-80px)] flex items-end pb-12 sm:pb-16 md:pb-20 lg:pb-24">
+                <div className="w-full lg:w-1/2">
+                    {/* Left Content - at bottom */}
+                    <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
                         {/* Paw Icon - Responsive positioning */}
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:ml-32 xl:ml-40">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-24 lg:h-24 xl:w-28 xl:h-28">
                             <PawGreenImage className="w-full h-full" />
                         </div>
 
                         {/* Main Heading - Responsive text sizes */}
-                        <h1 className="font-bakso text-[#024B5E] text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl 2xl:text-7xl leading-tight">
+                        <h1 className="font-bakso text-[#024B5E] text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-6xl 2xl:text-7xl leading-tight">
                             GET PAID TO HANG<br />
                             OUT WITH PETS
                         </h1>
 
                         {/* Description - Responsive text and spacing */}
-                        <div className="space-y-3 font-montserrat text-[#024B5E] text-sm sm:text-base md:text-lg lg:text-base xl:text-lg text-justify max-w-xl">
+                        <div className="space-y-3 font-montserrat text-[#024B5E] text-sm sm:text-base md:text-xl lg:text-lg xl:text-xl text-justify leading-relaxed max-w-xl">
                             Turn your free time into income doing something that feels good. Join the Wuffoos community of trusted pet care. Set your availability, connect with local pet parents, and earn money taking care of pets you'll love. Do what you enjoy. Get paid for it.
                         </div>
 
                         {/* CTA Button - Responsive sizing */}
                         <button
                             onClick={() => router.push('/signup?role=pet_sitter')}
-                            className="bg-[#FE6C5D] hover:bg-[#FF5252] text-white font-bakso text-base sm:text-lg md:text-xl px-6 py-3 sm:px-8 sm:py-4 rounded-lg transition-colors flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
+                            className="bg-[#FE6C5D] hover:bg-[#FF5252] text-white font-bakso text-base sm:text-lg md:text-2xl lg:text-xl xl:text-2xl px-6 py-3 sm:px-8 sm:py-4 md:px-12 md:py-5 lg:px-10 lg:py-4 xl:px-14 xl:py-6 rounded-lg transition-colors flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
                             GET STARTED
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg className="w-5 h-5 md:w-7 md:h-7 lg:w-6 lg:h-6 xl:w-8 xl:h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
-                    </div>
-
-                    {/* Right Image - Fully responsive */}
-                    <div className="relative order-1 lg:order-2 flex justify-center lg:justify-end">
-                        <HeroImage className="w-full max-w-[280px] h-auto sm:max-w-[350px] md:max-w-[420px] lg:max-w-[480px] xl:max-w-[552px] object-contain lg:-mr-8 xl:-mr-12 2xl:-mr-16"/>
                     </div>
                 </div>
             </div>

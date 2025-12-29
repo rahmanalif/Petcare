@@ -21,16 +21,16 @@ export default function HowItWorks() {
             />
             {/* Speech Bubble */}
             <div className="absolute -bottom-15 right-12 md:right-12 max-w-[280px] z-10 hidden md:block">
-              <div className=" bg-[#F8F4EF] text-[#024B5E] p-6 rounded-2xl shadow-lg text-sm font-medium leading-relaxed relative">
-                It's easy. I go to the calendar and mark myself as available when I want to be.
+              <div className=" bg-[#FE6C5D] text-[#FFF] p-6 rounded-2xl shadow-lg text-sm font-medium leading-relaxed relative">
+                It's easy. Go to the calendar and mark yourself as available when you want to be
                 {/* Triangle Tail */}
                 {/* <div className="absolute -bottom-2 right-0 w-4 h-4 bg-[#FF6E61] transform rotate-45 translate-x-[-50%] translate-y-[-50%]"></div> */}
               </div>
             </div>
             {/* Mobile Speech Bubble (Adjusted position) */}
             <div className="absolute bottom-4 right-4 max-w-60 z-10 md:hidden">
-              <div className="bg-[#F8F4EF] text-[white] p-4 rounded-xl  shadow-lg text-xs font-medium leading-relaxed relative">
-                It's easy. I go to the calendar and mark myself as available when I want to be.
+              <div className="bg-[#FE6C5D] text-[#FFF] p-4 rounded-xl  shadow-lg text-xs font-medium leading-relaxed relative">
+                It's easy. Go to the calendar and mark yourself as available when you want to be
               </div>
             </div>
           </div>
@@ -38,20 +38,20 @@ export default function HowItWorks() {
           {/* Right Image Section */}
           <div className="relative h-[300px] md:h-[400px] w-full">
             <img
-              src="https://images.unsplash.com/photo-1568572933382-74d440642117?w=800&h=800&fit=crop"
+              src="/kutta.png"
               alt="Australian Shepherd dog"
               className="w-full h-full object-cover"
             />
             {/* Speech Bubble */}
             <div className="absolute -bottom-17 left-8 md:left-12 max-w-[280px] z-10 hidden md:block">
-              <div className="bg-[#F8F4EF] text-[#024B5E] p-6 text-justify rounded-2xl  shadow-lg text-sm font-medium leading-relaxed">
-                Thanks to the Wuffoos App, I know about my clients schedule immediately and I'm quick to respond!
+              <div className="bg-[#FF6E61] text-[#FFF] p-6 text-justify rounded-2xl  shadow-lg text-sm font-medium leading-relaxed">
+                With Wuffoos you can build trust from the first visit to the last by staying connected with pet parents by sharing photos, videos, and live location updates
               </div>
             </div>
             {/* Mobile Speech Bubble */}
             <div className="absolute bottom-4 left-4 max-w-60 z-10 md:hidden">
               <div className="bg-[#FF6E61] text-white p-4 rounded-xl  shadow-lg text-xs font-medium leading-relaxed">
-                Thanks to the Wuffoos App...
+                With Wuffoos you can build trust from the first visit to the last by staying connected with pet parents by sharing photos, videos, and live location updates
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ export default function HowItWorks() {
                   <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Accept requests</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
-                  Tell us the types of pets you want to care for and the dates that work for you. You make your own schedule.
+                  Review each request, confirm the details, and accept the bookings that fit your schedule and preferences.
                 </p>
               </div>
 

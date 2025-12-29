@@ -177,7 +177,7 @@ export default function NewHeroSection() {
       </div>
 
       {/* Booking Card - Overlapping Section */}
-      <div id="booking-section" className="relative z-20 -mt-24 md:-mt-80 pb-12 px-4 sm:px-6 lg:px-8">
+      <div id="booking-section" className="relative z-20 -mt-24 md:-mt-54 lg:-mt-72 xl:-mt-54 pb-12 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 max-w-7xl mx-auto">
           {/* Service Tabs */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">

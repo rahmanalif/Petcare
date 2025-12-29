@@ -132,7 +132,7 @@ export default function WhatUserSay() {
           </div>
 
           {/* Right side paw prints - Hidden on mobile and tablet */}
-          <div className="hidden lg:flex flex-col gap-32 flex-shrink-0">
+          <div className="hidden lg:flex flex-col gap-32 shrink-0">
             <div className="w-12 xl:w-16 mt-92">
               <PawImage className="w-full h-full" />
             </div>
