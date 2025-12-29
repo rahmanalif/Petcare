@@ -3,17 +3,17 @@ import React from 'react';
 
 export default function MobileAppSection() {
   return (
-    <div className="bg-[#F8F4EF] py-8 sm:py-12 md:py-16 lg:py-20 px-4 sm:px-6 md:px-8 lg:px-12">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-[#F8F4EF] px-4 sm:px-6 md:px-8 lg:px-12 pb-0">
+      <div className="max-w-7xl mx-auto pb-0">
         {/* Header */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center text-[#024B5E] mb-8 sm:mb-12 md:mb-16 lg:mb-20 font-bakso leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center text-[#024B5E] mb-4 sm:mb-6 md:mb-8 lg:mb-10 font-bakso leading-tight">
           Connect Anywhere with the Wuffoos App
         </h1>
 
         {/* Content Container */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 sm:gap-10 md:gap-12 lg:gap-20 xl:gap-24">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-8 sm:gap-10 md:gap-12 lg:gap-20 xl:gap-24 pb-0">
           {/* Mobile Phones Image */}
-          <div className="shrink-0 w-full md:w-auto flex justify-center">
+          <div className="shrink-0 w-full md:w-auto flex justify-center pb-0">
             <img
               src="/Frame.png"
               alt="Wuffoos Mobile App"

@@ -27,7 +27,7 @@ export default function ConditionalLayout({ children }) {
   return (
     <div className="min-h-screen bg-[#F8F4EF] overflow-hidden">
       <NavbarComponent />
-      <main className="pt-20">{children}</main>
+      <main className="pt-20 pb-0 mb-0">{children}</main>
       <Footer />
     </div>
   );
