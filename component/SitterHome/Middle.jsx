@@ -37,10 +37,12 @@ export default function HowItWorks() {
 
           {/* Right Image Section */}
           <div className="relative h-[300px] md:h-[400px] w-full">
-            <img
+
+            <Image
               src="/kutta.png"
               alt="Australian Shepherd dog"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
             {/* Speech Bubble */}
             <div className="absolute -bottom-17 left-8 md:left-12 max-w-[280px] z-10 hidden md:block">
@@ -68,14 +70,14 @@ export default function HowItWorks() {
               {/* Step 1 */}
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    {/* Placeholder for Profile Icon */}
-                    <img src="/people.png" alt="people" />
+                  <div className="w-8 h-8 flex items-center justify-center">
+                    {/* Placeholder for Paw Icon */}
+                    <img src="/paw.png" alt="paw" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Create your profile</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Join a trusted care community</h3>
                 </div>
-                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
-                  Tell us a little about yourself and what pet services you want to offer.
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
+                  Sign up, then complete your $199 MXN document validation + background check in seconds.
                 </p>
               </div>
 
@@ -87,7 +89,7 @@ export default function HowItWorks() {
                   </div>
                   <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Accept requests</h3>
                 </div>
-                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
                   Review each request, confirm the details, and accept the bookings that fit your schedule and preferences.
                 </p>
               </div>
@@ -101,7 +103,7 @@ export default function HowItWorks() {
                   </div>
                   <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Get paid</h3>
                 </div>
-                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
                   Payments are sent directly to your bank once you have completed a service.
                 </p>
               </div>
@@ -109,14 +111,14 @@ export default function HowItWorks() {
               {/* Step 4 */}
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    {/* Placeholder for Paw Icon */}
-                    <img src="/paw.png" alt="paw" />
+                  <div className="w-6 h-6 flex items-center justify-center">
+                    {/* Placeholder for Profile Icon */}
+                    <img src="/people.png" alt="people" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Join a trusted care community</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Create your profile</h3>
                 </div>
-                <p className="text-slate-600 leading-relaxed text-xs md:text-sm">
-                  Sign up, then complete your $199 MXN document validation + background check in seconds.
+                <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
+                  Tell us a little about yourself and what pet services you want to offer.
                 </p>
               </div>
             </div>

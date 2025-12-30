@@ -237,11 +237,11 @@ export default function ServicesSection() {
                   </p>
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="text-[#024B5E] text-center text-semibold md:text-lg ">
                     Connect with pet owners once your <br /> profile is approved
                     </p>
-                </div>
+                </div> */}
               </div>
 
               {/* CTA Button */}
