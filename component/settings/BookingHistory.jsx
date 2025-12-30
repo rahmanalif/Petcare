@@ -71,33 +71,31 @@ export default function BookingHistory() {
     }
   };
 
-  const statuses = ["On going", "Completed", "Cancelled", "Upcoming"];
+  const statuses = ["On going", "Upcoming", "Completed", "Cancelled"];
 
   return (
 
     <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
-      <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-0">
-        <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E] mb-4 sm:mb-6">Order history</h2>
+      <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E] mb-4 sm:mb-6">Order history</h2>
 
-        {/* Status Tabs */}
-        <div className="flex w-full gap-1 sm:gap-2 mb-4 sm:mb-8">
-          {statuses.map((status) => {
-            const statusKey = status.toLowerCase().replace(" ", "-");
-            const isActive = activeStatus === statusKey;
-            return (
-              <button
-                key={status}
-                onClick={() => setActiveStatus(statusKey)}
-                className={`flex-1 px-0.5 sm:px-3 py-2 rounded-md text-[10px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${isActive
-                  ? "bg-[#024B5E] text-white"
-                  : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
-                  }`}
-              >
-                {status}
-              </button>
-            );
-          })}
-        </div>
+      {/* Status Tabs */}
+      <div className="flex w-full gap-1 sm:gap-2 mb-4 sm:mb-8">
+        {statuses.map((status) => {
+          const statusKey = status.toLowerCase().replace(" ", "-");
+          const isActive = activeStatus === statusKey;
+          return (
+            <button
+              key={status}
+              onClick={() => setActiveStatus(statusKey)}
+              className={`flex-1 px-1 sm:px-3 py-2 rounded-md text-[9px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${isActive
+                ? "bg-[#024B5E] text-white"
+                : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
+                }`}
+            >
+              {status}
+            </button>
+          );
+        })}
       </div>
 
 
@@ -154,7 +152,7 @@ export default function BookingHistory() {
               <div className="text-sm font-semibold text-[#024B5E] mb-2">Contact</div>
 
               {/* 3 Column Grid Layout */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
                 {/* Column 1: Contact and Date */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm text-[#024B5E]">
@@ -185,9 +183,9 @@ export default function BookingHistory() {
                 </div>
 
                 {/* Column 3: Status Badge */}
-                <div className="flex justify-end items-start">
+                <div className="flex justify-start md:justify-end items-start">
                   <span
-                    className={`px-4 py-1.5 rounded-md text-sm font-medium ${getStatusColor(
+                    className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium whitespace-nowrap ${getStatusColor(
                       booking.status
                     )}`}
                   >

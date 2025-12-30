@@ -17,13 +17,13 @@ export default function SwitchProfile() {
 
       {/* Toggle Switch */}
       <div className="flex items-center justify-between mb-6 sm:mb-8">
-        <span className="text-sm sm:text-base font-medium text-gray-900">
-          Switch as a provider
+        <span className="text-sm sm:text-base font-medium text-[#024B5E]">
+          Switch as a Sitter
         </span>
         <button
           onClick={() => setIsProvider(!isProvider)}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-            isProvider ? "bg-teal-600" : "bg-gray-200"
+            isProvider ? "bg-[#024B5E]" : "bg-gray-200"
           }`}
         >
           <span

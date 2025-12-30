@@ -115,7 +115,7 @@ export default function PetProfile() {
                 </div>
                 <div>
                   <p className="text-[#024B5E] font-medium mb-1">
-                    friendly with children?
+                    Friendly with children?
                   </p>
                   <p className="text-sm text-[#024B5E]">
                     Friendly with children

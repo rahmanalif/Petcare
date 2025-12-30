@@ -29,6 +29,45 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [isSelectingStartDate, setIsSelectingStartDate] = useState(true);
+  const [selectedPets, setSelectedPets] = useState([]);
+
+  // Pet data
+  const pets = [
+    {
+      id: "bob",
+      name: "Bob",
+      breed: "Australian Shepherds",
+      image: "/Ellipse.png"
+    },
+    {
+      id: "max",
+      name: "Max",
+      breed: "Golden Retriever",
+      image: "/Ellipse.png"
+    },
+    {
+      id: "whiskers",
+      name: "Whiskers",
+      breed: "Persian Cat",
+      image: "/Ellipse.png"
+    },
+    {
+      id: "luna",
+      name: "Luna",
+      breed: "Labrador",
+      image: "/Ellipse.png"
+    }
+  ];
+
+  const addPet = (petId) => {
+    if (!selectedPets.includes(petId)) {
+      setSelectedPets([...selectedPets, petId]);
+    }
+  };
+
+  const removePet = (petId) => {
+    setSelectedPets(selectedPets.filter(id => id !== petId));
+  };
 
   if (!isOpen) return null;
 
@@ -145,7 +184,6 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
   const services = [
     { name: "Bathing/ Grooming", price: 60.0 },
-    { name: "Sitter Pick-Up and Drop-off", price: 48.0 },
     { name: "Extended Care", price: 10.0 },
     // { name: "Additional Pet Rate", price: 10.0 },
   ];
@@ -323,10 +361,70 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
             </Select>
           </div>
 
-          {/* Add your pet button */}
-          <button className="w-full border-2 border-dashed border-gray-300 rounded-lg py-3 text-[#024B5E] font-montserrat text-sm flex items-center justify-center  gap-4">
-            <span className="text-xl">+</span> Add your pet
-          </button>
+          {/* Pet Selection */}
+          <div>
+            {/* <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Pet</h3>
+            <div className="mb-3">
+              <span className="text-sm text-[#024B5E] font-medium font-montserrat">Your pets</span>
+            </div> */}
+
+            {/* Display Selected Pets */}
+            <div className="space-y-3 mb-3">
+              {selectedPets.map((petId) => {
+                const pet = pets.find(p => p.id === petId);
+                if (!pet) return null;
+                return (
+                  <div key={pet.id} className="border-2 border-[#024B5E] rounded-lg px-4 py-3 flex items-center gap-3">
+                    <img
+                      src={pet.image}
+                      alt={pet.name}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="font-semibold text-sm text-[#024B5E] font-montserrat">{pet.name}</div>
+                      <div className="text-xs text-[#024B5E] font-montserrat">{pet.breed}</div>
+                    </div>
+                    <button
+                      onClick={() => removePet(pet.id)}
+                      className="p-1 hover:bg-red-50 rounded transition-colors"
+                      aria-label="Remove pet"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6.75 3.25V3.5H9.25V3.25C9.25 2.91848 9.1183 2.60054 8.88388 2.36612C8.64946 2.1317 8.33152 2 8 2C7.66848 2 7.35054 2.1317 7.11612 2.36612C6.8817 2.60054 6.75 2.91848 6.75 3.25ZM5.75 3.5V3.25C5.75 2.65326 5.98705 2.08097 6.40901 1.65901C6.83097 1.23705 7.40326 1 8 1C8.59674 1 9.16903 1.23705 9.59099 1.65901C10.0129 2.08097 10.25 2.65326 10.25 3.25V3.5H14C14.1326 3.5 14.2598 3.55268 14.3536 3.64645C14.4473 3.74021 14.5 3.86739 14.5 4C14.5 4.13261 14.4473 4.25979 14.3536 4.35355C14.2598 4.44732 14.1326 4.5 14 4.5H13.246L12.3 12.784C12.2302 13.3941 11.9384 13.9572 11.4801 14.3659C11.0218 14.7746 10.4291 15.0003 9.815 15H6.185C5.57093 15.0003 4.97823 14.7746 4.51993 14.3659C4.06162 13.9572 3.76976 13.3941 3.7 12.784L2.754 4.5H2C1.86739 4.5 1.74021 4.44732 1.64645 4.35355C1.55268 4.25979 1.5 4.13261 1.5 4C1.5 3.86739 1.55268 3.74021 1.64645 3.64645C1.74021 3.55268 1.86739 3.5 2 3.5H5.75ZM4.694 12.67C4.73574 13.036 4.91068 13.3738 5.18546 13.619C5.46025 13.8643 5.81567 13.9999 6.184 14H9.8155C10.1838 13.9999 10.5393 13.8643 10.814 13.619C11.0888 13.3738 11.2638 13.036 11.3055 12.67L12.24 4.5H3.7605L4.694 12.67ZM6.5 6.25C6.63261 6.25 6.75979 6.30268 6.85355 6.39645C6.94732 6.49021 7 6.61739 7 6.75V11.75C7 11.8826 6.94732 12.0098 6.85355 12.1036C6.75979 12.1973 6.63261 12.25 6.5 12.25C6.36739 12.25 6.24021 12.1973 6.14645 12.1036C6.05268 12.0098 6 11.8826 6 11.75V6.75C6 6.61739 6.05268 6.49021 6.14645 6.39645C6.24021 6.30268 6.36739 6.25 6.5 6.25ZM10 6.75C10 6.61739 9.94732 6.49021 9.85355 6.39645C9.75979 6.30268 9.63261 6.25 9.5 6.25C9.36739 6.25 9.24021 6.30268 9.14645 6.39645C9.05268 6.49021 9 6.61739 9 6.75V11.75C9 11.8826 9.05268 12.0098 9.14645 12.1036C9.24021 12.1973 9.36739 12.25 9.5 12.25C9.63261 12.25 9.75979 12.1973 9.85355 12.1036C9.94732 12.0098 10 11.8826 10 11.75V6.75Z" fill="#F34F4F"/>
+                      </svg>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Add Pet Dropdown */}
+            <Select onValueChange={addPet}>
+              <SelectTrigger className="text-[#024B5E] border-2 border-dashed border-[#024B5E] rounded-lg px-17 py-4 hover:bg-[#E7F4F6] transition-colors h-auto min-h-[60px] font-montserrat">
+                <div className="flex items-center justify-center gap-2 w-full">
+                  <span className="text-xl font-medium">+</span>
+                  <span className="text-base font-medium">Add your pet</span>
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                {pets.filter(pet => !selectedPets.includes(pet.id)).map((pet) => (
+                  <SelectItem key={pet.id} value={pet.id}>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={pet.image}
+                        alt={pet.name}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                      <div>
+                        <span className="font-medium text-[#024B5E] font-montserrat">{pet.name}</span>
+                        <span className="text-[#024B5E] text-sm font-montserrat"> - {pet.breed}</span>
+                      </div>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
           {/* Calendar */}
           <div>
@@ -570,7 +668,7 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
                 <span>$60.00</span>
               </div>
               <div className="flex justify-between font-montserrat">
-                <span>Sitter Pick-Up and Drop-off</span>
+                <span>Extended Care</span>
                 <span>$48.00</span>
               </div>
               {/* <div className="flex justify-between font-montserrat">
