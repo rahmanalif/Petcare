@@ -116,21 +116,21 @@ export default function NewHeroSection() {
       </div>
 
       {/* Hero Background Section */}
-      <div className="relative w-full  pb-32 md:pb-40 lg:-mt-40 xl:-mt-20 ">
+      <div className="relative w-full  pb-32 md:pb-40 lg:-mt-40 xl:-mt-30 ">
         {/* Mobile/Tablet Layout - Stack vertically */}
         <div className="block lg:hidden relative">
           {/* Images Row - Top */}
           <div className="flex justify-between items-start pt-4 sm:pt-6">
-            <div className="w-[40%] sm:w-[35%]">
+            <div className="w-[40%] sm:w-[25%]">
               <LeftImage />
             </div>
-            <div className="w-[40%] sm:w-[35%]">
+            <div className="w-[40%] sm:w-[25%]">
               <RightImage />
             </div>
           </div>
 
           {/* Text Content - Bottom */}
-          <div className="px-4 pb-12 sm:pb-16 pt-6 sm:pt-8 text-center relative z-10 md:-top-10">
+          <div className="px-4 pb-12 sm:pb-16 pt-6 sm:pt-8 text-center relative z-10 md:-top-25 ">
             <h1 className="font-bakso text-white mb-4">
               <span className="block text-3xl sm:text-4xl md:text-4xl  leading-tight">
                 Trusted Pet Care,
@@ -149,7 +149,7 @@ export default function NewHeroSection() {
         {/* Desktop Layout - Side by side */}
         <div className="hidden lg:flex relative min-h-[700px] items-center justify-center py-16 lg:py-20">
           {/* Left Image */}
-          <div className="absolute left-0 top-0 w-[25%] h-full flex items-start z-10">
+          <div className="absolute left-0 top-0 sm:w-[20%] xl:w-[23%] 2xl:w-[22%] h-full flex items-start z-10">
             <LeftImage />
           </div>
 
@@ -170,15 +170,15 @@ export default function NewHeroSection() {
           </div>
 
           {/* Right Image */}
-          <div className="absolute right-0 top-0 w-[23%] h-full flex items-start z-10">
+          <div className="absolute right-0 top-0 sm:w-[18%] xl:w-[20%] 2xl:w-[20%] h-full flex items-start z-10">
             <RightImage />
           </div>
         </div>
       </div>
 
       {/* Booking Card - Overlapping Section */}
-      <div id="booking-section" className="relative z-20 -mt-24 md:-mt-54 lg:-mt-72 xl:-mt-54 pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 max-w-7xl mx-auto">
+      <div id="booking-section" className="relative z-20 -mt-24 md:-mt-110 md:py-30  lg:-mt-110 xl:-mt-118 2xl:-mt-120 xl:mr- 2xl:mr-5 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 md:max-w-2xl lg:max-w-3xl xl:max-w-5xl  mx-auto">
           {/* Service Tabs */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
             {services.map((service) => (
@@ -376,11 +376,11 @@ export default function NewHeroSection() {
           </div>
         </div>
         {/* Dog Man Image - Below the card in teal background */}
-      <div className="absolute top-2 left-75 -z-10  pb-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
+      {/* <div className="absolute top-2 left-75 -z-10  pb-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
         <div className="  w-[300px] sm:w-[350px] md:w-[400px] lg:w-full xl:w-[11px]">
           <DogMan />
         </div>
-      </div>
+      </div> */}
       </div>
 
       

@@ -235,13 +235,13 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
   return (
     <>
-      <div className="bg-white rounded-lg w-full">
+      <div className="bg-white rounded-lg w-full max-w-2xl mx-auto">
         {/* Header */}
 
-        <div className="p-4 space-y-4">
+        <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
           {/* Profile Section */}
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gray-300">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-300">
               <img
                 src="/Ellipse 52.png"
                 alt="Profile"
@@ -249,8 +249,8 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
               />
             </div>
             <div>
-              <h3 className="font-semibold text-[#024B5E]">Seam Rahman</h3>
-              <div className="flex items-center gap-1 text-sm text-[#024B5E]">
+              <h3 className="font-semibold text-sm sm:text-base text-[#024B5E]">Seam Rahman</h3>
+              <div className="flex items-center gap-1 text-xs sm:text-sm text-[#024B5E]">
                 <MapPin className="w-3 h-3" />
                 <span className="">New York, NY</span>
               </div>
@@ -268,9 +268,9 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
           </div> */}
 
           {/* Stats */}
-          <div className="space-y-2 text-sm">
+          <div className="space-y-2 text-xs sm:text-sm">
             <div className="flex items-center gap-2 text-[#024B5E]">
-              <Star className="w-4 h-4 fill-current text-[#024B5E]" />
+              <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current text-[#024B5E]" />
               <span className="">5.0 (55 reviews)</span>
             </div>
             <div className="flex items-center gap-2 text-[#024B5E]">
@@ -290,13 +290,14 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
               </svg>
               <span className="text-[#024B5E]">Repeat pet owners</span>
             </div>
-            <div className="flex items-center bg-[#FCF0D994] gap-2 text-sm text-[#E26A15]">
+            <div className="flex items-center bg-[#FCF0D994] gap-2 text-xs sm:text-sm text-[#E26A15] p-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
+                className="sm:w-6 sm:h-6"
               >
                 <path
                   d="M12 22.75C6.07 22.75 1.25 17.93 1.25 12C1.25 6.07 6.07 1.25 12 1.25C17.93 1.25 22.75 6.07 22.75 12C22.75 17.93 17.93 22.75 12 22.75ZM12 2.75C6.9 2.75 2.75 6.9 2.75 12C2.75 17.1 6.9 21.25 12 21.25C17.1 21.25 21.25 17.1 21.25 12C21.25 6.9 17.1 2.75 12 2.75Z"
@@ -311,8 +312,8 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
             </div>
           </div>
 
-          <Badge className="bg-[#E7F4F6] text-[#035F75] mb-2 font-montserrat text-xs leading-relaxed whitespace-normal">
-            <div className="px-2">
+          <Badge className="bg-[#E7F4F6] text-[#035F75] mb-2 font-montserrat text-[10px] sm:text-xs leading-relaxed whitespace-normal">
+            <div className="px-1 sm:px-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -336,13 +337,13 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
           {/* Looking For Section */}
           <div>
-            <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Looking For</h3>
+            <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Looking For</h3>
             <Select
               value={lookingFor}
               onValueChange={handleServiceChange}
               className="font-montserrat"
             >
-              <SelectTrigger className="w-full flex items-center justify-between px-4 py-3 border rounded-lg">
+              <SelectTrigger className="w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border rounded-lg text-sm">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -374,15 +375,15 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
                 const pet = pets.find(p => p.id === petId);
                 if (!pet) return null;
                 return (
-                  <div key={pet.id} className="border-2 border-[#024B5E] rounded-lg px-4 py-3 flex items-center gap-3">
+                  <div key={pet.id} className="border-2 border-[#024B5E] rounded-lg px-3 sm:px-4 py-2 sm:py-3 flex items-center gap-2 sm:gap-3">
                     <img
                       src={pet.image}
                       alt={pet.name}
-                      className="w-12 h-12 rounded-full object-cover"
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                     />
                     <div className="flex-1">
-                      <div className="font-semibold text-sm text-[#024B5E] font-montserrat">{pet.name}</div>
-                      <div className="text-xs text-[#024B5E] font-montserrat">{pet.breed}</div>
+                      <div className="font-semibold text-xs sm:text-sm text-[#024B5E] font-montserrat">{pet.name}</div>
+                      <div className="text-[10px] sm:text-xs text-[#024B5E] font-montserrat">{pet.breed}</div>
                     </div>
                     <button
                       onClick={() => removePet(pet.id)}
@@ -400,10 +401,10 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
             {/* Add Pet Dropdown */}
             <Select onValueChange={addPet}>
-              <SelectTrigger className="text-[#024B5E] border-2 border-dashed border-[#024B5E] rounded-lg px-17 py-4 hover:bg-[#E7F4F6] transition-colors h-auto min-h-[60px] font-montserrat">
+              <SelectTrigger className="text-[#024B5E] border-2 border-dashed border-[#024B5E] rounded-lg px-4 sm:px-17 py-3 sm:py-4 hover:bg-[#E7F4F6] transition-colors h-auto min-h-[50px] sm:min-h-[60px] font-montserrat">
                 <div className="flex items-center justify-center gap-2 w-full">
-                  <span className="text-xl font-medium">+</span>
-                  <span className="text-base font-medium">Add your pet</span>
+                  <span className="text-lg sm:text-xl font-medium">+</span>
+                  <span className="text-sm sm:text-base font-medium">Add your pet</span>
                 </div>
               </SelectTrigger>
               <SelectContent>
@@ -428,33 +429,33 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
           {/* Calendar */}
           <div>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2 sm:mb-3">
               <Button
                 variant="ghost"
                 size="sm"
-                className="font-montserrat"
+                className="font-montserrat h-8 w-8 sm:h-10 sm:w-10 p-0"
                 onClick={goToPreviousMonth}
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
-              <span className="font-semibold font-montserrat text-sm">
+              <span className="font-semibold font-montserrat text-xs sm:text-sm">
                 {monthNames[currentMonth]} {currentYear}
               </span>
               <Button
                 variant="ghost"
                 size="sm"
-                className="font-montserrat"
+                className="font-montserrat h-8 w-8 sm:h-10 sm:w-10 p-0"
                 onClick={goToNextMonth}
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
             </div>
 
-            <div className="grid grid-cols-7 gap-1">
+            <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
                 <div
                   key={day}
-                  className="text-center text-xs font-semibold text-[#024B5E] py-1 font-montserrat"
+                  className="text-center text-[10px] sm:text-xs font-semibold text-[#024B5E] py-0.5 sm:py-1 font-montserrat"
                 >
                   {day}
                 </div>
@@ -475,7 +476,7 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
                     key={index}
                     onClick={() => handleDateClick(dayInfo)}
                     className={`
-                      aspect-square flex items-center justify-center text-sm rounded font-montserrat
+                      aspect-square flex items-center justify-center text-xs sm:text-sm rounded font-montserrat
                       ${!dayInfo.isCurrentMonth
                         ? "text-gray-300"
                         : "text-[#024B5E]"
@@ -504,70 +505,70 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
           </div>
 
           <div>
-            <span className="font-semibold text-black font-montserrat">
+            <span className="font-semibold text-black font-montserrat text-sm sm:text-base">
               Schedule
             </span>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="border rounded-lg p-4 text-xs">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <div className="border rounded-lg p-2 sm:p-4 text-[10px] sm:text-xs">
                 Specific dates
               </div>
-              <div className="border rounded-lg p-4 text-xs">
+              <div className="border rounded-lg p-2 sm:p-4 text-[10px] sm:text-xs">
                 Repeat Weekly
               </div>
             </div>
           </div>
 
           {/* Start/End Date and Time */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
             <div>
-                <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
+                <label className="text-xs sm:text-sm font-montserrat text-[#024B5E] mb-1 block">
                 Start date
               </label>
               <input
                 type="text"
                 placeholder="Select"
-                className="w-full px-3 py-2 border rounded-lg text-sm font-montserrat"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
                 readOnly
               />
             </div>
             <div>
-              <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
+              <label className="text-xs sm:text-sm font-montserrat text-[#024B5E] mb-1 block">
                 End date
               </label>
               <input
                 type="text"
                 placeholder="Select"
-                className="w-full px-3 py-2 border rounded-lg text-sm font-montserrat"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
                 readOnly
               />
             </div>
             <div>
-                <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
+                <label className="text-xs sm:text-sm font-montserrat text-[#024B5E] mb-1 block">
                 Start time
               </label>
               <input
                 type="time"
                 defaultValue="10:00:00"
-                className="w-full px-3 py-2 border rounded-lg text-sm font-montserrat"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
               />
             </div>
             <div>
-              <label className="text-sm font-montserrat text-[#024B5E] mb-1 block">
+              <label className="text-xs sm:text-sm font-montserrat text-[#024B5E] mb-1 block">
                 End time
               </label>
               <input
                 type="time"
                 defaultValue="10:00:00"
-                className="w-full px-3 py-2 border rounded-lg text-sm font-montserrat"
+                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
               />
             </div>
           </div>
 
           {/* Contact Section */}
-          <div className="border-2 rounded-lg p-4">
-            <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Contact</h3>
+          <div className="border-2 rounded-lg p-3 sm:p-4">
+            <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Contact</h3>
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm border-2 rounded-lg p-2 boarder-[#292D32] font-montserrat text-[#024B5E]">
+              <div className="flex items-center gap-2 text-xs sm:text-sm border-2 rounded-lg p-2 boarder-[#292D32] font-montserrat text-[#024B5E]">
                 <svg
                   width="24"
                   height="24"
@@ -607,13 +608,14 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
                 <span>Address</span>
               </div>
-              <div className="flex items-center gap-2 text-sm border-2 rounded-lg p-2 font-montserrat text-[#024B5E]">
+              <div className="flex items-center gap-2 text-xs sm:text-sm border-2 rounded-lg p-2 font-montserrat text-[#024B5E]">
                 <svg
-                  width="22"
-                  height="22"
+                  width="18"
+                  height="18"
                   viewBox="0 0 22 22"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  className="sm:w-[22px] sm:h-[22px]"
                 >
                   <path
                     d="M2.52762 10.6924C1.5796 9.03931 1.12185 7.68948 0.845837 6.32121C0.437622 4.29758 1.37181 2.32081 2.91938 1.05947C3.57345 0.526383 4.32323 0.708518 4.71 1.4024L5.58318 2.96891C6.27529 4.21057 6.62134 4.83139 6.5527 5.48959C6.48407 6.14779 6.01737 6.68386 5.08397 7.75601L2.52762 10.6924ZM2.52762 10.6924C4.44651 14.0383 7.45784 17.0513 10.8076 18.9724M10.8076 18.9724C12.4607 19.9204 13.8105 20.3782 15.1788 20.6542C17.2024 21.0624 19.1792 20.1282 20.4405 18.5806C20.9736 17.9266 20.7915 17.1768 20.0976 16.79L18.5311 15.9168C17.2894 15.2247 16.6686 14.8787 16.0104 14.9473C15.3522 15.0159 14.8161 15.4826 13.744 16.416L10.8076 18.9724Z"
@@ -630,14 +632,14 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
           {/* Service Section */}
           <div>
-            <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Service</h3>
+            <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Service</h3>
             <div className="space-y-2">
               {services.map((service, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between py-2"
                 >
-                  <span className="text-sm font-montserrat text-[#024B5E]">
+                  <span className="text-xs sm:text-sm font-montserrat text-[#024B5E]">
                     {service.name}
                   </span>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -651,18 +653,18 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
 
           {/* Note Section */}
           <div>
-              <h3 className="font-semibold mb-2 text-[#024B5E] font-montserrat">Note</h3>
+              <h3 className="font-semibold mb-2 text-sm sm:text-base text-[#024B5E] font-montserrat">Note</h3>
               <textarea
                 placeholder="Please make sure all windows are secure locked after cleaning. Kindly use eco-friendly cleaning products. Thank you!"
-                className="w-full px-3 py-2 border rounded-lg border-[#024B5E] text-sm font-montserrat resize-none text-[#024B5E]"
+                className="w-full px-2 sm:px-3 py-2 border rounded-lg border-[#024B5E] text-xs sm:text-sm font-montserrat resize-none text-[#024B5E]"
               rows="4"
             />
           </div>
 
           {/* Pricing Section */}
           <div>
-              <h3 className="font-semibold mb-2 font-montserrat text-[#024B5E]">Pricing</h3>
-              <div className="space-y-1 text-sm text-[#024B5E]">
+              <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Pricing</h3>
+              <div className="space-y-1 text-xs sm:text-sm text-[#024B5E]">
               <div className="flex justify-between font-montserrat">
                 <span>Bathing/ Grooming</span>
                 <span>$60.00</span>
@@ -683,7 +685,7 @@ export default function BookingModalWalking({ isOpen, onClose, providerData }) {
           </div>
 
           {/* Book Service Button */}
-          <Button className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-montserrat py-6">
+          <Button className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-montserrat py-4 sm:py-6 text-sm sm:text-base">
             Book Service
           </Button>
         </div>
