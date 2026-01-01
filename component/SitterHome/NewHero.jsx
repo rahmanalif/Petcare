@@ -35,19 +35,19 @@ export default function NewHero() {
     return (
         <div className="relative bg-[#F5F3EF] lg:h-screen overflow-hidden">
             {/* Top Right Orange Background - Responsive sizing */}
-            <div className="absolute top-0 right-0 w-[250px] h-[300px] sm:w-[350px] sm:h-[400px] md:w-[450px] md:h-[500px] lg:w-[500px] lg:h-[650px] xl:w-[600px] xl:h-[750px] 2xl:w-[700px] 2xl:h-[850px] bg-[#FE6C5D]"></div>
+            <div className="absolute top-0 right-0 w-[250px] h-[300px] sm:w-[350px] sm:h-[400px] md:w-[450px] md:h-[500px] lg:w-[500px] lg:h-[700px] xl:w-[600px] xl:h-[750px] 2xl:w-[700px] 2xl:h-[850px] bg-[#FE6C5D]"></div>
 
             {/* Bottom Right Paw - Hidden on small screens, visible on larger */}
-            <div className="hidden 2xl:block absolute bottom-10 right-16 w-28 h-28 opacity-60">
+            {/* <div className="hidden 2xl:block absolute bottom-18 right-16 w-28 h-28 opacity-60">
                 <PawWhiteImage className="w-full h-full" />
-            </div>
+            </div> */}
 
             {/* Container for content - Proper flex layout */}
             <div className="relative z-10 container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 h-full lg:h-screen">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between h-full py-6 sm:py-8 md:py-10 lg:py-12 xl:py-16 gap-4 sm:gap-6 md:gap-8 lg:gap-8">
 
                     {/* Right Image - Shown first on mobile */}
-                    <div className="w-full lg:w-[48%] xl:w-[50%] flex justify-center lg:justify-end items-start order-1 lg:order-2 relative z-20">
+                    <div className="w-full lg:w-[48%] xl:w-[35%] xl:right-20 flex justify-center lg:justify-end items-start order-1 lg:order-2 relative z-20">
                         <HeroImage className="w-full max-w-40 sm:max-w-[220px] md:max-w-[300px] lg:max-w-[350px] xl:max-w-[450px] 2xl:max-w-[550px] h-auto object-contain" />
                     </div>
 
