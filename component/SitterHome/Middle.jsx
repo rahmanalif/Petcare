@@ -39,7 +39,7 @@ export default function HowItWorks() {
           <div className="relative h-[300px] md:h-[400px] w-full">
 
             <Image
-              src="/kutta.png"
+              src="/Kutta.png"
               alt="Australian Shepherd dog"
               fill
               className="object-cover"
