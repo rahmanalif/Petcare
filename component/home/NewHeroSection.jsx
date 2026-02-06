@@ -149,7 +149,7 @@ export default function NewHeroSection() {
         {/* Desktop Layout - Side by side */}
         <div className="hidden lg:flex relative min-h-[700px] items-center justify-center py-16 lg:py-20 hero-1280-new-desktop">
           {/* Left Image */}
-          <div className="absolute left-0 top-0 sm:w-[20%] xl:w-[23%] 2xl:w-[22%] h-full flex items-start z-10">
+          <div className="absolute left-0 top-0 sm:w-[20%] xl:w-[23%] 2xl:w-[22%] h-full flex items-start z-10 hero-1280-new-left">
             <LeftImage />
           </div>
 
@@ -170,7 +170,7 @@ export default function NewHeroSection() {
           </div>
 
           {/* Right Image */}
-          <div className="absolute right-0 top-0 sm:w-[18%] xl:w-[20%] 2xl:w-[20%] h-full flex items-start z-10">
+          <div className="absolute right-0 top-0 sm:w-[18%] xl:w-[20%] 2xl:w-[20%] h-full flex items-start z-10 hero-1280-new-right">
             <RightImage />
           </div>
         </div>
