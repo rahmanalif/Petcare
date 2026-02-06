@@ -130,27 +130,11 @@ export default function ServicesSection() {
               {/* Header */}
               <div className="flex items-center gap-2 md:gap-3 mb-4">
                 <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center">
-                  <svg
-                    width="48"
-                    height="48"
-                    viewBox="0 0 48 48"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M23.9964 4.00024C17.9809 4.00024 14.0804 8.03823 9.46743 9.51005C7.59177 10.1085 6.65394 10.4077 6.2744 10.8295C5.89486 11.2514 5.78372 11.8677 5.56144 13.1005C3.18287 26.2922 8.3818 38.4882 20.7806 43.2352C22.1128 43.7452 22.7789 44.0003 24.003 44.0002C25.2271 44.0002 25.8931 43.7452 27.2252 43.2352C39.6232 38.4881 44.8172 26.2922 42.4379 13.1005C42.2156 11.8675 42.1044 11.251 41.7248 10.8292C41.3451 10.4074 40.4074 10.1083 38.5318 9.51022C33.9171 8.03853 30.0122 4.00024 23.9964 4.00024Z"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M24 14.0002L24 18.0002"
-                      stroke="#035F75"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                    />
-                  </svg>
+                  <img
+                    src="/Frame 2147239658.png"
+                    alt="Safety and trust"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <h3
                   className="text-xl md:text-2xl text-[#024B5E] font-bakso"

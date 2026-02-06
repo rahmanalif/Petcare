@@ -56,7 +56,7 @@ const DogWalkingIcon = ({className}) => (
 
 export default function Services() {
     return (
-        <div className="relative py-46 px-8 md:px-16 lg:px-24 overflow-hidden " style={{ backgroundColor: '#012e3a' }}>
+        <div id="services" className="relative py-46 px-8 md:px-16 lg:px-24 overflow-hidden " style={{ backgroundColor: '#012e3a' }}>
             {/* Background Image */}
             <div className="absolute inset-0 z-0">
                 <BgImage />
@@ -102,7 +102,7 @@ export default function Services() {
                             <DogBoardingIcon />
                         </div>
                         <div className="text-white">
-                            <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, cursive' }}>
+                            <h3 className="text-2xl font-bold mb-2 font-bakso" >
                                 DOG BOARDING
                             </h3>
                             <p className="text-sm md:text-base leading-relaxed">
@@ -117,7 +117,7 @@ export default function Services() {
                             <DogDayCareIcon />
                         </div>
                         <div className="text-white">
-                            <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, cursive' }}>
+                            <h3 className="text-2xl font-bold mb-2 font-bakso">
                                 DOGGY DAY CARE
                             </h3>
                             <p className="text-sm md:text-base leading-relaxed">
@@ -132,7 +132,7 @@ export default function Services() {
                             <DogWalkingIcon />
                         </div>
                         <div className="text-white">
-                            <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: 'Fredoka One, cursive' }}>
+                            <h3 className="text-2xl font-bold mb-2 font-bakso">
                                 DOG WALKING
                             </h3>
                             <p className="text-sm md:text-base leading-relaxed">

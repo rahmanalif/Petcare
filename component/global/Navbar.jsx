@@ -40,7 +40,7 @@ export default function Navbar() {
             <Link href="/" className="text-[#024B5E] hover:text-[#022b35] transition">
               Home
             </Link>
-            <a href="#services" className="text-[#024B5E] hover:text-[#022b35] transition">
+            <a href="/#services" className="text-[#024B5E] hover:text-[#022b35] transition">
               Services
             </a>
             <a href="/sitterhome" className="text-[#024B5E] hover:text-[#022b35] transition">
@@ -71,11 +71,18 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <Link href="/login" className="hidden md:block">
-              <button className="bg-coral-500 bg-red-400 hover:bg-red-500 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg">
-                Sign Up
-              </button>
-            </Link>
+            <div className="hidden md:flex items-center gap-3">
+              <Link href="/login">
+                <button className="border border-[#024B5E] text-[#024B5E] hover:bg-[#024B5E] hover:text-white px-5 py-2.5 rounded-full font-medium transition-all">
+                  Sign In
+                </button>
+              </Link>
+              <Link href="/signup">
+                <button className="bg-coral-500 bg-red-400 hover:bg-red-500 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg">
+                  Sign Up
+                </button>
+              </Link>
+            </div>
           )}
 
           {/* Mobile Menu Button */}
@@ -124,11 +131,18 @@ export default function Navbar() {
               FAQ's
             </a>
             {!isAuthenticated && (
-              <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                <button className="w-full bg-red-400 hover:bg-red-500 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg">
-                  Sign Up
-                </button>
-              </Link>
+              <>
+                <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                  <button className="w-full border border-[#024B5E] text-[#024B5E] hover:bg-[#024B5E] hover:text-white px-6 py-2.5 rounded-full font-medium transition-all">
+                    Sign In
+                  </button>
+                </Link>
+                <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                  <button className="w-full bg-red-400 hover:bg-red-500 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg">
+                    Sign Up
+                  </button>
+                </Link>
+              </>
             )}
           </div>
         </div>

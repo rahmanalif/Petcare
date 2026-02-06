@@ -217,9 +217,9 @@ export default function HeroSection() {
         <div
           className="w-full h-[600px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-size-[100%_auto] bg-bottom md:bg-cover md:bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl bg-[url('/MobileIMAGE%20.png')] md:bg-[url('/IMAGE%20(2).png')]"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 md:pt-12 lg:pt-16 pb-8 sm:pb-12 lg:pb-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 md:pt-6 lg:pt-4 pb-8 sm:pb-12 lg:pb-16 hero-1280-up-outer">
             {/* Left Content */}
-            <div className="max-w-xl py-8 sm:py-12 md:py-16 lg:py-24">
+            <div className="max-w-xl py-6 sm:py-10 md:py-12 lg:pt-6 lg:pb-20 hero-1280-up-inner">
               <h1 className="mb-4 sm:mb-6 font-bakso">
                 <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
                   trusted Pet Care,

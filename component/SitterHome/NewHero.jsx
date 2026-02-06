@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const HeroImage = ({ className }) => (
   <img src="/Hero01.png" className={className} alt="heroImage" />
@@ -129,7 +130,7 @@ export default function UpdatedHeroSection() {
 
       {/* Desktop Section (md and up) */}
       <div className="hidden md:flex bg-[#F8F4EF] overflow-hidden">
-        <div className="relative xl:py-50 xl:px-82 2xl:py-50 2xl:px-80 lg:py-52 lg:px-8 md:py-52 md:px-8 ">
+        <div className="relative xl:py-50 xl:px-82 2xl:py-50 2xl:px-80 lg:py-52 lg:px-8 md:py-52 md:px-8 hero-1280-sitter-new">
           <div className="font-bakso text-[#024B5E] md:text-[36px] lg:text-[26px] xl:text-[36px] 2xl:text-[66px]  ">
               GET PAID TO HANG <br />
               OUT WITH PETS
@@ -137,7 +138,7 @@ export default function UpdatedHeroSection() {
 
           <div className="font-montserrat text-justify text-[#024B5E] lg:text-[10px] xl:text-[16px] 2xl:text-[16px] font-medium 2xl:py-8 xl:py-8 lg:py-4 ">
               <p>Turn your free time into income doing something that feels good. Join the</p>
-              <p>Wuffoos community of trusted pet care. Set youravailability, connect with</p>
+              <p>Wuffoos community of trusted pet care. Set your availability, connect with</p>
               <p>local pet parents, and earn money taking care of pets you'll love. Do what</p>
               <p> you enjoy. Get paidfor it.</p>
 
@@ -145,39 +146,41 @@ export default function UpdatedHeroSection() {
           <div className="absolute top-20 left-220">
             <PawGreenImage />
           </div>
-          <button className="flex items-center justify-center bg-[#FE6C5D] rounded-2xl gap-2 w-50 h-15 ">
-            <div className="font-bakso text-white text-[18px]">Get started</div>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <g clip-path="url(#clip0_5012_11309)">
-                  <path
-                    d="M20.3635 11.2929C20.5509 11.4805 20.6562 11.7348 20.6562 11.9999C20.6562 12.2651 20.5509 12.5194 20.3635 12.7069L14.7065 18.3639C14.5179 18.5461 14.2653 18.6469 14.0031 18.6446C13.7409 18.6423 13.4901 18.5372 13.3046 18.3518C13.1192 18.1663 13.0141 17.9155 13.0118 17.6533C13.0095 17.3911 13.1103 17.1385 13.2925 16.9499L17.2425 12.9999H3.99946C3.73425 12.9999 3.47989 12.8946 3.29236 12.707C3.10482 12.5195 2.99946 12.2652 2.99946 11.9999C2.99946 11.7347 3.10482 11.4804 3.29236 11.2928C3.47989 11.1053 3.73425 10.9999 3.99946 10.9999H17.2425L13.2925 7.04994C13.1103 6.86133 13.0095 6.60873 13.0118 6.34653C13.0141 6.08434 13.1192 5.83353 13.3046 5.64812C13.4901 5.46271 13.7409 5.35754 14.0031 5.35526C14.2653 5.35298 14.5179 5.45378 14.7065 5.63594L20.3635 11.2929Z"
-                    fill="white"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_5012_11309">
-                    <rect
-                      width="24"
-                      height="24"
+          <Link href="/login">
+            <button className="flex items-center justify-center bg-[#FE6C5D] rounded-2xl gap-2 w-50 h-15 ">
+              <div className="font-montserrat font-bold text-white text-[18px]">Get started</div>
+              <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <g clip-path="url(#clip0_5012_11309)">
+                    <path
+                      d="M20.3635 11.2929C20.5509 11.4805 20.6562 11.7348 20.6562 11.9999C20.6562 12.2651 20.5509 12.5194 20.3635 12.7069L14.7065 18.3639C14.5179 18.5461 14.2653 18.6469 14.0031 18.6446C13.7409 18.6423 13.4901 18.5372 13.3046 18.3518C13.1192 18.1663 13.0141 17.9155 13.0118 17.6533C13.0095 17.3911 13.1103 17.1385 13.2925 16.9499L17.2425 12.9999H3.99946C3.73425 12.9999 3.47989 12.8946 3.29236 12.707C3.10482 12.5195 2.99946 12.2652 2.99946 11.9999C2.99946 11.7347 3.10482 11.4804 3.29236 11.2928C3.47989 11.1053 3.73425 10.9999 3.99946 10.9999H17.2425L13.2925 7.04994C13.1103 6.86133 13.0095 6.60873 13.0118 6.34653C13.0141 6.08434 13.1192 5.83353 13.3046 5.64812C13.4901 5.46271 13.7409 5.35754 14.0031 5.35526C14.2653 5.35298 14.5179 5.45378 14.7065 5.63594L20.3635 11.2929Z"
                       fill="white"
-                      transform="matrix(-1 0 0 1 24 0)"
                     />
-                  </clipPath>
-                </defs>
-              </svg>
-            </div>
-          </button>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_5012_11309">
+                      <rect
+                        width="24"
+                        height="24"
+                        fill="white"
+                        transform="matrix(-1 0 0 1 24 0)"
+                      />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </div>
+            </button>
+          </Link>
         </div>
 
         <div className="relative bg-[#FE6C5D] xl:w-[700px] xl:h-[750px]  2xl:w-[550px] 2xl:h-[750px] lg:w-[550px] lg:h-[750px] md:w-[400px] md:h-[650px] ">
-          <HeroImage className="absolute md:w-[252px] md:h-[369px] lg:w-[452px] lg:h-[569px] xl:w-[452px] xl:h-[569px] 2xl:w-[452px] 2xl:h-[569px] 2xl:-left-40 xl:-left-40 bottom-26 lg:left-10 md:left-5 " />
+          <HeroImage className="absolute md:w-[252px] md:h-[369px] lg:w-[452px] lg:h-[569px] xl:w-[452px] xl:h-[469px] 2xl:w-[452px] 2xl:h-[569px] 2xl:-left-40 xl:-left-40 xl:top-20 bottom-26 lg:left-10 md:left-5 " />
           <div className="absolute top-168 left-90">
             <PawWhiteImage />
           </div>

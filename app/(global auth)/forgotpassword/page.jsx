@@ -72,7 +72,7 @@ export default function WuffoosRecovery() {
       {/* Right Panel - Logo */}
       <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-50 to-gray-100 items-center justify-center p-8">
         <div className="max-w-lg">
-          < img src = "/wuffoos.png" />
+          < img src = "/wuffoosFinal.png" />
         </div>
       </div>
     </div>

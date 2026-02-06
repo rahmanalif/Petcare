@@ -196,3 +196,42 @@ html {
     outline: none;
   }
 }
+
+@media (min-width: 1280px) and (max-width: 1280px) and (max-height: 900px) {
+  .hero-1280-up-outer {
+    padding-top: 0;
+  }
+
+  .hero-1280-up-inner {
+    padding-top: 0;
+  }
+
+  .hero-1280-new-outer {
+    padding-top: 0;
+  }
+
+  .hero-1280-new-desktop {
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: 620px;
+  }
+
+  .hero-1280-new-center {
+    margin-top: -3rem;
+  }
+
+  .hero-1280-sitter-text {
+    margin-top: -2rem;
+    margin-left: 8rem;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    justify-content: start;
+    align-items: start;
+  }
+
+  .hero-1280-sitter-new {
+    margin-top: 2rem;
+    margin-left: -2rem;
+
+  }
+}

@@ -12,6 +12,8 @@ import {
 import { Map, MapTileLayer, MapMarker } from "@/components/ui/map";
 import Portfolio from "../Portfolio";
 import BookingModal from "../Booking/BookingServiceBoarding";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const BoardingIcon = ({ className = "" }) => (
   <img
@@ -30,6 +32,8 @@ const WalkingIcon = ({ className }) => (
 );
 
 export default function BoardingProfile({ sitterName = "Seam Rahman" }) {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const router = useRouter();
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState(null);
@@ -312,7 +316,13 @@ export default function BoardingProfile({ sitterName = "Seam Rahman" }) {
 
                   <Button
                     className="w-full bg-[#035F75] hover:bg-[#024a5c] text-white mb-3"
-                    onClick={() => setShowBooking(true)}
+                    onClick={() => {
+                      if (!isAuthenticated) {
+                        router.push("/login");
+                        return;
+                      }
+                      setShowBooking(true);
+                    }}
                   >
                     Book Service
                   </Button>

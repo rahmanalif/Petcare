@@ -116,7 +116,7 @@ export default function NewHeroSection() {
       </div>
 
       {/* Hero Background Section */}
-      <div className="relative w-full  pb-32 md:pb-40 lg:-mt-40 xl:-mt-30 ">
+      <div className="relative w-full pb-32 md:pb-40 lg:-mt-40 xl:-mt-30 hero-1280-new-outer">
         {/* Mobile/Tablet Layout - Stack vertically */}
         <div className="block lg:hidden relative">
           {/* Images Row - Top */}
@@ -147,19 +147,19 @@ export default function NewHeroSection() {
         </div>
 
         {/* Desktop Layout - Side by side */}
-        <div className="hidden lg:flex relative min-h-[700px] items-center justify-center py-16 lg:py-20">
+        <div className="hidden lg:flex relative min-h-[700px] items-center justify-center py-16 lg:py-20 hero-1280-new-desktop">
           {/* Left Image */}
           <div className="absolute left-0 top-0 sm:w-[20%] xl:w-[23%] 2xl:w-[22%] h-full flex items-start z-10">
             <LeftImage />
           </div>
 
           {/* Center Content */}
-          <div className="relative z-20 flex flex-col items-center justify-center px-4 text-center max-w-4xl mx-auto">
+          <div className="relative z-20 flex flex-col items-center justify-center px-4 text-center max-w-4xl mx-auto hero-1280-new-center">
             <h1 className="font-bakso text-white mb-4">
-              <span className="block text-3xl lg:text-4xl xl:text-6xl leading-tight">
+              <span className="block text-3xl lg:text-4xl xl:text-5xl leading-tight">
                 Trusted Pet Care,
               </span>
-              <span className="block text-3xl lg:text-4xl xl:text-6xl leading-tight">
+              <span className="block text-3xl lg:text-4xl xl:text-5xl leading-tight">
                 Whenever You Need It.
               </span>
             </h1>

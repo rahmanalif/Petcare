@@ -92,6 +92,7 @@ export default function WuffoosRegister() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [acceptPrivacy, setAcceptPrivacy] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('english');
   const [userRole, setUserRole] = useState('pet_owner'); // Default to pet_owner
   const [formData, setFormData] = useState({
@@ -109,12 +110,12 @@ export default function WuffoosRegister() {
   }, [searchParams]);
 
   const handleSubmit = async () => {
-    if (!acceptTerms) {
-      alert("Please accept the terms and conditions");
+    if (!acceptTerms || !acceptPrivacy) {
+      alert("Please accept the terms and conditions and privacy policy");
       return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
@@ -323,7 +324,25 @@ export default function WuffoosRegister() {
                   className="mt-1 w-4 h-4 rounded border-white/30 bg-transparent accent-[#FE6C5D]"
                 />
                 <label htmlFor="terms" className="text-white/80 text-sm">
-                  Allow Terms & condition and Privacy Policy
+                  <Link href="/terms" className="text-white underline hover:text-white/90">
+                    Terms & condition
+                  </Link>
+                </label>
+              </div>
+
+              {/* Privacy Policy Checkbox */}
+              <div className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id="privacy"
+                  checked={acceptPrivacy}
+                  onChange={(e) => setAcceptPrivacy(e.target.checked)}
+                  className="mt-1 w-4 h-4 rounded border-white/30 bg-transparent accent-[#FE6C5D]"
+                />
+                <label htmlFor="privacy" className="text-white/80 text-sm">
+                  <Link href="/privacy" className="text-white underline hover:text-white/90">
+                    Privacy Policy
+                  </Link>{" "}
                 </label>
               </div>
 
@@ -399,7 +418,7 @@ export default function WuffoosRegister() {
         {/* Right Panel - Logo */}
         <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-50 to-gray-100 items-center justify-center p-8">
           <div className="max-w-lg">
-            < img src = "/wuffoos.png" />
+            < img src = "/wuffoosFinal.png" />
           </div>
         </div>
       </div>

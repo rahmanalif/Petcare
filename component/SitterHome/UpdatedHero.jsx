@@ -78,7 +78,7 @@ export default function UpdatedHeroSection() {
     <div className="bg-[#F8F4EF] lg:flex justify-between  xl:h-screen  overflow-hidden">
       
 
-      <div className="font-bakso grid lg:items-center lg:justify-center lg:h-[700px] text-[#024B5E] mx-5 lg:mx-auto text-4xl lg:text-[66px] py-20 lg:py-50 lg:px-52">
+      <div className="font-bakso grid lg:items-center lg:justify-center lg:h-[700px] text-[#024B5E] mx-5 lg:mx-auto text-4xl lg:text-[66px] py-20 lg:py-50 lg:px-52 hero-1280-sitter-text">
        <div>
          GET PAID TO HANG <br />
         OUT WITH PETS

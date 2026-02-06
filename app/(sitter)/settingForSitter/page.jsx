@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { logout } from "@/store/authSlice";
 import AccountDetail from "@/component/settingsForSitter/AccountDetail";
@@ -81,6 +82,9 @@ export default function AccountSettings() {
           <div className="lg:col-span-3 space-y-2">
             {/* Navigation Menu */}
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mt-2 md:mt-4">
+              <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
+                Account Information
+              </div>
               <button
                 onClick={() => setActiveTab("account")}
                 className={`w-full text-left px-3 md:px-4 py-2 md:py-3 border-l-4 text-sm md:text-base ${activeTab === "account"
@@ -137,29 +141,60 @@ export default function AccountSettings() {
               </button>
             </div>
 
-            <div className="pt-2 md:pt-4 space-y-2">
-              <button
-                onClick={() => setActiveTab("friend")}
-                className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100 rounded"
-              >
-                Invite a friend to Wuffoos
-              </button>
-              <button
-                onClick={() => setActiveTab("promo")}
-                className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100 rounded"
-              >
-                Apply promo codes
-              </button>
-            </div>
-            <div className="pt-2 md:pt-4 space-y-2">
-              <div
-                onClick={handleLogout}
-                className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100 rounded cursor-pointer"
-              >
-                Logout
+            <div className="pt-2 md:pt-4">
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
+                  Policy Center
+                </div>
+                <Link
+                  href="/privacy"
+                  className="block w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms"
+                  className="block w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100"
+                >
+                  Terms & Condition
+                </Link>
               </div>
-              <div className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#FE6C5D] hover:bg-gray-100 rounded cursor-pointer">
-                Delete account
+            </div>
+
+            <div className="pt-2 md:pt-4">
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
+                  Referrals and promos
+                </div>
+                <button
+                  onClick={() => setActiveTab("friend")}
+                  className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100"
+                >
+                  Invite a friend to Wuffoos
+                </button>
+                <button
+                  onClick={() => setActiveTab("promo")}
+                  className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100"
+                >
+                  Apply promo codes
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-2 md:pt-4">
+              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
+                  Account Actions
+                </div>
+                <div
+                  onClick={handleLogout}
+                  className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100 cursor-pointer"
+                >
+                  Logout
+                </div>
+                <div className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#FE6C5D] hover:bg-gray-100 cursor-pointer">
+                  Delete account
+                </div>
               </div>
             </div>
           </div>
