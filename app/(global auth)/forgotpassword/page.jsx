@@ -9,15 +9,37 @@ export default function WuffoosRecovery() {
   const [email, setEmail] = useState('');
 
   const handleSubmit = async () => {
-    // Demo - replace with actual API call
+    if (!email) {
+      alert('Please enter your email');
+      return;
+    }
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      alert('Recovery email sent! Check your inbox.');
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/forgot-password`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Something went wrong');
+      }
+
+      alert(data.message); // "Reset code sent to email"
       router.push('/changepassword');
+
     } catch (error) {
-      alert('Failed to send recovery email');
+      alert(error.message || 'Failed to send recovery email');
     }
   };
+
 
   return (
     <div className="min-h-screen flex">
@@ -72,7 +94,7 @@ export default function WuffoosRecovery() {
       {/* Right Panel - Logo */}
       <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-50 to-gray-100 items-center justify-center p-8">
         <div className="max-w-lg">
-          < img src = "/wuffoosFinal.png" />
+          < img src="/wuffoosFinal.png" />
         </div>
       </div>
     </div>
