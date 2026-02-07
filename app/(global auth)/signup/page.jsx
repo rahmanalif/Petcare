@@ -96,10 +96,13 @@ export default function WuffoosRegister() {
   const [selectedLanguage, setSelectedLanguage] = useState('english');
   const [userRole, setUserRole] = useState('pet_owner'); // Default to pet_owner
   const [formData, setFormData] = useState({
-    username: "",
+    fullName: "",
+    email: "",
+    phoneNumber: "",
     password: "",
-    confirmPassword: "",
+    referralSource: "",
   });
+
 
   // Check URL parameter for role
   useEffect(() => {
@@ -109,46 +112,72 @@ export default function WuffoosRegister() {
     }
   }, [searchParams]);
 
-  const handleSubmit = async () => {
-    if (!acceptTerms || !acceptPrivacy) {
-      alert("Please accept the terms and conditions and privacy policy");
-      return;
-    }
+ const handleSubmit = async () => {
+  if (!acceptTerms || !acceptPrivacy) {
+    alert("Please accept terms & privacy policy");
+    return;
+  }
 
-    if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+  if (!formData.password) {
+    alert("Password is required");
+    return;
+  }
 
-    dispatch(loginStart());
+  dispatch(loginStart());
 
-    // Demo signup - replace with actual API call
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Demo user data
-      const userData = {
-        user: {
-          id: "1",
-          name: formData.username,
-          email: formData.username,
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        role: userRole, // Use the role from URL parameter or default
-      };
-
-      dispatch(loginSuccess(userData));
-
-      // Role-based routing
-      if (userRole === 'pet_sitter') {
-        router.push("/sitterdashboard");
-      } else {
-        router.push("/");
+        credentials: "include", // 🔥 refresh token cookie
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          password: formData.password,
+          language: selectedLanguage,
+          referralSource: formData.referralSource,
+          role: userRole,
+        }),
       }
-    } catch (error) {
-      dispatch(loginFailure(error.message || "Signup failed"));
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "Registration failed");
     }
-  };
+
+    //  Save access token + user
+    dispatch(
+      loginSuccess({
+        user: {
+          id: data._id,
+          name: data.fullName,
+          email: data.email,
+          role: data.role,
+        },
+        token: data.token,
+      })
+    );
+
+    // Role based redirect
+    if (data.role === "pet_sitter") {
+      router.push("/sitterdashboard");
+    } else {
+      router.push("/");
+    }
+
+  } catch (error) {
+    dispatch(loginFailure(error.message));
+    alert(error.message);
+  }
+};
+
 
   return (
     <>
@@ -180,10 +209,10 @@ export default function WuffoosRegister() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Username "
-                  value={formData.username}
+                  placeholder="Full Name"
+                  value={formData.fullName}
                   onChange={(e) =>
-                    setFormData({ ...formData, username: e.target.value })
+                    setFormData({ ...formData, fullName: e.target.value })
                   }
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
@@ -195,11 +224,11 @@ export default function WuffoosRegister() {
                   Enter your e-mail address
                 </label>
                 <input
-                  type="text"
-                  placeholder="Enter your e-mail address"
-                  value={formData.username}
+                  type="email"
+                  placeholder="Email"
+                  value={formData.email}
                   onChange={(e) =>
-                    setFormData({ ...formData, username: e.target.value })
+                    setFormData({ ...formData, email: e.target.value })
                   }
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
@@ -212,10 +241,10 @@ export default function WuffoosRegister() {
                 </label>
                 <input
                   type="text"
-                  placeholder="+1"
-                  value={formData.username}
+                  placeholder="+880..."
+                  value={formData.phoneNumber}
                   onChange={(e) =>
-                    setFormData({ ...formData, username: e.target.value })
+                    setFormData({ ...formData, phoneNumber: e.target.value })
                   }
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
@@ -228,8 +257,7 @@ export default function WuffoosRegister() {
                 </label>
                 <div className="relative">
                   <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="*********"
+                    type="password"
                     value={formData.password}
                     onChange={(e) =>
                       setFormData({ ...formData, password: e.target.value })
@@ -255,11 +283,10 @@ export default function WuffoosRegister() {
                   <button
                     type="button"
                     onClick={() => setSelectedLanguage('english')}
-                    className={`border-2 rounded-lg px-4 py-3 cursor-pointer flex items-center justify-center font-montserrat font-medium text-white transition-all ${
-                      selectedLanguage === 'english'
+                    className={`border-2 rounded-lg px-4 py-3 cursor-pointer flex items-center justify-center font-montserrat font-medium text-white transition-all ${selectedLanguage === 'english'
                         ? 'bg-[#FE6C5D] border-[#e96456]'
                         : 'bg-white/10 border-white/30 hover:border-white/50'
-                    }`}
+                      }`}
                   >
                     <span className="m-2">
                       <img src="/flag/usa.png" alt="English" className="w-8 h-8" />
@@ -269,11 +296,10 @@ export default function WuffoosRegister() {
                   <button
                     type="button"
                     onClick={() => setSelectedLanguage('spanish')}
-                    className={`border-2 rounded-lg px-4 py-3 cursor-pointer flex items-center justify-center font-montserrat font-medium text-white transition-all ${
-                      selectedLanguage === 'spanish'
+                    className={`border-2 rounded-lg px-4 py-3 cursor-pointer flex items-center justify-center font-montserrat font-medium text-white transition-all ${selectedLanguage === 'spanish'
                         ? 'bg-[#FE6C5D] border-[#e96456]'
                         : 'bg-white/10 border-white/30 hover:border-white/50'
-                    }`}
+                      }`}
                   >
                     <span className="m-2">
                       <img src="/flag/Mexico.png" alt="Spanish" className="w-8 h-8" />
@@ -418,7 +444,7 @@ export default function WuffoosRegister() {
         {/* Right Panel - Logo */}
         <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-50 to-gray-100 items-center justify-center p-8">
           <div className="max-w-lg">
-            < img src = "/wuffoosFinal.png" />
+            < img src="/wuffoosFinal.png" />
           </div>
         </div>
       </div>
