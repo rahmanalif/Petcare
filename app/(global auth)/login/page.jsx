@@ -111,26 +111,43 @@ export default function WuffoosLogin() {
   const handleSubmit = async () => {
     dispatch(loginStart());
 
-    // Demo login - replace with actual API call
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/login`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            emailOrPhone: formData.username,
+            password: formData.password,
+          }),
+        }
+      );
 
-      // Demo user data - In production, this would come from your API
-      // For now, you can modify the role here to test different user types
-      const userData = {
-        user: {
-          id: '1',
-          name: formData.username,
-          email: formData.username,
-        },
-        role: 'pet_owner' // Can be 'pet_owner', 'pet_sitter', 'admin'
-      };
+      const data = await res.json();
 
-      dispatch(loginSuccess(userData));
+      if (!res.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
 
-      // Role-based routing
-      if (userData.role === 'pet_sitter') {
+      dispatch(
+        loginSuccess({
+          user: {
+            id: data._id,
+            name: data.fullName,
+            email: data.email,
+            isBiometricEnabled: data.isBiometricEnabled,
+          },
+          role: data.role,
+        })
+      );
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('refreshToken', data.refreshToken);
+
+      if (data.role === 'pet_sitter') {
         router.push('/sitterdashboard');
       } else {
         router.push('/');
@@ -140,87 +157,90 @@ export default function WuffoosLogin() {
     }
   };
 
+
   return (
     <>
       <style>{glassStyles}</style>
       <div className="min-h-screen flex">
-      {/* Left Panel - Login Form */}
-      <div className="w-full lg:w-1/2 bg-[#0C6478] flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          <div className="mb-8">
-            <h1 className="text-white text-4xl font-bold mb-3">
-              Login to your account
-            </h1>
-            <p className="text-white/90 text-lg">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-[#FE6C5D] hover:underline font-medium">
-                Register
-              </Link>
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {/* Username Field */}
-            <div>
-              <label className="block text-white text-sm mb-2">
-                Username or Email
-              </label>
-              <input
-                type="text"
-                placeholder="Username or Email"
-                value={formData.username}
-                onChange={(e) => setFormData({...formData, username: e.target.value})}
-                className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
-              />
+        {/* Left Panel - Login Form */}
+        <div className="w-full lg:w-1/2 bg-[#0C6478] flex items-center justify-center p-8">
+          <div className="w-full max-w-md">
+            <div className="mb-8">
+              <h1 className="text-white text-4xl font-bold mb-3">
+                Login to your account
+              </h1>
+              <p className="text-white/90 text-lg">
+                Don't have an account?{' '}
+                <Link href="/signup" className="text-[#FE6C5D] hover:underline font-medium">
+                  Register
+                </Link>
+              </p>
             </div>
 
-            {/* Password Field */}
-            <div>
-              <label className="block text-white text-sm mb-2">
-                Password
-              </label>
-              <div className="relative">
+            <div className="space-y-6">
+              {/* Username Field */}
+              <div>
+                <label className="block text-white text-sm mb-2">
+                  Username or Email
+                </label>
                 <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  type="text"
+                  placeholder="Username or Email"
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/90"
-                >
-                  {showPassword ? '👁️' : '👁️‍🗨️'}
-                </button>
               </div>
-            </div>
 
-            {/* Forgot Password */}
-            <div className="text-left">
-              <Link href="/forgotpassword" className="text-white/80 hover:text-white text-sm">
-                Forgot Password?
-              </Link>
-            </div>
+              {/* Password Field */}
+              <div>
+                <label className="block text-white text-sm mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/90"
+                  >
+                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                  </button>
+                </div>
+              </div>
 
-            {/* Login Button */}
-            <button
-              onClick={handleSubmit}
-              className="w-full py-3 rounded-lg bg-[#FE6C5D] hover:bg-[#ff7a6d] text-white font-semibold transition-colors shadow-lg"
-            >
-              Login
-            </button>
+              {/* Forgot Password */}
+              <div className="text-left">
+                <Link href="/forgotpassword" className="text-white/80 hover:text-white text-sm">
+                  Forgot Password?
+                </Link>
+              </div>
 
-            {/* Divider */}
-            <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 h-px bg-white/20"></div>
-              <span className="text-white/60 text-sm">Or continue with</span>
-              <div className="flex-1 h-px bg-white/20"></div>
-            </div>
+              {/* Login Button */}
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="w-full py-3 rounded-lg bg-[#FE6C5D] hover:bg-[#ff7a6d] text-white font-semibold transition-colors shadow-lg"
+              >
+                Login
+              </button>
 
-            {/* Google Button with Glassmorphism */}
-            {/* Social Login Buttons */}
+
+              {/* Divider */}
+              <div className="flex items-center gap-4 my-6">
+                <div className="flex-1 h-px bg-white/20"></div>
+                <span className="text-white/60 text-sm">Or continue with</span>
+                <div className="flex-1 h-px bg-white/20"></div>
+              </div>
+
+              {/* Google Button with Glassmorphism */}
+              {/* Social Login Buttons */}
               <div className="grid grid-cols-3 gap-3">
                 {/* Google Button */}
                 <GlassSurface
@@ -270,17 +290,17 @@ export default function WuffoosLogin() {
                   </button>
                 </GlassSurface>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Panel - Logo */}
+        <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-50 to-gray-100 items-center justify-center p-8">
+          <div className="max-w-lg">
+            < img src="/wuffoosFinal.png" />
           </div>
         </div>
       </div>
-
-      {/* Right Panel - Logo */}
-      <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-gray-50 to-gray-100 items-center justify-center p-8">
-        <div className="max-w-lg">
-          < img src = "/wuffoosFinal.png" />
-        </div>
-      </div>
-    </div>
     </>
   );
 }
