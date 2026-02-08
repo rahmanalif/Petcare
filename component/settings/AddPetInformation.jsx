@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar, Dog, Cat, Camera, Heart, Loader2 } from 'lucide-react';
+import { Dog, Cat, Camera, Heart, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -15,7 +15,9 @@ export default function PetDetailsForm() {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [petId, setPetId] = useState("6987bf7d4038a7d08c9285d6");
-  const [gallery, setGallery] = useState([]);
+  const [gallery, setGallery] = useState([]); 
+  // NEW: State for showing image immediately
+  const [imagePreview, setImagePreview] = useState(null);
 
   // Original UI States
   const [selectedPetType, setSelectedPetType] = useState('dog');
@@ -43,10 +45,18 @@ export default function PetDetailsForm() {
 
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  // 1. Image Upload API
+  // 1. Image Upload API (Modified for Instant Feedback)
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (!file || !petId) return;
+    if (!file) return;
+
+    const objectUrl = URL.createObjectURL(file);
+    setImagePreview(objectUrl);
+
+    if (!petId) {
+        toast.error("Pet ID missing provided, only preview shown.");
+        return;
+    }
 
     const data = new FormData();
     data.append("petImage", file);
@@ -63,10 +73,13 @@ export default function PetDetailsForm() {
 
       const result = await res.json();
       if (res.ok) {
-        setGallery(result.gallery);
-        toast.success("Image uploaded");
+        setGallery(result.gallery || []);
+        toast.success("Image uploaded successfully");
+      } else {
+        toast.error("Failed to upload to server, showing preview only.");
       }
     } catch (error) {
+      console.error(error);
       toast.error("Upload failed");
     } finally {
       setUploading(false);
@@ -129,6 +142,13 @@ export default function PetDetailsForm() {
     }
   };
 
+  // Helper function to decide which image to show
+  const getDisplayImage = () => {
+    if (imagePreview) return imagePreview; 
+    if (gallery && gallery.length > 0) return `${API_BASE}/${gallery[gallery.length - 1]}`;
+    return "https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?w=1200&h=400&fit=crop";
+  };
+
   return (
     <div className="max-w-4xl mx-auto bg-gray-50 min-h-screen">
       <div className="bg-white px-6 py-4 flex items-center gap-3 mb-6">
@@ -141,9 +161,9 @@ export default function PetDetailsForm() {
       <div className="relative mb-6 mx-6">
         <div className="rounded-2xl overflow-hidden shadow-lg h-96 bg-gray-200">
           <img
-            src={gallery.length > 0 ? `${API_BASE}/${gallery[gallery.length - 1]}` : "https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?w=1200&h=400&fit=crop"}
+            src={getDisplayImage()}
             alt="Pet"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-opacity duration-300"
           />
           <button 
              onClick={() => fileInputRef.current.click()}
@@ -156,6 +176,7 @@ export default function PetDetailsForm() {
       </div>
 
       <div className="bg-white mx-6 rounded-2xl shadow-sm p-6">
+        {/* ... Rest of your form inputs (No changes needed below) ... */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
             <Dog className="w-5 h-5 text-[#024B5E]" />

@@ -12,20 +12,24 @@ import ApplyPromo from "@/component/settings/ApplyPromo";
 import InviteFriend from "@/component/settings/InviteFriend";
 import { Loader2 } from "lucide-react";
 
+// Global cache to store pets data
+let petsCache = null;
+
 export default function AccountSettings() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("account");
-  const [pets, setPets] = useState([]);
-  const [loading, setLoading] = useState(true);
+  
+  // Initialize state from cache if available
+  const [pets, setPets] = useState(petsCache || []);
+  const [loading, setLoading] = useState(!petsCache);
 
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  // Fetch all pets
   useEffect(() => {
     const fetchPets = async () => {
       try {
-        const token = localStorage.getItem("token"); // Check koren key 'token' naki 'accessToken'
+        const token = localStorage.getItem("token");
 
         const response = await fetch(`${API_BASE}/api/pets`, {
           method: "GET",
@@ -37,21 +41,20 @@ export default function AccountSettings() {
         });
 
         const data = await response.json();
-        console.log("API Response Data:", data); // Browser console e check koren ki asche
 
         if (response.ok) {
-          // Jodi data shora-shori array hoy
+          let petsData = [];
+          
           if (Array.isArray(data)) {
-            setPets(data);
+            petsData = data;
+          } else if (data.pets && Array.isArray(data.pets)) {
+            petsData = data.pets;
+          } else if (data.data && Array.isArray(data.data)) {
+            petsData = data.data;
           }
-          // Jodi data { pets: [...] } eivabe thake
-          else if (data.pets && Array.isArray(data.pets)) {
-            setPets(data.pets);
-          }
-          // Jodi data { data: [...] } eivabe thake
-          else if (data.data && Array.isArray(data.data)) {
-            setPets(data.data);
-          }
+
+          setPets(petsData);
+          petsCache = petsData; // Update cache
         }
       } catch (error) {
         console.error("Error fetching pets:", error);
@@ -59,10 +62,14 @@ export default function AccountSettings() {
         setLoading(false);
       }
     };
+
+    // If we already have cached data, we still fetch to update, 
+    // but the user sees the cached data immediately without a spinner.
     fetchPets();
   }, [API_BASE]);
 
   const handleLogout = () => {
+    petsCache = null; // Clear cache on logout
     dispatch(logout());
     router.push('/');
   };
