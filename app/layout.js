@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import ReduxProvider from "../components/providers/ReduxProvider";
 import ConditionalLayout from "../components/ConditionalLayout";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -64,6 +65,7 @@ export default function RootLayout({ children }) {
             {children}
           </ConditionalLayout>
         </ReduxProvider>
+        <Toaster position="top-right" />
       </body>
     </html>
   );
