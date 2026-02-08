@@ -33,8 +33,14 @@ export default function AccountDetail() {
   // Fetch profile data
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          toast.error("Please login to view your profile");
+          setLoading(false);
+          return;
+        }
+        
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/profile`, {
           method: "GET",
           headers: {
@@ -75,6 +81,11 @@ export default function AccountDetail() {
     try {
       setUpdating(true);
       const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Session expired. Please login again.");
+        return;
+      }
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/profile-image`, {
         method: "POST",
         headers: {
@@ -88,7 +99,7 @@ export default function AccountDetail() {
         setFormData(prev => ({ ...prev, profilePicture: result.profilePicture }));
         toast.success("Profile picture updated");
       } else if (response.status === 401) {
-        toast.error("Please login again. Session expired.");
+        toast.error("Session expired. Please login again.");
       } else {
         toast.error("Upload failed");
       }
@@ -106,9 +117,19 @@ export default function AccountDetail() {
       return;
     }
 
+    // Validate password match if user is changing password
+    if (formData.newPassword && formData.newPassword !== formData.confirmPassword) {
+      toast.error("New password and confirm password do not match");
+      return;
+    }
+
     try {
       setUpdating(true);
-      const token = localStorage.getItem("token"); 
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Session expired. Please login again.");
+        return;
+      }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/profile`, {
         method: "PUT",
@@ -180,10 +201,13 @@ export default function AccountDetail() {
         <div
           className="relative cursor-pointer group w-20 h-20 sm:w-24 sm:h-24"
           onClick={() => isEditing && fileInputRef.current?.click()}
+          role="button"
+          tabIndex={isEditing ? 0 : -1}
+          aria-label={isEditing ? "Click to upload profile picture" : "Profile picture"}
         >
           <div className="w-full h-full bg-teal-500 rounded-full flex items-center justify-center overflow-hidden">
             {formData.profilePicture ? (
-              <img src={formData.profilePicture} alt="Avatar" className="w-full h-full object-cover" />
+              <img src={formData.profilePicture} alt="Profile avatar" className="w-full h-full object-cover" />
             ) : (
               <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="140" height="140" rx="70" fill="#EBFBFE" />
@@ -197,7 +221,14 @@ export default function AccountDetail() {
               <Camera className="text-white w-6 h-6" />
             </div>
           )}
-          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            className="hidden" 
+            accept="image/*" 
+            onChange={handleImageUpload}
+            aria-label="Upload profile picture"
+          />
         </div>
       </div>
 
@@ -210,7 +241,14 @@ export default function AccountDetail() {
 
         <div>
           <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">E-mail address or phone number</Label>
-          <Input id="email" value={formData.email} disabled={true} placeholder="Email" className="mt-1 text-[#024B5E] bg-gray-50" />
+          <Input 
+            id="email" 
+            value={formData.email} 
+            disabled={true} 
+            placeholder="Email" 
+            className="mt-1 text-[#024B5E] bg-gray-50"
+            aria-label="Email address (read-only, cannot be changed)" 
+          />
         </div>
 
         <div>
