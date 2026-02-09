@@ -1,32 +1,17 @@
-import React, { useState } from "react";
-import { ChevronDown, MapPin } from "lucide-react";
+"use client";
+import React, { forwardRef, useImperativeHandle } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setField,
+  toggleArrayField,
+  saveBoardingService,
+} from "@/store/serviceSlice";
+import { ChevronDown, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
-export default function BoardingForm() {
-  const [baseRate, setBaseRate] = useState("45.00");
-  const [updateRates, setUpdateRates] = useState(true);
-  const [showAdditionalRates, setShowAdditionalRates] = useState(false);
-  const [petsPerDay, setPetsPerDay] = useState("3");
-  const [selectedDays, setSelectedDays] = useState([]);
-  const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
-  const [useHomeAddress, setUseHomeAddress] = useState(true);
-  const [location, setLocation] = useState("1000, BD");
-  const [distanceType, setDistanceType] = useState("miles");
-  const [TimeType, settimeType] = useState("Yes");
-  const [serviceArea, setServiceArea] = useState("0");
-  const [travelModes, setTravelModes] = useState(["Walking"]);
-  const [petSizes, setPetSizes] = useState([
-    "Small dog (0-15 lbs)",
-    "Medium dog (16-40 lbs)",
-    "Large dog (41-100 lbs)",
-    "Giant dog (100+ lbs)",
-  ]);
-  const [acceptPuppies, setAcceptPuppies] = useState("yes");
-  const [cancellationPolicies, setCancellationPolicies] = useState([
-    "Same day",
-    "One day",
-    "Two day",
-    "Three day",
-  ]);
+const BoardingForm = forwardRef((props, ref) => {
+  const dispatch = useDispatch();
+  const service = useSelector((state) => state.service);
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const timeSlots = ["6am - 11am", "11am - 3am", "3am - 10am", "None"];
@@ -39,47 +24,38 @@ export default function BoardingForm() {
   ];
   const cancellationOptions = ["Same day", "One day", "Two day", "Three day"];
 
-  const toggleDay = (day) => {
-    setSelectedDays((prev) =>
-      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
-    );
-  };
-
-  const toggleTimeSlot = (slot) => {
-    setSelectedTimeSlots((prev) =>
-      prev.includes(slot) ? prev.filter((s) => s !== slot) : [...prev, slot]
-    );
-  };
-
-  const toggleTravelMode = (mode) => {
-    setTravelModes((prev) =>
-      prev.includes(mode) ? prev.filter((m) => m !== mode) : [...prev, mode]
-    );
-  };
-
-  const togglePetSize = (size) => {
-    setPetSizes((prev) =>
-      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
-    );
-  };
-
-  const toggleCancellationPolicy = (policy) => {
-    setCancellationPolicies((prev) =>
-      prev.includes(policy)
-        ? prev.filter((p) => p !== policy)
-        : [...prev, policy]
-    );
-  };
+  useImperativeHandle(ref, () => ({
+    handleSave: async () => {
+      try {
+        const resultAction = await dispatch(saveBoardingService());
+        if (saveBoardingService.fulfilled.match(resultAction)) {
+          toast.success("Boarding service saved!");
+        } else {
+          toast.error("Save failed");
+        }
+      } catch {
+        toast.error("Server error");
+      }
+    },
+  }));
 
   return (
     <>
+      {service.loading && (
+        <div className="fixed inset-0 bg-white/50 z-50 flex items-center justify-center">
+          <Loader2 className="animate-spin text-[#024B5E] w-10 h-10" />
+        </div>
+      )}
+
       {/* Update Rates Checkbox */}
       <div className="mb-6">
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
-            checked={updateRates}
-            onChange={(e) => setUpdateRates(e.target.checked)}
+            checked={service.updateRates}
+            onChange={(e) =>
+              dispatch(setField({ field: "updateRates", value: e.target.checked }))
+            }
             className="custom-checkbox mt-0.5"
           />
           <div>
@@ -93,112 +69,60 @@ export default function BoardingForm() {
         </label>
       </div>
 
-      {/* Base Rate Section */}
+      {/* Base Rate */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-[#024B5E] mb-3">
           Set your base rate
         </label>
         <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
           <span className="text-[#024B5E]">Per night</span>
-          <span className="text-[#024B5E] font-semibold">${baseRate}</span>
+          <div className="flex items-center">
+            <span className="text-[#024B5E] font-semibold mr-1">$</span>
+            <input
+              type="number"
+              value={service.baseRate}
+              onChange={(e) =>
+                dispatch(setField({ field: "baseRate", value: e.target.value }))
+              }
+              className="w-20 bg-transparent text-[#024B5E] font-semibold focus:outline-none"
+            />
+          </div>
         </div>
         <p className="text-sm text-[#024B5E] mt-2">
-          What you will earn per service: ${(parseFloat(baseRate) * 0.86).toFixed(2)}
+          What you will earn per service: $
+          {(parseFloat(service.baseRate || 0) * 0.86).toFixed(2)}
         </p>
       </div>
 
-      {/* Show Additional Rates Button */}
+      {/* Additional Rates Toggle */}
       <button
-        onClick={() => setShowAdditionalRates(!showAdditionalRates)}
+        onClick={() =>
+          dispatch(setField({ field: "showAdditionalRates", value: !service.showAdditionalRates }))
+        }
         className="w-full px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2 mb-8"
       >
-        {showAdditionalRates
-          ? "Hide additional rates"
-          : "Show additional rates"}
+        {service.showAdditionalRates ? "Hide additional rates" : "Show additional rates"}
         <ChevronDown
-          className={`w-5 h-5 transition-transform ${showAdditionalRates ? "rotate-180" : ""
-            }`}
+          className={`w-5 h-5 transition-transform ${
+            service.showAdditionalRates ? "rotate-180" : ""
+          }`}
         />
       </button>
 
-
-      {/* Additional Rates Section */}
-      {showAdditionalRates && (
+      {service.showAdditionalRates && (
         <div className="mb-8 space-y-6">
-          {/* 60 minute rate */}
           <div>
-            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
-              60 minute rate
-            </h4>
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">60 minute rate</h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
               <span className="text-[#024B5E]">Per night</span>
               <span className="text-[#024B5E] font-semibold">$45.00</span>
             </div>
             <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
-          </div>
-
-          {/* Holiday Rate */}
-          <div>
-            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
-              Holiday Rate
-            </h4>
-            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-[#024B5E]">Per night</span>
-              <span className="text-[#024B5E] font-semibold">$45.00</span>
-            </div>
-            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
-          </div>
-
-          {/* Additional Rate */}
-          <div>
-            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
-              Additional Rate
-            </h4>
-            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-[#024B5E]">Per night</span>
-              <span className="text-[#024B5E] font-semibold">$45.00</span>
-            </div>
-            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
-          </div>
-
-          {/* Puppy Rate */}
-          <div>
-            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
-              Puppy Rate
-            </h4>
-            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-[#024B5E]">Per night</span>
-              <span className="text-[#024B5E] font-semibold">$45.00</span>
-            </div>
-            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
-
-            <label className="flex items-center gap-3 cursor-pointer mt-3">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="custom-checkbox"
-              />
-              <span className="text-[#024B5E]">Offer for free</span>
-            </label>
-          </div>
-
-          {/* Daily Sitter Pick-Up/Drop-Off */}
-          <div>
-            <h4 className="text-base font-semibold text-[#024B5E] mb-3">
-              Daily Sitter Pick-Up/Drop-Off
-            </h4>
-            <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-[#024B5E]">Per night</span>
-              <span className="text-[#024B5E] font-semibold">$45.00</span>
-            </div>
-            <p className="text-sm text-[#024B5E] mt-2">You keep: 80%</p>
           </div>
         </div>
       )}
 
-
-
-      {/* Availability Section */}
+      {/* Availability */}
       <div className="mb-8">
         <h3 className="text-base font-semibold text-[#024B5E] mb-4">Availability</h3>
 
@@ -206,44 +130,34 @@ export default function BoardingForm() {
           Are you home full-time during the week?
         </label>
         <div className="flex gap-4 mb-4">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="timeType"
-              value="Yes"
-              checked={TimeType === "Yes"}
-              onChange={(e) => settimeType(e.target.value)}
-              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
-            />
-            <span className="text-[#024B5E]">Yes</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="timeType"
-              value="No"
-              checked={TimeType === "No"}
-              onChange={(e) => settimeType(e.target.value)}
-              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
-            />
-            <span className="text-[#024B5E]">No</span>
-          </label>
+          {["Yes", "No"].map((val) => (
+            <label key={val} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="timeType"
+                value={val}
+                checked={service.timeType === val}
+                onChange={(e) =>
+                  dispatch(setField({ field: "timeType", value: e.target.value }))
+                }
+                className="w-4 h-4 text-[#035F75] focus:ring-[#035F75]"
+              />
+              <span className="text-[#024B5E]">{val}</span>
+            </label>
+          ))}
         </div>
 
-        <p className="text-sm text-[#024B5E] mb-3">
-          You can edit any date individually by going to your calendar.
-        </p>
-
-        {/* Days of Week */}
+        {/* Days */}
         <div className="flex gap-2 mb-6">
           {days.map((day) => (
             <button
               key={day}
-              onClick={() => toggleDay(day)}
-              className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${selectedDays.includes(day)
+              onClick={() => dispatch(toggleArrayField({ field: "selectedDays", value: day }))}
+              className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${
+                service.selectedDays.includes(day)
                   ? "bg-[#035F75] text-white border-[#035F75]"
                   : "bg-white text-[#024B5E] border-gray-300 hover:bg-gray-50"
-                }`}
+              }`}
             >
               {day}
             </button>
@@ -259,8 +173,10 @@ export default function BoardingForm() {
             <label key={slot} className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={selectedTimeSlots.includes(slot)}
-                onChange={() => toggleTimeSlot(slot)}
+                checked={service.selectedTimeSlots.includes(slot)}
+                onChange={() =>
+                  dispatch(toggleArrayField({ field: "selectedTimeSlots", value: slot }))
+                }
                 className="custom-checkbox"
               />
               <span className="text-[#024B5E]">{slot}</span>
@@ -279,8 +195,10 @@ export default function BoardingForm() {
             <label key={policy} className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={cancellationPolicies.includes(policy)}
-                onChange={() => toggleCancellationPolicy(policy)}
+                checked={service.cancellationPolicies.includes(policy)}
+                onChange={() =>
+                  dispatch(toggleArrayField({ field: "cancellationPolicies", value: policy }))
+                }
                 className="custom-checkbox"
               />
               <span className="text-[#024B5E]">{policy}</span>
@@ -289,109 +207,74 @@ export default function BoardingForm() {
         </div>
       </div>
 
-      {/* Location Section */}
+      {/* Location */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <label className="text-base font-semibold text-[#024B5E]">
-            Use my home address
-          </label>
+          <label className="text-base font-semibold text-[#024B5E]">Use my home address</label>
           <button
-            onClick={() => setUseHomeAddress(!useHomeAddress)}
-            className={`relative w-12 h-6 rounded-full transition-colors ${useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"
-              }`}
+            onClick={() =>
+              dispatch(setField({ field: "useHomeAddress", value: !service.useHomeAddress }))
+            }
+            className={`relative w-12 h-6 rounded-full transition-colors ${
+              service.useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"
+            }`}
           >
             <div
-              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${useHomeAddress ? "translate-x-6" : ""
-                }`}
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
+                service.useHomeAddress ? "translate-x-6" : ""
+              }`}
             />
           </button>
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-2">
-          Location
-        </label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">Location</label>
         <input
           type="text"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          value={service.location}
+          onChange={(e) => dispatch(setField({ field: "location", value: e.target.value }))}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent mb-6"
         />
 
-        {/* Service Area */}
-        <label className="block text-base font-semibold text-[#024B5E] mb-2">
-          Service Area
-        </label>
-        <p className="text-sm text-[#024B5E] mb-4">
-          The service area you define here will be for house sitting.
-        </p>
-
-        <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 mb-4">
-          <div className="text-sm font-medium text-[#024B5E] mb-2">
-            Location
-          </div>
-          <div className="text-sm text-[#024B5E] mb-3">New York, NY</div>
-          <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-            <MapPin className="w-8 h-8 text-[#024B5E]" />
-          </div>
-        </div>
-
-        {/* Distance Type */}
-        <label className="block text-sm font-semibold text-[#024B5E] mb-3">
-          Distance type
-        </label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">Distance type</label>
         <div className="flex gap-4 mb-4">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="distanceTypeBoarding"
-              value="miles"
-              checked={distanceType === "miles"}
-              onChange={(e) => setDistanceType(e.target.value)}
-              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
-            />
-            <span className="text-[#024B5E]">Miles</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="distanceTypeBoarding"
-              value="minutes"
-              checked={distanceType === "minutes"}
-              onChange={(e) => setDistanceType(e.target.value)}
-              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
-            />
-            <span className="text-[#024B5E]">Minutes</span>
-          </label>
+          {["Miles", "Minutes"].map((type) => (
+            <label key={type} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="distanceTypeBoarding"
+                value={type}
+                checked={service.distanceType === type}
+                onChange={(e) =>
+                  dispatch(setField({ field: "distanceType", value: e.target.value }))
+                }
+                className="w-4 h-4 text-[#035F75] focus:ring-[#035F75]"
+              />
+              <span className="text-[#024B5E]">{type}</span>
+            </label>
+          ))}
         </div>
 
-        {/* Service Area Input */}
-        <label className="block text-sm font-semibold text-[#024B5E] mb-2">
-          Service area
-        </label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">Service area (Radius)</label>
         <div className="flex items-center gap-2 mb-4">
           <input
-            type="text"
-            value={serviceArea}
-            onChange={(e) => setServiceArea(e.target.value)}
+            type="number"
+            value={service.serviceArea}
+            onChange={(e) =>
+              dispatch(setField({ field: "serviceArea", value: e.target.value }))
+            }
             className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent"
           />
-          <span className="text-[#024B5E]">Miles</span>
+          <span className="text-[#024B5E]">{service.distanceType}</span>
         </div>
 
-        {/* Travel Mode */}
-        <label className="block text-sm font-semibold text-[#024B5E] mb-3">
-          Travel mode
-        </label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">Travel mode</label>
         <div className="space-y-3 mb-8">
           {travelOptions.map((mode) => (
-            <label
-              key={mode}
-              className="flex items-center gap-3 cursor-pointer"
-            >
+            <label key={mode} className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={travelModes.includes(mode)}
-                onChange={() => toggleTravelMode(mode)}
+                checked={service.travelModes.includes(mode)}
+                onChange={() => dispatch(toggleArrayField({ field: "travelModes", value: mode }))}
                 className="custom-checkbox"
               />
               <span className="text-[#024B5E]">{mode}</span>
@@ -400,21 +283,18 @@ export default function BoardingForm() {
         </div>
       </div>
 
-      {/* Pet Types Section */}
+      {/* Pet Types */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-[#024B5E] mb-3">
-          What type of pets can you host in your home?
+          What type of pets can you host?
         </label>
         <div className="space-y-3 mb-6">
           {petSizeOptions.map((size) => (
-            <label
-              key={size}
-              className="flex items-center gap-3 cursor-pointer"
-            >
+            <label key={size} className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                checked={petSizes.includes(size)}
-                onChange={() => togglePetSize(size)}
+                checked={service.petSizes.includes(size)}
+                onChange={() => dispatch(toggleArrayField({ field: "petSizes", value: size }))}
                 className="custom-checkbox"
               />
               <span className="text-[#024B5E]">{size}</span>
@@ -422,35 +302,30 @@ export default function BoardingForm() {
           ))}
         </div>
 
-        {/* Accept Puppies */}
         <label className="block text-sm font-semibold text-[#024B5E] mb-3">
           Do you accept puppies under 1 year old?
         </label>
         <div className="flex gap-4 mb-8">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="acceptPuppiesBoarding"
-              value="yes"
-              checked={acceptPuppies === "yes"}
-              onChange={(e) => setAcceptPuppies(e.target.value)}
-              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
-            />
-            <span className="text-[#024B5E]">Yes</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="radio"
-              name="acceptPuppiesBoarding"
-              value="no"
-              checked={acceptPuppies === "no"}
-              onChange={(e) => setAcceptPuppies(e.target.value)}
-              className="w-4 h-4 text-[#035F75] focus:ring-[#035F75] cursor-pointer"
-            />
-            <span className="text-[#024B5E]">No</span>
-          </label>
+          {["yes", "no"].map((val) => (
+            <label key={val} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="acceptPuppiesBoarding"
+                value={val}
+                checked={service.acceptPuppies === val}
+                onChange={(e) =>
+                  dispatch(setField({ field: "acceptPuppies", value: e.target.value }))
+                }
+                className="w-4 h-4 text-[#035F75] focus:ring-[#035F75]"
+              />
+              <span className="text-[#024B5E]">{val === "yes" ? "Yes" : "No"}</span>
+            </label>
+          ))}
         </div>
       </div>
     </>
   );
-}
+});
+
+BoardingForm.displayName = "BoardingForm";
+export default BoardingForm;

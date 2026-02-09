@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,10 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SitterCard from "./SitterCard";
+import SitterCard from "./SitterCard"; // Assuming you have this component
 import { Map, MapTileLayer, MapMarker, MapPopup, MapZoomControl } from "@/components/ui/map";
+import { Loader2 } from "lucide-react";
 
-// Reusable SVG Icons
+// Reusable SVG Icons (Kept exactly as provided)
 const FilterIcon = ({ className = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +121,6 @@ export default function FindMatchSection() {
   const [selectedPets, setSelectedPets] = useState([]);
   const [showMap, setShowMap] = useState(false);
   const [schedule, setSchedule] = useState("oneTime"); // "oneTime" or "repeatWeekly"
-  const [daycareDate, setDaycareDate] = useState("");
   const [selectedDays, setSelectedDays] = useState({
     M: false,
     T: false,
@@ -129,6 +129,12 @@ export default function FindMatchSection() {
     F: false,
     S: false,
   });
+
+  // Search Results State
+  const [sitters, setSitters] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState({ lat: 40.7128, lng: -74.0060 }); // Default to NY
+  const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Pet data
   const pets = [
@@ -168,6 +174,7 @@ export default function FindMatchSection() {
     setSelectedPets(selectedPets.filter(id => id !== petId));
   };
 
+  // Regular Boarding/Walking Filters
   const [filters, setFilters] = useState({
     sitterAtHome: true,
     hasFencedGarden: true,
@@ -220,202 +227,6 @@ export default function FindMatchSection() {
     dogFirstAid: false,
   });
 
-  // Sitter data for different services
-  const boardingSitters = [
-    {
-      name: "Seam Rahman",
-      location: "New York, NY",
-      rating: 5.0,
-      reviews: 55,
-      repeatPetOwners: true,
-      availability: "Still available for 2 more pets today. (3 booked, 2 remaining)",
-      price: 25,
-      backgroundCheck: true,
-    },
-    {
-      name: "Emily Johnson",
-      location: "Brooklyn, NY",
-      rating: 4.8,
-      reviews: 42,
-      repeatPetOwners: true,
-      availability: "Available for 3 pets this week",
-      price: 30,
-      backgroundCheck: true,
-    },
-    {
-      name: "Michael Chen",
-      location: "Queens, NY",
-      rating: 4.9,
-      reviews: 67,
-      repeatPetOwners: true,
-      availability: "Fully booked until next week",
-      price: 28,
-      backgroundCheck: true,
-    },
-    {
-      name: "Sarah Williams",
-      location: "Manhattan, NY",
-      rating: 5.0,
-      reviews: 89,
-      repeatPetOwners: true,
-      availability: "Available for 1 more pet today",
-      price: 35,
-      backgroundCheck: true,
-    },
-    {
-      name: "David Martinez",
-      location: "Bronx, NY",
-      rating: 4.7,
-      reviews: 31,
-      repeatPetOwners: false,
-      availability: "Available for 5 pets this weekend",
-      price: 22,
-      backgroundCheck: false,
-    },
-    {
-      name: "Lisa Anderson",
-      location: "Staten Island, NY",
-      rating: 4.9,
-      reviews: 58,
-      repeatPetOwners: true,
-      availability: "Available for 2 pets today",
-      price: 27,
-      backgroundCheck: true,
-    },
-  ];
-
-  const daycareSitters = [
-    {
-      name: "Jessica Parker",
-      location: "Upper West Side, NY",
-      rating: 4.9,
-      reviews: 73,
-      repeatPetOwners: true,
-      availability: "Available for daycare Mon-Fri",
-      price: 40,
-      backgroundCheck: true,
-    },
-    {
-      name: "Robert Taylor",
-      location: "Williamsburg, Brooklyn",
-      rating: 4.8,
-      reviews: 51,
-      repeatPetOwners: true,
-      availability: "Full facility, 10 spots available",
-      price: 45,
-      backgroundCheck: true,
-    },
-    {
-      name: "Amanda Foster",
-      location: "Long Island City, Queens",
-      rating: 5.0,
-      reviews: 94,
-      repeatPetOwners: true,
-      availability: "Available weekdays 7am-6pm",
-      price: 38,
-      backgroundCheck: true,
-    },
-    {
-      name: "Christopher Lee",
-      location: "Chelsea, Manhattan",
-      rating: 4.7,
-      reviews: 39,
-      repeatPetOwners: true,
-      availability: "Available Mon-Sat",
-      price: 50,
-      backgroundCheck: true,
-    },
-    {
-      name: "Nicole Brown",
-      location: "Park Slope, Brooklyn",
-      rating: 4.9,
-      reviews: 62,
-      repeatPetOwners: true,
-      availability: "Available Tue-Fri, limited spots",
-      price: 42,
-      backgroundCheck: true,
-    },
-    {
-      name: "James Wilson",
-      location: "Astoria, Queens",
-      rating: 4.6,
-      reviews: 28,
-      repeatPetOwners: false,
-      availability: "New daycare center, many spots!",
-      price: 35,
-      backgroundCheck: false,
-    },
-  ];
-
-  const walkingSitters = [
-    {
-      name: "Rachel Green",
-      location: "Central Park Area, NY",
-      rating: 5.0,
-      reviews: 112,
-      repeatPetOwners: true,
-      availability: "Available for morning & evening walks",
-      price: 20,
-      backgroundCheck: true,
-    },
-    {
-      name: "Tom Harris",
-      location: "East Village, Manhattan",
-      rating: 4.8,
-      reviews: 87,
-      repeatPetOwners: true,
-      availability: "Available 3 walks daily",
-      price: 18,
-      backgroundCheck: true,
-    },
-    {
-      name: "Sophia Davis",
-      location: "Fort Greene, Brooklyn",
-      rating: 4.9,
-      reviews: 71,
-      repeatPetOwners: true,
-      availability: "Flexible schedule, all day",
-      price: 22,
-      backgroundCheck: true,
-    },
-    {
-      name: "Daniel Kim",
-      location: "Murray Hill, Manhattan",
-      rating: 4.7,
-      reviews: 45,
-      repeatPetOwners: true,
-      availability: "Available lunch & evening walks",
-      price: 19,
-      backgroundCheck: true,
-    },
-    {
-      name: "Olivia Rodriguez",
-      location: "Prospect Heights, Brooklyn",
-      rating: 5.0,
-      reviews: 98,
-      repeatPetOwners: true,
-      availability: "Group walks available!",
-      price: 25,
-      backgroundCheck: true,
-    },
-    {
-      name: "Mark Thompson",
-      location: "Jackson Heights, Queens",
-      rating: 4.6,
-      reviews: 33,
-      repeatPetOwners: false,
-      availability: "Available morning walks only",
-      price: 15,
-      backgroundCheck: false,
-    },
-  ];
-
-  // Select sitters based on service type
-  const sitters =
-    lookingFor === "Doggy Day Care" ? daycareSitters :
-      lookingFor === "Dog Walking" ? walkingSitters :
-        boardingSitters;
-
   const toggleFilter = (filterKey) => {
     setFilters((prev) => ({
       ...prev,
@@ -437,6 +248,72 @@ export default function FindMatchSection() {
     }));
   };
 
+  // --- API FETCH LOGIC (UPDATED) ---
+  const getServiceEndpoint = () => {
+    // Dropdown values match these cases exactly
+    switch (lookingFor) {
+      case "Dog Walking":
+        return "walking";
+      case "Doggy Day Care":
+        return "daycare";
+      case "boarding":
+      default:
+        return "boarding";
+    }
+  };
+
+  const fetchSitters = async () => {
+    setLoading(true);
+
+    try {
+      const serviceEndpoint = getServiceEndpoint(); // returns 'walking', 'daycare', or 'boarding'
+      const token = localStorage.getItem("token");
+
+      // Dynamic URL based on service type
+      const response = await fetch(
+        `${API_BASE}/api/sitter/services/${serviceEndpoint}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success && Array.isArray(result.data)) {
+        // Map the data to fit SitterCard component
+        const mappedSitters = result.data.map(sitter => ({
+          name: sitter.fullName || "Sitter",
+          location: sitter.address || "New York, NY",
+          rating: sitter.averageRating || 5.0,
+          reviews: sitter.reviewsCount || 0,
+          repeatPetOwners: true,
+          availability: sitter.about || "Available",
+          // Adjust price access based on service type if structure varies
+          price: sitter.rates?.base || 25,
+          backgroundCheck: sitter.isVerified || false,
+          image: sitter.profilePicture
+        }));
+
+        setSitters(mappedSitters);
+      } else {
+        setSitters([]);
+      }
+    } catch (error) {
+      console.error("Search failed", error);
+      setSitters([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Re-fetch when the Service Type (lookingFor) changes
+  useEffect(() => {
+    fetchSitters();
+  }, [lookingFor]); 
 
 
   return (
@@ -487,26 +364,22 @@ export default function FindMatchSection() {
                 {showMap ? (
                   /* Map View */
                   <div className="w-full h-[400px] sm:h-[500px] md:h-[600px] rounded-lg overflow-hidden">
-                    <Map center={[40.7128, -74.0060]} zoom={13} className="h-full w-full">
+                    <Map center={[currentLocation.lat, currentLocation.lng]} zoom={13} className="h-full w-full">
                       <MapTileLayer />
                       <MapZoomControl />
 
-                      {/* Sitter locations */}
-                      <MapMarker position={[40.7128, -74.0060]}>
-                        <MapPopup>
-                          <div className="">
-                            <div className="font-semibold">Seam Rahman</div>
-                            <div className="text-sm text-[#024B5E]">New York, NY</div>
-                            <div className="text-sm font-semibold text-[#024B5E] mt-1">$25/day</div>
-                          </div>
-                        </MapPopup>
-                      </MapMarker>
-
-                      <MapMarker position={[40.7148, -74.0080]} />
-                      <MapMarker position={[40.7108, -74.0040]} />
-                      <MapMarker position={[40.7138, -74.0050]} />
-                      <MapMarker position={[40.7118, -74.0070]} />
-                      <MapMarker position={[40.7158, -74.0030]} />
+                      {/* Render found sitters on map */}
+                      {sitters.map((sitter, idx) => (
+                         <MapMarker key={idx} position={[currentLocation.lat + (Math.random() * 0.02 - 0.01), currentLocation.lng + (Math.random() * 0.02 - 0.01)]}>
+                            <MapPopup>
+                              <div className="">
+                                <div className="font-semibold">{sitter.name}</div>
+                                <div className="text-sm text-[#024B5E]">{sitter.location}</div>
+                                <div className="text-sm font-semibold text-[#024B5E] mt-1">${sitter.price}/day</div>
+                              </div>
+                            </MapPopup>
+                         </MapMarker>
+                      ))}
                     </Map>
                   </div>
                 ) : (
@@ -607,29 +480,6 @@ export default function FindMatchSection() {
 
                         {/* Dates */}
                         <div>
-                          {/* <label className="block text-sm font-semibold mb-2">
-                        Dates
-                      </label>
-                      <div className="relative">
-                        <Input
-                          type="text"
-                          placeholder="DD/MM/YY"
-                          value={daycareDate}
-                          onChange={(e) => setDaycareDate(e.target.value)}
-                          className="border-2 border-gray-200 rounded-sm px-2 p-2 pr-8 text-[#024B5E] focus-visible:ring-0"
-                        />
-                        <svg
-                          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-[#024B5E]"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" strokeWidth="2" />
-                          <line x1="16" y1="2" x2="16" y2="6" strokeWidth="2" />
-                          <line x1="8" y1="2" x2="8" y2="6" strokeWidth="2" />
-                          <line x1="3" y1="10" x2="21" y2="10" strokeWidth="2" />
-                        </svg>
-                      </div> */}
                           <div className="border border-gray-200 rounded-lg p-3 sm:p-4 space-y-3 sm:space-y-4">
                             {/* Date Inputs */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1234,8 +1084,11 @@ export default function FindMatchSection() {
                     {/* Apply Filters Button */}
                     <div className="pt-4">
                       <Button
-                        className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-semibold py-3 rounded-lg transition-colors"
+                        onClick={fetchSitters}
+                        disabled={loading}
+                        className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
                       >
+                        {loading && <Loader2 className="animate-spin w-4 h-4" />}
                         Apply filters
                       </Button>
                     </div>
@@ -1247,9 +1100,19 @@ export default function FindMatchSection() {
 
           {/* Right Section - Sitter Cards */}
           <div className="flex-1 space-y-4 sm:space-y-6">
-            {sitters.map((sitter, index) => (
-              <SitterCard key={index} sitter={sitter} serviceType={lookingFor} />
-            ))}
+            {loading ? (
+                <div className="flex justify-center items-center h-40">
+                    <Loader2 className="animate-spin text-[#024B5E] w-8 h-8" />
+                </div>
+            ) : sitters.length > 0 ? (
+                sitters.map((sitter, index) => (
+                    <SitterCard key={index} sitter={sitter} serviceType={lookingFor} />
+                ))
+            ) : (
+                <div className="text-center py-10 text-gray-500">
+                    No sitters found matching your criteria.
+                </div>
+            )}
           </div>
         </div>
       </div>

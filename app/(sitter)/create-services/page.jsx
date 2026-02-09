@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ChevronDown } from "lucide-react";
 import DogWalkingForm from "@/component/createServices/DogWalkingForm";
 import DoggyDayCareForm from "@/component/createServices/DoggyDayCareForm";
@@ -7,6 +7,16 @@ import BoardingForm from "@/component/createServices/BoardingForm";
 
 export default function ServiceSetupForm() {
   const [serviceType, setServiceType] = useState("Dog Walking");
+  
+  // Ref to access child component methods
+  const formRef = useRef(null);
+
+  const handleCreateService = () => {
+     console.log("formRef.current:", formRef.current);
+    if (formRef.current) {
+      formRef.current.handleSave();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-start justify-center p-4 pt-8">
@@ -22,9 +32,9 @@ export default function ServiceSetupForm() {
               onChange={(e) => setServiceType(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg appearance-none bg-white text-[#024B5E] focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent"
             >
-              <option>Dog Walking</option>
-              <option>Boarding</option>
-              <option>Doggy Day Care</option>
+              <option value="Dog Walking">Dog Walking</option>
+              <option value="Boarding">Boarding</option>
+              <option value="Doggy Day Care">Doggy Day Care</option>
             </select>
             <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#024B5E] pointer-events-none" />
           </div>
@@ -65,13 +75,16 @@ export default function ServiceSetupForm() {
           </div>
         </div>
 
-        {/* Render appropriate form based on service type */}
-        {serviceType === "Dog Walking" && <DogWalkingForm />}
-        {serviceType === "Doggy Day Care" && <DoggyDayCareForm />}
-        {serviceType === "Boarding" && <BoardingForm />}
+        {/* Pass the Ref to the active form */}
+        {serviceType === "Dog Walking" && <DogWalkingForm ref={formRef} />}
+        {serviceType === "Doggy Day Care" && <DoggyDayCareForm ref={formRef} />}
+        {serviceType === "Boarding" && <BoardingForm ref={formRef} />}
 
         {/* Create Service Button */}
-        <button className="w-full px-6 py-4 bg-[#035F75] text-white rounded-lg font-semibold text-lg hover:bg-[#024a5c] transition-colors">
+        <button 
+          onClick={handleCreateService}
+          className="w-full px-6 py-4 bg-[#035F75] text-white rounded-lg font-semibold text-lg hover:bg-[#024a5c] transition-colors mt-8"
+        >
           Create Service
         </button>
       </div>
