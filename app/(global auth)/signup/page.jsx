@@ -6,7 +6,7 @@ import {
   loginStart,
   loginSuccess,
   loginFailure,
-} from "../../../store/authSlice";
+} from "../../../redux/authSlice";
 import Link from "next/link";
 
 // Glassmorphism styles embedded

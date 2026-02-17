@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { logout } from "@/store/authSlice";
+import { logout } from "@/redux/authSlice";
 import AccountDetail from "@/component/settingsForSitter/AccountDetail";
 import BookingHistory from "@/component/settingsForSitter/ChangePassword";
 import Payments from "@/component/settingsForSitter/Payments";

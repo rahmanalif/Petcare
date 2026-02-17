@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { logout } from "@/store/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/redux/authSlice";
+import { fetchPets } from "@/redux/petSlice"; // Import action
+
 import AccountDetail from "@/component/settings/AccountDetail";
 import BookingHistory from "@/component/settings/BookingHistory";
 import Payments from "@/component/settings/Payments";
@@ -12,64 +14,24 @@ import ApplyPromo from "@/component/settings/ApplyPromo";
 import InviteFriend from "@/component/settings/InviteFriend";
 import { Loader2 } from "lucide-react";
 
-// Global cache to store pets data
-let petsCache = null;
-
 export default function AccountSettings() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("account");
-  
-  // Initialize state from cache if available
-  const [pets, setPets] = useState(petsCache || []);
-  const [loading, setLoading] = useState(!petsCache);
 
+  // Redux state
+  const { list: pets, loading } = useSelector((state) => state.pets);
+  
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  // Fetch pets if list is empty
   useEffect(() => {
-    const fetchPets = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const response = await fetch(`${API_BASE}/api/pets`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          let petsData = [];
-          
-          if (Array.isArray(data)) {
-            petsData = data;
-          } else if (data.pets && Array.isArray(data.pets)) {
-            petsData = data.pets;
-          } else if (data.data && Array.isArray(data.data)) {
-            petsData = data.data;
-          }
-
-          setPets(petsData);
-          petsCache = petsData; // Update cache
-        }
-      } catch (error) {
-        console.error("Error fetching pets:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // If we already have cached data, we still fetch to update, 
-    // but the user sees the cached data immediately without a spinner.
-    fetchPets();
-  }, [API_BASE]);
+    if (pets.length === 0) {
+      dispatch(fetchPets());
+    }
+  }, [dispatch, pets.length]);
 
   const handleLogout = () => {
-    petsCache = null; // Clear cache on logout
     dispatch(logout());
     router.push('/');
   };
@@ -80,7 +42,7 @@ export default function AccountSettings() {
 
         {/* Dynamic Pet Profiles Section */}
         <div className="flex flex-wrap gap-3 mb-4 sm:mb-6">
-          {loading ? (
+          {loading && pets.length === 0 ? (
             <div className="flex items-center p-4"><Loader2 className="animate-spin text-[#024B5E]" /></div>
           ) : (
             Array.isArray(pets) && pets.map((pet) => (
@@ -115,57 +77,32 @@ export default function AccountSettings() {
           </button>
         </div>
 
+        {/* Rest of the component remains EXACTLY same */}
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-4 sm:gap-6 rounded-2xl bg-[#FFF] p-3 sm:p-4 shadow-md">
-          {/* Left Sidebar */}
           <div className="lg:col-span-3 space-y-2">
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mt-0 lg:mt-4">
               <div className="px-3 sm:px-4 py-3 text-[#024B5E] text-xl sm:text-lg font-bakso">
                 Account Information
               </div>
-              <button
-                onClick={() => setActiveTab("account")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "account"
-                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
-                  : "border-transparent hover:bg-gray-50"
-                  }`}
-              >
-                Account
-              </button>
-              <button
-                onClick={() => setActiveTab("booking")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "booking"
-                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
-                  : "border-transparent hover:bg-gray-50"
-                  }`}
-              >
-                Booking History
-              </button>
-              <button
-                onClick={() => setActiveTab("payments")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "payments"
-                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
-                  : "border-transparent hover:bg-gray-50"
-                  }`}
-              >
-                Payments
-              </button>
-              <button
-                onClick={() => setActiveTab("switch")}
-                className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === "switch"
-                  ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
-                  : "border-transparent hover:bg-gray-50"
-                  }`}
-              >
-                Switch profile
-              </button>
+              {/* Tab Buttons */}
+              {['account', 'booking', 'payments', 'switch'].map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border-l-4 ${activeTab === tab
+                    ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-medium"
+                    : "border-transparent hover:bg-gray-50 capitalize"
+                    }`}
+                >
+                  {tab === 'switch' ? 'Switch profile' : tab.charAt(0).toUpperCase() + tab.slice(1) + (tab === 'booking' ? ' History' : '')}
+                </button>
+              ))}
             </div>
 
-            {/* Other Sections */}
+            {/* Other Sidebar Sections (Same as original) */}
             <div className="pt-2 sm:pt-4">
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                <div className="px-3 sm:px-4 py-3 text-[#024B5E] text-lg sm:text-xl font-bakso">
-                  Policy Center
-                </div>
+                <div className="px-3 sm:px-4 py-3 text-[#024B5E] text-lg sm:text-xl font-bakso">Policy Center</div>
                 <Link href="/privacy" className="block w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-[#024B5E] hover:bg-gray-100">Privacy Policy</Link>
                 <Link href="/terms" className="block w-full text-left px-3 sm:px-4 py-2 text-sm sm:text-base text-[#024B5E] hover:bg-gray-100">Terms & Condition</Link>
               </div>
@@ -188,7 +125,7 @@ export default function AccountSettings() {
             </div>
           </div>
 
-          {/* Account Detail Display Section */}
+          {/* Main Content Area */}
           <div className="lg:col-span-9 mt-4 lg:mt-0">
             {activeTab === "account" && <AccountDetail />}
             {activeTab === "booking" && <BookingHistory />}

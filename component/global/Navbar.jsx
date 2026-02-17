@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../store/authSlice";
+import { logout } from "../../redux/authSlice";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

@@ -5,7 +5,7 @@ import {
   setField,
   toggleArrayField,
   saveBoardingService,
-} from "@/store/serviceSlice";
+} from "@/redux/serviceSlice";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 

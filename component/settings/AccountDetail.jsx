@@ -1,27 +1,28 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Eye, EyeOff, Calendar, Camera, Loader2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux"; // Redux hooks
+import { Eye, EyeOff, Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-// Global cache to store data between route changes
-let profileCache = null;
+// Import thunks from slice
+import { fetchProfile, updateProfileImage, updateProfileInfo, changePassword } from "@/redux/userSlice";
 
 export default function AccountDetail() {
-  const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useDispatch();
   
-  // Initialize loading based on cache existence
-  const [loading, setLoading] = useState(!profileCache);
-  const [updating, setUpdating] = useState(false);
+  // Redux state থেকে ডাটা আনা
+  const { data: user, loading, updating } = useSelector((state) => state.user);
 
+  const [isEditing, setIsEditing] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Initialize form with cached data if available
-  const [formData, setFormData] = useState(profileCache || {
+  // Local Form State
+  const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     street: "",
@@ -39,138 +40,61 @@ export default function AccountDetail() {
   const formatDateForInput = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return dateString; 
+    if (isNaN(date.getTime())) return dateString;
     return date.toISOString().split('T')[0];
   };
 
+  // ১. কম্পোনেন্ট লোড হলে ডাটা ফেচ করুন (যদি Redux এ ডাটা না থাকে)
   useEffect(() => {
-    // If we have cache, we don't need to show loader, but we still fetch latest data in background
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/profile`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+    if (!user) {
+      dispatch(fetchProfile());
+    }
+  }, [dispatch, user]);
 
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-          const userData = result.data;
-
-          let profilePic = userData.profilePicture || "";
-          if (profilePic && !profilePic.startsWith("http")) {
-            profilePic = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${profilePic.replace(/\\/g, '/')}`;
-          }
-
-          const newData = {
-            ...formData, // Keep existing password fields if any
-            fullName: userData.fullName || "",
-            email: userData.email || "",
-            street: userData.street || "",
-            state: userData.state || "",
-            zipCode: userData.zipCode || "",
-            dob: formatDateForInput(userData.dob) || "",
-            profilePicture: profilePic,
-          };
-
-          setFormData(newData);
-          profileCache = newData; // Update cache
-        }
-      } catch (error) {
-        console.error("Fetch error:", error);
-      } finally {
-        setLoading(false);
+  // ২. Redux থেকে ডাটা আসলে ফর্ম আপডেট করুন
+  useEffect(() => {
+    if (user) {
+      let profilePic = user.profilePicture || "";
+      // ইমেজ URL ঠিক করা
+      if (profilePic && !profilePic.startsWith("http")) {
+        profilePic = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${profilePic.replace(/\\/g, '/')}`;
       }
-    };
 
-    fetchProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      setFormData((prev) => ({
+        ...prev,
+        fullName: user.fullName || "",
+        email: user.email || "",
+        street: user.street || "",
+        state: user.state || "",
+        zipCode: user.zipCode || "",
+        dob: formatDateForInput(user.dob) || "",
+        profilePicture: profilePic,
+      }));
+    }
+  }, [user]);
 
+  // ইমেজ আপলোড হ্যান্ডলার
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const formDataUpload = new FormData();
-    formDataUpload.append("profileImage", file);
-
     try {
-      setUpdating(true);
-      const token = localStorage.getItem("token");
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/profile-image`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          ...(token && { "Authorization": `Bearer ${token}` }),
-        },
-        body: formDataUpload,
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        const imageUrl = result.profilePicture || result.imageUrl || result.data?.profilePicture;
-        
-        setFormData(prev => {
-            const updated = { ...prev, profilePicture: imageUrl };
-            profileCache = updated; // Update cache
-            return updated;
-        });
-        toast.success("Profile picture updated!");
-      } else {
-        toast.error(result.message || "Upload failed");
-      }
+      // unwrap() ব্যবহার করা হয়েছে যাতে error catch করা যায়
+      await dispatch(updateProfileImage(file)).unwrap();
+      toast.success("Profile picture updated!");
     } catch (error) {
-      toast.error("Upload failed due to server error");
-    } finally {
-      setUpdating(false);
+      toast.error(error || "Upload failed");
     }
   };
 
-  const updateProfileInfo = async (token) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        fullName: formData.fullName,
-        street: formData.street,
-        state: formData.state,
-        zipCode: formData.zipCode,
-        dob: formData.dob, 
-      }),
-    });
-    return response;
-  };
-
-  const changePassword = async (token) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/sitter/change-password`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        currentPassword: formData.currentPassword,
-        newPassword: formData.newPassword
-      }),
-    });
-    return response;
-  };
-
+  // সেভ হ্যান্ডলার
   const handleSave = async () => {
     if (!isEditing) {
       setIsEditing(true);
       return;
     }
 
+    // পাসওয়ার্ড ভ্যালিডেশন
     if (formData.newPassword || formData.currentPassword) {
       if (!formData.currentPassword) {
         toast.error("Please enter your current password");
@@ -187,57 +111,38 @@ export default function AccountDetail() {
     }
 
     try {
-      setUpdating(true);
-      const token = localStorage.getItem("token");
+      // ১. প্রোফাইল ইনফো আপডেট
+      await dispatch(updateProfileInfo({
+        fullName: formData.fullName,
+        street: formData.street,
+        state: formData.state,
+        zipCode: formData.zipCode,
+        dob: formData.dob,
+      })).unwrap();
 
-      if (!token) {
-        toast.error("Session expired. Please login again.");
-        return;
-      }
-
-      const profileResponse = await updateProfileInfo(token);
-      
-      let passwordSuccess = true;
-      let profileSuccess = profileResponse.ok;
-
+      // ২. পাসওয়ার্ড পরিবর্তন (যদি থাকে)
       if (formData.newPassword && formData.currentPassword) {
-        const passwordResponse = await changePassword(token);
-        const passwordResult = await passwordResponse.json();
+        await dispatch(changePassword({
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword
+        })).unwrap();
         
-        if (!passwordResponse.ok) {
-          passwordSuccess = false;
-          toast.error(passwordResult.message || "Failed to update password");
-        } else {
-          toast.success("Password changed successfully");
-          setFormData(prev => ({
-            ...prev,
-            currentPassword: "",
-            newPassword: "",
-            confirmPassword: ""
-          }));
-        }
+        toast.success("Password changed successfully");
+        // পাসওয়ার্ড ফিল্ড ক্লিয়ার করা
+        setFormData(prev => ({
+          ...prev,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: ""
+        }));
       }
 
-      if (profileSuccess && passwordSuccess) {
-        toast.success("Profile updated successfully");
-        setIsEditing(false);
-        
-        // Update cache with latest data (excluding passwords)
-        profileCache = {
-            ...formData,
-            currentPassword: "",
-            newPassword: "",
-            confirmPassword: ""
-        };
-      } else if (!profileSuccess) {
-        toast.error("Failed to update profile details");
-      }
+      toast.success("Profile updated successfully");
+      setIsEditing(false);
 
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating");
-    } finally {
-      setUpdating(false);
+      toast.error(typeof error === 'string' ? error : "An error occurred while updating");
     }
   };
 
@@ -245,7 +150,8 @@ export default function AccountDetail() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  if (loading) {
+  // ইনিশিয়াল লোডিং
+  if (loading && !user) {
     return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-[#024B5E]" /></div>;
   }
 
@@ -257,14 +163,14 @@ export default function AccountDetail() {
           variant={isEditing ? "default" : "outline"}
           size="sm"
           onClick={handleSave}
-          disabled={updating}
+          disabled={updating} // Redux updating state
         >
           {updating && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
           {isEditing ? "Save" : "Edit"}
         </Button>
       </div>
 
-      {/* Avatar */}
+      {/* Avatar Section */}
       <div className="flex justify-center sm:justify-start mb-6 sm:mb-8">
         <div
           className="relative cursor-pointer group w-20 h-20 sm:w-24 sm:h-24"
@@ -274,6 +180,7 @@ export default function AccountDetail() {
             {formData.profilePicture ? (
               <img src={formData.profilePicture} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
+              // SVG Placeholder (Same as before)
               <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="140" height="140" rx="70" fill="#EBFBFE" />
                 <path fillRule="evenodd" clipRule="evenodd" d="M47.5002 50C47.5002 37.5736 57.5738 27.5 70.0002 27.5C82.4266 27.5 92.5002 37.5736 92.5002 50C92.5002 62.4264 82.4266 72.5 70.0002 72.5C57.5738 72.5 47.5002 62.4264 47.5002 50Z" fill="#0B87AC" />
@@ -290,64 +197,49 @@ export default function AccountDetail() {
         </div>
       </div>
 
-      {/* Form Fields */}
+      {/* Form Fields (Same as before, simplified slightly) */}
       <div className="space-y-4 sm:space-y-6 max-w-2xl mx-auto">
         <div>
           <Label htmlFor="fullName" className="text-sm font-medium text-[#024B5E]">Full Name</Label>
-          <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} placeholder="Name" className="mt-1 text-[#024B5E]" />
+          <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
         </div>
 
         <div>
           <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">E-mail address or phone number</Label>
-          <Input id="email" value={formData.email} disabled={true} placeholder="Email" className="mt-1 text-[#024B5E] bg-gray-50" />
+          <Input id="email" value={formData.email} disabled={true} className="mt-1 text-[#024B5E] bg-gray-50" />
         </div>
 
         <div>
           <Label htmlFor="street" className="text-sm font-medium text-[#024B5E]">Street</Label>
-          <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} placeholder="Street" className="mt-1 text-[#024B5E]" />
+          <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="state" className="text-sm font-medium text-[#024B5E]">State</Label>
-            <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} placeholder="State" className="mt-1 text-[#024B5E]" />
+            <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
           </div>
           <div>
             <Label htmlFor="zipCode" className="text-sm font-medium text-[#024B5E]">Zip Code</Label>
-            <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} placeholder="Zip Code" className="mt-1 text-[#024B5E]" />
+            <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
           </div>
         </div>
 
         <div>
           <Label htmlFor="dob" className="text-sm font-medium text-[#024B5E]">Date of birth</Label>
           <div className="relative mt-1">
-            <Input 
-              id="dob" 
-              type="date" 
-              value={formData.dob} 
-              onChange={handleChange} 
-              disabled={!isEditing} 
-              className="text-[#024B5E] block w-full" 
-            />
+            <Input id="dob" type="date" value={formData.dob} onChange={handleChange} disabled={!isEditing} className="text-[#024B5E] block w-full" />
           </div>
         </div>
 
         <div className="pt-4 border-t border-gray-100">
             <h3 className="text-md font-semibold text-[#024B5E] mb-4">Change Password</h3>
-            
             <div className="space-y-4">
+                {/* Password Fields - Same as original */}
                 <div>
                 <Label htmlFor="currentPassword" className="text-sm font-medium text-[#024B5E]">Current Password</Label>
                 <div className="relative mt-1">
-                    <Input
-                    id="currentPassword"
-                    type={showCurrentPassword ? "text" : "password"}
-                    value={formData.currentPassword}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    placeholder="••••••••"
-                    className="pr-10 text-[#024B5E]"
-                    />
+                    <Input id="currentPassword" type={showCurrentPassword ? "text" : "password"} value={formData.currentPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
                     <button type="button" onClick={() => setShowCurrentPassword(!showCurrentPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
                     {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -357,15 +249,7 @@ export default function AccountDetail() {
                 <div>
                 <Label htmlFor="newPassword" className="text-sm font-medium text-[#024B5E]">New Password</Label>
                 <div className="relative mt-1">
-                    <Input
-                    id="newPassword"
-                    type={showNewPassword ? "text" : "password"}
-                    value={formData.newPassword}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    placeholder="••••••••"
-                    className="pr-10 text-[#024B5E]"
-                    />
+                    <Input id="newPassword" type={showNewPassword ? "text" : "password"} value={formData.newPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
                     <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
                     {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -375,15 +259,7 @@ export default function AccountDetail() {
                 <div>
                 <Label htmlFor="confirmPassword" className="text-sm font-medium text-[#024B5E]">Confirm Password</Label>
                 <div className="relative mt-1">
-                    <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    disabled={!isEditing}
-                    placeholder="••••••••"
-                    className="pr-10 text-[#024B5E]"
-                    />
+                    <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
                     <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
                     {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
