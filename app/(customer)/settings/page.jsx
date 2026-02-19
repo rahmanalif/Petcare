@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/redux/authSlice";
 import { fetchPets } from "@/redux/petSlice"; // Import action
+import { clearAuthStorage } from "@/lib/auth";
 
 import AccountDetail from "@/component/settings/AccountDetail";
 import BookingHistory from "@/component/settings/BookingHistory";
@@ -32,6 +33,7 @@ export default function AccountSettings() {
   }, [dispatch, pets.length]);
 
   const handleLogout = () => {
+    clearAuthStorage();
     dispatch(logout());
     router.push('/');
   };

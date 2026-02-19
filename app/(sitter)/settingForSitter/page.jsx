@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/authSlice";
+import { clearAuthStorage } from "@/lib/auth";
 import AccountDetail from "@/component/settingsForSitter/AccountDetail";
 import BookingHistory from "@/component/settingsForSitter/ChangePassword";
 import Payments from "@/component/settingsForSitter/Payments";
@@ -19,6 +20,7 @@ export default function AccountSettings() {
   const [activeTab, setActiveTab] = useState("account");
 
   const handleLogout = () => {
+    clearAuthStorage();
     dispatch(logout());
     router.push('/');
   };

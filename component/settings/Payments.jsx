@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Loader2, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
+import { fetchWithAuth } from "@/lib/auth";
 
 // Global cache to prevent reloading on route change
 let paymentsCache = null;
@@ -45,12 +46,10 @@ export default function Payments() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`${API_BASE}/api/bookings`, {
+        const response = await fetchWithAuth(`${API_BASE}/api/bookings`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }),
           },
         });
 

@@ -1,21 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchWithAuth } from '@/lib/auth';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-// Helper to get token
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return {
-    "Authorization": `Bearer ${token}`,
-  };
-};
 
 // 1. Fetch All Pets
 export const fetchPets = createAsyncThunk('pets/fetchPets', async (_, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${API_BASE}/api/pets`, {
+    const response = await fetchWithAuth(`${API_BASE}/api/pets`, {
       method: "GET",
-      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || "Failed to fetch pets");
@@ -33,9 +26,9 @@ export const fetchPets = createAsyncThunk('pets/fetchPets', async (_, { rejectWi
 // 2. Fetch Single Pet (Optional if we already have the list, but good for direct link access)
 export const fetchPetById = createAsyncThunk('pets/fetchPetById', async (id, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${API_BASE}/api/pets/${id}`, {
+    const response = await fetchWithAuth(`${API_BASE}/api/pets/${id}`, {
       method: "GET",
-      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || "Failed to fetch pet details");
@@ -51,9 +44,8 @@ export const updatePetImage = createAsyncThunk('pets/updatePetImage', async ({ i
     const formData = new FormData();
     formData.append("petImage", file);
 
-    const response = await fetch(`${API_BASE}/api/pets/${id}/image`, {
+    const response = await fetchWithAuth(`${API_BASE}/api/pets/${id}/image`, {
       method: "POST",
-      headers: { ...getAuthHeaders() }, // No Content-Type for FormData
       body: formData,
     });
     const result = await response.json();

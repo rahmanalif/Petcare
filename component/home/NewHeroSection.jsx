@@ -73,9 +73,13 @@ const PawIcon = ({ className }) => (
 );
 
 export default function NewHeroSection() {
+  const today = new Date();
+  const todayFormatted = `${String(today.getMonth() + 1).padStart(2, "0")}/${String(
+    today.getDate()
+  ).padStart(2, "0")}/${today.getFullYear()}`;
   const [activeService, setActiveService] = useState("boarding");
-    const [startDate, setStartDate] = useState("01/09/2025");
-    const [endDate, setEndDate] = useState("01/09/2025");
+    const [startDate, setStartDate] = useState(todayFormatted);
+    const [endDate, setEndDate] = useState(todayFormatted);
     const [startTime, setStartTime] = useState("11:00pm");
     const [endTime, setEndTime] = useState("11:00pm");
     const [schedule, setSchedule] = useState("onetime");
@@ -104,6 +108,26 @@ export default function NewHeroSection() {
           : [...prev, dayId]
       );
     };
+
+  const serviceToSearchValue = {
+    boarding: "boarding",
+    daycare: "Doggy Day Care",
+    walking: "Dog Walking",
+  };
+
+  const searchHref = {
+    pathname: "/search",
+    query: {
+      fromHome: "1",
+      service: serviceToSearchValue[activeService] || "boarding",
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      schedule: schedule === "repeat" ? "repeatWeekly" : "oneTime",
+      days: selectedDays.join(","),
+    },
+  };
 
   return (
     <div className="w-full bg-[#024B5E] relative">
@@ -259,13 +283,13 @@ export default function NewHeroSection() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs sm:text-sm text-gray-400 font-medium">
+                  <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
                     End date
                   </label>
                   <DatePicker
                     value={endDate}
                     onChange={setEndDate}
-                    className="w-full text-gray-400 text-xs sm:text-sm font-medium border-gray-200 h-9"
+                    className="w-full text-[#024B5E] text-xs sm:text-sm font-medium border-gray-200 h-9"
                   />
                 </div>
                 <div className="space-y-1">
@@ -341,9 +365,7 @@ export default function NewHeroSection() {
                 </div>
               )}
             </div>
-            <Link
-              href="/search"
-            >
+            <Link href={searchHref}>
                 <button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#024B5E] hover:bg-[#035F75] text-white px-8 sm:px-12 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-colors">
               
                 <svg

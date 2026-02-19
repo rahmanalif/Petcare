@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { ChevronDown, MapPin, Loader2 } from "lucide-react";
 import { Map, MapTileLayer, MapMarker, MapZoomControl, MapCircle } from "@/components/ui/map";
 import { toast } from "sonner";
+import { fetchWithAuth } from "@/lib/auth";
 
 export default function DogWalkingForm() {
   const [loading, setLoading] = useState(false);
@@ -68,8 +69,6 @@ export default function DogWalkingForm() {
   const handleSave = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-
       const payload = {
         message: "Service settings updated",
         settings: {
@@ -109,11 +108,10 @@ export default function DogWalkingForm() {
         }
       };
 
-      const response = await fetch(`${API_BASE}/api/sitter/services/walking`, {
+      const response = await fetchWithAuth(`${API_BASE}/api/sitter/services/walking`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });

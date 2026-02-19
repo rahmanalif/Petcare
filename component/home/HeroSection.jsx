@@ -46,9 +46,13 @@ const PawIcon = ({ className }) => (
 );
 
 export default function HeroSection() {
+  const today = new Date();
+  const todayFormatted = `${String(today.getMonth() + 1).padStart(2, "0")}/${String(
+    today.getDate()
+  ).padStart(2, "0")}/${today.getFullYear()}`;
   const [activeService, setActiveService] = useState("boarding");
-  const [startDate, setStartDate] = useState("01/09/2025");
-  const [endDate, setEndDate] = useState("01/09/2025");
+  const [startDate, setStartDate] = useState(todayFormatted);
+  const [endDate, setEndDate] = useState(todayFormatted);
   const [startTime, setStartTime] = useState("11:00pm");
   const [endTime, setEndTime] = useState("11:00pm");
   const [schedule, setSchedule] = useState("onetime");
@@ -76,6 +80,26 @@ export default function HeroSection() {
         ? prev.filter((id) => id !== dayId)
         : [...prev, dayId]
     );
+  };
+
+  const serviceToSearchValue = {
+    boarding: "boarding",
+    daycare: "Doggy Day Care",
+    walking: "Dog Walking",
+  };
+
+  const searchHref = {
+    pathname: "/search",
+    query: {
+      fromHome: "1",
+      service: serviceToSearchValue[activeService] || "boarding",
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      schedule: schedule === "repeat" ? "repeatWeekly" : "oneTime",
+      days: selectedDays.join(","),
+    },
   };
 
   // Render form fields based on active service
@@ -292,7 +316,7 @@ export default function HeroSection() {
               )}
             </div>
             <Link
-              href="/search"
+              href={searchHref}
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#035F75] hover:bg-teal-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-colors"
             >
               <svg

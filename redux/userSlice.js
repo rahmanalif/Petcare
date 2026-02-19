@@ -1,21 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchWithAuth } from '@/lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-// Helper to get token
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-  return {
-    "Authorization": `Bearer ${token}`,
-  };
-};
 
 // 1. Fetch Profile
 export const fetchProfile = createAsyncThunk('user/fetchProfile', async (_, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${API_URL}/api/users/profile`, {
+    const response = await fetchWithAuth(`${API_URL}/api/users/profile`, {
       method: "GET",
-      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.message || "Failed to fetch profile");
@@ -31,9 +24,8 @@ export const updateProfileImage = createAsyncThunk('user/updateProfileImage', as
     const formData = new FormData();
     formData.append("profileImage", file);
 
-    const response = await fetch(`${API_URL}/api/users/profile-image`, {
+    const response = await fetchWithAuth(`${API_URL}/api/users/profile-image`, {
       method: "POST",
-      headers: { ...getAuthHeaders() }, // Content-Type multipart/form-data
       body: formData,
     });
     const result = await response.json();
@@ -49,9 +41,9 @@ export const updateProfileImage = createAsyncThunk('user/updateProfileImage', as
 // 3. Update Profile Info (Text data)
 export const updateProfileInfo = createAsyncThunk('user/updateProfileInfo', async (userData, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${API_URL}/api/users/profile`, {
+    const response = await fetchWithAuth(`${API_URL}/api/users/profile`, {
       method: "PUT",
-      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
     });
     const result = await response.json();
@@ -65,9 +57,9 @@ export const updateProfileInfo = createAsyncThunk('user/updateProfileInfo', asyn
 // 4. Change Password
 export const changePassword = createAsyncThunk('user/changePassword', async (passwordData, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${API_URL}/api/sitter/change-password`, {
+    const response = await fetchWithAuth(`${API_URL}/api/sitter/change-password`, {
       method: "PUT",
-      headers: { ...getAuthHeaders(), "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(passwordData),
     });
     const result = await response.json();

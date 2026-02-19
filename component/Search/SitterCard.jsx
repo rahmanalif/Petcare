@@ -15,9 +15,12 @@ const SitterCard = ({ sitter, serviceType = "boarding" }) => {
                 {/* Profile Image */}
                 <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gray-300 shrink-0">
                   <img
-                    src="/Ellipse 52.png"
+                    src={sitter.image || "/Ellipse.png"}
                     alt="Profile"
                     className="w-full h-full object-cover rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = "/Ellipse.png";
+                    }}
                   />
                 </div>
 

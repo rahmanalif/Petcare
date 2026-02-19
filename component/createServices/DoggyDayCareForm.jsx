@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { ChevronDown, MapPin, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { fetchWithAuth } from "@/lib/auth";
 
 export default function DoggyDayCareForm() {
   const [loading, setLoading] = useState(false);
@@ -67,8 +68,6 @@ export default function DoggyDayCareForm() {
   const handleSave = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-
       const payload = {
         message: "Service settings updated",
         settings: {
@@ -107,11 +106,10 @@ export default function DoggyDayCareForm() {
         }
       };
 
-      const response = await fetch(`${API_BASE}/api/sitter/services/daycare`, {
+      const response = await fetchWithAuth(`${API_BASE}/api/sitter/services/daycare`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });

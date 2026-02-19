@@ -1,8 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -13,6 +15,10 @@ import {
 import SitterCard from "./SitterCard"; // Assuming you have this component
 import { Map, MapTileLayer, MapMarker, MapPopup, MapZoomControl } from "@/components/ui/map";
 import { Loader2 } from "lucide-react";
+import { fetchWithAuth } from "@/lib/auth";
+import { searchBoardingSitters } from "@/redux/boardingSearchSlice";
+import { searchWalkingSitters } from "@/redux/walkingSearchSlice";
+import { searchDaycareSitters } from "@/redux/daycareSearchSlice";
 
 // Reusable SVG Icons (Kept exactly as provided)
 const FilterIcon = ({ className = "" }) => (
@@ -113,11 +119,20 @@ const CheckedIcon = ({ className = "" }) => (
 
 
 export default function FindMatchSection() {
+  const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const [shouldAutoSearch, setShouldAutoSearch] = useState(false);
+  const [autoSearchMinimal, setAutoSearchMinimal] = useState(false);
+  const today = new Date();
+  const todayFormatted = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}-${String(today.getDate()).padStart(2, "0")}`;
   const [lookingFor, setLookingFor] = useState("boarding");
-  const [startDate, setStartDate] = useState("01/09/2025");
-  const [endDate, setEndDate] = useState("01/09/2025");
-  const [startTime, setStartTime] = useState("11:00am");
-  const [endTime, setEndTime] = useState("11:00pm");
+  const [startDate, setStartDate] = useState(todayFormatted);
+  const [endDate, setEndDate] = useState(todayFormatted);
+  const [startTime, setStartTime] = useState("11:00");
+  const [endTime, setEndTime] = useState("23:00");
   const [selectedPets, setSelectedPets] = useState([]);
   const [showMap, setShowMap] = useState(false);
   const [schedule, setSchedule] = useState("oneTime"); // "oneTime" or "repeatWeekly"
@@ -135,6 +150,17 @@ export default function FindMatchSection() {
   const [loading, setLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState({ lat: 40.7128, lng: -74.0060 }); // Default to NY
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const { loading: boardingLoading } = useSelector((state) => state.boardingSearch);
+  const { loading: walkingLoading } = useSelector((state) => state.walkingSearch);
+  const { loading: daycareLoading } = useSelector((state) => state.daycareSearch);
+  const uiLoading =
+    lookingFor === "boarding"
+      ? boardingLoading
+      : lookingFor === "Dog Walking"
+        ? walkingLoading
+        : lookingFor === "Doggy Day Care"
+          ? daycareLoading
+          : loading;
 
   // Pet data
   const pets = [
@@ -248,6 +274,104 @@ export default function FindMatchSection() {
     }));
   };
 
+  const normalizeDateForInput = (value) => {
+    if (!value) return "";
+    const raw = String(value).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+    const mdy = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!mdy) return raw;
+    const mm = mdy[1].padStart(2, "0");
+    const dd = mdy[2].padStart(2, "0");
+    const yyyy = mdy[3];
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
+  const normalizeTimeForInput = (value) => {
+    if (!value) return "";
+    const raw = String(value).trim();
+    if (/^\d{2}:\d{2}$/.test(raw)) return raw;
+
+    const m = raw.toUpperCase().replace(/\s+/g, "").match(/^(\d{1,2}):(\d{2})(AM|PM)$/);
+    if (!m) return raw;
+
+    let hour = Number(m[1]);
+    const minute = m[2];
+    const suffix = m[3];
+
+    if (suffix === "AM") {
+      if (hour === 12) hour = 0;
+    } else if (hour !== 12) {
+      hour += 12;
+    }
+
+    return `${String(hour).padStart(2, "0")}:${minute}`;
+  };
+
+  useEffect(() => {
+    const fromHome = searchParams.get("fromHome") === "1";
+    const service = searchParams.get("service");
+    const queryStartDate = searchParams.get("startDate");
+    const queryEndDate = searchParams.get("endDate");
+    const queryStartTime = searchParams.get("startTime");
+    const queryEndTime = searchParams.get("endTime");
+    const querySchedule = searchParams.get("schedule");
+    const queryDays = searchParams.get("days");
+
+    const serviceMap = {
+      boarding: "boarding",
+      daycare: "Doggy Day Care",
+      "doggy day care": "Doggy Day Care",
+      walking: "Dog Walking",
+      "dog walking": "Dog Walking",
+    };
+    const normalizedService = serviceMap[String(service || "").toLowerCase()];
+    if (normalizedService) {
+      setLookingFor(normalizedService);
+    }
+    if (queryStartDate) setStartDate(normalizeDateForInput(queryStartDate));
+    if (queryEndDate) setEndDate(normalizeDateForInput(queryEndDate));
+    if (queryStartTime) setStartTime(normalizeTimeForInput(queryStartTime));
+    if (queryEndTime) setEndTime(normalizeTimeForInput(queryEndTime));
+    if (querySchedule) {
+      const scheduleMap = {
+        onetime: "oneTime",
+        one_time: "oneTime",
+        repeatweekly: "repeatWeekly",
+        repeat_weekly: "repeatWeekly",
+        repeat: "repeatWeekly",
+      };
+      const normalizedSchedule = scheduleMap[String(querySchedule).toLowerCase()];
+      if (normalizedSchedule) {
+        setSchedule(normalizedSchedule);
+      }
+    }
+    if (queryDays) {
+      const selected = { M: false, T: false, W: false, T2: false, F: false, S: false };
+      queryDays.split(",").forEach((d) => {
+        const day = String(d).trim().toLowerCase();
+        if (day === "m" || day === "mon" || day === "monday") selected.M = true;
+        if (day === "t" || day === "tu" || day === "tue" || day === "tuesday") selected.T = true;
+        if (day === "w" || day === "wed" || day === "wednesday") selected.W = true;
+        if (day === "th" || day === "thu" || day === "thur" || day === "thurs" || day === "thursday") selected.T2 = true;
+        if (day === "f" || day === "fri" || day === "friday") selected.F = true;
+        if (day === "s" || day === "sa" || day === "sat" || day === "saturday" || day === "sun" || day === "sunday") selected.S = true;
+      });
+      setSelectedDays(selected);
+    }
+
+    if (
+      service ||
+      queryStartDate ||
+      queryEndDate ||
+      queryStartTime ||
+      queryEndTime ||
+      querySchedule
+    ) {
+      setAutoSearchMinimal(fromHome);
+      setShouldAutoSearch(true);
+    }
+  }, [searchParams]);
+
   // --- API FETCH LOGIC (UPDATED) ---
   const getServiceEndpoint = () => {
     // Dropdown values match these cases exactly
@@ -262,21 +386,148 @@ export default function FindMatchSection() {
     }
   };
 
-  const fetchSitters = async () => {
+  const fetchSitters = async (options = {}) => {
+    const minimalMode = Boolean(options.minimalMode);
+
+    const resolveProfileImage = (imagePath) => {
+      if (!imagePath) return "/Ellipse.png";
+      if (/^https?:\/\//i.test(imagePath)) return imagePath;
+
+      const base = (API_BASE || "").replace(/\/+$/, "");
+      const path = String(imagePath).replace(/^\/+/, "");
+      return base ? `${base}/${path}` : imagePath;
+    };
+
+    const mapSitterToCard = (sitter) => ({
+      name: sitter.fullName || sitter.name || "Sitter",
+      location: sitter.address || "New York, NY",
+      rating: sitter.rating || sitter.averageRating || 5.0,
+      reviews: sitter.reviews || sitter.reviewsCount || 0,
+      repeatPetOwners: Boolean(sitter.isRepeatSitter),
+      availability: sitter.availabilitySummary || sitter.about || "Available",
+      price: sitter.price || sitter.rates?.base || 25,
+      backgroundCheck: Boolean(sitter.isVerified),
+      image: resolveProfileImage(sitter.profilePicture),
+    });
+
+    if (lookingFor === "boarding") {
+      try {
+        const payload = {
+          startDate,
+          endDate,
+          startTime,
+          endTime,
+        };
+
+        if (!minimalMode) {
+          payload.lat = currentLocation?.lat;
+          payload.lng = currentLocation?.lng;
+          payload.filters = {
+            isHomeFullTime: filters.sitterAtHome,
+            hasFencedGarden: filters.hasFencedGarden,
+            petsAllowedOnFurniture: filters.petsAllowed,
+            noSmokingHome: filters.noSmokingHome,
+            doesntOwnDogs: filters.doesntOwnDogs,
+            doesntOwnCats: filters.doesntOwnCats,
+            acceptsOnlyOneBooking: filters.onlyOneBooking,
+            doesNotOwnCagedPets: filters.doesntOwnCagedPets,
+            noChildren: filters.hasNoChildren,
+            noChildren0to5: filters.hasNoChildren0to3,
+            noChildren6to12: filters.hasNoChildren6to12,
+            acceptsNonSpayedFemale: filters.acceptsNonSpayed,
+            acceptsNonNeuteredMale: filters.acceptsNonNeutered,
+            canDoBathingGrooming: filters.bathingGrooming,
+            certifiedFirstAid: filters.dogFirstAid,
+          };
+        }
+
+        const result = await dispatch(
+          searchBoardingSitters(payload)
+        ).unwrap();
+
+        setSitters(Array.isArray(result) ? result.map(mapSitterToCard) : []);
+      } catch (error) {
+        console.error("Boarding search failed", error);
+        setSitters([]);
+      }
+      return;
+    }
+
+    if (lookingFor === "Dog Walking") {
+      try {
+        const payload = {
+          schedule,
+          selectedDays,
+          startDate,
+          endDate,
+          startTime,
+          endTime,
+        };
+
+        if (!minimalMode) {
+          payload.lat = currentLocation?.lat;
+          payload.lng = currentLocation?.lng;
+          payload.radius = 20;
+          payload.filters = {
+            certifiedFirstAid: walkingFilters.dogFirstAid,
+            canDoBathingGrooming: false,
+          };
+        }
+
+        const result = await dispatch(
+          searchWalkingSitters(payload)
+        ).unwrap();
+
+        setSitters(Array.isArray(result) ? result.map(mapSitterToCard) : []);
+      } catch (error) {
+        console.error("Walking search failed", error);
+        setSitters([]);
+      }
+      return;
+    }
+
+    if (lookingFor === "Doggy Day Care") {
+      try {
+        const payload = {
+          schedule,
+          selectedDays,
+          startDate,
+          endDate,
+          startTime,
+          endTime,
+        };
+
+        if (!minimalMode) {
+          payload.lat = currentLocation?.lat;
+          payload.lng = currentLocation?.lng;
+          payload.radius = 20;
+          payload.filters = daycareFilters;
+        }
+
+        const result = await dispatch(
+          searchDaycareSitters(payload)
+        ).unwrap();
+
+        setSitters(Array.isArray(result) ? result.map(mapSitterToCard) : []);
+      } catch (error) {
+        console.error("Day care search failed", error);
+        setSitters([]);
+      }
+      return;
+    }
+
     setLoading(true);
 
     try {
       const serviceEndpoint = getServiceEndpoint(); // returns 'walking', 'daycare', or 'boarding'
-      const token = localStorage.getItem("token");
 
       // Dynamic URL based on service type
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${API_BASE}/api/sitter/services/${serviceEndpoint}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
           }
         }
       );
@@ -285,18 +536,7 @@ export default function FindMatchSection() {
 
       if (result.success && Array.isArray(result.data)) {
         // Map the data to fit SitterCard component
-        const mappedSitters = result.data.map(sitter => ({
-          name: sitter.fullName || "Sitter",
-          location: sitter.address || "New York, NY",
-          rating: sitter.averageRating || 5.0,
-          reviews: sitter.reviewsCount || 0,
-          repeatPetOwners: true,
-          availability: sitter.about || "Available",
-          // Adjust price access based on service type if structure varies
-          price: sitter.rates?.base || 25,
-          backgroundCheck: sitter.isVerified || false,
-          image: sitter.profilePicture
-        }));
+        const mappedSitters = result.data.map(mapSitterToCard);
 
         setSitters(mappedSitters);
       } else {
@@ -310,11 +550,22 @@ export default function FindMatchSection() {
     }
   };
 
-  // Re-fetch when the Service Type (lookingFor) changes
   useEffect(() => {
-    fetchSitters();
-  }, [lookingFor]); 
-
+    if (!shouldAutoSearch) return;
+    fetchSitters({ minimalMode: autoSearchMinimal });
+    setShouldAutoSearch(false);
+    setAutoSearchMinimal(false);
+  }, [
+    shouldAutoSearch,
+    autoSearchMinimal,
+    lookingFor,
+    startDate,
+    endDate,
+    startTime,
+    endTime,
+    schedule,
+    selectedDays,
+  ]);
 
   return (
     <div className="min-h-screen bg-[#F8F4EF] py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 text-[#024B5E]">
@@ -488,7 +739,7 @@ export default function FindMatchSection() {
                                   Start date
                                 </label>
                                 <Input
-                                  type="text"
+                                  type="date"
                                   value={startDate}
                                   onChange={(e) => setStartDate(e.target.value)}
                                   className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -499,7 +750,7 @@ export default function FindMatchSection() {
                                   End date
                                 </label>
                                 <Input
-                                  type="text"
+                                  type="date"
                                   value={endDate}
                                   onChange={(e) => setEndDate(e.target.value)}
                                   className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -514,7 +765,7 @@ export default function FindMatchSection() {
                                   Start time
                                 </label>
                                 <Input
-                                  type="text"
+                                  type="time"
                                   value={startTime}
                                   onChange={(e) => setStartTime(e.target.value)}
                                   className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -525,7 +776,7 @@ export default function FindMatchSection() {
                                   End time
                                 </label>
                                 <Input
-                                  type="text"
+                                  type="time"
                                   value={endTime}
                                   onChange={(e) => setEndTime(e.target.value)}
                                   className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -610,7 +861,7 @@ export default function FindMatchSection() {
                                 Start date
                               </label>
                               <Input
-                                type="text"
+                                type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
                                 className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -621,7 +872,7 @@ export default function FindMatchSection() {
                                 End date
                               </label>
                               <Input
-                                type="text"
+                                type="date"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
                                 className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -636,7 +887,7 @@ export default function FindMatchSection() {
                                 Start time
                               </label>
                               <Input
-                                type="text"
+                                type="time"
                                 value={startTime}
                                 onChange={(e) => setStartTime(e.target.value)}
                                 className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -647,7 +898,7 @@ export default function FindMatchSection() {
                                 End time
                               </label>
                               <Input
-                                type="text"
+                                type="time"
                                 value={endTime}
                                 onChange={(e) => setEndTime(e.target.value)}
                                 className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -667,7 +918,7 @@ export default function FindMatchSection() {
                               Start date
                             </label>
                             <Input
-                              type="text"
+                              type="date"
                               value={startDate}
                               onChange={(e) => setStartDate(e.target.value)}
                               className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -678,7 +929,7 @@ export default function FindMatchSection() {
                               End date
                             </label>
                             <Input
-                              type="text"
+                              type="date"
                               value={endDate}
                               onChange={(e) => setEndDate(e.target.value)}
                               className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -693,7 +944,7 @@ export default function FindMatchSection() {
                               Start time
                             </label>
                             <Input
-                              type="text"
+                              type="time"
                               value={startTime}
                               onChange={(e) => setStartTime(e.target.value)}
                               className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -704,7 +955,7 @@ export default function FindMatchSection() {
                               End time
                             </label>
                             <Input
-                              type="text"
+                              type="time"
                               value={endTime}
                               onChange={(e) => setEndTime(e.target.value)}
                               className="border-2 text-[#024B5E] border-gray-200 rounded-b-sm px-0 p-2 focus-visible:ring-0"
@@ -1085,10 +1336,10 @@ export default function FindMatchSection() {
                     <div className="pt-4">
                       <Button
                         onClick={fetchSitters}
-                        disabled={loading}
+                        disabled={uiLoading}
                         className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
                       >
-                        {loading && <Loader2 className="animate-spin w-4 h-4" />}
+                        {uiLoading && <Loader2 className="animate-spin w-4 h-4" />}
                         Apply filters
                       </Button>
                     </div>
@@ -1100,7 +1351,7 @@ export default function FindMatchSection() {
 
           {/* Right Section - Sitter Cards */}
           <div className="flex-1 space-y-4 sm:space-y-6">
-            {loading ? (
+            {uiLoading ? (
                 <div className="flex justify-center items-center h-40">
                     <Loader2 className="animate-spin text-[#024B5E] w-8 h-8" />
                 </div>

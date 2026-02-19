@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dog, Cat, Camera, Heart, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { fetchWithAuth } from '@/lib/auth';
 
 export default function PetDetailsForm() {
   const router = useRouter();
@@ -63,12 +64,10 @@ export default function PetDetailsForm() {
 
     try {
       setUploading(true);
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${API_BASE}/api/pets/${petId}/image`, {
+      const res = await fetchWithAuth(`${API_BASE}/api/pets/${petId}/image`, {
         method: "POST",
         body: data,
         credentials: "include",
-        headers: { ...(token && { Authorization: `Bearer ${token}` }) }
       });
 
       const result = await res.json();
@@ -90,7 +89,6 @@ export default function PetDetailsForm() {
   const handleSave = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
 
       const payload = {
         name,
@@ -117,11 +115,10 @@ export default function PetDetailsForm() {
         insuranceProvider: insurance
       };
 
-      const res = await fetch(`${API_BASE}/api/pets`, {
+      const res = await fetchWithAuth(`${API_BASE}/api/pets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` })
         },
         body: JSON.stringify(payload),
         credentials: "include"

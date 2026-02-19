@@ -5,6 +5,9 @@ import authReducer from './authSlice';
 import serviceReducer from './serviceSlice';
 import userReducer from './userSlice';
 import petReducer from './petSlice';
+import boardingSearchReducer from './boardingSearchSlice';
+import walkingSearchReducer from './walkingSearchSlice';
+import daycareSearchReducer from './daycareSearchSlice';
 
 
 const authPersistConfig = {
@@ -19,6 +22,9 @@ export const store = configureStore({
 
     user: userReducer,
     pets: petReducer,
+    boardingSearch: boardingSearchReducer,
+    walkingSearch: walkingSearchReducer,
+    daycareSearch: daycareSearchReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

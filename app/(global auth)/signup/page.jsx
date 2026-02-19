@@ -161,9 +161,16 @@ export default function WuffoosRegister() {
           email: data.email,
           role: data.role,
         },
-        token: data.token,
+        role: data.role,
       })
     );
+
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+    }
+    if (data.refreshToken) {
+      localStorage.setItem("refreshToken", data.refreshToken);
+    }
 
     // Role based redirect
     if (data.role === "pet_sitter") {

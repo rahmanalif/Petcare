@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchWithAuth } from "@/lib/auth";
 
 // Async thunk for saving boarding service
 export const saveBoardingService = createAsyncThunk(
@@ -6,7 +7,6 @@ export const saveBoardingService = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     const state = getState().service;
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const token = localStorage.getItem("token");
 
     const mapPetSizes = (sizes) => {
       const map = {
@@ -41,11 +41,10 @@ export const saveBoardingService = createAsyncThunk(
     };
 
     try {
-      const res = await fetch(`${API_BASE}/api/sitter/services/boarding`, {
+      const res = await fetchWithAuth(`${API_BASE}/api/sitter/services/boarding`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
