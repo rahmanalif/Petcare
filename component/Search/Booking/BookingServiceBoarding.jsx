@@ -22,8 +22,100 @@ import {
 } from "@/components/ui/select";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPets } from "@/redux/petSlice";
+import { fetchWithAuth } from "@/lib/auth";
+import BookingStatusModal from "./BookingStatusModal";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAY_KEY_MAP = {
+  M: "Mon",
+  T: "Tue",
+  W: "Wed",
+  T2: "Thu",
+  F: "Fri",
+  S: "Sat",
+  Sun: "Sun",
+};
+const RATE_LABEL_MAP = {
+  holiday: "Holiday Rate",
+  puppy: "Puppy Rate",
+  cat: "Cat Care",
+  additionalCat: "Additional Cat",
+  extendedStay: "Extended Care",
+  bathingGrooming: "Bathing/ Grooming",
+  pickupDropoff: "Sitter Pick-Up and Drop-off",
+  sixtyMinuteRate: "60 minute rate",
+  walking60MinRate: "60 minute rate",
+};
+const FALLBACK_EXTRA_SERVICES = [
+  { name: "Bathing/ Grooming", price: 60 },
+  { name: "Sitter Pick-Up and Drop-off", price: 48 },
+  { name: "Extended Care", price: 10 },
+];
+
+const normalizeDateForInput = (value) => {
+  if (!value) return "";
+  const raw = String(value).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  const mdy = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!mdy) return "";
+  const mm = mdy[1].padStart(2, "0");
+  const dd = mdy[2].padStart(2, "0");
+  const yyyy = mdy[3];
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+const normalizeTimeForInput = (value) => {
+  if (!value) return "";
+  const raw = String(value).trim();
+  if (/^\d{2}:\d{2}$/.test(raw)) return raw;
+  const match = raw.toUpperCase().replace(/\s+/g, "").match(/^(\d{1,2}):(\d{2})(AM|PM)$/);
+  if (!match) return "";
+  let hour = Number(match[1]);
+  const minute = match[2];
+  if (match[3] === "AM") {
+    if (hour === 12) hour = 0;
+  } else if (hour !== 12) {
+    hour += 12;
+  }
+  return `${String(hour).padStart(2, "0")}:${minute}`;
+};
+
+const toAmPm = (value) => {
+  if (!value) return "";
+  const raw = String(value).trim();
+  const upper = raw.toUpperCase().replace(/\s+/g, "");
+  const amPm = upper.match(/^(\d{1,2}):(\d{2})(AM|PM)$/);
+  if (amPm) return `${Number(amPm[1])}:${amPm[2]} ${amPm[3]}`;
+  const twentyFour = raw.match(/^(\d{1,2}):(\d{2})$/);
+  if (!twentyFour) return raw;
+  const hour = Number(twentyFour[1]);
+  if (!Number.isFinite(hour) || hour < 0 || hour > 23) return raw;
+  const minute = twentyFour[2];
+  const suffix = hour >= 12 ? "PM" : "AM";
+  const converted = hour % 12 === 0 ? 12 : hour % 12;
+  return `${converted}:${minute} ${suffix}`;
+};
+
+const toIsoDateTime = (dateValue, timeValue, fallbackDate = null) => {
+  const dateRaw = String(dateValue || "").trim();
+  const timeRaw = String(timeValue || "").trim();
+  const [hourPart = "00", minutePart = "00"] = timeRaw.split(":");
+  const hour = Number(hourPart);
+  const minute = Number(minutePart);
+
+  const dateBase = /^\d{4}-\d{2}-\d{2}$/.test(dateRaw)
+    ? new Date(`${dateRaw}T00:00:00`)
+    : fallbackDate instanceof Date
+      ? new Date(fallbackDate)
+      : null;
+  if (!dateBase || Number.isNaN(dateBase.getTime())) return "";
+
+  if (Number.isFinite(hour) && Number.isFinite(minute)) {
+    dateBase.setHours(hour, minute, 0, 0);
+  }
+  return dateBase.toISOString();
+};
 
 const resolvePetImage = (path) => {
   if (!path) return "/Ellipse.png";
@@ -49,6 +141,7 @@ const toDisplayLocation = (profile) =>
 export default function BookingModalBoarding({ isOpen, onClose, providerData }) {
   const dispatch = useDispatch();
   const { list: petList = [] } = useSelector((state) => state.pets);
+  const { user } = useSelector((state) => state.auth);
   const { profile, services: profileServices, bookedDates } = useSelector((state) => state.sitterProfile);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -220,29 +313,41 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
   };
 
   const handleDateClick = (dayInfo) => {
-    if (dayInfo.isCurrentMonth) {
-      setSelectedDate({
-        day: dayInfo.day,
-        month: dayInfo.month,
-        year: dayInfo.year,
-      });
+    if (!dayInfo.isCurrentMonth) return;
+
+    const nextDate = {
+      day: dayInfo.day,
+      month: dayInfo.month,
+      year: dayInfo.year,
+    };
+    const isoDate = `${nextDate.year}-${String(nextDate.month + 1).padStart(2, "0")}-${String(nextDate.day).padStart(2, "0")}`;
+
+    if (isSelectingStartDate || scheduleType === "one_time") {
+      setSelectedDate(nextDate);
+      setSelectedEndDate(scheduleType === "one_time" ? nextDate : null);
+      setStartDate(isoDate);
+      if (scheduleType === "one_time") setEndDate(isoDate);
+      setIsSelectingStartDate(scheduleType !== "one_time");
+      return;
     }
+
+    setSelectedEndDate(nextDate);
+    setEndDate(isoDate);
+    setIsSelectingStartDate(true);
   };
 
   const isDateSelected = (dayInfo) => {
     return (
-      selectedDate &&
-      selectedDate.day === dayInfo.day &&
-      selectedDate.month === dayInfo.month &&
-      selectedDate.year === dayInfo.year
+      (selectedDate &&
+        selectedDate.day === dayInfo.day &&
+        selectedDate.month === dayInfo.month &&
+        selectedDate.year === dayInfo.year) ||
+      (selectedEndDate &&
+        selectedEndDate.day === dayInfo.day &&
+        selectedEndDate.month === dayInfo.month &&
+        selectedEndDate.year === dayInfo.year)
     );
   };
-
-  const services = [
-    { name: "Bathing/ Grooming", price: 60.0 },
-    { name: "Sitter Pick-Up and Drop-off", price: 48.0 },
-    { name: "Extended Care", price: 10.0 },
-  ];
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -250,6 +355,20 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
   const [endTime, setEndTime] = useState("");
   const [selectedPet, setSelectedPet] = useState("");
   const [showMap, setShowMap] = useState(false);
+  const [note, setNote] = useState("");
+  const [scheduleType, setScheduleType] = useState("one_time");
+  const [repeatDays, setRepeatDays] = useState([]);
+  const [selectedExtras, setSelectedExtras] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [resultModal, setResultModal] = useState({
+    open: false,
+    type: "success",
+    message: "",
+  });
+
+  const openResultModal = (type, message) => {
+    setResultModal({ open: true, type, message });
+  };
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -258,17 +377,152 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
     try {
       const context = JSON.parse(raw);
-      setStartDate(String(context?.startDate || ""));
-      setEndDate(String(context?.endDate || ""));
-      setStartTime(String(context?.startTime || ""));
-      setEndTime(String(context?.endTime || ""));
+      setStartDate(normalizeDateForInput(context?.startDate));
+      setEndDate(normalizeDateForInput(context?.endDate));
+      setStartTime(normalizeTimeForInput(context?.startTime));
+      setEndTime(normalizeTimeForInput(context?.endTime));
       if (Array.isArray(context?.selectedPets)) {
         setSelectedPets(context.selectedPets.map((id) => String(id)));
+      }
+      setScheduleType(context?.schedule === "repeatWeekly" ? "repeat_weekly" : "one_time");
+      if (context?.selectedDays && typeof context.selectedDays === "object") {
+        const normalizedDays = Object.entries(context.selectedDays)
+          .filter(([, checked]) => Boolean(checked))
+          .map(([key]) => DAY_KEY_MAP[key] || "")
+          .filter(Boolean);
+        setRepeatDays(normalizedDays);
       }
     } catch (error) {
       console.error("Failed to parse selectedSearchContext", error);
     }
   }, []);
+
+  const toggleExtra = (name) => {
+    setSelectedExtras((prev) =>
+      prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]
+    );
+  };
+
+  const toggleRepeatDay = (day) => {
+    setRepeatDays((prev) =>
+      prev.includes(day) ? prev.filter((item) => item !== day) : [...prev, day]
+    );
+  };
+
+  const boardingService = useMemo(
+    () =>
+      (Array.isArray(profileServices) ? profileServices : []).find(
+        (item) => String(item?.serviceType || "").toLowerCase() === "boarding"
+      ),
+    [profileServices]
+  );
+
+  const extraServiceOptions = useMemo(() => {
+    const rates =
+      boardingService?.rates && typeof boardingService.rates === "object"
+        ? boardingService.rates
+        : {};
+    const mappedRates = Object.entries(rates)
+      .filter(([key, value]) => key !== "base" && Number.isFinite(Number(value)) && Number(value) > 0)
+      .map(([key, value]) => ({
+        name: RATE_LABEL_MAP[key] || key,
+        price: Number(value),
+      }));
+    return mappedRates.length > 0 ? mappedRates : FALLBACK_EXTRA_SERVICES;
+  }, [boardingService]);
+
+  const basePrice = useMemo(() => {
+    return Number(boardingService?.rates?.base ?? 0);
+  }, [boardingService]);
+
+  const selectedServiceItems = useMemo(
+    () => extraServiceOptions.filter((service) => selectedExtras.includes(service.name)),
+    [extraServiceOptions, selectedExtras]
+  );
+
+  const totalPrice = useMemo(
+    () => basePrice + selectedServiceItems.reduce((sum, item) => sum + Number(item.price || 0), 0),
+    [basePrice, selectedServiceItems]
+  );
+
+  const handleBookService = async () => {
+    if (!API_BASE) {
+      openResultModal("error", "API base URL is missing.");
+      return;
+    }
+    if (!selectedPets.length) {
+      openResultModal("error", "Please select at least one pet.");
+      return;
+    }
+
+    const fallbackSitterId =
+      typeof window !== "undefined" ? localStorage.getItem("selectedSitterId") || "" : "";
+    const sitterId = String(
+      profile?._id || profile?.id || providerData?.sitterId || fallbackSitterId || ""
+    ).trim();
+    if (!sitterId) {
+      openResultModal("error", "Sitter ID not found.");
+      return;
+    }
+
+    const startFallback = selectedDate
+      ? new Date(selectedDate.year, selectedDate.month, selectedDate.day)
+      : new Date();
+    const endFallback = selectedEndDate
+      ? new Date(selectedEndDate.year, selectedEndDate.month, selectedEndDate.day)
+      : startFallback;
+    const normalizedStartTime = toAmPm(startTime || "10:00");
+    const normalizedEndTime = toAmPm(endTime || "18:00");
+    const payload = {
+      sitterId,
+      pets: selectedPets,
+      serviceType: "boarding",
+      startDate: toIsoDateTime(startDate, startTime, startFallback),
+      endDate: toIsoDateTime(endDate || startDate, endTime, endFallback),
+      startTime: normalizedStartTime,
+      endTime: normalizedEndTime,
+      totalPrice,
+      currency: "MXN",
+      priceBreakdown: [
+        { label: "Base Price", amount: basePrice },
+        ...selectedServiceItems.map((item) => ({ label: item.name, amount: Number(item.price || 0) })),
+      ],
+      extrasIncluded: selectedServiceItems.map((item) => item.name),
+      contactInfo: {
+        phone: user?.phoneNumber || user?.phone || "",
+        email: user?.email || "",
+        home: user?.address || user?.home || "",
+      },
+      note,
+      schedule:
+        scheduleType === "repeat_weekly" && repeatDays.length > 0
+          ? { type: "repeat_weekly", days: repeatDays }
+          : { type: "one_time" },
+    };
+
+    if (!payload.startDate || !payload.endDate) {
+      openResultModal("error", "Start date and end date are required.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const response = await fetchWithAuth(`${API_BASE}/api/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok || result?.success === false) {
+        throw new Error(result?.message || "Failed to create booking.");
+      }
+      openResultModal("success", result?.message || "Booking created successfully.");
+    } catch (error) {
+      openResultModal("error", error?.message || "Failed to create booking.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const BoardingIcon = ({ className = "" }) => (
     <img
@@ -551,6 +805,54 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
               </div>
             </div>
 
+            <div className="mt-4">
+              <span className="font-semibold text-black font-montserrat text-sm sm:text-base">
+                Schedule
+              </span>
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setScheduleType("one_time")}
+                  className={`border rounded-lg p-2 sm:p-4 text-[10px] sm:text-xs font-montserrat text-left ${
+                    scheduleType === "one_time"
+                      ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-semibold"
+                      : "border-gray-300 text-[#024B5E]"
+                  }`}
+                >
+                  Specific dates
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setScheduleType("repeat_weekly")}
+                  className={`border rounded-lg p-2 sm:p-4 text-[10px] sm:text-xs font-montserrat text-left ${
+                    scheduleType === "repeat_weekly"
+                      ? "border-[#024B5E] bg-[#E7F4F6] text-[#024B5E] font-semibold"
+                      : "border-gray-300 text-[#024B5E]"
+                  }`}
+                >
+                  Repeat Weekly
+                </button>
+              </div>
+              {scheduleType === "repeat_weekly" ? (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {WEEK_DAYS.map((day) => (
+                    <button
+                      key={day}
+                      type="button"
+                      onClick={() => toggleRepeatDay(day)}
+                      className={`px-2 py-1 rounded border text-xs font-montserrat ${
+                        repeatDays.includes(day)
+                          ? "bg-[#024B5E] text-white border-[#024B5E]"
+                          : "bg-white text-[#024B5E] border-gray-300"
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
             {/* Start/End Date and Time */}
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
               <div>
@@ -558,11 +860,11 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                   Start date
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   placeholder="Select"
                   value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
                   className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
-                  readOnly
                 />
               </div>
               <div>
@@ -570,11 +872,11 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                   End date
                 </label>
                 <input
-                  type="text"
+                  type="date"
                   placeholder="Select"
                   value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
                   className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
-                  readOnly
                 />
               </div>
               <div>
@@ -672,7 +974,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
           <div>
             <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Service</h3>
             <div className="space-y-2">
-              {services.map((service, index) => (
+              {extraServiceOptions.map((service, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between py-2"
@@ -681,7 +983,12 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                     {service.name}
                   </span>
                   <label className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" />
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={selectedExtras.includes(service.name)}
+                      onChange={() => toggleExtra(service.name)}
+                    />
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#035F75]"></div>
                   </label>
                 </div>
@@ -697,6 +1004,8 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 placeholder="Please make sure all windows are secure locked after cleaning. Kindly use eco-friendly cleaning products. Thank you!"
                 className="w-full px-2 sm:px-3 py-2 border rounded-lg border-[#024B5E] text-xs sm:text-sm font-montserrat resize-none text-[#024B5E]"
                 rows="4"
+                value={note}
+                onChange={(event) => setNote(event.target.value)}
               />
             </div>
 
@@ -705,31 +1014,44 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
               <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Pricing</h3>
               <div className="space-y-1 text-xs sm:text-sm text-[#024B5E]">
                 <div className="flex justify-between font-montserrat">
-                  <span>Bathing/ Grooming</span>
-                  <span>$60.00</span>
+                  <span>Base Price</span>
+                  <span>${basePrice.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between font-montserrat">
-                  <span>Sitter Pick-Up and Drop-off</span>
-                  <span>$48.00</span>
-                </div>
-                <div className="flex justify-between font-montserrat">
-                  <span>Additional Pet Rate</span>
-                  <span>$10.00</span>
-                </div>
+                {selectedServiceItems.map((item) => (
+                  <div className="flex justify-between font-montserrat" key={item.name}>
+                    <span>{item.name}</span>
+                    <span>${Number(item.price || 0).toFixed(2)}</span>
+                  </div>
+                ))}
                 <div className="flex justify-between font-semibold font-montserrat pt-2 border-t">
                   <span>Total</span>
-                  <span>$170.00</span>
+                  <span>${totalPrice.toFixed(2)}</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Book Service Button */}
-          <Button className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-montserrat py-4 sm:py-6 text-sm sm:text-base">
-            Book Service
+          <Button
+            onClick={handleBookService}
+            disabled={isSubmitting}
+            className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-montserrat py-4 sm:py-6 text-sm sm:text-base disabled:opacity-70"
+          >
+            {isSubmitting ? "Booking..." : "Book Service"}
           </Button>
         </div>
       </div>
+      <BookingStatusModal
+        open={resultModal.open}
+        type={resultModal.type}
+        message={resultModal.message}
+        onClose={() => setResultModal((prev) => ({ ...prev, open: false }))}
+        onPrimary={() => {
+          const isSuccess = resultModal.type === "success";
+          setResultModal((prev) => ({ ...prev, open: false }));
+          if (isSuccess) onClose?.();
+        }}
+      />
     </>
   );
 }
