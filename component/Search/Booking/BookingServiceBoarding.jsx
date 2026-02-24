@@ -20,8 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import BookingModalDaycare from "./BookingServiceDaycare";
-import BookingModalWalking from "./BookingServiceWalking";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPets } from "@/redux/petSlice";
 
@@ -48,18 +46,10 @@ const toDisplayLocation = (profile) =>
   [profile?.street, profile?.state, profile?.zipCode].filter(Boolean).join(", ") ||
   "New York, NY";
 
-const normalizeServiceValue = (value) => {
-  const normalized = String(value || "").trim().toLowerCase();
-  if (normalized === "boarding") return "boarding";
-  if (normalized === "doggy day care" || normalized === "daycare") return "daycare";
-  if (normalized === "dog walking" || normalized === "walking") return "walking";
-  return "";
-};
-
 export default function BookingModalBoarding({ isOpen, onClose, providerData }) {
   const dispatch = useDispatch();
   const { list: petList = [] } = useSelector((state) => state.pets);
-  const { profile, services: profileServices } = useSelector((state) => state.sitterProfile);
+  const { profile, services: profileServices, bookedDates } = useSelector((state) => state.sitterProfile);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState(null);
@@ -166,8 +156,35 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
   const calendarDays = generateCalendarDays();
 
-  // Example booked days (you can replace this with dynamic data)
-  const bookedDays = [12, 13, 14];
+  const maxBookingsPerDay = !Array.isArray(profileServices) || profileServices.length === 0
+    ? 0
+    : (() => {
+        const values = profileServices
+          .map((service) => Number(service?.availability?.maxWalksPerDay))
+          .filter((value) => Number.isFinite(value) && value > 0);
+        return values.length > 0 ? Math.max(...values) : 0;
+      })();
+
+  const bookedDateMap = (() => {
+    const dayCountMap = new globalThis.Map();
+    if (!Array.isArray(bookedDates) || bookedDates.length === 0) return dayCountMap;
+
+    bookedDates.forEach((entry) => {
+      const rawDate = typeof entry === "string" ? entry : entry?.date;
+      if (!rawDate) return;
+
+      const dateObj = new Date(rawDate);
+      if (Number.isNaN(dateObj.getTime())) return;
+      if (dateObj.getMonth() !== currentMonth || dateObj.getFullYear() !== currentYear) return;
+
+      const day = dateObj.getDate();
+      const parsedCount = Number(typeof entry === "object" ? entry?.count : 1);
+      const count = Number.isFinite(parsedCount) && parsedCount > 0 ? parsedCount : 1;
+      dayCountMap.set(day, count);
+    });
+
+    return dayCountMap;
+  })();
 
   const monthNames = [
     "January",
@@ -227,7 +244,6 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
     { name: "Extended Care", price: 10.0 },
   ];
 
-  const [lookingFor, setLookingFor] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -242,8 +258,6 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
 
     try {
       const context = JSON.parse(raw);
-      const normalizedService = normalizeServiceValue(context?.lookingFor);
-      if (normalizedService) setLookingFor(normalizedService);
       setStartDate(String(context?.startDate || ""));
       setEndDate(String(context?.endDate || ""));
       setStartTime(String(context?.startTime || ""));
@@ -255,10 +269,6 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
       console.error("Failed to parse selectedSearchContext", error);
     }
   }, []);
-
-  const handleServiceChange = (value) => {
-    setLookingFor(value);
-  };
 
   const BoardingIcon = ({ className = "" }) => (
     <img
@@ -283,15 +293,6 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
       className={`${className} object-contain w-5 h-5`}
     />
   );
-
-  // If service changes to daycare or walking, render the appropriate component
-  if (lookingFor === "daycare") {
-    return <BookingModalDaycare isOpen={isOpen} onClose={onClose} providerData={providerData} />;
-  }
-
-  if (lookingFor === "walking") {
-    return <BookingModalWalking isOpen={isOpen} onClose={onClose} providerData={providerData} />;
-  }
 
   return (
     <>
@@ -398,28 +399,10 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
           {/* Looking For Section */}
           <div>
             <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Looking For</h3>
-            <Select
-              value={lookingFor || undefined}
-              onValueChange={handleServiceChange}
-              className="font-montserrat"
-            >
-              <SelectTrigger className="w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border rounded-lg text-sm">
-                <SelectValue placeholder="Select service" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="boarding" className={"font-montserrat"}>
-                  <BoardingIcon className="inline-block mr-2" /> Boarding
-                </SelectItem>
-                <SelectItem value="daycare" className={"font-montserrat"}>
-                  <DaycareIcon className="inline-block mr-2" />
-                  Daycare
-                </SelectItem>
-                <SelectItem value="walking" className={"font-montserrat"}>
-                  <WalkingIcon className="inline-block mr-2" />
-                  Walking
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="w-full flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 border rounded-lg text-sm text-[#024B5E] bg-gray-50 font-montserrat">
+              <BoardingIcon className="w-5 h-5" />
+              <span>Boarding</span>
+            </div>
           </div>
 
           {/* Pet Selection */}
@@ -519,8 +502,14 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                 ))}
 
                 {calendarDays.map((dayInfo, index) => {
-                  const isBooked =
-                    dayInfo.isCurrentMonth && bookedDays.includes(dayInfo.day);
+                  const bookedCount = dayInfo.isCurrentMonth ? (bookedDateMap.get(dayInfo.day) || 0) : 0;
+                  const isBooked = bookedCount > 0;
+                  const bookingMeta =
+                    bookedCount > 0
+                      ? maxBookingsPerDay > 0
+                        ? `${bookedCount}/${maxBookingsPerDay} booked`
+                        : `${bookedCount} booked`
+                      : "";
                   const isSelected = isDateSelected(dayInfo);
                   const today = new Date();
                   const isToday =
@@ -532,6 +521,7 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
                     <div
                       key={index}
                       onClick={() => handleDateClick(dayInfo)}
+                      title={bookingMeta || undefined}
                       className={`
                         aspect-square flex items-center justify-center text-xs sm:text-sm rounded font-montserrat
                         ${!dayInfo.isCurrentMonth

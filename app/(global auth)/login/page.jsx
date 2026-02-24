@@ -87,12 +87,22 @@ export default function WuffoosLogin() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
 
   const handleSubmit = async () => {
+    setErrorMessage("");
+
+    if (!formData.username || !formData.password) {
+      const message = "Please enter both username/email and password.";
+      dispatch(loginFailure(message));
+      setErrorMessage(message);
+      return;
+    }
+
     dispatch(loginStart());
 
     try {
@@ -137,7 +147,9 @@ export default function WuffoosLogin() {
         router.push('/');
       }
     } catch (error) {
-      dispatch(loginFailure(error.message || 'Login failed'));
+      const message = "Unable to log in. Please check your credentials and try again.";
+      dispatch(loginFailure(message));
+      setErrorMessage(message);
     }
   };
 
@@ -154,7 +166,7 @@ export default function WuffoosLogin() {
                 Login to your account
               </h1>
               <p className="text-white/90 text-lg">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/signup" className="text-[#FE6C5D] hover:underline font-medium">
                   Register
                 </Link>
@@ -171,7 +183,10 @@ export default function WuffoosLogin() {
                   type="text"
                   placeholder="Username or Email"
                   value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, username: e.target.value });
+                    if (errorMessage) setErrorMessage("");
+                  }}
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
               </div>
@@ -186,7 +201,10 @@ export default function WuffoosLogin() {
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, password: e.target.value });
+                      if (errorMessage) setErrorMessage("");
+                    }}
                     className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                   />
                   <button
@@ -205,6 +223,12 @@ export default function WuffoosLogin() {
                   Forgot Password?
                 </Link>
               </div>
+
+              {errorMessage && (
+                <p className="rounded-lg border border-red-300/40 bg-red-500/20 px-3 py-2 text-sm text-red-100">
+                  {errorMessage}
+                </p>
+              )}
 
               {/* Login Button */}
               <button

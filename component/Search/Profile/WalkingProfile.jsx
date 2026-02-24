@@ -67,6 +67,7 @@ export default function WalkingProfile({ sitterName = "Alex Martinez", sitterId 
   const [showBooking, setShowBooking] = useState(false);
   const [effectiveSitterId, setEffectiveSitterId] = useState(sitterId || "");
   const [cachedAvailabilitySummary, setCachedAvailabilitySummary] = useState("");
+  const requestedServiceType = "walking";
 
   useEffect(() => {
     if (sitterId) {
@@ -165,6 +166,7 @@ export default function WalkingProfile({ sitterName = "Alex Martinez", sitterId 
         .filter(([, v]) => v !== null && v !== undefined && v !== "")
         .map(([k, v]) => ({ name: k, price: v, unit: "per day" }));
       return {
+        type: serviceType,
         title: meta.title,
         subtitle: meta.subtitle,
         price: service?.rates?.base ?? 0,
@@ -174,6 +176,13 @@ export default function WalkingProfile({ sitterName = "Alex Martinez", sitterId 
       };
     });
   }, [services]);
+
+  const filteredServiceSections = useMemo(() => {
+    const matchedServices = serviceSections.filter(
+      (section) => section?.type === requestedServiceType
+    );
+    return matchedServices.length > 0 ? matchedServices : serviceSections;
+  }, [serviceSections]);
 
   const displayReviews = useMemo(() => {
     if (!Array.isArray(reviews) || reviews.length === 0) return [];
@@ -437,7 +446,7 @@ export default function WalkingProfile({ sitterName = "Alex Martinez", sitterId 
 
                     {/* Services List */}
                     <div className="px- pb-4">
-                      {serviceSections.map((section, sectionIndex) => (
+                      {filteredServiceSections.map((section, sectionIndex) => (
                         <div key={sectionIndex}>
                           {sectionIndex > 0 && (
                             <div className="border-t my-4" />

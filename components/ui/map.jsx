@@ -36,7 +36,6 @@ import { renderToString } from "react-dom/server"
 import { useMap, useMapEvents } from "react-leaflet"
 
 const LeafletMapContainer = dynamic(async () => (await import("react-leaflet")).MapContainer, { ssr: false })
-const LeafletTileLayer = dynamic(async () => (await import("react-leaflet")).TileLayer, { ssr: false })
 const LeafletMarker = dynamic(async () => (await import("react-leaflet")).Marker, { ssr: false })
 const LeafletPopup = dynamic(async () => (await import("react-leaflet")).Popup, { ssr: false })
 const LeafletTooltip = dynamic(async () => (await import("react-leaflet")).Tooltip, { ssr: false })
@@ -78,6 +77,8 @@ function MapTileLayer({
     ...props
 }) {
     const map = useMap()
+    const { L } = useLeaflet()
+    const layerRef = useRef(null)
     if (map.attributionControl) {
         map.attributionControl.setPrefix("")
     }
@@ -107,13 +108,55 @@ function MapTileLayer({
                 attribution: resolvedAttribution,
             })
         }
-    }, [context, name, url, attribution])
+    }, [context, name, resolvedUrl, resolvedAttribution])
 
-    if (context && context.selectedTileLayer !== name) {
-        return null
-    }
+    useEffect(() => {
+        if (!L || !map) return
+        if (context && context.selectedTileLayer !== name) return
 
-    return (<LeafletTileLayer url={resolvedUrl} attribution={resolvedAttribution} {...props} />);
+        let isDisposed = false
+
+        const mountTileLayer = () => {
+            if (isDisposed) return
+            if (!map.getPane("tilePane")) return
+
+            if (layerRef.current && map.hasLayer(layerRef.current)) {
+                map.removeLayer(layerRef.current)
+            }
+
+            const tileLayer = L.tileLayer(resolvedUrl, {
+                attribution: resolvedAttribution,
+                ...props,
+            })
+            tileLayer.addTo(map)
+            layerRef.current = tileLayer
+        }
+
+        if (map.getPane("tilePane")) {
+            mountTileLayer()
+        } else {
+            map.whenReady(mountTileLayer)
+        }
+
+        return () => {
+            isDisposed = true
+            if (layerRef.current && map.hasLayer(layerRef.current)) {
+                map.removeLayer(layerRef.current)
+            }
+            layerRef.current = null
+        };
+    }, [
+        L,
+        map,
+        context,
+        name,
+        resolvedUrl,
+        resolvedAttribution,
+        props,
+        context?.selectedTileLayer,
+    ])
+
+    return null;
 }
 
 function MapLayerGroup({
@@ -345,10 +388,36 @@ function MapMarker({
     bgPos,
     popupAnchor,
     tooltipAnchor,
+    children,
     ...props
 }) {
+    const map = useMap()
     const { L } = useLeaflet()
-    if (!L) return null
+    const [isReady, setIsReady] = useState(false)
+
+    useEffect(() => {
+        let isDisposed = false
+
+        const markReady = () => {
+            if (isDisposed) return
+            if (map.getPane("markerPane")) {
+                setIsReady(true)
+            }
+        }
+
+        if (map.getPane("markerPane")) {
+            markReady()
+        } else {
+            map.whenReady(markReady)
+        }
+
+        return () => {
+            isDisposed = true
+            setIsReady(false)
+        };
+    }, [map])
+
+    if (!L || !isReady) return null
 
     return (
         <LeafletMarker
@@ -360,7 +429,9 @@ function MapMarker({
                 ...(tooltipAnchor ? { tooltipAnchor } : {}),
             })}
             riseOnHover
-            {...props} />
+            {...props}>
+            {children}
+        </LeafletMarker>
     );
 }
 

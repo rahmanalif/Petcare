@@ -91,6 +91,7 @@ export default function WuffoosRegister() {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [acceptPrivacy, setAcceptPrivacy] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('english');
@@ -113,13 +114,15 @@ export default function WuffoosRegister() {
   }, [searchParams]);
 
  const handleSubmit = async () => {
+  setErrorMessage("");
+
   if (!acceptTerms || !acceptPrivacy) {
-    alert("Please accept terms & privacy policy");
+    setErrorMessage("Please accept the Terms and Privacy Policy.");
     return;
   }
 
   if (!formData.password) {
-    alert("Password is required");
+    setErrorMessage("Password is required.");
     return;
   }
 
@@ -180,8 +183,9 @@ export default function WuffoosRegister() {
     }
 
   } catch (error) {
-    dispatch(loginFailure(error.message));
-    alert(error.message);
+    const message = "Unable to create your account. Please try again.";
+    dispatch(loginFailure(message));
+    setErrorMessage(message);
   }
 };
 
@@ -219,7 +223,10 @@ export default function WuffoosRegister() {
                   placeholder="Full Name"
                   value={formData.fullName}
                   onChange={(e) =>
-                    setFormData({ ...formData, fullName: e.target.value })
+                    {
+                      setFormData({ ...formData, fullName: e.target.value });
+                      if (errorMessage) setErrorMessage("");
+                    }
                   }
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
@@ -235,7 +242,10 @@ export default function WuffoosRegister() {
                   placeholder="Email"
                   value={formData.email}
                   onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
+                    {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (errorMessage) setErrorMessage("");
+                    }
                   }
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
@@ -251,7 +261,10 @@ export default function WuffoosRegister() {
                   placeholder="+880..."
                   value={formData.phoneNumber}
                   onChange={(e) =>
-                    setFormData({ ...formData, phoneNumber: e.target.value })
+                    {
+                      setFormData({ ...formData, phoneNumber: e.target.value });
+                      if (errorMessage) setErrorMessage("");
+                    }
                   }
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                 />
@@ -267,7 +280,10 @@ export default function WuffoosRegister() {
                     type="password"
                     value={formData.password}
                     onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
+                      {
+                        setFormData({ ...formData, password: e.target.value });
+                        if (errorMessage) setErrorMessage("");
+                      }
                     }
                     className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white placeholder-white/50 focus:outline-none focus:border-white/60 transition-colors"
                   />
@@ -353,7 +369,10 @@ export default function WuffoosRegister() {
                   type="checkbox"
                   id="terms"
                   checked={acceptTerms}
-                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  onChange={(e) => {
+                    setAcceptTerms(e.target.checked);
+                    if (errorMessage) setErrorMessage("");
+                  }}
                   className="mt-1 w-4 h-4 rounded border-white/30 bg-transparent accent-[#FE6C5D]"
                 />
                 <label htmlFor="terms" className="text-white/80 text-sm">
@@ -369,7 +388,10 @@ export default function WuffoosRegister() {
                   type="checkbox"
                   id="privacy"
                   checked={acceptPrivacy}
-                  onChange={(e) => setAcceptPrivacy(e.target.checked)}
+                  onChange={(e) => {
+                    setAcceptPrivacy(e.target.checked);
+                    if (errorMessage) setErrorMessage("");
+                  }}
                   className="mt-1 w-4 h-4 rounded border-white/30 bg-transparent accent-[#FE6C5D]"
                 />
                 <label htmlFor="privacy" className="text-white/80 text-sm">
@@ -378,6 +400,12 @@ export default function WuffoosRegister() {
                   </Link>{" "}
                 </label>
               </div>
+
+              {errorMessage && (
+                <p className="rounded-lg border border-red-300/40 bg-red-500/20 px-3 py-2 text-sm text-red-100">
+                  {errorMessage}
+                </p>
+              )}
 
               {/* Register Button */}
               <button
@@ -458,5 +486,4 @@ export default function WuffoosRegister() {
     </>
   );
 }
-
 

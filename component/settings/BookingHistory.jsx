@@ -1,64 +1,108 @@
 "use client";
-import React, { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import React, { useEffect, useMemo, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { fetchWithAuth } from "@/lib/auth";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+const resolveImage = (path) => {
+  if (!path) return "/Ellipse.png";
+  if (/^https?:\/\//i.test(path)) return path;
+  const base = String(API_BASE || "").replace(/\/+$/, "");
+  const clean = String(path).replace(/^\/+/, "");
+  return base ? `${base}/${clean}` : path;
+};
+
+const formatDate = (value) => {
+  if (!value) return "N/A";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "N/A";
+  return date.toLocaleDateString();
+};
+
+const formatPrice = (amount, currency = "MXN") => {
+  const numeric = Number(amount);
+  if (!Number.isFinite(numeric)) return `${currency} 0`;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).format(numeric);
+};
 
 export default function BookingHistory() {
-  const [activeStatus, setActiveStatus] = useState("on-going");
+  const [activeStatus, setActiveStatus] = useState("ongoing");
+  const [bookingData, setBookingData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
   const router = useRouter();
 
-  const bookingData = [
-    {
-      id: 1,
-      sitterName: "Tamim",
-      rating: 5,
-      ratingCount: "1200",
-      date: "02/09/2025",
-      service: "Dog walking",
-      price: "$99",
-      priceType: "Per walk",
-      contact: "(229) 555-0109",
-      pickupTime: "10:00 AM",
-      dropoffTime: "10:00 AM",
-      status: "on-going",
-    },
-    {
-      id: 2,
-      sitterName: "Tamim",
-      rating: 3,
-      ratingCount: "1200",
-      date: "02/09/2025",
-      service: "Dog walking",
-      price: "$99",
-      priceType: "Per walk",
-      contact: "(229) 555-0109",
-      pickupTime: "10:00 AM",
-      dropoffTime: "10:00 AM",
-      status: "on-going",
-    },
-    {
-      id: 3,
-      sitterName: "Tamim",
-      rating: 3,
-      ratingCount: "811,200",
-      date: "02/09/2025",
-      service: "Dog walking",
-      price: "$99",
-      priceType: "Per walk",
-      contact: "(229) 555-0109",
-      pickupTime: "10:00 AM",
-      dropoffTime: "10:00 AM",
-      status: "completed",
-    },
+  const statuses = [
+    { key: "ongoing", label: "On going" },
+    { key: "upcoming", label: "Upcoming" },
+    { key: "completed", label: "Completed" },
+    { key: "cancelled", label: "Cancelled" },
+    { key: "rejected", label: "Rejected" },
   ];
 
-  const filteredBookings = bookingData.filter(
-    (booking) => booking.status === activeStatus
+  useEffect(() => {
+    const loadBookings = async () => {
+      if (!API_BASE) {
+        setBookingData([]);
+        setLoadError("API base URL is not configured.");
+        return;
+      }
+
+      setLoading(true);
+      setLoadError("");
+      try {
+        const response = await fetchWithAuth(
+          `${API_BASE}/api/bookings?type=${encodeURIComponent(activeStatus)}`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        const result = await response.json();
+        if (!response.ok || !result?.success) {
+          throw new Error(result?.message || "Failed to fetch bookings.");
+        }
+        setBookingData(Array.isArray(result?.data) ? result.data : []);
+      } catch (error) {
+        setBookingData([]);
+        setLoadError(error?.message || "Failed to fetch bookings.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBookings();
+  }, [activeStatus]);
+
+  const normalizedBookings = useMemo(
+    () =>
+      bookingData.map((booking) => ({
+        id: booking?._id || Math.random().toString(36),
+        sitterName: booking?.sitter?.fullName || "Unknown Sitter",
+        sitterImage: resolveImage(booking?.sitter?.profilePicture),
+        rating: Number(booking?.sitter?.averageRating ?? 0),
+        ratingCount: booking?.sitter?.reviewsCount ?? 0,
+        date: formatDate(booking?.startDate),
+        service: booking?.serviceType || "Service",
+        price: formatPrice(booking?.totalPrice, booking?.currency || "MXN"),
+        priceType: "Total",
+        contact: booking?.sitter?.phoneNumber || "N/A",
+        pickupTime: booking?.startTime || "N/A",
+        dropoffTime: booking?.endTime || "N/A",
+        status: String(booking?.type || activeStatus).toLowerCase(),
+      })),
+    [bookingData, activeStatus]
   );
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "on-going":
+      case "ongoing":
         return "text-[#024B5E] border-b-2 border-[#024B5E] rounded-none";
       case "completed":
         return "bg-gray-200 text-[#024B5E]";
@@ -66,12 +110,18 @@ export default function BookingHistory() {
         return "bg-red-100 text-red-700";
       case "upcoming":
         return "bg-blue-100 text-blue-700";
+      case "rejected":
+        return "bg-rose-100 text-rose-700";
       default:
         return "bg-gray-200 text-[#024B5E]";
     }
   };
 
-  const statuses = ["On going", "Upcoming", "Completed", "Cancelled"];
+  const formatStatusLabel = (status) => {
+    const normalized = String(status || "").toLowerCase();
+    if (normalized === "ongoing") return "On going";
+    return normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : "Unknown";
+  };
 
   return (
 
@@ -79,20 +129,19 @@ export default function BookingHistory() {
       <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E] mb-4 sm:mb-6">Order history</h2>
 
       {/* Status Tabs */}
-      <div className="flex w-full gap-1 sm:gap-2 mb-4 sm:mb-8">
+      <div className="flex flex-wrap w-full gap-1 sm:gap-2 mb-4 sm:mb-8">
         {statuses.map((status) => {
-          const statusKey = status.toLowerCase().replace(" ", "-");
-          const isActive = activeStatus === statusKey;
+          const isActive = activeStatus === status.key;
           return (
             <button
-              key={status}
-              onClick={() => setActiveStatus(statusKey)}
-              className={`flex-1 px-1 sm:px-3 py-2 rounded-md text-[9px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${isActive
+              key={status.key}
+              onClick={() => setActiveStatus(status.key)}
+              className={`flex-1 min-w-[88px] sm:min-w-[110px] px-1 sm:px-3 py-2 rounded-md text-[9px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${isActive
                 ? "bg-[#024B5E] text-white"
                 : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
                 }`}
             >
-              {status}
+              {status.label}
             </button>
           );
         })}
@@ -101,8 +150,16 @@ export default function BookingHistory() {
 
       {/* Bookings List */}
       <div className="space-y-4">
-        {filteredBookings.length > 0 ? (
-          filteredBookings.map((booking) => (
+        {loading ? (
+          <div className="py-12 flex items-center justify-center">
+            <Loader2 className="h-6 w-6 animate-spin text-[#024B5E]" />
+          </div>
+        ) : loadError ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{loadError}</p>
+          </div>
+        ) : normalizedBookings.length > 0 ? (
+          normalizedBookings.map((booking) => (
             <div
               key={booking.id}
               onClick={() => router.push('/settings/ongoing')}
@@ -113,7 +170,7 @@ export default function BookingHistory() {
                 <div className="flex gap-3 items-start w-full sm:w-auto">
                   <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full shrink-0 overflow-hidden">
                     <img
-                      src="/Ellipse.png"
+                      src={booking.sitterImage}
                       alt={booking.sitterName}
                       className="w-full h-full object-cover"
                     />
@@ -125,7 +182,7 @@ export default function BookingHistory() {
                     <div className="flex items-center gap-1 text-xs sm:text-sm">
                       <span className="text-yellow-400">★</span>
                       <span className="font-medium">
-                        {booking.rating}.{booking.rating > 0 ? "8" : "0"}({booking.ratingCount})
+                        {Number.isFinite(booking.rating) ? booking.rating.toFixed(1) : "0.0"}({booking.ratingCount})
                       </span>
                     </div>
                   </div>
@@ -189,10 +246,7 @@ export default function BookingHistory() {
                       booking.status
                     )}`}
                   >
-                    {booking.status === "on-going"
-                      ? "On going"
-                      : booking.status.charAt(0).toUpperCase() +
-                      booking.status.slice(1)}
+                    {formatStatusLabel(booking.status)}
                   </span>
                 </div>
               </div>

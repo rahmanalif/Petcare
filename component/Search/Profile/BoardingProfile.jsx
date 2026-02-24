@@ -53,6 +53,7 @@ const defaultServices = [
     subtitle: "In the sitter's home",
     price: 99,
     unit: "per night",
+    type: "boarding",
     iconType: "boarding",
     items: [
       { name: "Holiday Rate", price: 110, unit: "per night" },
@@ -70,6 +71,7 @@ const defaultServices = [
     subtitle: "In your neighbourhood",
     price: 99,
     unit: "Per walk",
+    type: "walking",
     iconType: "walking",
     items: [
       { name: "60 minute rate", price: 15, unit: "Per walk", isPlus: true },
@@ -91,6 +93,7 @@ export default function BoardingProfile({ sitterName = "Seam Rahman", sitterId =
   const [showBooking, setShowBooking] = useState(false);
   const [effectiveSitterId, setEffectiveSitterId] = useState(sitterId || "");
   const [cachedAvailabilitySummary, setCachedAvailabilitySummary] = useState("");
+  const requestedServiceType = "boarding";
 
   useEffect(() => {
     if (sitterId) {
@@ -200,6 +203,7 @@ export default function BoardingProfile({ sitterName = "Seam Rahman", sitterId =
         .map(([k, v]) => ({ name: labelMap[k] || k, price: v, unit: "per day" }));
 
       return {
+        type: serviceType,
         title: meta.title,
         subtitle: meta.subtitle,
         price: service?.rates?.base ?? 0,
@@ -209,6 +213,13 @@ export default function BoardingProfile({ sitterName = "Seam Rahman", sitterId =
       };
     });
   }, [services]);
+
+  const filteredServiceSections = useMemo(() => {
+    const matchedServices = serviceSections.filter(
+      (section) => section?.type === requestedServiceType
+    );
+    return matchedServices.length > 0 ? matchedServices : serviceSections;
+  }, [serviceSections]);
 
   const displayReviews = useMemo(() => {
     if (!Array.isArray(reviews) || reviews.length === 0) return [];
@@ -453,7 +464,7 @@ export default function BoardingProfile({ sitterName = "Seam Rahman", sitterId =
 
                 {/* Services List */}
                 <div className="px-4 pb-4">
-                  {serviceSections.map((section, sectionIndex) => (
+                  {filteredServiceSections.map((section, sectionIndex) => (
                     <div key={sectionIndex}>
                       {sectionIndex > 0 && <div className="border-t my-4" />}
 

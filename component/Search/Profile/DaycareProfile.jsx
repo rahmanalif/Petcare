@@ -73,6 +73,7 @@ export default function DaycareProfile({ sitterName = "Maya Johnson", sitterId =
   const [showBooking, setShowBooking] = useState(false);
   const [effectiveSitterId, setEffectiveSitterId] = useState(sitterId || "");
   const [cachedAvailabilitySummary, setCachedAvailabilitySummary] = useState("");
+  const requestedServiceType = "daycare";
 
   useEffect(() => {
     if (sitterId) {
@@ -171,6 +172,7 @@ export default function DaycareProfile({ sitterName = "Maya Johnson", sitterId =
         .filter(([, v]) => v !== null && v !== undefined && v !== "")
         .map(([k, v]) => ({ name: k, price: v, unit: "per day" }));
       return {
+        type: serviceType,
         title: meta.title,
         subtitle: meta.subtitle,
         price: service?.rates?.base ?? 0,
@@ -180,6 +182,13 @@ export default function DaycareProfile({ sitterName = "Maya Johnson", sitterId =
       };
     });
   }, [services]);
+
+  const filteredServiceSections = useMemo(() => {
+    const matchedServices = serviceSections.filter(
+      (section) => section?.type === requestedServiceType
+    );
+    return matchedServices.length > 0 ? matchedServices : serviceSections;
+  }, [serviceSections]);
 
   const displayReviews = useMemo(() => {
     if (!Array.isArray(reviews) || reviews.length === 0) return [];
@@ -437,7 +446,7 @@ export default function DaycareProfile({ sitterName = "Maya Johnson", sitterId =
 
                   {/* Services List */}
                   <div className="px-4 pb-4">
-                    {serviceSections.map((section, sectionIndex) => (
+                    {filteredServiceSections.map((section, sectionIndex) => (
                       <div key={sectionIndex}>
                         {sectionIndex > 0 && <div className="border-t my-4" />}
 
