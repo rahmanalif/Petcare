@@ -134,6 +134,7 @@ export default function FindMatchSection() {
   const [startTime, setStartTime] = useState("11:00");
   const [endTime, setEndTime] = useState("23:00");
   const [selectedPets, setSelectedPets] = useState([]);
+  const [pets, setPets] = useState([]);
   const [showMap, setShowMap] = useState(false);
   const [schedule, setSchedule] = useState("oneTime"); // "oneTime" or "repeatWeekly"
   const [selectedDays, setSelectedDays] = useState({
@@ -162,33 +163,53 @@ export default function FindMatchSection() {
           ? daycareLoading
           : loading;
 
-  // Pet data
-  const pets = [
-    {
-      id: "bob",
-      name: "Bob",
-      breed: "Australian Shepherds",
-      image: "/Ellipse.png"
-    },
-    {
-      id: "max",
-      name: "Max",
-      breed: "Golden Retriever",
-      image: "/Ellipse.png"
-    },
-    {
-      id: "whiskers",
-      name: "Whiskers",
-      breed: "Persian Cat",
-      image: "/Ellipse.png"
-    },
-    {
-      id: "luna",
-      name: "Luna",
-      breed: "Labrador",
-      image: "/Ellipse.png"
-    }
-  ];
+  const resolvePetImage = (imagePath) => {
+    if (!imagePath) return "/Ellipse.png";
+    if (/^https?:\/\//i.test(imagePath)) return imagePath;
+    const base = (API_BASE || "").replace(/\/+$/, "");
+    const path = String(imagePath).replace(/^\/+/, "");
+    return base ? `${base}/${path}` : imagePath;
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchPets = async () => {
+      try {
+        const response = await fetchWithAuth(`${API_BASE}/api/pets`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const result = await response.json();
+        if (!isMounted) return;
+
+        if (result?.success && Array.isArray(result?.data)) {
+          const mappedPets = result.data.map((pet) => ({
+            id: String(pet?._id || pet?.id || ""),
+            name: pet?.name || "Pet",
+            breed: pet?.breed || pet?.type || "Pet",
+            image: resolvePetImage(pet?.coverPhoto || pet?.gallery?.[0]),
+          })).filter((pet) => pet.id);
+
+          setPets(mappedPets);
+        } else {
+          setPets([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch pets", error);
+        if (isMounted) setPets([]);
+      }
+    };
+
+    fetchPets();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [API_BASE]);
 
   const addPet = (petId) => {
     if (!selectedPets.includes(petId)) {
@@ -202,19 +223,19 @@ export default function FindMatchSection() {
 
   // Regular Boarding/Walking Filters
   const [filters, setFilters] = useState({
-    sitterAtHome: true,
-    hasFencedGarden: true,
+    sitterAtHome: false,
+    hasFencedGarden: false,
     petsAllowed: false,
     noSmokingHome: false,
     allTypes: false,
-    doesntOwnDogs: true,
+    doesntOwnDogs: false,
     doesntOwnCats: false,
     onlyOneBooking: false,
     doesntOwnCagedPets: false,
-    hasNoChildren: true,
+    hasNoChildren: false,
     hasNoChildren0to3: false,
     hasNoChildren6to12: false,
-    acceptsNonSpayed: true,
+    acceptsNonSpayed: false,
     acceptsNonNeutered: false,
     bathingGrooming: false,
     dogFirstAid: false,
@@ -222,25 +243,25 @@ export default function FindMatchSection() {
 
   // Daycare specific filters
   const [daycareFilters, setDaycareFilters] = useState({
-    sitterAtHome: true,
+    sitterAtHome: false,
     atSittersFacility: false,
     atYourHome: false,
-    home: true,
+    home: false,
     flats: false,
     allTypes: false,
-    sitterHomeFullTime: true,
+    sitterHomeFullTime: false,
     otherAtHomeFullTime: false,
-    hasFencedGarden: true,
+    hasFencedGarden: false,
     petsAllowedOnFurniture: false,
     noSmokingHome: false,
-    doesntOwnDogs: true,
+    doesntOwnDogs: false,
     doesntOwnCats: false,
     onlyOneBooking: false,
     doesntOwnCagedPets: false,
-    hasNoChildren: true,
+    hasNoChildren: false,
     hasNoChildren0to3: false,
     hasNoChildren6to12: false,
-    acceptsNonSpayed: true,
+    acceptsNonSpayed: false,
     acceptsNonNeutered: false,
     bathingGrooming: false,
     dogFirstAid: false,
@@ -390,7 +411,7 @@ export default function FindMatchSection() {
     const minimalMode = Boolean(options.minimalMode);
 
     const resolveProfileImage = (imagePath) => {
-      if (!imagePath) return "/Ellipse.png";
+      if (!imagePath) return "";
       if (/^https?:\/\//i.test(imagePath)) return imagePath;
 
       const base = (API_BASE || "").replace(/\/+$/, "");
@@ -398,9 +419,24 @@ export default function FindMatchSection() {
       return base ? `${base}/${path}` : imagePath;
     };
 
+    const getSitterId = (sitter) => {
+      const directId = sitter?.sitterId || sitter?._id || sitter?.id;
+      if (directId) return directId;
+
+      if (sitter?.user && typeof sitter.user === "object") {
+        return sitter.user.sitterId || sitter.user._id || sitter.user.id || null;
+      }
+
+      return sitter?.user || null;
+    };
+
     const mapSitterToCard = (sitter) => ({
+      sitterId: getSitterId(sitter),
       name: sitter.fullName || sitter.name || "Sitter",
-      location: sitter.address || "New York, NY",
+      location:
+        sitter.address ||
+        [sitter.street, sitter.state, sitter.zipCode].filter(Boolean).join(", ") ||
+        "New York, NY",
       rating: sitter.rating || sitter.averageRating || 5.0,
       reviews: sitter.reviews || sitter.reviewsCount || 0,
       repeatPetOwners: Boolean(sitter.isRepeatSitter),
@@ -1357,7 +1393,27 @@ export default function FindMatchSection() {
                 </div>
             ) : sitters.length > 0 ? (
                 sitters.map((sitter, index) => (
-                    <SitterCard key={index} sitter={sitter} serviceType={lookingFor} />
+                    <SitterCard
+                      key={index}
+                      sitter={sitter}
+                      serviceType={lookingFor}
+                      searchContext={{
+                        lookingFor,
+                        startDate,
+                        endDate,
+                        startTime,
+                        endTime,
+                        schedule,
+                        selectedDays,
+                        selectedPets,
+                        filters:
+                          lookingFor === "boarding"
+                            ? filters
+                            : lookingFor === "Dog Walking"
+                              ? walkingFilters
+                              : daycareFilters,
+                      }}
+                    />
                 ))
             ) : (
                 <div className="text-center py-10 text-gray-500">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -22,42 +22,91 @@ import {
 } from "@/components/ui/select";
 import BookingModalBoarding from "./BookingServiceBoarding";
 import BookingModalWalking from "./BookingServiceWalking";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPets } from "@/redux/petSlice";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+
+const resolvePetImage = (path) => {
+  if (!path) return "/Ellipse.png";
+  if (/^https?:\/\//i.test(path)) return path;
+  const base = API_BASE.replace(/\/+$/, "");
+  const clean = String(path).replace(/^\/+/, "");
+  return base ? `${base}/${clean}` : path;
+};
+
+const resolveProfileImage = (path) => {
+  if (!path) return "/Ellipse 52.png";
+  if (/^https?:\/\//i.test(path)) return path;
+  const base = API_BASE.replace(/\/+$/, "");
+  const clean = String(path).replace(/^\/+/, "");
+  return base ? `${base}/${clean}` : path;
+};
+
+const toDisplayLocation = (profile) =>
+  profile?.address ||
+  [profile?.street, profile?.state, profile?.zipCode].filter(Boolean).join(", ") ||
+  "New York, NY";
+
+const normalizeServiceValue = (value) => {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (normalized === "boarding") return "boarding";
+  if (normalized === "doggy day care" || normalized === "daycare") return "daycare";
+  if (normalized === "dog walking" || normalized === "walking") return "walking";
+  return "";
+};
 
 export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
+  const dispatch = useDispatch();
+  const { list: petList = [] } = useSelector((state) => state.pets);
+  const { profile, services: profileServices } = useSelector((state) => state.sitterProfile);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [isSelectingStartDate, setIsSelectingStartDate] = useState(true);
   const [selectedPets, setSelectedPets] = useState([]);
+  const [cachedAvailabilitySummary, setCachedAvailabilitySummary] = useState("");
 
-  // Pet data
-  const pets = [
-    {
-      id: "bob",
-      name: "Bob",
-      breed: "Australian Shepherds",
-      image: "/Ellipse.png"
-    },
-    {
-      id: "max",
-      name: "Max",
-      breed: "Golden Retriever",
-      image: "/Ellipse.png"
-    },
-    {
-      id: "whiskers",
-      name: "Whiskers",
-      breed: "Persian Cat",
-      image: "/Ellipse.png"
-    },
-    {
-      id: "luna",
-      name: "Luna",
-      breed: "Labrador",
-      image: "/Ellipse.png"
-    }
-  ];
+  useEffect(() => {
+    dispatch(fetchPets());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    setCachedAvailabilitySummary(
+      localStorage.getItem("selectedSitterAvailabilitySummary") || ""
+    );
+  }, []);
+
+  const pets = useMemo(
+    () =>
+      (Array.isArray(petList) ? petList : []).map((pet) => ({
+        id: String(pet?._id || pet?.id || ""),
+        name: pet?.name || "Unnamed Pet",
+        breed: pet?.breed || pet?.type || "",
+        image: resolvePetImage(pet?.coverPhoto || pet?.gallery?.[0]),
+      })),
+    [petList]
+  );
+  const displayName = profile?.fullName || "Seam Rahman";
+  const displayLocation = toDisplayLocation(profile);
+  const displayAvatar = resolveProfileImage(profile?.profilePicture);
+  const displayRating = Number(profile?.averageRating ?? 0).toFixed(1);
+  const displayReviewsCount = profile?.reviewsCount ?? 0;
+  const fallbackAvailabilitySummary = useMemo(() => {
+    const values = Array.isArray(profileServices)
+      ? profileServices
+          .map((service) => Number(service?.availability?.maxWalksPerDay))
+          .filter((value) => Number.isFinite(value) && value > 0)
+      : [];
+    const max = values.length > 0 ? Math.max(...values) : 0;
+    return `Still available for ${max} more pets today. (0 booked, ${max} remaining)`;
+  }, [profileServices]);
+  const displayAvailabilitySummary =
+    String(profile?.availabilitySummary || "").trim() ||
+    String(cachedAvailabilitySummary || "").trim() ||
+    fallbackAvailabilitySummary;
 
   const addPet = (petId) => {
     if (!selectedPets.includes(petId)) {
@@ -189,13 +238,34 @@ export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
     // { name: "Additional Pet Rate", price: 10.0 },
   ];
 
-  const [lookingFor, setLookingFor] = useState("daycare");
-  const [startDate, setStartDate] = useState("01/09/2025");
-  const [endDate, setEndDate] = useState("01/09/2025");
-  const [startTime, setStartTime] = useState("11:00am");
-  const [endTime, setEndTime] = useState("11:00pm");
-  const [selectedPet, setSelectedPet] = useState("bob");
+  const [lookingFor, setLookingFor] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [selectedPet, setSelectedPet] = useState("");
   const [showMap, setShowMap] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const raw = localStorage.getItem("selectedSearchContext");
+    if (!raw) return;
+
+    try {
+      const context = JSON.parse(raw);
+      const normalizedService = normalizeServiceValue(context?.lookingFor);
+      if (normalizedService) setLookingFor(normalizedService);
+      setStartDate(String(context?.startDate || ""));
+      setEndDate(String(context?.endDate || ""));
+      setStartTime(String(context?.startTime || ""));
+      setEndTime(String(context?.endTime || ""));
+      if (Array.isArray(context?.selectedPets)) {
+        setSelectedPets(context.selectedPets.map((id) => String(id)));
+      }
+    } catch (error) {
+      console.error("Failed to parse selectedSearchContext", error);
+    }
+  }, []);
 
   const handleServiceChange = (value) => {
     setLookingFor(value);
@@ -244,16 +314,16 @@ export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-300">
               <img
-                src="/Ellipse 52.png"
+                src={displayAvatar}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
             <div>
-              <h3 className="font-semibold text-sm sm:text-base text-[#024B5E]">Seam Rahman</h3>
+              <h3 className="font-semibold text-sm sm:text-base text-[#024B5E]">{displayName}</h3>
               <div className="flex items-center gap-1 text-xs sm:text-sm text-[#024B5E]">
                 <MapPin className="w-3 h-3" />
-                <span className="">New York, NY</span>
+                <span className="">{displayLocation}</span>
               </div>
             </div>
           </div>
@@ -272,7 +342,7 @@ export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
           <div className="space-y-2 text-xs sm:text-sm">
             <div className="flex items-center gap-2 text-[#024B5E]">
               <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current text-[#024B5E]" />
-              <span className="">5.0 (55 reviews)</span>
+              <span className="">{displayRating} ({displayReviewsCount} reviews)</span>
             </div>
             <div className="flex items-center gap-2 text-[#024B5E]">
               <svg
@@ -333,19 +403,19 @@ export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
                 />
               </svg>
             </div>
-            Still available for 2 more pets today. (3 booked, 2 remaining)
+            {displayAvailabilitySummary}
           </Badge>
 
           {/* Looking For Section */}
           <div>
             <h3 className="font-semibold mb-2 font-montserrat text-sm sm:text-base text-[#024B5E]">Looking For</h3>
             <Select
-              value={lookingFor}
+              value={lookingFor || undefined}
               onValueChange={handleServiceChange}
               className="font-montserrat"
             >
               <SelectTrigger className="w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border rounded-lg text-sm">
-                <SelectValue />
+                <SelectValue placeholder="Select service" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="boarding" className={"font-montserrat"}>
@@ -520,23 +590,25 @@ export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
                 <label className="text-xs sm:text-sm font-montserrat text-[#024B5E] mb-1 block">
                 Start date
               </label>
-              <input
-                type="text"
-                placeholder="Select"
-                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
-                readOnly
-              />
+                <input
+                  type="text"
+                  placeholder="Select"
+                  value={startDate}
+                  className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
+                  readOnly
+                />
             </div>
             <div>
               <label className="text-xs sm:text-sm font-montserrat text-[#024B5E] mb-1 block">
                 End date
               </label>
-              <input
-                type="text"
-                placeholder="Select"
-                className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
-                readOnly
-              />
+                <input
+                  type="text"
+                  placeholder="Select"
+                  value={endDate}
+                  className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
+                  readOnly
+                />
             </div>
             <div>
                 <label className="text-xs sm:text-sm font-montserrat text-[#024B5E] mb-1 block">
@@ -544,7 +616,8 @@ export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
               </label>
               <input
                 type="time"
-                defaultValue="10:00:00"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
                 className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
               />
             </div>
@@ -554,7 +627,8 @@ export default function BookingModalDaycare({ isOpen, onClose, providerData }) {
               </label>
               <input
                 type="time"
-                defaultValue="10:00:00"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
                 className="w-full px-2 sm:px-3 py-1.5 sm:py-2 border rounded-lg text-xs sm:text-sm font-montserrat"
               />
             </div>

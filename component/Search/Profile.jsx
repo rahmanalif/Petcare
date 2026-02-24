@@ -9,14 +9,13 @@ export default function Profile() {
   const searchParams = useSearchParams();
   const serviceType = searchParams.get("service") || "boarding";
   const sitterName = searchParams.get("name") || "Seam Rahman";
+  const sitterId = searchParams.get("id") || "";
 
-  // Route to the appropriate profile component based on service type
   if (serviceType === "Doggy Day Care") {
-    return <DaycareProfile sitterName={sitterName} />;
+    return <DaycareProfile sitterName={sitterName} sitterId={sitterId} />;
   } else if (serviceType === "Dog Walking") {
-    return <WalkingProfile sitterName={sitterName} />;
+    return <WalkingProfile sitterName={sitterName} sitterId={sitterId} />;
   } else {
-    // Default to boarding profile
-    return <BoardingProfile sitterName={sitterName} />;
+    return <BoardingProfile sitterName={sitterName} sitterId={sitterId} />;
   }
 }

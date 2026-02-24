@@ -1,14 +1,42 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { fetchProfile } from "@/redux/userSlice";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+
+const resolveAvatarUrl = (path) => {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  const base = API_BASE.replace(/\/+$/, "");
+  const clean = String(path).replace(/^\/+/, "");
+  return base ? `${base}/${clean}` : path;
+};
 
 export default function SitterNavbar() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const profileData = useSelector((state) => state.user?.data);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    dispatch(fetchProfile());
+  }, [dispatch, isAuthenticated]);
+
+  const avatarSrc = useMemo(
+    () =>
+      resolveAvatarUrl(
+        profileData?.profilePicture || user?.profilePicture || user?.avatar || ""
+      ),
+    [profileData?.profilePicture, user?.profilePicture, user?.avatar]
+  );
+
+  const displayName = profileData?.fullName || user?.fullName || user?.name || "User";
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md">
@@ -57,16 +85,17 @@ export default function SitterNavbar() {
               onClick={() => router.push('/settingForSitter')}
               className="relative w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden bg-linear-to-br from-teal-400 to-blue-500 flex items-center justify-center text-white font-semibold cursor-pointer hover:shadow-lg transition-shadow"
             >
-              {user?.avatar ? (
+              {avatarSrc ? (
                 <Image
-                  src={user.avatar}
-                  alt={user.name || 'User'}
+                  src={avatarSrc}
+                  alt={displayName}
                   fill
                   className="object-cover"
+                  unoptimized
                 />
               ) : (
                 <span className="text-base md:text-lg">
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
+                  {displayName?.charAt(0).toUpperCase() || 'U'}
                 </span>
               )}
             </div>

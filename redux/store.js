@@ -8,6 +8,7 @@ import petReducer from './petSlice';
 import boardingSearchReducer from './boardingSearchSlice';
 import walkingSearchReducer from './walkingSearchSlice';
 import daycareSearchReducer from './daycareSearchSlice';
+import sitterProfileReducer from './sitterProfileSlice';
 
 
 const authPersistConfig = {
@@ -25,6 +26,7 @@ export const store = configureStore({
     boardingSearch: boardingSearchReducer,
     walkingSearch: walkingSearchReducer,
     daycareSearch: daycareSearchReducer,
+    sitterProfile: sitterProfileReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

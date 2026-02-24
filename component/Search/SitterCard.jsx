@@ -1,11 +1,44 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Star, RefreshCw, CheckCircle } from "lucide-react";
 
-const SitterCard = ({ sitter, serviceType = "boarding" }) => {
+const SitterCard = ({ sitter, serviceType = "boarding", searchContext = null }) => {
+  const sitterId =
+    typeof sitter?.sitterId === "string" || typeof sitter?.sitterId === "number"
+      ? String(sitter.sitterId)
+      : typeof sitter?.sitterId === "object" && sitter?.sitterId
+        ? String(sitter.sitterId._id || sitter.sitterId.id || "")
+        : "";
+  const profileHref = sitterId
+    ? `/profile?service=${encodeURIComponent(serviceType)}&name=${encodeURIComponent(sitter.name)}&id=${encodeURIComponent(sitterId)}`
+    : `/profile?service=${encodeURIComponent(serviceType)}&name=${encodeURIComponent(sitter.name)}`;
+
+  const [imageError, setImageError] = useState(false);
+  const hasImage = useMemo(
+    () => Boolean(sitter?.image && String(sitter.image).trim()) && !imageError,
+    [sitter?.image, imageError]
+  );
+
   return (
-    <Link href={`/profile?service=${encodeURIComponent(serviceType)}&name=${encodeURIComponent(sitter.name)}`} className="block">
+    <Link
+      href={profileHref}
+      className="block"
+      onClick={() => {
+        if (typeof window !== "undefined") {
+          if (sitterId) {
+            localStorage.setItem("selectedSitterId", sitterId);
+          }
+          localStorage.setItem(
+            "selectedSitterAvailabilitySummary",
+            String(sitter?.availability || "")
+          );
+          if (searchContext) {
+            localStorage.setItem("selectedSearchContext", JSON.stringify(searchContext));
+          }
+        }
+      }}
+    >
       <Card className="hover:shadow-md transition-shadow p-2 sm:p-3 md:p-4">
         <CardContent className="p-2 sm:p-3 md:p-4">
           <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
@@ -13,15 +46,15 @@ const SitterCard = ({ sitter, serviceType = "boarding" }) => {
               {/* Top Section - Profile and Name */}
               <div className="flex gap-3 sm:gap-4">
                 {/* Profile Image */}
-                <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gray-300 shrink-0">
-                  <img
-                    src={sitter.image || "/Ellipse.png"}
-                    alt="Profile"
-                    className="w-full h-full object-cover rounded-full"
-                    onError={(e) => {
-                      e.currentTarget.src = "/Ellipse.png";
-                    }}
-                  />
+                <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-[#D9E3E8] shrink-0 overflow-hidden">
+                  {hasImage ? (
+                    <img
+                      src={sitter.image}
+                      alt="Profile"
+                      className="w-full h-full object-cover rounded-full"
+                      onError={() => setImageError(true)}
+                    />
+                  ) : null}
                 </div>
 
                 {/* Name and Location */}
