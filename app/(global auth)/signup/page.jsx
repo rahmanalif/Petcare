@@ -176,7 +176,7 @@ export default function WuffoosRegister() {
     }
 
     // Role based redirect
-    if (data.role === "pet_sitter") {
+    if (data.role === "pet_sitter" || data.role === "sitter") {
       router.push("/sitterdashboard");
     } else {
       router.push("/");

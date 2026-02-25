@@ -20,8 +20,9 @@ export default function ConditionalLayout({ children }) {
     return <>{children}</>;
   }
 
-  // Determine which navbar to show based on user role
-  const NavbarComponent = role === 'pet_sitter' ? SitterNavbar : Navbar;
+  // Support both legacy and current sitter role values from backend
+  const isSitterRole = role === 'pet_sitter' || role === 'sitter';
+  const NavbarComponent = isSitterRole ? SitterNavbar : Navbar;
 
   // Render with appropriate Navbar and Footer for all other pages
   return (

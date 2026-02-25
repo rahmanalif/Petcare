@@ -1,7 +1,7 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../../../redux/authSlice';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -86,12 +86,24 @@ const GlassSurface = ({
 export default function WuffoosLogin() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { role, isAuthenticated } = useSelector((state) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
+
+  useEffect(() => {
+    if (!isAuthenticated || !role) return;
+
+    if (role === 'sitter' || role === 'pet_sitter') {
+      router.push('/sitterdashboard');
+      return;
+    }
+
+    router.push('/');
+  }, [isAuthenticated, role, router]);
 
   const handleSubmit = async () => {
     setErrorMessage("");
@@ -140,12 +152,6 @@ export default function WuffoosLogin() {
 
       localStorage.setItem('token', data.token);
       localStorage.setItem('refreshToken', data.refreshToken);
-
-      if (data.role === 'pet_sitter') {
-        router.push('/sitterdashboard');
-      } else {
-        router.push('/');
-      }
     } catch (error) {
       const message = "Unable to log in. Please check your credentials and try again.";
       dispatch(loginFailure(message));
