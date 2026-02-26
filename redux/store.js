@@ -10,6 +10,10 @@ import walkingSearchReducer from './walkingSearchSlice';
 import daycareSearchReducer from './daycareSearchSlice';
 import sitterProfileReducer from './sitterProfileSlice';
 
+// New Import
+import bookingReducer from './sitter/bookingSlice';
+import chatReducer from './chat/chatSlice';
+import sitterReducer from './sitter/sitterSlice';
 
 const authPersistConfig = {
   key: 'auth',
@@ -20,13 +24,17 @@ export const store = configureStore({
   reducer: {
     auth: persistReducer(authPersistConfig, authReducer),
     service: serviceReducer,
-
     user: userReducer,
     pets: petReducer,
     boardingSearch: boardingSearchReducer,
     walkingSearch: walkingSearchReducer,
     daycareSearch: daycareSearchReducer,
     sitterProfile: sitterProfileReducer,
+    
+    // New Reducer Added Here
+    booking: bookingReducer,
+    chat: chatReducer,
+    sitter: sitterReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

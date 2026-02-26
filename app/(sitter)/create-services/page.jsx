@@ -12,7 +12,6 @@ export default function ServiceSetupForm() {
   const formRef = useRef(null);
 
   const handleCreateService = () => {
-     console.log("formRef.current:", formRef.current);
     if (formRef.current) {
       formRef.current.handleSave();
     }

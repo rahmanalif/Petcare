@@ -1,73 +1,124 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useGetBookingByIdQuery } from "@/redux/bookingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { 
+  fetchBookingById, 
+  fetchCalendarEvents, // 🔥 ১. ক্যালেন্ডার ইভেন্ট ইম্পোর্ট
+  clearCurrentBooking, 
+  requestReschedule,
+  clearMessages as clearBookingMessages
+} from "@/redux/sitter/bookingSlice";
+import { fetchMessagesByUser, sendMessage, clearChat } from "@/redux/chat/chatSlice";
 
-// Helper for Images
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// Server URL
+const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const getImageUrl = (path) => {
   if (!path) return "https://placehold.co/100";
   if (path.startsWith("http")) return path;
-  return `${API_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+  return `${SERVER_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 };
+
+// --- Helper Components for Styles ---
+const InfoRow = ({ label, value }) => (
+  <div className="flex justify-between items-start py-1">
+    <span className="text-[#024B5E] font-bold text-sm min-w-[140px]">{label}:</span>
+    <span className="text-gray-500 text-sm text-right flex-1">{value || "N/A"}</span>
+  </div>
+);
+
+const SectionHeading = ({ title, icon }) => (
+  <h4 className="flex items-center gap-2 text-[#024B5E] font-bold text-sm mb-3">
+    {icon && icon}
+    {title}
+  </h4>
+);
 
 export default function OngoingDetails() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = searchParams.get("id"); // Get ID from URL
+  const id = searchParams.get("id");
+  const dispatch = useDispatch();
 
-  // API Call
-  const { data: bookingData, isLoading, error } = useGetBookingByIdQuery(id, {
-    skip: !id, // Don't fetch if no ID
-  });
+  // Redux State
+  const { currentBooking: booking, calendarEvents, loading, successMessage } = useSelector((state) => state.booking);
+  const { messages } = useSelector((state) => state.chat);
 
-  const booking = bookingData?.data;
-
-  // State
+  // Local State
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [showPetDetails, setShowPetDetails] = useState(false);
+  const [showPetDetails, setShowPetDetails] = useState(true); 
   const [activeView, setActiveView] = useState("details"); 
-  const [message, setMessage] = useState("");
+  
+  // Inputs
+  const [rescheduleForm, setRescheduleForm] = useState({ reason: "", startDate: "", endDate: "" });
+  const [messageText, setMessageText] = useState("");
+  const chatEndRef = useRef(null);
 
-  // Map Booking Data to Calendar
+  // Fetch Booking & Calendar Data
+  useEffect(() => {
+    if (id) {
+        dispatch(fetchBookingById(id));
+        dispatch(fetchCalendarEvents()); // 🔥 ২. ক্যালেন্ডার ডাটা ফেচ করা হলো
+    }
+    return () => {
+      dispatch(clearCurrentBooking());
+      dispatch(clearChat());
+    };
+  }, [id, dispatch]);
+
+  // Handle Success Message (For Reschedule)
+  useEffect(() => {
+    if (successMessage) {
+        alert(successMessage);
+        dispatch(clearBookingMessages());
+        setActiveView("details"); // রিসিডিউল সাকসেস হলে ডিটেইলসে ফিরে যাবে
+    }
+  }, [successMessage, dispatch]);
+
+  // Chat Fetching
+  useEffect(() => {
+    if (activeView === "chat" && booking?.owner?._id) {
+        dispatch(fetchMessagesByUser(booking.owner._id));
+    }
+  }, [activeView, booking, dispatch]);
+
+  // --- Calendar Logic Update ---
+  
+  // ১. বর্তমান বুকিং এর তারিখ (লাল রঙের জন্য)
   const bookedDays = [];
   if (booking) {
     const start = new Date(booking.startDate);
     const end = new Date(booking.endDate);
-    // Simple logic to highlight start and end date for demo
     bookedDays.push(start.getDate());
-    if (end.getDate() !== start.getDate()) {
-        bookedDays.push(end.getDate());
-    }
+    if (end.getDate() !== start.getDate()) bookedDays.push(end.getDate());
   }
 
-  // Calendar Logic
+  // ২. অ্যাভেইলেবল তারিখ বের করা (সবুজ রঙের জন্য)
+  // ধরে নিচ্ছি API থেকে calendarEvents আসছে [{ date: "2024-02-20", status: "available" }] ফরম্যাটে
+  const availableDays = calendarEvents
+    .filter(event => {
+        const eventDate = new Date(event.date); // বা event.start
+        return eventDate.getMonth() === currentDate.getMonth() && 
+               eventDate.getFullYear() === currentDate.getFullYear() &&
+               event.status === 'available'; // অথবা আপনার API স্ট্যাটাস অনুযায়ী
+    })
+    .map(event => new Date(event.date).getDate());
+
+
   const generateCalendarDays = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const daysInPrevMonth = new Date(year, month, 0).getDate();
-
     const days = [];
-
-    // Previous month
-    for (let i = firstDay - 1; i >= 0; i--) {
-      days.push({ day: daysInPrevMonth - i, isCurrentMonth: false });
-    }
-    // Current month
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push({ day: i, isCurrentMonth: true });
-    }
-    // Next month
-    const remainingDays = 42 - days.length;
-    for (let i = 1; i <= remainingDays; i++) {
-      days.push({ day: i, isCurrentMonth: false });
-    }
+    for (let i = 0; i < firstDay; i++) days.push({ day: "", isCurrentMonth: false });
+    for (let i = 1; i <= daysInMonth; i++) days.push({ day: i, isCurrentMonth: true });
     return days;
   };
 
   const calendarDays = generateCalendarDays(currentDate);
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   const navigateMonth = (direction) => {
     const newDate = new Date(currentDate);
@@ -75,320 +126,325 @@ export default function OngoingDetails() {
     setCurrentDate(newDate);
   };
 
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
+  // Handlers
+  const handleRescheduleSubmit = () => {
+    if (!rescheduleForm.startDate || !rescheduleForm.endDate) return alert("Please select both start and end dates.");
+    
+    // ডিসপ্যাচ রিকোয়েস্ট
+    dispatch(requestReschedule({ 
+        id: booking._id, 
+        reason: rescheduleForm.reason,
+        startDate: rescheduleForm.startDate,
+        endDate: rescheduleForm.endDate
+    }));
+  };
 
-  // Loading State
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center text-[#024B5E]">Loading details...</div>;
-  }
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!messageText.trim()) return;
+    dispatch(sendMessage({ recipientId: booking.owner._id, content: messageText }));
+    setMessageText("");
+  };
 
-  // Error State
-  if (!id || error || !booking) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6">
-        <p className="text-red-500 mb-4">Booking not found or ID missing.</p>
-        <button onClick={() => router.back()} className="text-[#024B5E] underline">Go Back</button>
-      </div>
-    );
-  }
+  if (loading) return <div className="p-10 text-center text-[#024B5E]">Loading details...</div>;
+  if (!booking) return <div className="p-10 text-center text-red-500">Booking not found</div>;
 
-  // Extract Pet Info (First pet)
-  const pet = booking.pets && booking.pets.length > 0 ? booking.pets[0] : null;
+  const pet = booking.pets?.[0];
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6">
-      <div className="max-w-6xl border-2 border-gray-200 rounded-lg bg-white m-2 p-2 mx-auto">
-        <div className="p-6 pb-0">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 text-[#024B5E] hover:underline mb-2"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5" />
-              <path d="M12 19l-7-7 7-7" />
-            </svg>
-            Back
-          </button>
-        </div>
+    <div className="bg-[#FDFDFD] min-h-screen p-4 md:p-8 font-sans">
+      <div className="max-w-7xl mx-auto">
         
-        <div className="flex justify-between items-center px-6 pb-6 pt-2 mb-2">
-            <h1 className="text-2xl font-semibold text-[#024B5E]">
-            Details (#{booking._id.slice(-6)})
-            </h1>
-            <span className="px-3 py-1 bg-[#E7F4F6] text-[#024B5E] rounded-full text-sm font-medium capitalize">
-                {booking.status}
-            </span>
+        {/* Top Header */}
+        <div className="flex items-center gap-2 mb-6">
+          <button onClick={() => router.back()} className="text-[#024B5E]">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <h1 className="text-xl font-bold text-[#024B5E]">On going details</h1>
         </div>
 
-        {activeView === "reschedule" ? (
-          /* Reschedule View */
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
-            {/* Calendar Section */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-[#024B5E] mb-4">
-                Select New Date
-              </h2>
-
-              <div className="flex items-center justify-between mb-4">
-                <button onClick={() => navigateMonth(-1)} className="p-2 hover:bg-[#024B5E] hover:text-white rounded-lg transition-colors">
-                    {"<"}
-                </button>
-                <h3 className="text-lg font-semibold text-[#024B5E]">
-                  {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-                </h3>
-                <button onClick={() => navigateMonth(1)} className="p-2 hover:bg-[#024B5E] hover:text-white rounded-lg transition-colors">
-                    {">"}
-                </button>
-              </div>
-
-              <div className="grid grid-cols-7 gap-1">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                  <div key={day} className="text-center text-xs font-semibold text-[#024B5E] py-1">
-                    {day}
-                  </div>
-                ))}
-
-                {calendarDays.map((dayInfo, index) => (
-                    <div
-                      key={index}
-                      className={`
-                      aspect-square flex items-center justify-center text-sm rounded
-                      ${!dayInfo.isCurrentMonth ? "text-gray-300" : "text-[#024B5E] hover:bg-gray-100 cursor-pointer"}
-                    `}
-                    >
-                      {dayInfo.day}
-                    </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Reschedule Form Section */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-[#024B5E] mb-4">Request Reschedule</h2>
-
-              <textarea
-                className="w-full border-2 border-[#035F75] rounded-lg p-3 mb-6 h-24 focus:outline-none text-sm"
-                placeholder="Reason for rescheduling..."
-              />
-
-              <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium text-[#024B5E] mb-2">Start date</label>
-                  <input type="date" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-[#024B5E] mb-2">End date</label>
-                  <input type="date" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
-                </div>
-              </div>
-
-              <div className="flex gap-3 mb-4">
-                <button onClick={() => setActiveView("details")} className="flex-1 border-2 border-[#FE6C5D] text-[#FE6C5D] font-medium py-3 px-6 rounded-lg">
-                  Cancel
-                </button>
-                <button className="flex-1 bg-[#035F75] text-white font-medium py-3 px-6 rounded-lg">
-                  Send Request
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : activeView === "chat" ? (
-          /* Chat View (Static for now) */
-          <div className="p-6">
-            <div className="max-w-4xl mx-auto bg-white rounded-lg border border-gray-200 p-6 min-h-[600px] flex flex-col">
-              <h2 className="text-xl font-semibold text-[#024B5E] text-center mb-6">Chat with {booking.owner?.fullName}</h2>
-              <div className="flex-1 flex items-center justify-center text-gray-400">
-                Chat functionality coming soon...
-              </div>
-              <div className="mt-4">
-                <button onClick={() => setActiveView("details")} className="text-[#035F75] hover:underline text-sm">
-                  ← Back to details
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          /* Default Details View */
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+        {activeView === "details" ? (
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
             
-            {/* Left: Calendar & Status */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-[#024B5E] mb-4">
-                Booking Date
-              </h2>
-              
-              <div className="flex gap-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-[#FF4747] rounded"></div>
-                  <span className="text-sm text-[#024B5E]">Booked Dates</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between mb-4">
-                 <h3 className="text-lg font-semibold text-[#024B5E]">
-                  {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-7 gap-1">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                  <div key={day} className="text-center text-xs font-semibold text-[#024B5E] py-1">
-                    {day}
-                  </div>
-                ))}
-
-                {calendarDays.map((dayInfo, index) => {
-                  const isBooked = dayInfo.isCurrentMonth && bookedDays.includes(dayInfo.day);
-                  
-                  return (
-                    <div
-                      key={index}
-                      className={`
-                        aspect-square flex items-center justify-center text-sm rounded
-                        ${!dayInfo.isCurrentMonth ? "text-gray-300" : "text-[#024B5E]"}
-                        ${isBooked ? "bg-[#FF4747] text-white font-semibold" : ""}
-                      `}
-                    >
-                      {dayInfo.day}
+            {/* ================= LEFT SIDE: CALENDAR ================= */}
+            <div className="w-full lg:w-1/3 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <h2 className="text-[#024B5E] font-semibold mb-2">Pet sitter Availability</h2>
+                
+                {/* Legend */}
+                <div className="flex gap-4 mb-6 text-xs text-[#024B5E]">
+                    <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 bg-[#FF6B6B] rounded-sm"></span> Book
                     </div>
-                  );
-                })}
-              </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 bg-[#10B981] rounded-sm"></span> Available
+                    </div>
+                </div>
+
+                {/* Calendar Header */}
+                <div className="flex items-center justify-between mb-4 px-2">
+                    <button onClick={() => navigateMonth(-1)} className="p-1 hover:bg-gray-100 rounded">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <span className="font-bold text-[#024B5E] text-sm">{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</span>
+                    <button onClick={() => navigateMonth(1)} className="p-1 hover:bg-gray-100 rounded">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                </div>
+
+                {/* Days Grid */}
+                <div className="grid grid-cols-7 gap-y-4 text-center">
+                    {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d => (
+                        <div key={d} className="text-xs font-semibold text-gray-400">{d}</div>
+                    ))}
+                    {calendarDays.map((d, i) => {
+                        const isBooked = d.isCurrentMonth && bookedDays.includes(d.day);
+                        // 🔥 
+                        const isAvailable = d.isCurrentMonth && availableDays.includes(d.day) && !isBooked;
+
+                        return (
+                            <div key={i} className={`flex justify-center`}>
+                                <div className={`
+                                    w-7 h-7 flex items-center justify-center text-xs rounded-md transition-colors
+                                    ${!d.isCurrentMonth ? "text-transparent" : "text-gray-600"}
+                                    ${isBooked ? "bg-[#FF6B6B] text-white shadow-md" : ""} 
+                                    ${isAvailable ? "bg-[#10B981] text-white shadow-md" : ""}
+                                `}>
+                                    {d.day}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
 
-            {/* Right: Booking Details */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              
-              {/* Client Info (Mapped from API) */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
-                    <img
-                      src={getImageUrl(booking.owner?.profilePicture)}
-                      alt={booking.owner?.fullName}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-[#024B5E]">{booking.owner?.fullName}</h3>
-                    <div className="flex items-center gap-1 text-sm text-[#024B5E]">
-                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                       <span>{booking.owner?.address || "No address"}</span>
+            {/* ================= RIGHT SIDE: DETAILS & PET INFO ================= */}
+            <div className="w-full lg:w-2/3 space-y-4">
+                
+                {/* 1. Sitter/Owner Info Card */}
+                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative">
+                    {/* Date Badge */}
+                    <div className="absolute top-6 right-6 bg-[#E0F2F1] text-[#00695C] text-xs font-bold px-2 py-1 rounded">
+                        {new Date(booking.startDate).toLocaleDateString()}
                     </div>
-                  </div>
-                </div>
-                <div className="text-right">
-                    <p className="text-sm font-bold text-[#024B5E] capitalize">{booking.serviceType}</p>
-                    <span className="text-xs text-gray-500">{new Date(booking.startDate).toLocaleDateString()}</span>
-                </div>
-              </div>
 
-              {/* Contact Info */}
-              <div className="mb-4 space-y-2">
-                <h4 className="font-semibold text-[#024B5E]">Contact</h4>
-                <div className="flex items-center gap-2 text-sm text-[#024B5E]">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                  <span>{booking.owner?.phoneNumber || "N/A"}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-[#024B5E]">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                  <span>{booking.owner?.email || "N/A"}</span>
-                </div>
-              </div>
-
-              {/* Time Info */}
-              <div className="mb-4 space-y-1 text-sm bg-[#F9FAFB] p-3 rounded">
-                <p className="text-[#024B5E] flex justify-between">
-                  <span>Pick-up time:</span> <span className="font-bold">{booking.startTime}</span>
-                </p>
-                <p className="text-[#024B5E] flex justify-between">
-                  <span>Drop-off time:</span> <span className="font-bold">{booking.endTime}</span>
-                </p>
-              </div>
-
-              {/* Pricing */}
-              <div className="border-t border-gray-200 pt-4 mb-4">
-                <h4 className="font-semibold text-[#024B5E] mb-3">Pricing Breakdown</h4>
-                <div className="space-y-2 text-sm">
-                    {booking.priceBreakdown && Object.entries(booking.priceBreakdown).map(([key, value]) => (
-                         key !== 'platformFee' && (
-                            <div key={key} className="flex justify-between">
-                                <span className="text-[#024B5E] capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                                <span className="font-medium text-[#024B5E]">${value}</span>
-                            </div>
-                         )
-                    ))}
-                  <div className="flex justify-between pt-2 border-t border-gray-200 mt-2">
-                    <span className="font-bold text-[#024B5E]">Total Earning</span>
-                    <span className="font-bold text-[#024B5E]">${booking.totalPrice}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Pet Info Card */}
-              {pet && (
-                <div className="mb-4">
-                    <div
-                    onClick={() => setShowPetDetails(!showPetDetails)}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors"
-                    >
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
-                        <img
-                            src={getImageUrl(pet.image)}
-                            alt={pet.name}
-                            className="w-full h-full object-cover"
-                        />
-                        </div>
+                    <div className="flex items-start gap-4 mb-4">
+                        <img src={getImageUrl(booking.owner?.profilePicture)} className="w-12 h-12 rounded-full object-cover" alt="User" />
                         <div>
-                        <h4 className="font-semibold text-[#024B5E]">{pet.name}</h4>
-                        <p className="text-sm text-[#024B5E]">{pet.breed}</p>
+                            <h3 className="text-[#024B5E] font-bold text-lg">{booking.owner?.fullName}</h3>
+                            <div className="flex items-center text-yellow-400 text-xs">
+                                ★ <span className="text-gray-500 ml-1">5.0 (1,200)</span>
+                            </div>
                         </div>
-                    </div>
-                    <svg className={`w-5 h-5 text-[#024B5E] transition-transform ${showPetDetails ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
                     </div>
 
-                    {/* Pet Details Dropdown */}
-                    {showPetDetails && (
-                    <div className="mt-4 bg-white border border-gray-200 rounded-lg overflow-hidden p-4">
-                        <h3 className="text-lg font-semibold text-[#024B5E] mb-2">Pet Details</h3>
-                        <div className="space-y-2 text-sm">
-                            <p><span className="font-medium">Age:</span> {pet.ageYears} Yrs {pet.ageMonths} Mon</p>
-                            <p><span className="font-medium">Weight:</span> {pet.weight} {pet.weightUnit}</p>
-                            <p><span className="font-medium">Gender:</span> {pet.gender}</p>
-                            <p><span className="font-medium">Vaccinated:</span> {pet.vaccinated ? "Yes" : "No"}</p>
-                            {pet.vetInfo && (
-                                <div className="mt-3 pt-3 border-t">
-                                    <p className="font-semibold mb-1">Vet Info:</p>
-                                    <p>{pet.vetInfo.name} - {pet.vetInfo.clinic}</p>
-                                </div>
-                            )}
+                    <div className="flex gap-6 text-sm text-[#024B5E] mb-4">
+                        <span className="font-semibold">{booking.serviceType || "Dog walking"}</span>
+                        <span className="flex items-center gap-1 text-gray-500">
+                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                             Live location
+                        </span>
+                    </div>
+
+                    <div className="space-y-2 mb-6">
+                        <p className="text-sm font-semibold text-[#024B5E]">Contact</p>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            {booking.owner?.phoneNumber}
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            {new Date(booking.startDate).toLocaleDateString()}
+                        </div>
+                        <div className="text-xs text-[#024B5E]">
+                            <span className="font-semibold">Pick-up time:</span> {booking.startTime}
+                        </div>
+                        <div className="text-xs text-[#024B5E]">
+                            <span className="font-semibold">Drop-off time:</span> {booking.endTime}
                         </div>
                     </div>
+
+                    {/* Pricing */}
+                    <div className="border-t border-gray-100 pt-4 space-y-2">
+                        <p className="text-sm font-semibold text-[#024B5E] mb-2">Pricing</p>
+                        <div className="flex justify-between text-xs text-[#024B5E]">
+                            <span>Base Price</span>
+                            <span>${booking.priceBreakdown?.basePrice || 0}</span>
+                        </div>
+                        {booking.priceBreakdown && Object.entries(booking.priceBreakdown).map(([key, value]) => {
+                             if (key !== 'basePrice' && key !== 'platformFee' && value > 0) {
+                                 return (
+                                    <div key={key} className="flex justify-between text-xs text-[#024B5E]">
+                                        <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                                        <span>${value}</span>
+                                    </div>
+                                 );
+                             }
+                             return null;
+                        })}
+                        <div className="flex justify-between text-sm font-bold text-[#024B5E] pt-2 border-t border-gray-100 mt-2">
+                            <span>Total</span>
+                            <span>${booking.totalPrice}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. Pet Info Accordion Card */}
+                {pet && (
+                <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+                    {/* Header */}
+                    <div 
+                        onClick={() => setShowPetDetails(!showPetDetails)}
+                        className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors"
+                    >
+                        <div className="flex items-center gap-3">
+                            <img src={getImageUrl(pet.image)} alt={pet.name} className="w-12 h-12 rounded-full object-cover" />
+                            <div>
+                                <h4 className="font-bold text-[#024B5E] text-lg">{pet.name}</h4>
+                                <p className="text-sm text-gray-500">{pet.breed}</p>
+                            </div>
+                        </div>
+                        <svg className={`w-5 h-5 text-gray-500 transition-transform ${showPetDetails ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                    </div>
+
+                    {/* Collapsible Content */}
+                    {showPetDetails && (
+                        <div className="p-6 pt-0 space-y-6">
+                            
+                            {/* Pet Information */}
+                            <div className="p-4 border border-gray-100 rounded-lg">
+                                <SectionHeading title="Pet Information" />
+                                <InfoRow label="Pet Name" value={pet.name} />
+                                <InfoRow label="Type" value={pet.type} />
+                                <InfoRow label="Weight (lbs)" value={`${pet.weight} ${pet.weightUnit || ''}`} />
+                                <InfoRow label="Age" value={`${pet.ageYears} Yrs ${pet.ageMonths} Mon`} />
+                                <InfoRow label="Breed" value={pet.breed} />
+                                <InfoRow label="Gender" value={pet.gender} />
+                                <InfoRow label="Dates of birth" value={pet.birthDate ? new Date(pet.birthDate).toLocaleDateString() : 'N/A'} />
+                            </div>
+
+                            {/* Additional Details */}
+                            <div className="p-4 border border-gray-100 rounded-lg">
+                                <SectionHeading title="Additional details" />
+                                <InfoRow label="Microchipped?" value={pet.microchipped ? "Yes" : "No"} />
+                                <InfoRow label="Spayed/Neutered?" value={pet.spayedNeutered ? "Yes" : "No"} />
+                                <InfoRow label="House Trained?" value={pet.houseTrained ? "Yes" : "No"} />
+                                <InfoRow label="Friendly with children?" value={pet.friendlyWithChildren ? "Yes" : "No"} />
+                                <InfoRow label="Friendly with dogs?" value={pet.friendlyWithDogs ? "Yes" : "No"} />
+                                <InfoRow label="Adoption Date" value={pet.adoptionDate ? new Date(pet.adoptionDate).toLocaleDateString() : 'N/A'} />
+                                <div className="mt-2">
+                                    <span className="text-[#024B5E] font-bold text-sm">About your pet</span>
+                                    <p className="text-gray-500 text-sm mt-1">{pet.aboutPet || "No description."} 🐱</p>
+                                </div>
+                            </div>
+
+                            {/* Care Info */}
+                            <div className="p-4 border border-gray-100 rounded-lg">
+                                <SectionHeading 
+                                    title="Care info" 
+                                    icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>} 
+                                />
+                                <InfoRow label="Potty break" value={pet.careInfo?.pottyBreak} />
+                                <InfoRow label="Energy level" value={pet.careInfo?.energyLevel} />
+                                <InfoRow label="Feeding schedule" value={pet.careInfo?.feedingSchedule} />
+                                <InfoRow label="Can be left alone" value={pet.careInfo?.canBeLeftAlone} />
+                                <InfoRow label="Medications" value={pet.careInfo?.medications} />
+                                <div className="mt-2">
+                                    <span className="text-[#024B5E] font-bold text-sm">Pill</span>
+                                    <p className="text-gray-500 text-sm mt-1">{pet.careInfo?.pill || "N/A"}</p>
+                                </div>
+                                <div className="mt-2">
+                                    <span className="text-[#024B5E] font-bold text-sm">Anything else a sitter should know?</span>
+                                    <p className="text-gray-500 text-sm mt-1">{pet.careInfo?.additionalInstructions || "None"}</p>
+                                </div>
+                            </div>
+
+                            {/* Veterinary Info */}
+                            <div className="p-4 border border-gray-100 rounded-lg">
+                                <SectionHeading 
+                                    title="Care info" 
+                                    icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>} 
+                                />
+                                <div className="mb-2">
+                                    <span className="text-[#024B5E] font-bold text-sm block">Veterinary info</span>
+                                    <div className="text-gray-500 text-sm mt-1 space-y-1">
+                                        <p>Vet's Name: {pet.vetInfo?.name}</p>
+                                        <p>Clinic: {pet.vetInfo?.clinicName}</p>
+                                        <p>Address: {pet.vetInfo?.address}</p>
+                                        <p>Number: {pet.vetInfo?.contactNumber}</p>
+                                    </div>
+                                </div>
+                                <InfoRow label="Pet insurance provider" value={pet.vetInfo?.insuranceProvider} />
+                            </div>
+
+                            {/* Note */}
+                            <div className="p-4 border border-gray-100 rounded-lg">
+                                <span className="text-[#024B5E] font-bold text-sm block mb-1">Note</span>
+                                <p className="text-gray-500 text-sm">{pet.note || "Lorem ipsum dolor sit amet."}</p>
+                            </div>
+
+                        </div>
                     )}
                 </div>
-              )}
+                )}
 
-              {/* Action Buttons */}
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setActiveView("reschedule")}
-                  className="flex-1 bg-[#FE6C5D] hover:bg-[#ee6758] text-white font-medium py-3 px-6 rounded-lg transition-colors">
-                  Reschedule
-                </button>
-                <button
-                  onClick={() => setActiveView("chat")}
-                  className="flex-1 bg-[#035F75] hover:bg-[#035569] text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2">
-                  Chat
-                </button>
-              </div>
+                {/* 3. Action Buttons (Sticky Bottom style inside Right Col) */}
+                <div className="flex justify-end gap-3 pt-2">
+                    <button 
+                        onClick={() => setActiveView("reschedule")}
+                        className="bg-[#FE6C5D] hover:bg-[#E65B4C] text-white font-medium px-6 py-2.5 rounded-lg shadow-sm text-sm transition-colors"
+                    >
+                        Reschedule
+                    </button>
+                    <button 
+                        onClick={() => setActiveView("chat")}
+                        className="bg-[#035F75] hover:bg-[#024B5E] text-white font-medium px-8 py-2.5 rounded-lg shadow-sm text-sm transition-colors flex items-center gap-2"
+                    >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        Chat
+                    </button>
+                </div>
+
             </div>
           </div>
+        ) : activeView === "reschedule" ? (
+           /* Simple Reschedule UI */
+           <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow mt-10">
+              <h2 className="text-lg font-bold text-[#024B5E] mb-4">Request Reschedule</h2>
+              <div className="mb-4">
+                  <label className="block text-sm text-[#024B5E] mb-1">Start Date</label>
+                  <input type="date" className="w-full border p-2 rounded" onChange={(e)=>setRescheduleForm({...rescheduleForm, startDate: e.target.value})} />
+              </div>
+              <div className="mb-4">
+                  <label className="block text-sm text-[#024B5E] mb-1">End Date</label>
+                  <input type="date" className="w-full border p-2 rounded" onChange={(e)=>setRescheduleForm({...rescheduleForm, endDate: e.target.value})} />
+              </div>
+              <div className="mb-4">
+                   <label className="block text-sm text-[#024B5E] mb-1">Reason</label>
+                   <textarea className="w-full border p-2 rounded h-24" placeholder="Reason for rescheduling..." onChange={(e)=>setRescheduleForm({...rescheduleForm, reason: e.target.value})}></textarea>
+              </div>
+              <div className="flex gap-2">
+                 <button onClick={handleRescheduleSubmit} className="bg-[#035F75] text-white px-4 py-2 rounded flex-1 hover:bg-[#024B5E]">Send Request</button>
+                 <button onClick={()=>setActiveView("details")} className="border border-red-300 text-red-500 px-4 py-2 rounded flex-1 hover:bg-red-50">Cancel</button>
+              </div>
+           </div>
+        ) : (
+           /* Simple Chat UI */
+           <div className="max-w-2xl mx-auto bg-white rounded-lg shadow h-[600px] flex flex-col mt-4">
+              <div className="p-4 border-b font-bold text-[#024B5E]">Chat with {booking.owner?.fullName}</div>
+              <div className="flex-1 overflow-auto p-4 space-y-2 bg-gray-50">
+                 {messages.map((m, i) => (
+                    <div key={i} className={`p-2 rounded max-w-[80%] ${m.senderId === booking.owner._id ? 'bg-gray-200 self-start' : 'bg-[#035F75] text-white self-end ml-auto'}`}>
+                        {m.content}
+                    </div>
+                 ))}
+                 <div ref={chatEndRef}></div>
+              </div>
+              <form onSubmit={handleSendMessage} className="p-4 border-t flex gap-2">
+                  <input className="flex-1 border p-2 rounded" placeholder="Message..." value={messageText} onChange={e=>setMessageText(e.target.value)} />
+                  <button className="bg-[#035F75] text-white px-4 py-2 rounded">Send</button>
+                  <button type="button" onClick={()=>setActiveView("details")} className="text-gray-500 underline">Back</button>
+              </form>
+           </div>
         )}
       </div>
     </div>
