@@ -1,189 +1,264 @@
 "use client";
-import React, { useState } from "react";
-import { Eye, EyeOff, Calendar } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Eye, EyeOff, Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+
+import { fetchProfile, updateProfileImage, updateProfileInfo, changePassword } from "@/redux/userSlice";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+
+const formatDateForInput = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+  return date.toISOString().split("T")[0];
+};
+
+// ✅ Helper — প্রথম লোড এবং useEffect দুই জায়গায় reuse
+const buildFormData = (data) => {
+  if (!data) return {
+    fullName: "", email: "", street: "",
+    state: "", zipCode: "", dob: "",
+    profilePicture: "",
+    currentPassword: "", newPassword: "", confirmPassword: "",
+  };
+
+  let profilePic = data.profilePicture || "";
+  if (profilePic && !profilePic.startsWith("http")) {
+    profilePic = `${API_BASE_URL}/${profilePic.replace(/\\/g, "/")}`;
+  }
+
+  return {
+    fullName: data.fullName || "",
+    email: data.email || "",
+    street: data.street || "",
+    state: data.state || "",
+    zipCode: data.zipCode || "",
+    dob: formatDateForInput(data.dob) || "",
+    profilePicture: profilePic,
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  };
+};
 
 export default function AccountDetail() {
+  const dispatch = useDispatch();
+
+  const { data: user, loading, updating } = useSelector((state) => state.user);
+
+  const [isEditing, setIsEditing] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  // ✅ Lazy initializer — Redux-এ user আগে থেকে থাকলে প্রথম render-এই form populated হবে
+  const [formData, setFormData] = useState(() => buildFormData(user));
+
+  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(fetchProfile());
+    }
+  }, [dispatch, user]);
+
+  // ✅ user আসলে বা update হলে sync করবে
+  useEffect(() => {
+    if (user) {
+      setFormData(buildFormData(user));
+    }
+  }, [user]);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      await dispatch(updateProfileImage(file)).unwrap();
+      toast.success("Profile picture updated!");
+    } catch (error) {
+      toast.error(error || "Upload failed");
+    }
+  };
+
+  const handleSave = async () => {
+    if (!isEditing) {
+      setIsEditing(true);
+      return;
+    }
+
+    if (formData.newPassword || formData.currentPassword) {
+      if (!formData.currentPassword) {
+        toast.error("Please enter your current password");
+        return;
+      }
+      if (!formData.newPassword) {
+        toast.error("Please enter a new password");
+        return;
+      }
+      if (formData.newPassword !== formData.confirmPassword) {
+        toast.error("New password and confirm password do not match");
+        return;
+      }
+    }
+
+    try {
+      await dispatch(updateProfileInfo({
+        fullName: formData.fullName,
+        street: formData.street,
+        state: formData.state,
+        zipCode: formData.zipCode,
+        dob: formData.dob,
+      })).unwrap();
+
+      if (formData.newPassword && formData.currentPassword) {
+        await dispatch(changePassword({
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword,
+        })).unwrap();
+
+        toast.success("Password changed successfully");
+        setFormData(prev => ({
+          ...prev,
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        }));
+      }
+
+      toast.success("Profile updated successfully");
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
+      toast.error(typeof error === "string" ? error : "An error occurred while updating");
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  if (loading && !user) {
+    return (
+      <div className="flex justify-center p-10">
+        <Loader2 className="animate-spin text-[#024B5E]" />
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
-      <div className="flex justify-between items-center mb-6 md:mb-8 pb-2 border-b-2 border-grey-600">
-        <h2 className="text-lg md:text-xl font-semibold text-gray-900">Account</h2>
-        <Button variant="outline" size="sm" className="text-xs md:text-sm">
-          Edit
+    <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
+      <div className="flex justify-between items-center mb-6 sm:mb-8">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">Account</h2>
+        <Button
+          variant={isEditing ? "default" : "outline"}
+          size="sm"
+          onClick={handleSave}
+          disabled={updating}
+        >
+          {updating && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+          {isEditing ? "Save" : "Edit"}
         </Button>
       </div>
 
-      {/* Avatar */}
-      <div className="flex mb-6 md:mb-8 justify-center md:justify-start">
-        <div className="w-20 h-20 md:w-24 md:h-24 bg-teal-500 rounded-full flex items-center justify-center">
-          <svg
-            width="140"
-            height="140"
-            viewBox="0 0 140 140"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect width="140" height="140" rx="70" fill="#EBFBFE" />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M47.5002 50C47.5002 37.5736 57.5738 27.5 70.0002 27.5C82.4266 27.5 92.5002 37.5736 92.5002 50C92.5002 62.4264 82.4266 72.5 70.0002 72.5C57.5738 72.5 47.5002 62.4264 47.5002 50Z"
-              fill="#0B87AC"
-            />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M28.7564 120.527C29.1431 98.0779 47.4601 80 70.0002 80C92.5408 80 110.858 98.0787 111.244 120.528C111.27 122.017 110.412 123.38 109.058 124.001C97.1638 129.459 83.9328 132.5 70.0018 132.5C56.0695 132.5 42.8374 129.458 30.9418 123.999C29.5884 123.378 28.7308 122.015 28.7564 120.527Z"
-              fill="#0B87AC"
-            />
-          </svg>
+      {/* Avatar Section */}
+      <div className="flex justify-center sm:justify-start mb-6 sm:mb-8">
+        <div
+          className="relative cursor-pointer group w-20 h-20 sm:w-24 sm:h-24"
+          onClick={() => isEditing && fileInputRef.current?.click()}
+        >
+          <div className="w-full h-full bg-teal-500 rounded-full flex items-center justify-center overflow-hidden">
+            {formData.profilePicture ? (
+              <img src={formData.profilePicture} alt="Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="140" height="140" rx="70" fill="#EBFBFE" />
+                <path fillRule="evenodd" clipRule="evenodd" d="M47.5002 50C47.5002 37.5736 57.5738 27.5 70.0002 27.5C82.4266 27.5 92.5002 37.5736 92.5002 50C92.5002 62.4264 82.4266 72.5 70.0002 72.5C57.5738 72.5 47.5002 62.4264 47.5002 50Z" fill="#0B87AC" />
+                <path fillRule="evenodd" clipRule="evenodd" d="M28.7564 120.527C29.1431 98.0779 47.4601 80 70.0002 80C92.5408 80 110.858 98.0787 111.244 120.528C111.27 122.017 110.412 123.38 109.058 124.001C97.1638 129.459 83.9328 132.5 70.0018 132.5C56.0695 132.5 42.8374 129.458 30.9418 123.999C29.5884 123.378 28.7308 122.015 28.7564 120.527Z" fill="#0B87AC" />
+              </svg>
+            )}
+          </div>
+          {isEditing && (
+            <div className="absolute inset-0 bg-black/20 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <Camera className="text-white w-6 h-6" />
+            </div>
+          )}
+          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
         </div>
       </div>
 
       {/* Form Fields */}
-      <div className="space-y-4 md:space-y-6 max-w-2xl mx-auto">
-        {/* Full Name */}
+      <div className="space-y-4 sm:space-y-6 max-w-2xl mx-auto">
         <div>
-          <Label
-            htmlFor="fullName"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            Full Name
-          </Label>
-          <Input id="fullName" placeholder="Name" className="mt-1 text-sm md:text-base" />
+          <Label htmlFor="fullName" className="text-sm font-medium text-[#024B5E]">Full Name</Label>
+          <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
         </div>
 
-        {/* Email or Phone */}
         <div>
-          <Label
-            htmlFor="contact"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            E-mail address
-          </Label>
-          <Input
-            id="contact"
-            placeholder="E-mail address"
-            className="mt-1 text-sm md:text-base"
-          />
+          <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">E-mail address or phone number</Label>
+          <Input id="email" value={formData.email} disabled={true} className="mt-1 text-[#024B5E] bg-gray-50" />
         </div>
 
-        {/* Phone */}
         <div>
-          <Label
-            htmlFor="contact"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            Phone Number
-          </Label>
-          <Input
-            id="contact"
-            placeholder="Phone Number"
-            className="mt-1 text-sm md:text-base"
-          />
+          <Label htmlFor="street" className="text-sm font-medium text-[#024B5E]">Street</Label>
+          <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
         </div>
 
-        {/* Street Address */}
-        <div>
-          <Label
-            htmlFor="street"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            Street
-          </Label>
-          <Input
-            id="street"
-            placeholder="Street Number and Name"
-            className="mt-1 text-sm md:text-base"
-          />
-        </div>
-        {/* State and Zip Code */}
-        <div className="grid grid-cols-2 gap-3 md:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Input id="state" placeholder="State" className="mt-1 text-sm md:text-base" />
+            <Label htmlFor="state" className="text-sm font-medium text-[#024B5E]">State</Label>
+            <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
           </div>
           <div>
-            <Input
-              id="zipCode"
-              placeholder="Zip Code"
-              className="mt-1 text-sm md:text-base"
-            />
+            <Label htmlFor="zipCode" className="text-sm font-medium text-[#024B5E]">Zip Code</Label>
+            <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
           </div>
         </div>
 
-        {/* About you */}
         <div>
-          <Label
-            htmlFor="dob"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            About
-          </Label>
+          <Label htmlFor="dob" className="text-sm font-medium text-[#024B5E]">Date of birth</Label>
           <div className="relative mt-1">
-            <Input
-              id="textarea"
-              placeholder="Introduce yourself to potential clients..."
-              className="pb-20 w-full h-32 text-sm md:text-base"
-            />
+            <Input id="dob" type="date" value={formData.dob} onChange={handleChange} disabled={!isEditing} className="text-[#024B5E] block w-full" />
           </div>
         </div>
 
-        {/* pet number */}
-        <div>
-          <Label
-            htmlFor="currentPassword"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            Pet number
-          </Label>
-          <div className="relative mt-1">
-            <Input
-              id="pet"
-              placeholder="03"
-              className="mt-1 text-sm md:text-base"
-            />
-          </div>
-        </div>
+        <div className="pt-4 border-t border-gray-100">
+          <h3 className="text-md font-semibold text-[#024B5E] mb-4">Change Password</h3>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="currentPassword" className="text-sm font-medium text-[#024B5E]">Current Password</Label>
+              <div className="relative mt-1">
+                <Input id="currentPassword" type={showCurrentPassword ? "text" : "password"} value={formData.currentPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
+                <button type="button" onClick={() => setShowCurrentPassword(!showCurrentPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
+                  {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
 
-        {/* home size */}
-        <div>
-          <Label
-            htmlFor="currentPassword"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            Home Size (sq ft)
-          </Label>
-          <div className="relative mt-1">
-            <Input
-              id="size"
-              placeholder="e.g. 800"
-              className="mt-1 text-sm md:text-base"
-            />
-          </div>
-        </div>
+            <div>
+              <Label htmlFor="newPassword" className="text-sm font-medium text-[#024B5E]">New Password</Label>
+              <div className="relative mt-1">
+                <Input id="newPassword" type={showNewPassword ? "text" : "password"} value={formData.newPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
+                <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
+                  {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
 
-
-
-        {/* Confirm Password */}
-       <div>
-          <Label
-            htmlFor="currentPassword"
-            className="text-xs md:text-sm font-medium text-gray-700"
-          >
-            Outdoor Space
-          </Label>
-          <div className="relative mt-1">
-            <Input
-              id="zipCode"
-              placeholder="No outdoor space"
-              className="mt-1 text-sm md:text-base"
-            />
+            <div>
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-[#024B5E]">Confirm Password</Label>
+              <div className="relative mt-1">
+                <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
+                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
+                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
