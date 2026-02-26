@@ -203,37 +203,45 @@ export default function DashboardOverview() {
 
             <div className="space-y-4">
               {bookings.map((booking) => (
-                <div 
-                  key={booking.id} 
+                <div
+                  key={booking._id || booking.id} 
                   className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:shadow-lg transition-shadow duration-200"
-                  onClick={() => router.push("/settingForSitter/ongoing")}
+
+                  onClick={() => router.push(`/settingForSitter/ongoing?id=${booking._id || booking.id}`)}
                 >
                   {/* Header */}
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-pink-400 to-red-400 flex items-center justify-center text-white font-semibold">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-red-400 flex items-center justify-center text-white font-semibold overflow-hidden">
+                        <img
+                          src={booking.owner?.profilePicture || "https://placehold.co/100"}
+                          alt={booking.name || "User"}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-[#024B5E]">{booking.name}</h3>
+                        <h3 className="font-semibold text-[#024B5E]">{booking.name || booking.owner?.fullName}</h3>
                         <div className="flex items-center gap-1 text-xs text-[#024B5E]">
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                           </svg>
-                          <span>{booking.location}</span>
+                          <span>{booking.location || booking.owner?.address}</span>
                         </div>
                       </div>
                     </div>
-                    <span className="text-xs text-[#024B5E]">{booking.time}</span>
+                    <span className="text-xs text-[#024B5E]">{booking.time || booking.startTime}</span>
                   </div>
 
                   {/* Service Details */}
                   <div className="mb-3">
-                    <p className="font-medium text-[#024B5E] mb-1">{booking.service}</p>
-                    <p className="text-xs text-[#024B5E] mb-2">{booking.date}</p>
+                    <p className="font-medium text-[#024B5E] mb-1 capitalize">{booking.service || booking.serviceType}</p>
+                    <p className="text-xs text-[#024B5E] mb-2">
+                      {booking.date || new Date(booking.startDate).toLocaleDateString()}
+                    </p>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#024B5E]">{booking.duration}</span>
-                      <span className="text-[#024B5E] font-medium">{booking.price}</span>
+                      <span className="text-[#024B5E]">{booking.duration || `${booking.startTime} - ${booking.endTime}`}</span>
+                      <span className="text-[#024B5E] font-medium">{booking.price || booking.totalPrice}</span>
                     </div>
                   </div>
 
@@ -242,14 +250,18 @@ export default function DashboardOverview() {
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
                         <img
-                          src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=100&h=100&fit=crop"
-                          alt={booking.pet.name}
+                          src={booking.pet?.image || booking.pets?.[0]?.image || "https://placehold.co/100"}
+                          alt="Pet"
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <div>
-                        <p className="font-semibold text-[#024B5E] text-sm">{booking.pet.name}</p>
-                        <p className="text-xs text-[#024B5E]">{booking.pet.breed}</p>
+                        <p className="font-semibold text-[#024B5E] text-sm">
+                          {booking.pet?.name || booking.pets?.[0]?.name || "Pet Name"}
+                        </p>
+                        <p className="text-xs text-[#024B5E]">
+                          {booking.pet?.breed || booking.pets?.[0]?.breed || "Breed"}
+                        </p>
                       </div>
                     </div>
                     <svg className="w-5 h-5 text-[#024B5E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,10 +271,20 @@ export default function DashboardOverview() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-[#FE6C5D] hover:bg-[#f16859] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <button
+                      className="flex-1 bg-[#FE6C5D] hover:bg-[#f16859] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                      onClick={(e) => {
+                        e.stopPropagation(); 
+                      }}
+                    >
                       Cancel
                     </button>
-                    <button className="flex-1 bg-[#024B5E] hover:bg-[#023846] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                    <button
+                      className="flex-1 bg-[#024B5E] hover:bg-[#023846] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
                       Accept
                     </button>
                   </div>
