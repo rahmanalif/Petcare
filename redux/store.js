@@ -15,6 +15,7 @@ import bookingReducer from './sitter/bookingSlice';
 import chatReducer from './chat/chatSlice';
 import sitterReducer from './sitter/sitterSlice';
 import paymentReducer from './sitter/paymentSlice';
+import settingReducer from './settingSlice';
 
 
 const authPersistConfig = {
@@ -38,6 +39,7 @@ export const store = configureStore({
     chat: chatReducer,
     sitter: sitterReducer,
     payment: paymentReducer,
+    setting: settingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

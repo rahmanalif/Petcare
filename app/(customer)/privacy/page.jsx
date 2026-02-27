@@ -1,20 +1,16 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ArrowLeft } from 'lucide-react';
+import { fetchPrivacyPolicy } from '@/redux/settingSlice';
 
 export default function PrivacyPage() {
-  const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { privacyPolicy, loading } = useSelector((state) => state.setting);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/content/content/privacy-policy`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) setContent(data.data.content);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+    dispatch(fetchPrivacyPolicy());
+  }, [dispatch]);
 
   return (
     <div className="min-h-screen bg-[#035F751A]">
@@ -34,10 +30,9 @@ export default function PrivacyPage() {
           {loading ? (
             <p className="text-gray-500 text-center">Loading...</p>
           ) : (
-            // ✅ API থেকে আসা HTML content render করছে
             <div
               className="prose max-w-none text-gray-700 font-montserrat leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: privacyPolicy?.content || "" }}
             />
           )}
         </div>

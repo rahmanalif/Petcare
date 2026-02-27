@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
     fetchBookingById,
-    fetchCalendarEvents,
     clearCurrentBooking,
     requestReschedule,
     clearMessages as clearBookingMessages
@@ -39,7 +38,7 @@ export default function OngoingDetails() {
     const id = searchParams.get("id");
     const dispatch = useDispatch();
 
-    const { currentBooking: booking, calendarEvents, loading, successMessage } = useSelector((state) => state.booking);
+    const { currentBooking: booking, loading, successMessage } = useSelector((state) => state.booking);
     const { messages } = useSelector((state) => state.chat);
 
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -52,7 +51,6 @@ export default function OngoingDetails() {
     useEffect(() => {
         if (id) {
             dispatch(fetchBookingById(id));
-            dispatch(fetchCalendarEvents());
         }
         return () => {
             dispatch(clearCurrentBooking());
@@ -74,10 +72,9 @@ export default function OngoingDetails() {
         }
     }, [activeView, booking, dispatch]);
 
-    // ✅ Today
     const today = new Date();
 
-    // ✅ Start → End পর্যন্ত সব দিন booked
+    // Start → End পর্যন্ত সব দিন booked
     const bookedDays = [];
     if (booking) {
         const start = new Date(booking.startDate);
@@ -93,18 +90,6 @@ export default function OngoingDetails() {
             cur.setDate(cur.getDate() + 1);
         }
     }
-
-    // ✅ API থেকে available days
-    const availableDays = (calendarEvents || [])
-        .filter(event => {
-            const d = new Date(event.date);
-            return (
-                d.getMonth() === currentDate.getMonth() &&
-                d.getFullYear() === currentDate.getFullYear() &&
-                event.status === "available"
-            );
-        })
-        .map(event => new Date(event.date).getDate());
 
     const generateCalendarDays = (date) => {
         const year = date.getFullYear();
@@ -177,9 +162,6 @@ export default function OngoingDetails() {
                                     <span style={{ width: 12, height: 12, backgroundColor: "#FF6B6B", borderRadius: 2, display: "inline-block" }}></span> Booked
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span style={{ width: 12, height: 12, backgroundColor: "#10B981", borderRadius: 2, display: "inline-block" }}></span> Available
-                                </div>
-                                <div className="flex items-center gap-2">
                                     <span style={{ width: 12, height: 12, border: "2px solid #035F75", borderRadius: 2, display: "inline-block" }}></span> Today
                                 </div>
                             </div>
@@ -202,14 +184,12 @@ export default function OngoingDetails() {
                                 ))}
                                 {calendarDays.map((d, i) => {
                                     const isBooked = d.isCurrentMonth && bookedDays.includes(d.day);
-                                    const isAvailable = d.isCurrentMonth && availableDays.includes(d.day) && !isBooked;
                                     const isToday =
                                         d.isCurrentMonth &&
                                         d.day === today.getDate() &&
                                         currentDate.getMonth() === today.getMonth() &&
                                         currentDate.getFullYear() === today.getFullYear();
 
-                                    // ✅ Inline style — Tailwind purge সমস্যা নেই
                                     const dayStyle = {
                                         width: 28,
                                         height: 28,
@@ -221,43 +201,15 @@ export default function OngoingDetails() {
                                         transition: "all 0.2s",
                                         cursor: !d.isCurrentMonth ? "default" : isBooked ? "not-allowed" : "pointer",
                                         pointerEvents: !d.isCurrentMonth ? "none" : "auto",
-                                        backgroundColor: isBooked
-                                            ? "#FF6B6B"
-                                            : isAvailable
-                                            ? "#10B981"
-                                            : isToday
-                                            ? "#EBF8FF"
-                                            : "transparent",
-                                        color: !d.isCurrentMonth
-                                            ? "transparent"
-                                            : isBooked || isAvailable
-                                            ? "#fff"
-                                            : isToday
-                                            ? "#035F75"
-                                            : "#4B5563",
-                                        border: isToday && !isBooked && !isAvailable ? "2px solid #035F75" : "none",
+                                        backgroundColor: isBooked ? "#FF6B6B" : isToday ? "#EBF8FF" : "transparent",
+                                        color: !d.isCurrentMonth ? "transparent" : isBooked ? "#fff" : isToday ? "#035F75" : "#4B5563",
+                                        border: isToday && !isBooked ? "2px solid #035F75" : "none",
                                         fontWeight: isToday ? 700 : 400,
                                     };
 
                                     return (
                                         <div key={i} style={{ display: "flex", justifyContent: "center" }}>
-                                            <div
-                                                style={dayStyle}
-                                                onMouseEnter={(e) => {
-                                                    if (d.isCurrentMonth && !isBooked && !isAvailable) {
-                                                        e.currentTarget.style.backgroundColor = "#10B981";
-                                                        e.currentTarget.style.color = "#fff";
-                                                    }
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    if (d.isCurrentMonth && !isBooked && !isAvailable) {
-                                                        e.currentTarget.style.backgroundColor = isToday ? "#EBF8FF" : "transparent";
-                                                        e.currentTarget.style.color = isToday ? "#035F75" : "#4B5563";
-                                                    }
-                                                }}
-                                            >
-                                                {d.day}
-                                            </div>
+                                            <div style={dayStyle}>{d.day}</div>
                                         </div>
                                     );
                                 })}

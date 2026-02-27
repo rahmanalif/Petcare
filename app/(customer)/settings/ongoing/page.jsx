@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { 
   fetchBookingById, 
-  fetchCalendarEvents, 
   clearCurrentBooking, 
   requestReschedule,
   clearMessages as clearBookingMessages
@@ -59,7 +58,6 @@ export default function OngoingDetails() {
   useEffect(() => {
     if (id) {
       dispatch(fetchBookingById(id));
-      dispatch(fetchCalendarEvents());
     }
     return () => {
       dispatch(clearCurrentBooking());

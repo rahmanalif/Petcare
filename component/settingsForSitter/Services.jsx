@@ -73,19 +73,20 @@ export default function Services() {
     } else {
       setExpandedService(serviceId);
       // Edit form populate করো Redux data থেকে
-      const serviceData = services[serviceId];
-      if (serviceData) {
-        setEditForms((prev) => ({
-          ...prev,
-          [serviceId]: {
-            price: serviceData.price || "",
-            duration: serviceData.duration || "",
-            maxPets: serviceData.maxPets || "",
-            description: serviceData.description || "",
-            isActive: serviceData.isActive ?? true,
-          },
-        }));
-      }
+     // ✅ 2. form populate fix — handleServiceClick এ
+const serviceData = services[serviceId];
+if (serviceData) {
+  setEditForms((prev) => ({
+    ...prev,
+    [serviceId]: {
+      price: serviceData?.rates?.base || "",
+      duration: serviceData?.duration || "",
+      maxPets: serviceData?.petPreferences?.maxPetsPerDay || "",
+      description: serviceData?.description || "",
+      isActive: serviceData?.isActive ?? true,
+    },
+  }));
+}
     }
   };
 
@@ -109,11 +110,12 @@ export default function Services() {
     }
   };
 
-  const getServicePrice = (serviceId) => {
-    const data = services[serviceId];
-    if (!data?.price) return "—";
-    return `$${data.price}`;
-  };
+const getServicePrice = (serviceId) => {
+  const data = services[serviceId];
+  const price = data?.rates?.base;
+  if (!price && price !== 0) return "—";
+  return `$${price}`;
+};
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8 max-w-3xl">

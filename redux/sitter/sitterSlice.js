@@ -177,7 +177,7 @@ export const fetchServiceSettings = createAsyncThunk(
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Failed to fetch service");
-      return { serviceType, data: result.data };
+      return { serviceType, data: result.data || result }; // ✅ এই line
     } catch (error) {
       return rejectWithValue(error.message);
     }

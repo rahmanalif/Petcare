@@ -27,22 +27,6 @@ export const fetchAllBookings = createAsyncThunk(
   }
 );
 
-export const fetchCalendarEvents = createAsyncThunk(
-  'booking/fetchCalendarEvents',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetch(`${SERVER_URL}/api/bookings/calendar`, {
-        method: 'GET',
-        headers: getHeaders(),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Failed to fetch calendar');
-      return Array.isArray(result.data) ? result.data : [];
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 
 export const updateBookingStatus = createAsyncThunk(
   'booking/updateBookingStatus',
@@ -98,18 +82,47 @@ export const requestReschedule = createAsyncThunk(
   }
 );
 
+// ✅ Promo Validation
+export const validatePromoCode = createAsyncThunk(
+  'booking/validatePromoCode',
+  async (code, { getState, rejectWithValue }) => {
+    // Duplicate check
+    const { appliedPromos } = getState().booking;
+    if (appliedPromos.some((p) => p.code === code)) {
+      return rejectWithValue('This promo code has already been applied.');
+    }
+
+    try {
+      const response = await fetch(`${SERVER_URL}/api/promos/validate`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ code }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'Invalid promo code.');
+      return result.data; // { code, discountType, discountValue, applyTo }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const bookingSlice = createSlice({
   name: 'booking',
   initialState: {
     bookings: [],
-    allBookings: [], // ✅ all bookings for calendar
+    allBookings: [],
     currentBooking: null,
-    calendarEvents: [],
     stats: { total: 0, ongoing: 0, completed: 0, upcoming: 0 },
     loading: false,
     actionLoading: false,
     error: null,
     successMessage: null,
+
+    // ✅ Promo state
+    appliedPromos: [],
+    promoLoading: false,
+    promoError: '',
   },
   reducers: {
     clearCurrentBooking: (state) => {
@@ -121,23 +134,32 @@ const bookingSlice = createSlice({
       state.successMessage = null;
       state.error = null;
     },
+    // ✅ Remove a specific promo by code
+    removePromoCode: (state, action) => {
+      state.appliedPromos = state.appliedPromos.filter((p) => p.code !== action.payload);
+    },
+    // ✅ Clear promo error manually (e.g. on input change)
+    clearPromoError: (state) => {
+      state.promoError = '';
+    },
+    // ✅ Clear all promos (e.g. after booking is completed)
+    clearAllPromos: (state) => {
+      state.appliedPromos = [];
+      state.promoError = '';
+    },
   },
   extraReducers: (builder) => {
     builder
       // Fetch All
       .addCase(fetchAllBookings.fulfilled, (state, action) => {
         state.bookings = action.payload;
-        state.allBookings = action.payload; // ✅ calendar এর জন্য
+        state.allBookings = action.payload;
         state.stats = {
           total: action.payload.length,
           ongoing: action.payload.filter(b => b?.status === 'ongoing').length,
           completed: action.payload.filter(b => b?.status === 'completed').length,
           upcoming: action.payload.filter(b => ['upcoming', 'confirmed'].includes(b?.status)).length,
         };
-      })
-      // Calendar
-      .addCase(fetchCalendarEvents.fulfilled, (state, action) => {
-        state.calendarEvents = action.payload;
       })
       // Single Booking
       .addCase(fetchBookingById.pending, (state) => { state.loading = true; state.error = null; })
@@ -152,9 +174,30 @@ const bookingSlice = createSlice({
       .addCase(requestReschedule.rejected, (state, action) => {
         state.actionLoading = false;
         state.error = action.payload;
+      })
+
+      // ✅ Promo Validation
+      .addCase(validatePromoCode.pending, (state) => {
+        state.promoLoading = true;
+        state.promoError = '';
+      })
+      .addCase(validatePromoCode.fulfilled, (state, action) => {
+        state.promoLoading = false;
+        state.appliedPromos.push(action.payload);
+      })
+      .addCase(validatePromoCode.rejected, (state, action) => {
+        state.promoLoading = false;
+        state.promoError = action.payload;
       });
   },
 });
 
-export const { clearCurrentBooking, clearMessages } = bookingSlice.actions;
+export const {
+  clearCurrentBooking,
+  clearMessages,
+  removePromoCode,
+  clearPromoError,
+  clearAllPromos,
+} = bookingSlice.actions;
+
 export default bookingSlice.reducer;

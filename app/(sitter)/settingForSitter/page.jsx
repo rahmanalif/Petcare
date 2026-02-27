@@ -15,14 +15,15 @@ import InviteFriend from "@/component/settingsForSitter/InviteFriend";
 import Services from "@/component/settingsForSitter/Services";
 import Portfolio from "@/component/settingsForSitter/portfolio";
 
+const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export default function AccountSettings() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("account");
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const { profile: sitterData, loading } = useSelector((state) => state.sitter);
-
-  // ✅ API থেকে earnings data
   const earnings = sitterData?.earnings;
 
   useEffect(() => {
@@ -35,6 +36,37 @@ export default function AccountSettings() {
     clearAuthStorage();
     dispatch(logout());
     router.push('/');
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+    if (!confirmed) return;
+
+    setDeleteLoading(true);
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
+      const response = await fetch(`${SERVER_URL}/api/users/account`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        clearAuthStorage();
+        dispatch(logout());
+        router.push('/');
+      } else {
+        alert(result.message || "Failed to delete account. Please try again.");
+      }
+    } catch (error) {
+      alert("Network error. Please try again.");
+    } finally {
+      setDeleteLoading(false);
+    }
   };
 
   const handleNavigateToOngoing = () => {
@@ -62,43 +94,28 @@ export default function AccountSettings() {
                   : `$${earnings?.totalIncome?.toFixed(2) ?? "0.00"}`}
               </p>
             </div>
-            <button className="text-[#035F75] text-xs md:text-sm font-medium underline">
+            <button onClick={() => setActiveTab("promo")} className="text-[#035F75] text-xs md:text-sm font-medium underline">
               Apply Promo Code
             </button>
           </div>
 
           <div className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-6">
-            <div
-              onClick={handleNavigateToOngoing}
-              className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors"
-            >
+            <div onClick={handleNavigateToOngoing} className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors">
               <p className="text-xs md:text-sm text-[#024B5E] mb-1">This Month</p>
               <p className="text-sm md:text-lg font-bold text-[#024B5E] font-montserrat">
-                {loading && !sitterData
-                  ? "..."
-                  : `$${earnings?.thisMonth?.toFixed(2) ?? "0.00"}`}
+                {loading && !sitterData ? "..." : `$${earnings?.thisMonth?.toFixed(2) ?? "0.00"}`}
               </p>
             </div>
-            <div
-              onClick={handleNavigateToOngoing}
-              className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors"
-            >
+            <div onClick={handleNavigateToOngoing} className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors">
               <p className="text-xs md:text-sm text-[#024B5E] mb-1 flex items-center justify-center">Last Month</p>
               <p className="text-sm md:text-lg font-bold text-[#024B5E] font-montserrat flex items-center justify-center">
-                {loading && !sitterData
-                  ? "..."
-                  : `$${earnings?.lastMonth?.toFixed(2) ?? "0.00"}`}
+                {loading && !sitterData ? "..." : `$${earnings?.lastMonth?.toFixed(2) ?? "0.00"}`}
               </p>
             </div>
-            <div
-              onClick={handleNavigateToOngoing}
-              className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors"
-            >
+            <div onClick={handleNavigateToOngoing} className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors">
               <p className="text-xs md:text-sm text-[#024B5E] mb-1 text-right">Pending</p>
               <p className="text-sm md:text-lg font-bold text-[#024B5E] font-montserrat text-right">
-                {loading && !sitterData
-                  ? "..."
-                  : `$${earnings?.pending?.toFixed(2) ?? "0.00"}`}
+                {loading && !sitterData ? "..." : `$${earnings?.pending?.toFixed(2) ?? "0.00"}`}
               </p>
             </div>
           </div>
@@ -169,8 +186,11 @@ export default function AccountSettings() {
                 <div onClick={handleLogout} className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100 cursor-pointer">
                   Logout
                 </div>
-                <div className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#FE6C5D] hover:bg-gray-100 cursor-pointer">
-                  Delete account
+                <div
+                  onClick={!deleteLoading ? handleDeleteAccount : undefined}
+                  className={`w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#FE6C5D] hover:bg-gray-100 cursor-pointer ${deleteLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                  {deleteLoading ? "Deleting..." : "Delete account"}
                 </div>
               </div>
             </div>
