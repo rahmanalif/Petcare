@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useGetBookingByIdQuery } from "@/redux/bookingSlice";
 
 // Helper for Images
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -16,10 +15,7 @@ export default function OngoingDetails() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id"); // Get ID from URL
 
-  // API Call
-  const { data: bookingData, isLoading, error } = useGetBookingByIdQuery(id, {
-    skip: !id, // Don't fetch if no ID
-  });
+
 
   const booking = bookingData?.data;
 
