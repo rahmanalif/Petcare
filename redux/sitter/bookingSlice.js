@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Server URL
 const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const getHeaders = () => {
@@ -11,7 +10,6 @@ const getHeaders = () => {
   };
 };
 
-// 1. Fetch All Bookings
 export const fetchAllBookings = createAsyncThunk(
   'booking/fetchAllBookings',
   async (_, { rejectWithValue }) => {
@@ -29,7 +27,6 @@ export const fetchAllBookings = createAsyncThunk(
   }
 );
 
-// 2. Fetch Calendar Events
 export const fetchCalendarEvents = createAsyncThunk(
   'booking/fetchCalendarEvents',
   async (_, { rejectWithValue }) => {
@@ -47,7 +44,6 @@ export const fetchCalendarEvents = createAsyncThunk(
   }
 );
 
-// 3. Update Booking Status
 export const updateBookingStatus = createAsyncThunk(
   'booking/updateBookingStatus',
   async ({ id, status }, { dispatch, rejectWithValue }) => {
@@ -59,7 +55,6 @@ export const updateBookingStatus = createAsyncThunk(
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Failed to update status');
-      
       dispatch(fetchAllBookings());
       return result.data;
     } catch (error) {
@@ -68,7 +63,6 @@ export const updateBookingStatus = createAsyncThunk(
   }
 );
 
-// 4. Fetch Single Booking Details
 export const fetchBookingById = createAsyncThunk(
   'booking/fetchBookingById',
   async (id, { rejectWithValue }) => {
@@ -86,7 +80,6 @@ export const fetchBookingById = createAsyncThunk(
   }
 );
 
-// 🔥 5. Request Reschedule (NEW)
 export const requestReschedule = createAsyncThunk(
   'booking/requestReschedule',
   async ({ id, reason, startDate, endDate }, { rejectWithValue }) => {
@@ -109,11 +102,12 @@ const bookingSlice = createSlice({
   name: 'booking',
   initialState: {
     bookings: [],
+    allBookings: [], // ✅ all bookings for calendar
     currentBooking: null,
     calendarEvents: [],
     stats: { total: 0, ongoing: 0, completed: 0, upcoming: 0 },
     loading: false,
-    actionLoading: false, // For buttons like reschedule
+    actionLoading: false,
     error: null,
     successMessage: null,
   },
@@ -124,15 +118,16 @@ const bookingSlice = createSlice({
       state.error = null;
     },
     clearMessages: (state) => {
-        state.successMessage = null;
-        state.error = null;
-    }
+      state.successMessage = null;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
       // Fetch All
       .addCase(fetchAllBookings.fulfilled, (state, action) => {
         state.bookings = action.payload;
+        state.allBookings = action.payload; // ✅ calendar এর জন্য
         state.stats = {
           total: action.payload.length,
           ongoing: action.payload.filter(b => b?.status === 'ongoing').length,
@@ -150,13 +145,13 @@ const bookingSlice = createSlice({
       .addCase(fetchBookingById.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
       // Reschedule
       .addCase(requestReschedule.pending, (state) => { state.actionLoading = true; state.error = null; })
-      .addCase(requestReschedule.fulfilled, (state, action) => { 
-        state.actionLoading = false; 
+      .addCase(requestReschedule.fulfilled, (state) => {
+        state.actionLoading = false;
         state.successMessage = "Reschedule request sent successfully!";
       })
-      .addCase(requestReschedule.rejected, (state, action) => { 
-        state.actionLoading = false; 
-        state.error = action.payload; 
+      .addCase(requestReschedule.rejected, (state, action) => {
+        state.actionLoading = false;
+        state.error = action.payload;
       });
   },
 });

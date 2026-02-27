@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Eye, EyeOff, Camera, Loader2 } from "lucide-react";
+import { Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-import { fetchProfile, updateProfileImage, updateProfileInfo, changePassword } from "@/redux/userSlice";
+import { fetchProfile, updateProfileImage, updateProfileInfo } from "@/redux/userSlice";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
@@ -18,13 +18,12 @@ const formatDateForInput = (dateString) => {
   return date.toISOString().split("T")[0];
 };
 
-// ✅ Helper — প্রথম লোড এবং useEffect দুই জায়গায় reuse
 const buildFormData = (data) => {
   if (!data) return {
-    fullName: "", email: "", street: "",
-    state: "", zipCode: "", dob: "",
-    profilePicture: "",
-    currentPassword: "", newPassword: "", confirmPassword: "",
+    fullName: "", email: "", phone: "", street: "",
+    state: "", zipCode: "", dob: "", profilePicture: "",
+    about: "", petNumber: "", homeType: "Apartment",
+    homeSize: "", outdoorSpace: "No outdoor space",
   };
 
   let profilePic = data.profilePicture || "";
@@ -35,49 +34,38 @@ const buildFormData = (data) => {
   return {
     fullName: data.fullName || "",
     email: data.email || "",
+    phone: data.phone || data.phoneNumber || "",
     street: data.street || "",
     state: data.state || "",
     zipCode: data.zipCode || "",
     dob: formatDateForInput(data.dob) || "",
     profilePicture: profilePic,
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    about: data.about || "",
+    petNumber: data.petNumber || data.ownPetsCount || "",
+    homeType: data.homeType || "Apartment",
+    homeSize: data.homeSize || "",
+    outdoorSpace: data.outdoorSpace || "No outdoor space",
   };
 };
 
 export default function AccountDetail() {
   const dispatch = useDispatch();
-
   const { data: user, loading, updating } = useSelector((state) => state.user);
-
   const [isEditing, setIsEditing] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // ✅ Lazy initializer — Redux-এ user আগে থেকে থাকলে প্রথম render-এই form populated হবে
   const [formData, setFormData] = useState(() => buildFormData(user));
-
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (!user) {
-      dispatch(fetchProfile());
-    }
+    if (!user) dispatch(fetchProfile());
   }, [dispatch, user]);
 
-  // ✅ user আসলে বা update হলে sync করবে
   useEffect(() => {
-    if (user) {
-      setFormData(buildFormData(user));
-    }
+    if (user) setFormData(buildFormData(user));
   }, [user]);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     try {
       await dispatch(updateProfileImage(file)).unwrap();
       toast.success("Profile picture updated!");
@@ -87,54 +75,24 @@ export default function AccountDetail() {
   };
 
   const handleSave = async () => {
-    if (!isEditing) {
-      setIsEditing(true);
-      return;
-    }
-
-    if (formData.newPassword || formData.currentPassword) {
-      if (!formData.currentPassword) {
-        toast.error("Please enter your current password");
-        return;
-      }
-      if (!formData.newPassword) {
-        toast.error("Please enter a new password");
-        return;
-      }
-      if (formData.newPassword !== formData.confirmPassword) {
-        toast.error("New password and confirm password do not match");
-        return;
-      }
-    }
-
+    if (!isEditing) { setIsEditing(true); return; }
     try {
       await dispatch(updateProfileInfo({
         fullName: formData.fullName,
+        phone: formData.phone,
         street: formData.street,
         state: formData.state,
         zipCode: formData.zipCode,
         dob: formData.dob,
+        about: formData.about,
+        petNumber: formData.petNumber,
+        homeType: formData.homeType,
+        homeSize: formData.homeSize,
+        outdoorSpace: formData.outdoorSpace,
       })).unwrap();
-
-      if (formData.newPassword && formData.currentPassword) {
-        await dispatch(changePassword({
-          currentPassword: formData.currentPassword,
-          newPassword: formData.newPassword,
-        })).unwrap();
-
-        toast.success("Password changed successfully");
-        setFormData(prev => ({
-          ...prev,
-          currentPassword: "",
-          newPassword: "",
-          confirmPassword: "",
-        }));
-      }
-
       toast.success("Profile updated successfully");
       setIsEditing(false);
     } catch (error) {
-      console.error(error);
       toast.error(typeof error === "string" ? error : "An error occurred while updating");
     }
   };
@@ -160,19 +118,20 @@ export default function AccountDetail() {
           size="sm"
           onClick={handleSave}
           disabled={updating}
+          className={isEditing ? "bg-[#024B5E] hover:bg-[#023b4a]" : "border-[#024B5E] text-[#024B5E]"}
         >
           {updating && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
           {isEditing ? "Save" : "Edit"}
         </Button>
       </div>
 
-      {/* Avatar Section */}
+      {/* Avatar */}
       <div className="flex justify-center sm:justify-start mb-6 sm:mb-8">
         <div
           className="relative cursor-pointer group w-20 h-20 sm:w-24 sm:h-24"
           onClick={() => isEditing && fileInputRef.current?.click()}
         >
-          <div className="w-full h-full bg-teal-500 rounded-full flex items-center justify-center overflow-hidden">
+          <div className="w-full h-full rounded-full flex items-center justify-center overflow-hidden bg-[#EBFBFE]">
             {formData.profilePicture ? (
               <img src={formData.profilePicture} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
@@ -193,74 +152,110 @@ export default function AccountDetail() {
       </div>
 
       {/* Form Fields */}
-      <div className="space-y-4 sm:space-y-6 max-w-2xl mx-auto">
+      <div className="space-y-4 sm:space-y-5 max-w-2xl mx-auto">
+
+        {/* Full Name */}
         <div>
           <Label htmlFor="fullName" className="text-sm font-medium text-[#024B5E]">Full Name</Label>
-          <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
+          <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} placeholder="Name" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
 
+        {/* Email */}
         <div>
-          <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">E-mail address or phone number</Label>
-          <Input id="email" value={formData.email} disabled={true} className="mt-1 text-[#024B5E] bg-gray-50" />
+          <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">E-mail address</Label>
+          <Input id="email" value={formData.email} disabled className="mt-1 text-[#024B5E] bg-gray-50 cursor-not-allowed" placeholder="E-mail address or phone number" />
         </div>
 
+        {/* Phone */}
+        <div>
+          <Label htmlFor="phone" className="text-sm font-medium text-[#024B5E]">Phone number</Label>
+          <Input id="phone" value={formData.phone} onChange={handleChange} disabled={!isEditing} placeholder="E-mail address or phone number" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+        </div>
+
+        {/* Street */}
         <div>
           <Label htmlFor="street" className="text-sm font-medium text-[#024B5E]">Street</Label>
-          <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
+          <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} placeholder="Street Number and Name" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* State + Zip */}
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="state" className="text-sm font-medium text-[#024B5E]">State</Label>
-            <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
+            <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} placeholder="State" className="text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
           </div>
           <div>
-            <Label htmlFor="zipCode" className="text-sm font-medium text-[#024B5E]">Zip Code</Label>
-            <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
+            <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} placeholder="Zip Code" className="text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
           </div>
         </div>
 
+        {/* About */}
         <div>
-          <Label htmlFor="dob" className="text-sm font-medium text-[#024B5E]">Date of birth</Label>
+          <Label htmlFor="about" className="text-sm font-medium text-[#024B5E]">About</Label>
           <div className="relative mt-1">
-            <Input id="dob" type="date" value={formData.dob} onChange={handleChange} disabled={!isEditing} className="text-[#024B5E] block w-full" />
+            <textarea
+              id="about"
+              value={formData.about}
+              onChange={handleChange}
+              disabled={!isEditing}
+              maxLength={500}
+              rows={4}
+              placeholder="Introduce yourself to potential clients..."
+              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200 text-[#024B5E] resize-none"
+            />
+            <span className="absolute bottom-2 right-3 text-xs text-gray-400">
+              {formData.about.length}/500
+            </span>
           </div>
         </div>
 
-        <div className="pt-4 border-t border-gray-100">
-          <h3 className="text-md font-semibold text-[#024B5E] mb-4">Change Password</h3>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="currentPassword" className="text-sm font-medium text-[#024B5E]">Current Password</Label>
-              <div className="relative mt-1">
-                <Input id="currentPassword" type={showCurrentPassword ? "text" : "password"} value={formData.currentPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
-                <button type="button" onClick={() => setShowCurrentPassword(!showCurrentPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
-                  {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <Label htmlFor="newPassword" className="text-sm font-medium text-[#024B5E]">New Password</Label>
-              <div className="relative mt-1">
-                <Input id="newPassword" type={showNewPassword ? "text" : "password"} value={formData.newPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
-                <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
-                  {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
-            <div>
-              <Label htmlFor="confirmPassword" className="text-sm font-medium text-[#024B5E]">Confirm Password</Label>
-              <div className="relative mt-1">
-                <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
-                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-          </div>
+        {/* Pet Number */}
+        <div>
+          <Label htmlFor="petNumber" className="text-sm font-medium text-[#024B5E]">Pet number</Label>
+          <Input id="petNumber" value={formData.petNumber} onChange={handleChange} disabled={!isEditing} placeholder="0-3" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
+
+        {/* Home Type */}
+        <div>
+          <Label htmlFor="homeType" className="text-sm font-medium text-[#024B5E]">Home Type</Label>
+          <select
+            id="homeType"
+            value={formData.homeType}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200 text-[#024B5E]"
+          >
+            <option>Apartment</option>
+            <option>House</option>
+            <option>Condo</option>
+            <option>Townhouse</option>
+            <option>Studio</option>
+          </select>
+        </div>
+
+        {/* Home Size */}
+        <div>
+          <Label htmlFor="homeSize" className="text-sm font-medium text-[#024B5E]">Home Size (sq ft)</Label>
+          <Input id="homeSize" value={formData.homeSize} onChange={handleChange} disabled={!isEditing} placeholder="e.g. 800" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+        </div>
+
+        {/* Outdoor Space */}
+        <div>
+          <Label htmlFor="outdoorSpace" className="text-sm font-medium text-[#024B5E]">Outdoor Space</Label>
+          <select
+            id="outdoorSpace"
+            value={formData.outdoorSpace}
+            onChange={handleChange}
+            disabled={!isEditing}
+            className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200 text-[#024B5E]"
+          >
+            <option>No outdoor space</option>
+            <option>Small yard</option>
+            <option>Large yard</option>
+            <option>Fenced yard</option>
+            <option>Balcony</option>
+          </select>
+        </div>
+
       </div>
     </div>
   );

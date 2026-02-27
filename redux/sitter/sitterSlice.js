@@ -2,19 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
 
-// Helper: Get Token & Headers
 const getAuthHeaders = (isMultipart = false) => {
   const token = localStorage.getItem('token');
   if (!token) console.warn("⚠️ Warning: No token found in localStorage!");
-
   const headers = {
     ...(token && { Authorization: `Bearer ${token}` }),
   };
-  
   if (!isMultipart) {
     headers["Content-Type"] = "application/json";
   }
-  
   return headers;
 };
 
@@ -27,11 +23,9 @@ export const fetchSitterProfile = createAsyncThunk(
         method: "GET",
         headers: getAuthHeaders(),
       });
-      
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Failed to fetch profile");
-      
-      return result.data; 
+      return result.data; // { profile: {...}, earnings: {...} }
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -48,34 +42,29 @@ export const updateSitterProfile = createAsyncThunk(
         headers: getAuthHeaders(),
         body: JSON.stringify(sitterData),
       });
-
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Update failed");
-      
-      return result.data; 
+      return result.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// 3. Update Sitter Image
+// 3. Update Sitter Profile Image
 export const updateSitterImage = createAsyncThunk(
   'sitter/updateImage',
   async (file, { rejectWithValue }) => {
     try {
       const formData = new FormData();
       formData.append("profilePicture", file);
-
-      const response = await fetch(`${API_URL}/api/sitter/profile-image`, { 
-        method: "POST", 
+      const response = await fetch(`${API_URL}/api/sitter/profile-image`, {
+        method: "POST",
         headers: getAuthHeaders(true),
         body: formData,
       });
-
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Image upload failed");
-    
       return result.profilePicture || result.data?.profilePicture || result.url;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -93,10 +82,8 @@ export const changeSitterPassword = createAsyncThunk(
         headers: getAuthHeaders(),
         body: JSON.stringify(passwordData),
       });
-
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Password change failed");
-      
       return result;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -105,46 +92,46 @@ export const changeSitterPassword = createAsyncThunk(
 );
 
 // 5. Upload Portfolio Image
+// ✅ Step 1: Generic upload → path পাও
+// ✅ Step 2: existing portfolioImages + new path → PUT /api/sitter/profile
 export const uploadPortfolioImage = createAsyncThunk(
   'sitter/uploadPortfolioImage',
   async (file, { rejectWithValue, getState }) => {
     try {
+      // Step 1: Generic upload করো
       const formData = new FormData();
       formData.append("image", file);
 
-      const uploadResponse = await fetch(`${API_URL}/api/upload`, { 
-        method: "POST", 
-        headers: {
-           Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+      const uploadResponse = await fetch(`${API_URL}/api/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: formData,
       });
 
       const uploadResult = await uploadResponse.json();
       if (!uploadResponse.ok) throw new Error(uploadResult.message || "Image upload failed");
-      const newImageUrl = uploadResult.data?.url || uploadResult.url || uploadResult.secure_url;
 
-      if (!newImageUrl) throw new Error("Did not receive image URL from server");
-      const currentState = getState().sitter.profile;
-      const currentPortfolio = currentState?.portfolio || [];
-      
-      const newPortfolioItem = { url: newImageUrl, id: Date.now() };
-      
-      const updateData = {
-        portfolio: [...currentPortfolio, newPortfolioItem]
-      };
+      // Server যে path/URL return করে সেটা নাও
+      const newImagePath = uploadResult.data?.url || uploadResult.url || uploadResult.secure_url || uploadResult.path;
+      if (!newImagePath) throw new Error("Did not receive image path from server");
 
-      const profileResponse = await fetch(`${API_URL}/api/sitter/profile`, {
+      // Step 2: existing portfolioImages নাও Redux state থেকে
+      const currentProfile = getState().sitter.profile?.profile;
+      const existingImages = currentProfile?.portfolioImages || [];
+
+      // Step 3: PUT /api/sitter/profile with updated portfolioImages array
+      const updateResponse = await fetch(`${API_URL}/api/sitter/profile`, {
         method: "PUT",
         headers: getAuthHeaders(),
-        body: JSON.stringify(updateData),
+        body: JSON.stringify({
+          portfolioImages: [...existingImages, newImagePath],
+        }),
       });
 
-      const profileResult = await profileResponse.json();
-      if (!profileResponse.ok) throw new Error("Failed to update profile with new image");
+      const updateResult = await updateResponse.json();
+      if (!updateResponse.ok) throw new Error(updateResult.message || "Failed to update portfolio");
 
-      return newPortfolioItem;
-
+      return newImagePath; // ✅ নতুন image path return করো
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -152,39 +139,82 @@ export const uploadPortfolioImage = createAsyncThunk(
 );
 
 // 6. Delete Portfolio Image
+// ✅ existing array থেকে সেই path বাদ দিয়ে PUT করো
 export const deletePortfolioImage = createAsyncThunk(
   'sitter/deletePortfolioImage',
-  async (imageId, { rejectWithValue }) => {
+  async (imagePath, { rejectWithValue, getState }) => {
     try {
-      const response = await fetch(`${API_URL}/api/sitter/portfolio/${imageId}`, {
-        method: "DELETE",
+      const currentProfile = getState().sitter.profile?.profile;
+      const existingImages = currentProfile?.portfolioImages || [];
+
+      // সেই path বাদ দাও
+      const updatedImages = existingImages.filter((img) => img !== imagePath);
+
+      const response = await fetch(`${API_URL}/api/sitter/profile`, {
+        method: "PUT",
         headers: getAuthHeaders(),
+        body: JSON.stringify({ portfolioImages: updatedImages }),
       });
 
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Delete failed");
-      
-      return imageId; 
+
+      return imagePath; // ✅ কোন path delete হলো সেটা return করো
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// 7. Fetch Public Sitter Profile by ID
+// 7. Fetch Service Settings
+export const fetchServiceSettings = createAsyncThunk(
+  'sitter/fetchServiceSettings',
+  async (serviceType, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${API_URL}/api/sitter/services/${serviceType}`, {
+        method: "GET",
+        headers: getAuthHeaders(),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Failed to fetch service");
+      return { serviceType, data: result.data };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// 8. Update Service Settings
+export const updateServiceSettings = createAsyncThunk(
+  'sitter/updateServiceSettings',
+  async ({ serviceType, serviceData }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${API_URL}/api/sitter/services/${serviceType}`, {
+        method: "PUT",
+        headers: getAuthHeaders(),
+        body: JSON.stringify(serviceData),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Failed to update service");
+      return { serviceType, data: result.data };
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// 9. Fetch Public Sitter Profile by ID
 export const fetchPublicSitterProfile = createAsyncThunk(
   'sitter/fetchPublicProfile',
   async (id, { rejectWithValue }) => {
     try {
       const response = await fetch(`${API_URL}/api/sitter/public/${id}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" } 
+        headers: { "Content-Type": "application/json" },
       });
-      
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Failed to fetch public profile");
-      
-      return result.data; 
+      return result.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -195,7 +225,9 @@ const sitterSlice = createSlice({
   name: 'sitter',
   initialState: {
     profile: null,
-    publicProfile: null, // Fixed: Added this line
+    publicProfile: null,
+    services: {}, // { boarding: {...}, doggyDayCare: {...}, dogWalking: {...} }
+    servicesLoading: false,
     loading: false,
     updating: false,
     error: null,
@@ -207,46 +239,45 @@ const sitterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // --- Fetch Profile Logic ---
+      // Fetch Profile
       .addCase(fetchSitterProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchSitterProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.profile = action.payload;
-        if (!state.profile.portfolio) {
-          state.profile.portfolio = [];
-        }
+        state.profile = action.payload; // { profile: {...}, earnings: {...} }
       })
       .addCase(fetchSitterProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // --- Update Profile Info Logic ---
+      // Update Profile Info
       .addCase(updateSitterProfile.pending, (state) => {
         state.updating = true;
         state.error = null;
       })
       .addCase(updateSitterProfile.fulfilled, (state, action) => {
         state.updating = false;
-        state.profile = { ...state.profile, ...action.payload };
+        if (state.profile?.profile) {
+          state.profile.profile = { ...state.profile.profile, ...action.payload };
+        }
       })
       .addCase(updateSitterProfile.rejected, (state, action) => {
         state.updating = false;
         state.error = action.payload;
       })
 
-      // --- Update Profile Image Logic ---
+      // Update Profile Image
       .addCase(updateSitterImage.pending, (state) => {
         state.updating = true;
         state.error = null;
       })
       .addCase(updateSitterImage.fulfilled, (state, action) => {
         state.updating = false;
-        if (state.profile) {
-          state.profile.profilePicture = action.payload;
+        if (state.profile?.profile) {
+          state.profile.profile.profilePicture = action.payload;
         }
       })
       .addCase(updateSitterImage.rejected, (state, action) => {
@@ -254,29 +285,27 @@ const sitterSlice = createSlice({
         state.error = action.payload;
       })
 
-      // --- Change Password Logic ---
-      .addCase(changeSitterPassword.pending, (state) => {
-        state.updating = true;
-        state.error = null;
-      })
-      .addCase(changeSitterPassword.fulfilled, (state) => {
-        state.updating = false;
-      })
+      // Change Password
+      .addCase(changeSitterPassword.pending, (state) => { state.updating = true; })
+      .addCase(changeSitterPassword.fulfilled, (state) => { state.updating = false; })
       .addCase(changeSitterPassword.rejected, (state, action) => {
         state.updating = false;
         state.error = action.payload;
       })
 
-      // --- Upload Portfolio Image Logic ---
+      // Upload Portfolio Image
       .addCase(uploadPortfolioImage.pending, (state) => {
         state.updating = true;
         state.error = null;
       })
       .addCase(uploadPortfolioImage.fulfilled, (state, action) => {
         state.updating = false;
-        if (state.profile) {
-          if (!state.profile.portfolio) state.profile.portfolio = [];
-          state.profile.portfolio.push(action.payload);
+        // ✅ portfolioImages array-এ নতুন path add করো
+        if (state.profile?.profile) {
+          if (!state.profile.profile.portfolioImages) {
+            state.profile.profile.portfolioImages = [];
+          }
+          state.profile.profile.portfolioImages.push(action.payload);
         }
       })
       .addCase(uploadPortfolioImage.rejected, (state, action) => {
@@ -284,22 +313,47 @@ const sitterSlice = createSlice({
         state.error = action.payload;
       })
 
-      // --- Delete Portfolio Image Logic ---
+      // Delete Portfolio Image
       .addCase(deletePortfolioImage.pending, (state) => {
-        // Optional loading
+        state.updating = true;
       })
       .addCase(deletePortfolioImage.fulfilled, (state, action) => {
-        if (state.profile && state.profile.portfolio) {
-          state.profile.portfolio = state.profile.portfolio.filter(
-            (img) => img._id !== action.payload && img.id !== action.payload
+        state.updating = false;
+        // ✅ সেই path বাদ দাও
+        if (state.profile?.profile?.portfolioImages) {
+          state.profile.profile.portfolioImages = state.profile.profile.portfolioImages.filter(
+            (img) => img !== action.payload
           );
         }
       })
       .addCase(deletePortfolioImage.rejected, (state, action) => {
+        state.updating = false;
         state.error = action.payload;
       })
 
-      // --- Fetch Public Sitter Profile Logic ---
+      // Fetch Service Settings
+      .addCase(fetchServiceSettings.pending, (state) => { state.servicesLoading = true; })
+      .addCase(fetchServiceSettings.fulfilled, (state, action) => {
+        state.servicesLoading = false;
+        state.services[action.payload.serviceType] = action.payload.data;
+      })
+      .addCase(fetchServiceSettings.rejected, (state, action) => {
+        state.servicesLoading = false;
+        state.error = action.payload;
+      })
+
+      // Update Service Settings
+      .addCase(updateServiceSettings.pending, (state) => { state.updating = true; })
+      .addCase(updateServiceSettings.fulfilled, (state, action) => {
+        state.updating = false;
+        state.services[action.payload.serviceType] = action.payload.data;
+      })
+      .addCase(updateServiceSettings.rejected, (state, action) => {
+        state.updating = false;
+        state.error = action.payload;
+      })
+
+      // Fetch Public Profile
       .addCase(fetchPublicSitterProfile.pending, (state) => {
         state.loading = true;
         state.error = null;

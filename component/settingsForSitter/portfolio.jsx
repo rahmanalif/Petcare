@@ -6,51 +6,66 @@ import {
   fetchSitterProfile, 
   uploadPortfolioImage, 
   deletePortfolioImage 
-} from "@/redux/sitter/sitterSlice"; 
+} from "@/redux/sitter/sitterSlice";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+
+// ✅ string path → full URL বানাও
+const buildImageUrl = (path) => {
+  if (!path) return "";
+  if (path.startsWith("http")) return path;
+  const clean = path.startsWith("/") ? path.slice(1) : path;
+  return `${API_BASE_URL}/${clean}`;
+};
 
 export default function Portfolio() {
   const dispatch = useDispatch();
-  
-  const { portfolio, loading, uploading } = useSelector((state) => state.sitter);
+
+  const { profile: sitterData, loading, updating } = useSelector((state) => state.sitter);
+
+  // ✅ sitterData = { profile: {...}, earnings: {...} }
+  // portfolioImages is array of strings inside sitterData.profile
+  const portfolioImages = sitterData?.profile?.portfolioImages || [];
 
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [isPublished, setIsPublished] = useState(true);
 
   useEffect(() => {
-    dispatch(fetchSitterProfile());
-  }, [dispatch]);
-
-  const handleDelete = async (id) => {
-    if(confirm("Are you sure you want to delete this image?")) {
-       await dispatch(deletePortfolioImage(id));
+    if (!sitterData) {
+      dispatch(fetchSitterProfile());
     }
-  };
+  }, [dispatch, sitterData]);
 
-  const handleAddPortfolio = () => {
-    setShowUploadModal(true);
-  };
-  const handlePublish = () => {
-    setIsPublished(!isPublished);
-    // dispatch(updateSitterProfile({ isPortfolioPublished: !isPublished })); 
+  const handleDelete = async (imagePath) => {
+    if (confirm("Are you sure you want to delete this image?")) {
+      const filename = imagePath.split("/").pop();
+      await dispatch(deletePortfolioImage(filename));
+    }
   };
 
   const handleFileUpload = async (event) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      const file = files[0];
-      
-      // API কল করা হচ্ছে
-      const result = await dispatch(uploadPortfolioImage(file));
-      
+      const result = await dispatch(uploadPortfolioImage(files[0]));
       if (uploadPortfolioImage.fulfilled.match(result)) {
-        setShowUploadModal(false); // আপলোড সফল হলে মোডাল বন্ধ
+        setShowUploadModal(false);
       }
     }
   };
 
-  // --- VIEW 1: EMPTY STATE ---
-  // যদি পোর্টফোলিও খালি থাকে এবং লোডিং না হয়
-  if (!loading && (!portfolio || portfolio.length === 0)) {
+  const handlePublish = () => setIsPublished(!isPublished);
+
+  // Loading state
+  if (loading && !sitterData) {
+    return (
+      <div className="flex h-[400px] w-full items-center justify-center">
+        <Loader2 className="animate-spin w-10 h-10 text-[#035F75]" />
+      </div>
+    );
+  }
+
+  // Empty state
+  if (portfolioImages.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8 max-w-3xl">
         <div className="flex justify-between items-center mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200">
@@ -63,9 +78,8 @@ export default function Portfolio() {
           </button>
         </div>
 
-        {/* Click to open modal even in empty state */}
-        <div 
-          onClick={handleAddPortfolio}
+        <div
+          onClick={() => setShowUploadModal(true)}
           className="cursor-pointer border-2 border-dashed border-gray-300 rounded-lg p-8 md:p-12 lg:p-16 flex flex-col items-center justify-center min-h-[200px] md:min-h-[300px] hover:bg-gray-50 transition"
         >
           <div className="w-12 h-12 md:w-14 md:h-14 bg-[#035F75] rounded-full flex items-center justify-center mb-3 md:mb-4">
@@ -75,53 +89,45 @@ export default function Portfolio() {
             No portfolio images yet. Click to add.
           </p>
         </div>
-        
-        {/* Modal Logic Reuse */}
+
         {showUploadModal && (
-          <UploadModal 
-            onClose={() => setShowUploadModal(false)} 
-            onUpload={handleFileUpload} 
-            uploading={uploading} 
-            handlePublish={handlePublish}
+          <UploadModal
+            onClose={() => setShowUploadModal(false)}
+            onUpload={handleFileUpload}
+            uploading={updating}
           />
         )}
       </div>
     );
   }
 
-  // --- VIEW 2: LIST STATE ---
+  // List state
   return (
     <>
       <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8 max-w-3xl">
         <div className="flex justify-between items-center mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200 gap-2">
           <h2 className="text-lg md:text-2xl font-medium text-gray-800">Portfolio</h2>
           <button
-            onClick={handleAddPortfolio}
+            onClick={() => setShowUploadModal(true)}
             className="px-3 md:px-6 py-2 md:py-2.5 border-2 border-dashed border-[#035F75] text-[#035F75] rounded-lg font-medium hover:bg-[#E7F4F6] transition-colors text-xs md:text-sm whitespace-nowrap"
           >
             Add Portfolio
           </button>
         </div>
 
-        {/* Loading Spinner for initial fetch */}
-        {loading && (
-           <div className="flex justify-center p-8 text-[#035F75]">
-             <Loader2 className="animate-spin w-8 h-8" />
-           </div>
-        )}
-
+        {/* ✅ portfolioImages = string[] — প্রতিটা full URL বানিয়ে দেখাও */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-          {portfolio && portfolio.map((image) => (
-            <div key={image._id || image.id} className="relative group">
+          {portfolioImages.map((imagePath, index) => (
+            <div key={index} className="relative group">
               <div className="relative rounded-lg overflow-hidden border border-gray-200 aspect-[4/3]">
                 <img
-                  src={image.url || image.secure_url} // Backend field name support
-                  alt={image.alt || "Portfolio"}
+                  src={buildImageUrl(imagePath)}
+                  alt={`Portfolio ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
               </div>
               <button
-                onClick={() => handleDelete(image._id || image.id)}
+                onClick={() => handleDelete(imagePath)}
                 className="absolute top-2 right-2 md:top-3 md:right-3 w-8 h-8 md:w-10 md:h-10 bg-white rounded-lg shadow-md flex items-center justify-center hover:bg-red-50 transition-colors opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
               >
                 <Trash2 className="w-4 h-4 md:w-5 md:h-5 text-gray-600 hover:text-red-500" />
@@ -131,36 +137,27 @@ export default function Portfolio() {
         </div>
       </div>
 
-      {/* Upload Modal */}
       {showUploadModal && (
-        <UploadModal 
-          onClose={() => setShowUploadModal(false)} 
-          onUpload={handleFileUpload} 
-          uploading={uploading}
-          handlePublish={handlePublish}
+        <UploadModal
+          onClose={() => setShowUploadModal(false)}
+          onUpload={handleFileUpload}
+          uploading={updating}
         />
       )}
     </>
   );
 }
 
-// Helper Component for Modal (Clean Code)
-function UploadModal({ onClose, onUpload, uploading, handlePublish }) {
+function UploadModal({ onClose, onUpload, uploading }) {
   return (
-    <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-4 md:p-6 lg:p-8 max-w-3xl w-full relative">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg p-4 md:p-6 lg:p-8 max-w-3xl w-full">
         <div className="flex justify-between items-center mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200">
           <h2 className="text-lg md:text-2xl font-medium text-gray-800">Upload to Portfolio</h2>
-          <button
-            onClick={handlePublish}
-            className="px-3 md:px-6 py-2 md:py-2.5 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors text-xs md:text-sm"
-          >
-            Publish
-          </button>
         </div>
 
         <label htmlFor="file-upload" className="cursor-pointer block">
-          <div className={`border-2 border-dashed border-gray-300 rounded-lg p-8 md:p-12 lg:p-16 flex flex-col items-center justify-center min-h-[200px] md:min-h-[300px] hover:border-[#035F75] hover:bg-gray-50 transition-colors ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+          <div className={`border-2 border-dashed border-gray-300 rounded-lg p-8 md:p-12 lg:p-16 flex flex-col items-center justify-center min-h-[200px] md:min-h-[300px] hover:border-[#035F75] hover:bg-gray-50 transition-colors ${uploading ? "opacity-50 pointer-events-none" : ""}`}>
             {uploading ? (
               <div className="flex flex-col items-center text-[#035F75]">
                 <Loader2 className="w-10 h-10 animate-spin mb-2" />
