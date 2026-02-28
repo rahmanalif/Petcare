@@ -3,18 +3,18 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBookings } from "@/redux/bookingSlice";
-import { 
-  ArrowLeft, 
-  MapPin, 
-  Calendar, 
-  Phone, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  PlayCircle, 
-  CalendarDays 
+import {
+  ArrowLeft,
+  MapPin,
+  Calendar,
+  Phone,
+  Clock,
+  CheckCircle,
+  XCircle,
+  PlayCircle,
+  CalendarDays
 } from "lucide-react";
-
+import { useTranslation } from "react-i18next";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -32,10 +32,11 @@ const PawIcon = ({ className = "" }) => (
 );
 
 export default function BookingHistory() {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
   const [activeStatus, setActiveStatus] = useState("on-going");
-  
+
   // Redux 
   const { bookings, loading } = useSelector((state) => state.booking);
 
@@ -60,12 +61,12 @@ export default function BookingHistory() {
     "upcoming": ["upcoming", "confirmed"]
   };
 
-  const filteredBookings = Array.isArray(bookings) 
+  const filteredBookings = Array.isArray(bookings)
     ? bookings.filter((booking) => {
-        const apiStatus = booking?.status?.toLowerCase();
-        const allowedStatuses = statusMap[activeStatus] || [];
-        return allowedStatuses.includes(apiStatus);
-      })
+      const apiStatus = booking?.status?.toLowerCase();
+      const allowedStatuses = statusMap[activeStatus] || [];
+      return allowedStatuses.includes(apiStatus);
+    })
     : [];
 
   const getStatusColor = (status) => {
@@ -77,7 +78,12 @@ export default function BookingHistory() {
     return "text-[#024B5E]";
   };
 
-  const statuses = ["On going", "Completed", "Cancelled", "Upcoming"];
+  const statuses = [
+    { key: "on-going", label: t("sitter_booking_history.tabs.on_going") },
+    { key: "completed", label: t("sitter_booking_history.tabs.completed") },
+    { key: "cancelled", label: t("sitter_booking_history.tabs.cancelled") },
+    { key: "upcoming", label: t("sitter_booking_history.tabs.upcoming") },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-start justify-center p-2 sm:p-4 pt-4 sm:pt-8">
@@ -88,29 +94,28 @@ export default function BookingHistory() {
             className="flex items-center gap-2 text-[#024B5E] hover:underline mb-2"
           >
             <ArrowLeft size={20} />
-            Back
+            {t("sitter_booking_history.back")}
           </button>
         </div>
-        
+
         {/* Header with Title and Status Tabs */}
         <div className="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
-          <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">Order history</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">{t("sitter_booking_history.order_history")}</h2>
 
           {/* Status Tabs */}
           <div className="flex flex-wrap gap-2">
-            {statuses.map((status) => {
-              const statusKey = status.toLowerCase().replace(" ", "-");
-              const isActive = activeStatus === statusKey;
+            {statuses.map((statusItem) => {
+              const isActive = activeStatus === statusItem.key;
               return (
                 <button
-                  key={status}
-                  onClick={() => setActiveStatus(statusKey)}
+                  key={statusItem.key}
+                  onClick={() => setActiveStatus(statusItem.key)}
                   className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${isActive
-                      ? "bg-[#035F75] text-white"
-                      : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
+                    ? "bg-[#035F75] text-white"
+                    : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
                     }`}
                 >
-                  {status}
+                  {statusItem.label}
                 </button>
               );
             })}
@@ -118,7 +123,7 @@ export default function BookingHistory() {
         </div>
 
         {/* Loading State */}
-        {loading && <p className="text-center text-[#024B5E] py-10">Loading orders...</p>}
+        {loading && <p className="text-center text-[#024B5E] py-10">{t("sitter_booking_history.loading")}</p>}
 
         {/* Bookings List */}
         <div className="space-y-3 sm:space-y-4">
@@ -173,14 +178,14 @@ export default function BookingHistory() {
                       {booking.currency} {booking.totalPrice}
                     </div>
                     <div className="text-xs text-[#024B5E] text-right">
-                      <div>Pick-up: <span className="font-semibold">{booking.startTime}</span></div>
-                      <div>Drop-off: <span className="font-semibold">{booking.endTime}</span></div>
+                      <div>{t("sitter_booking_history.pickup")} <span className="font-semibold">{booking.startTime}</span></div>
+                      <div>{t("sitter_booking_history.dropoff")} <span className="font-semibold">{booking.endTime}</span></div>
                     </div>
                   </div>
 
                   {/* Contact Section */}
                   <div>
-                    <h4 className="text-xs font-semibold text-[#024B5E] mb-1">Contact</h4>
+                    <h4 className="text-xs font-semibold text-[#024B5E] mb-1">{t("sitter_booking_history.contact")}</h4>
                     <div className="flex items-center gap-2 text-xs text-[#024B5E]">
                       <Phone size={12} />
                       <span>{booking.owner?.phoneNumber || "N/A"}</span>
@@ -190,10 +195,10 @@ export default function BookingHistory() {
                   {/* Buttons */}
                   <div className="flex gap-2">
                     <button className="flex-1 px-4 py-2 bg-[#FE6C5D] hover:bg-[#ee6758] text-white text-xs font-medium rounded-md transition-colors">
-                      Reschedule
+                      {t("sitter_booking_history.reschedule")}
                     </button>
                     <button className="flex-1 px-4 py-2 bg-[#035F75] hover:bg-[#024d61] text-white text-xs font-medium rounded-md transition-colors">
-                      View Details
+                      {t("sitter_booking_history.view_details")}
                     </button>
                   </div>
                 </div>
@@ -230,7 +235,7 @@ export default function BookingHistory() {
 
                     {/* Contact Section */}
                     <div>
-                      <h4 className="text-sm font-semibold text-[#024B5E] mb-2">Contact</h4>
+                      <h4 className="text-sm font-semibold text-[#024B5E] mb-2">{t("sitter_booking_history.contact")}</h4>
                       <div className="flex items-center gap-2 text-sm text-[#024B5E]">
                         <Phone size={16} />
                         <span>{booking.owner?.phoneNumber || "N/A"}</span>
@@ -243,14 +248,14 @@ export default function BookingHistory() {
 
                     {/* Reschedule Button */}
                     <button className="px-6 py-2 bg-[#FE6C5D] hover:bg-[#ee6758] text-white text-sm font-medium rounded-md transition-colors w-fit">
-                      Reschedule
+                      {t("sitter_booking_history.reschedule")}
                     </button>
                   </div>
 
                   {/* MIDDLE COLUMN - Huge Paw Logo */}
                   <div className="flex items-center justify-center px-2 md:px-4 lg:px-6 xl:px-8">
                     <div className="relative w-24 h-20 md:w-28 md:h-24 lg:w-36 lg:h-32 xl:w-48 xl:h-40 2xl:w-56 2xl:h-48 opacity-50 md:opacity-60">
-                      <PawIcon className="w-full h-full"/>
+                      <PawIcon className="w-full h-full" />
                     </div>
                   </div>
 
@@ -276,17 +281,17 @@ export default function BookingHistory() {
                     <div className="text-sm text-[#024B5E] text-right">
                       <div className="flex items-center justify-end gap-1">
                         <Clock size={14} />
-                        Pick-up: <span className="font-semibold text-[#024B5E]">{booking.startTime}</span>
+                        {t("sitter_booking_history.pickup")} <span className="font-semibold text-[#024B5E]">{booking.startTime}</span>
                       </div>
                       <div className="mt-1 flex items-center justify-end gap-1">
                         <Clock size={14} />
-                        Drop-off: <span className="font-semibold text-[#024B5E]">{booking.endTime}</span>
+                        {t("sitter_booking_history.dropoff")} <span className="font-semibold text-[#024B5E]">{booking.endTime}</span>
                       </div>
                     </div>
 
                     {/* Action Button */}
                     <button className="px-6 py-2 bg-[#035F75] hover:bg-[#024d61] text-white text-sm font-medium rounded-md transition-colors w-fit">
-                      View Details
+                      {t("sitter_booking_history.view_details")}
                     </button>
                   </div>
                 </div>
@@ -295,7 +300,7 @@ export default function BookingHistory() {
           ) : (
             !loading && (
               <div className="text-center py-12">
-                <p className="text-[#024B5E]">No {activeStatus.replace("-", " ")} bookings found.</p>
+                <p className="text-[#024B5E]">{t("sitter_booking_history.no_bookings", { status: activeStatus.replace("-", " ") })}</p>
               </div>
             )
           )}

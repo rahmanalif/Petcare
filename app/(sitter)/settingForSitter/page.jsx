@@ -14,10 +14,12 @@ import ApplyPromo from "@/component/settingsForSitter/ApplyPromo";
 import InviteFriend from "@/component/settingsForSitter/InviteFriend";
 import Services from "@/component/settingsForSitter/Services";
 import Portfolio from "@/component/settingsForSitter/portfolio";
+import { useTranslation } from "react-i18next";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function AccountSettings() {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("account");
@@ -39,7 +41,7 @@ export default function AccountSettings() {
   };
 
   const handleDeleteAccount = async () => {
-    const confirmed = window.confirm("Are you sure you want to delete your account? This action cannot be undone.");
+    const confirmed = window.confirm(t("sitter_settings.confirm_delete"));
     if (!confirmed) return;
 
     setDeleteLoading(true);
@@ -60,10 +62,10 @@ export default function AccountSettings() {
         dispatch(logout());
         router.push('/');
       } else {
-        alert(result.message || "Failed to delete account. Please try again.");
+        alert(result.message || t("sitter_settings.delete_failed"));
       }
     } catch (error) {
-      alert("Network error. Please try again.");
+      alert(t("sitter_settings.network_error"));
     } finally {
       setDeleteLoading(false);
     }
@@ -81,13 +83,13 @@ export default function AccountSettings() {
         <div className="border border-gray-300 rounded-lg m-1 md:m-2 p-4 md:p-6 bg-white shadow-sm">
           <div className="mb-3 md:mb-4">
             <h2 className="text-base md:text-lg font-semibold text-[#024B5E] font-montserrat mb-1">
-              Earnings Summary
+              {t("sitter_settings.earnings_summary")}
             </h2>
           </div>
 
           <div className="flex items-end justify-between mb-4 md:mb-6">
             <div>
-              <p className="text-xs md:text-sm text-[#024B5E] mb-1">Total Income</p>
+              <p className="text-xs md:text-sm text-[#024B5E] mb-1">{t("sitter_settings.total_income")}</p>
               <p className="text-xl md:text-2xl font-bold text-[#024B5E] font-montserrat">
                 {loading && !sitterData
                   ? "..."
@@ -95,25 +97,25 @@ export default function AccountSettings() {
               </p>
             </div>
             <button onClick={() => setActiveTab("promo")} className="text-[#035F75] text-xs md:text-sm font-medium underline">
-              Apply Promo Code
+              {t("sitter_settings.apply_promo")}
             </button>
           </div>
 
           <div className="grid grid-cols-3 gap-2 md:gap-4 lg:gap-6">
             <div onClick={handleNavigateToOngoing} className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors">
-              <p className="text-xs md:text-sm text-[#024B5E] mb-1">This Month</p>
+              <p className="text-xs md:text-sm text-[#024B5E] mb-1">{t("sitter_settings.this_month")}</p>
               <p className="text-sm md:text-lg font-bold text-[#024B5E] font-montserrat">
                 {loading && !sitterData ? "..." : `$${earnings?.thisMonth?.toFixed(2) ?? "0.00"}`}
               </p>
             </div>
             <div onClick={handleNavigateToOngoing} className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors">
-              <p className="text-xs md:text-sm text-[#024B5E] mb-1 flex items-center justify-center">Last Month</p>
+              <p className="text-xs md:text-sm text-[#024B5E] mb-1 flex items-center justify-center">{t("sitter_settings.last_month")}</p>
               <p className="text-sm md:text-lg font-bold text-[#024B5E] font-montserrat flex items-center justify-center">
                 {loading && !sitterData ? "..." : `$${earnings?.lastMonth?.toFixed(2) ?? "0.00"}`}
               </p>
             </div>
             <div onClick={handleNavigateToOngoing} className="cursor-pointer hover:bg-gray-50 p-2 md:p-3 rounded-lg transition-colors">
-              <p className="text-xs md:text-sm text-[#024B5E] mb-1 text-right">Pending</p>
+              <p className="text-xs md:text-sm text-[#024B5E] mb-1 text-right">{t("sitter_settings.pending")}</p>
               <p className="text-sm md:text-lg font-bold text-[#024B5E] font-montserrat text-right">
                 {loading && !sitterData ? "..." : `$${earnings?.pending?.toFixed(2) ?? "0.00"}`}
               </p>
@@ -126,24 +128,23 @@ export default function AccountSettings() {
           <div className="lg:col-span-3 space-y-2">
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mt-2 md:mt-4">
               <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
-                Account Information
+                {t("sitter_settings.account_info")}
               </div>
               {[
-                { key: "account", label: "Account" },
-                { key: "booking", label: "Change password" },
-                { key: "payments", label: "Payments" },
-                { key: "services", label: "Services" },
-                { key: "portfolio", label: "Portfolio" },
-                { key: "switch", label: "Switch profile" },
+                { key: "account", label: t("sitter_settings.account") },
+                { key: "booking", label: t("sitter_settings.change_password") },
+                { key: "payments", label: t("sitter_settings.payments") },
+                { key: "services", label: t("sitter_settings.services") },
+                { key: "portfolio", label: t("sitter_settings.portfolio") },
+                { key: "switch", label: t("sitter_settings.switch_profile") },
               ].map((item) => (
                 <button
                   key={item.key}
                   onClick={() => setActiveTab(item.key)}
-                  className={`w-full text-left px-3 md:px-4 py-2 md:py-3 border-l-4 text-sm md:text-base ${
-                    activeTab === item.key
+                  className={`w-full text-left px-3 md:px-4 py-2 md:py-3 border-l-4 text-sm md:text-base ${activeTab === item.key
                       ? "border-[#035F75] bg-[#E7F4F6] text-[#035F75] font-medium"
                       : "border-transparent hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </button>
@@ -153,13 +154,13 @@ export default function AccountSettings() {
             <div className="pt-2 md:pt-4">
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
-                  Policy Center
+                  {t("sitter_settings.policy_center")}
                 </div>
                 <Link href="/privacy" className="block w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100">
-                  Privacy Policy
+                  {t("sitter_settings.privacy_policy")}
                 </Link>
                 <Link href="/terms" className="block w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100">
-                  Terms & Condition
+                  {t("sitter_settings.terms")}
                 </Link>
               </div>
             </div>
@@ -167,13 +168,13 @@ export default function AccountSettings() {
             <div className="pt-2 md:pt-4">
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
-                  Referrals and promos
+                  {t("sitter_settings.referrals_promos")}
                 </div>
                 <button onClick={() => setActiveTab("friend")} className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100">
-                  Invite a friend to Wuffoos
+                  {t("sitter_settings.invite_friend")}
                 </button>
                 <button onClick={() => setActiveTab("promo")} className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100">
-                  Apply promo codes
+                  {t("sitter_settings.apply_promo_code")}
                 </button>
               </div>
             </div>
@@ -181,16 +182,16 @@ export default function AccountSettings() {
             <div className="pt-2 md:pt-4">
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div className="px-3 md:px-4 py-3 text-[#024B5E] text-lg md:text-xl font-bakso">
-                  Account Actions
+                  {t("sitter_settings.account_actions")}
                 </div>
                 <div onClick={handleLogout} className="w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#024B5E] hover:bg-gray-100 cursor-pointer">
-                  Logout
+                  {t("sitter_settings.logout")}
                 </div>
                 <div
                   onClick={!deleteLoading ? handleDeleteAccount : undefined}
                   className={`w-full text-left px-3 md:px-4 py-2 text-sm md:text-base text-[#FE6C5D] hover:bg-gray-100 cursor-pointer ${deleteLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  {deleteLoading ? "Deleting..." : "Delete account"}
+                  {deleteLoading ? t("sitter_settings.deleting") : t("sitter_settings.delete_account")}
                 </div>
               </div>
             </div>

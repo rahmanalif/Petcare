@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Trash2, Camera, Loader2 } from "lucide-react";
-import { 
-  fetchSitterProfile, 
-  uploadPortfolioImage, 
-  deletePortfolioImage 
+import {
+  fetchSitterProfile,
+  uploadPortfolioImage,
+  deletePortfolioImage
 } from "@/redux/sitter/sitterSlice";
+import { useTranslation } from "react-i18next";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
@@ -19,6 +20,7 @@ const buildImageUrl = (path) => {
 };
 
 export default function Portfolio() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const { profile: sitterData, loading, updating } = useSelector((state) => state.sitter);
@@ -37,7 +39,7 @@ export default function Portfolio() {
   }, [dispatch, sitterData]);
 
   const handleDelete = async (imagePath) => {
-    if (confirm("Are you sure you want to delete this image?")) {
+    if (confirm(t("portfolio.confirm_delete"))) {
       const filename = imagePath.split("/").pop();
       await dispatch(deletePortfolioImage(filename));
     }
@@ -69,12 +71,12 @@ export default function Portfolio() {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8 max-w-3xl">
         <div className="flex justify-between items-center mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200">
-          <h2 className="text-lg md:text-2xl font-medium text-gray-800">Portfolio</h2>
+          <h2 className="text-lg md:text-2xl font-medium text-gray-800">{t("portfolio.title")}</h2>
           <button
             onClick={handlePublish}
             className="px-3 md:px-6 py-2 md:py-2.5 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors text-xs md:text-sm"
           >
-            {isPublished ? "Published" : "Publish"}
+            {isPublished ? t("portfolio.published") : t("portfolio.publish")}
           </button>
         </div>
 
@@ -86,7 +88,7 @@ export default function Portfolio() {
             <Camera className="w-6 h-6 md:w-7 md:h-7 text-white" />
           </div>
           <p className="text-gray-500 text-center text-sm md:text-base">
-            No portfolio images yet. Click to add.
+            {t("portfolio.no_images")}
           </p>
         </div>
 
@@ -106,12 +108,12 @@ export default function Portfolio() {
     <>
       <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8 max-w-3xl">
         <div className="flex justify-between items-center mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200 gap-2">
-          <h2 className="text-lg md:text-2xl font-medium text-gray-800">Portfolio</h2>
+          <h2 className="text-lg md:text-2xl font-medium text-gray-800">{t("portfolio.title")}</h2>
           <button
             onClick={() => setShowUploadModal(true)}
             className="px-3 md:px-6 py-2 md:py-2.5 border-2 border-dashed border-[#035F75] text-[#035F75] rounded-lg font-medium hover:bg-[#E7F4F6] transition-colors text-xs md:text-sm whitespace-nowrap"
           >
-            Add Portfolio
+            {t("portfolio.add_portfolio")}
           </button>
         </div>
 
@@ -149,11 +151,12 @@ export default function Portfolio() {
 }
 
 function UploadModal({ onClose, onUpload, uploading }) {
+  const { t } = useTranslation();
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg p-4 md:p-6 lg:p-8 max-w-3xl w-full">
         <div className="flex justify-between items-center mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200">
-          <h2 className="text-lg md:text-2xl font-medium text-gray-800">Upload to Portfolio</h2>
+          <h2 className="text-lg md:text-2xl font-medium text-gray-800">{t("portfolio.upload_title")}</h2>
         </div>
 
         <label htmlFor="file-upload" className="cursor-pointer block">
@@ -161,14 +164,14 @@ function UploadModal({ onClose, onUpload, uploading }) {
             {uploading ? (
               <div className="flex flex-col items-center text-[#035F75]">
                 <Loader2 className="w-10 h-10 animate-spin mb-2" />
-                <p>Uploading...</p>
+                <p>{t("portfolio.uploading")}</p>
               </div>
             ) : (
               <>
                 <div className="w-12 h-12 md:w-14 md:h-14 bg-[#035F75] rounded-full flex items-center justify-center mb-3 md:mb-4">
                   <Camera className="w-6 h-6 md:w-7 md:h-7 text-white" />
                 </div>
-                <p className="text-gray-500 text-center text-sm md:text-base">Click to upload portfolio image</p>
+                <p className="text-gray-500 text-center text-sm md:text-base">{t("portfolio.click_upload")}</p>
               </>
             )}
           </div>
@@ -188,7 +191,7 @@ function UploadModal({ onClose, onUpload, uploading }) {
             disabled={uploading}
             className="px-4 md:px-6 py-2 md:py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm md:text-base"
           >
-            Cancel
+            {t("portfolio.cancel")}
           </button>
         </div>
       </div>

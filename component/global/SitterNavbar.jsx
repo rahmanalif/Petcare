@@ -23,7 +23,12 @@ export default function SitterNavbar() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const profileData = useSelector((state) => state.user?.data);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "es" : "en";
+    i18n.changeLanguage(newLang);
+  };
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -109,6 +114,15 @@ export default function SitterNavbar() {
             </Link>
           )}
 
+          {/* Language Switcher */}
+          <button
+            onClick={toggleLanguage}
+            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-[#024B5E] font-semibold transition-colors"
+            title="Toggle Language"
+          >
+            {i18n.language === "en" ? "ES" : "EN"}
+          </button>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -147,6 +161,14 @@ export default function SitterNavbar() {
             >
               {t("sitter_navbar.bookings")}
             </Link>
+            {/* Mobile Language Switcher */}
+            <button
+              onClick={toggleLanguage}
+              className="text-left text-gray-700 hover:text-teal-600 transition py-2 font-medium"
+            >
+              Switch to {i18n.language === "en" ? "Spanish" : "English"}
+            </button>
+
             {!isAuthenticated && (
               <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                 <button className="w-full bg-red-400 hover:bg-red-500 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg">

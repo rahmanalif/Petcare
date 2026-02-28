@@ -6,10 +6,12 @@ import {
   fetchAllBookings,
   updateBookingStatus
 } from "@/redux/bookingSlice";
+import { useTranslation } from "react-i18next";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function DashboardOverview() {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -66,7 +68,12 @@ export default function DashboardOverview() {
 
   const today = new Date();
   const calendarDays = generateCalendarDays(currentDate);
-  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const monthNames = [
+    t("months.january") || "January", t("months.february") || "February", t("months.march") || "March",
+    t("months.april") || "April", t("months.may") || "May", t("months.june") || "June",
+    t("months.july") || "July", t("months.august") || "August", t("months.september") || "September",
+    t("months.october") || "October", t("months.november") || "November", t("months.december") || "December"
+  ];
 
   const navigateMonth = (direction) => {
     const newDate = new Date(currentDate);
@@ -80,7 +87,7 @@ export default function DashboardOverview() {
 
   const handleAction = (e, id, status) => {
     e.stopPropagation();
-    if (confirm(`Are you sure you want to ${status}?`)) {
+    if (confirm(t("sitter_dashboard.confirm_action", { action: status }))) {
       dispatch(updateBookingStatus({ id, status }));
     }
   };
@@ -92,19 +99,19 @@ export default function DashboardOverview() {
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-8">
           <div className="bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl p-6">
-            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">Total Bookings</h3>
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">{t("sitter_dashboard.total_bookings")}</h3>
             <p className="text-4xl font-bold text-teal-600 font-bakso">{stats?.total || 0}</p>
           </div>
           <div className="bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl p-6">
-            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">On Going Services</h3>
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">{t("sitter_dashboard.ongoing_services")}</h3>
             <p className="text-4xl font-bold text-blue-600 font-bakso">{stats?.ongoing || 0}</p>
           </div>
           <div className="bg-white border border-gray-200 rounded-xl p-6">
-            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">Completed Services</h3>
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">{t("sitter_dashboard.completed_services")}</h3>
             <p className="text-4xl font-bold text-teal-500 font-bakso">{stats?.completed || 0}</p>
           </div>
           <div className="bg-white border border-red-200 rounded-xl p-6">
-            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">Upcoming Services</h3>
+            <h3 className="text-[#024B5E] text-sm font-medium mb-2 uppercase tracking-wide font-bakso">{t("sitter_dashboard.upcoming_services")}</h3>
             <p className="text-4xl font-bold text-red-400 font-bakso">{stats?.upcoming || 0}</p>
           </div>
         </div>
@@ -113,17 +120,17 @@ export default function DashboardOverview() {
 
           {/* Calendar */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-[#024B5E] mb-4">Pet sitter Availability</h2>
+            <h2 className="text-lg font-semibold text-[#024B5E] mb-4">{t("sitter_dashboard.pet_sitter_availability")}</h2>
 
             {/* Legend */}
             <div className="flex gap-4 mb-4">
               <div className="flex items-center gap-2">
                 <div style={{ width: 14, height: 14, backgroundColor: "#FE6C5D", borderRadius: 3 }}></div>
-                <span className="text-sm text-[#024B5E]">Booked</span>
+                <span className="text-sm text-[#024B5E]">{t("sitter_dashboard.booked")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div style={{ width: 14, height: 14, border: "2px solid #035F75", borderRadius: 3 }}></div>
-                <span className="text-sm text-[#024B5E]">Today</span>
+                <span className="text-sm text-[#024B5E]">{t("sitter_dashboard.today")}</span>
               </div>
             </div>
 
@@ -138,7 +145,7 @@ export default function DashboardOverview() {
             </div>
 
             <div className="grid grid-cols-7 gap-1 text-[#024B5E]">
-              {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map((day) => (
+              {[t("days_short.sun") || "Sun", t("days_short.mon") || "Mon", t("days_short.tue") || "Tue", t("days_short.wed") || "Wed", t("days_short.thu") || "Thu", t("days_short.fri") || "Fri", t("days_short.sat") || "Sat"].map((day) => (
                 <div key={day} className="text-center text-xs font-semibold text-[#024B5E] py-2">{day}</div>
               ))}
               {calendarDays.map((d, index) => {
@@ -188,14 +195,14 @@ export default function DashboardOverview() {
           {/* New Requests */}
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-[#024B5E] mb-4">
-              New Requests ({pendingBookings.length})
+              {t("sitter_dashboard.new_requests")} ({pendingBookings.length})
             </h2>
 
-            {loading && <p className="text-center text-gray-500">Loading...</p>}
+            {loading && <p className="text-center text-gray-500">{t("sitter_dashboard.loading")}</p>}
 
             {!loading && pendingBookings.length === 0 && (
               <div className="text-center text-gray-400 py-4">
-                <p>No pending requests found.</p>
+                <p>{t("sitter_dashboard.no_pending")}</p>
               </div>
             )}
 
@@ -219,7 +226,7 @@ export default function DashboardOverview() {
                       <div>
                         <h3 className="font-semibold text-[#024B5E]">{booking.owner?.fullName || "Client"}</h3>
                         <div className="flex items-center gap-1 text-xs text-[#024B5E]">
-                          <span>{booking.owner?.address || "Address N/A"}</span>
+                          <span>{booking.owner?.address || t("sitter_dashboard.address_na")}</span>
                         </div>
                       </div>
                     </div>
@@ -257,13 +264,13 @@ export default function DashboardOverview() {
                       className="flex-1 bg-[#FE6C5D] hover:bg-[#f16859] text-white font-medium py-2 px-4 rounded-lg text-sm"
                       onClick={(e) => handleAction(e, booking._id, 'rejected')}
                     >
-                      Reject
+                      {t("sitter_dashboard.reject")}
                     </button>
                     <button
                       className="flex-1 bg-[#024B5E] hover:bg-[#023846] text-white font-medium py-2 px-4 rounded-lg text-sm"
                       onClick={(e) => handleAction(e, booking._id, 'confirmed')}
                     >
-                      Accept
+                      {t("sitter_dashboard.accept")}
                     </button>
                   </div>
                 </div>
