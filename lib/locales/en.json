@@ -851,5 +851,22 @@
         "message_placeholder": "Message...",
         "send": "Send",
         "back": "Back"
+    },
+    "owner_settings": {
+        "account_info": "Account Information",
+        "account": "Account",
+        "booking_history": "Booking History",
+        "payments": "Payments",
+        "switch_profile": "Switch profile",
+        "add_another_pet": "Add another Pet",
+        "policy_center": "Policy Center",
+        "privacy_policy": "Privacy Policy",
+        "terms": "Terms & Condition",
+        "referrals_promos": "Referrals and promos",
+        "invite_friend": "Invite a friend to Wuffoos",
+        "apply_promo_codes": "Apply promo codes",
+        "account_actions": "Account Actions",
+        "logout": "Logout",
+        "delete_account": "Delete account"
     }
 }
