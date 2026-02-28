@@ -1,0 +1,14 @@
+{
+    "navbar": {
+        "home": "Home",
+        "services": "Services",
+        "become_sitter": "Become a sitter",
+        "faqs": "FAQ's",
+        "sign_in": "Sign In",
+        "sign_up": "Sign Up"
+    },
+    "hero": {
+        "title": "Trusted Pet Care,",
+        "subtitle": "Whenever You Need It."
+    }
+}

@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import ReduxProvider from "../components/providers/ReduxProvider";
+import I18nProvider from "../components/providers/I18nProvider";
 import ConditionalLayout from "../components/ConditionalLayout";
 
 
@@ -59,14 +60,16 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${baksoSapi.variable} ${montserrat.variable} font-montserrat antialiased`}
-       suppressHydrationWarning={true} 
-       >
-        <ReduxProvider>
-          <ConditionalLayout>
+        suppressHydrationWarning={true}
+      >
+        <I18nProvider>
+          <ReduxProvider>
+            <ConditionalLayout>
               {children}
-          </ConditionalLayout>
-        </ReduxProvider>
+            </ConditionalLayout>
+          </ReduxProvider>
+        </I18nProvider>
       </body>
-    </html>
+    </html >
   );
 }

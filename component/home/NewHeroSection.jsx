@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { DatePicker } from "@/components/ui/date-picker";
 import { TimePicker } from "@/components/ui/time-picker";
+import { useTranslation } from "react-i18next";
 
 const LeftImage = ({ className }) => (
   <img
@@ -78,36 +79,37 @@ export default function NewHeroSection() {
     today.getDate()
   ).padStart(2, "0")}/${today.getFullYear()}`;
   const [activeService, setActiveService] = useState("boarding");
-    const [startDate, setStartDate] = useState(todayFormatted);
-    const [endDate, setEndDate] = useState(todayFormatted);
-    const [startTime, setStartTime] = useState("11:00pm");
-    const [endTime, setEndTime] = useState("11:00pm");
-    const [schedule, setSchedule] = useState("onetime");
-    const [selectedDays, setSelectedDays] = useState([]);
-  
-    const services = [
-      { id: "boarding", label: "Boarding", icon: BoardingIcon },
-      { id: "daycare", label: "Doggy Day Care", icon: DaycareIcon },
-      { id: "walking", label: "Dog Walking", icon: WalkingIcon },
-    ];
-  
-    const daysOfWeek = [
-      { id: "S", label: "S", full: "Sunday" },
-      { id: "M", label: "M", full: "Monday" },
-      { id: "T", label: "T", full: "Tuesday" },
-      { id: "W", label: "W", full: "Wednesday" },
-      { id: "Th", label: "T", full: "Thursday" },
-      { id: "F", label: "F", full: "Friday" },
-      { id: "Sa", label: "S", full: "Saturday" },
-    ];
-  
-    const toggleDay = (dayId) => {
-      setSelectedDays((prev) =>
-        prev.includes(dayId)
-          ? prev.filter((id) => id !== dayId)
-          : [...prev, dayId]
-      );
-    };
+  const [startDate, setStartDate] = useState(todayFormatted);
+  const [endDate, setEndDate] = useState(todayFormatted);
+  const [startTime, setStartTime] = useState("11:00pm");
+  const [endTime, setEndTime] = useState("11:00pm");
+  const [schedule, setSchedule] = useState("onetime");
+  const [selectedDays, setSelectedDays] = useState([]);
+  const { t } = useTranslation();
+
+  const services = [
+    { id: "boarding", label: "Boarding", icon: BoardingIcon },
+    { id: "daycare", label: "Doggy Day Care", icon: DaycareIcon },
+    { id: "walking", label: "Dog Walking", icon: WalkingIcon },
+  ];
+
+  const daysOfWeek = [
+    { id: "S", label: "S", full: "Sunday" },
+    { id: "M", label: "M", full: "Monday" },
+    { id: "T", label: "T", full: "Tuesday" },
+    { id: "W", label: "W", full: "Wednesday" },
+    { id: "Th", label: "T", full: "Thursday" },
+    { id: "F", label: "F", full: "Friday" },
+    { id: "Sa", label: "S", full: "Saturday" },
+  ];
+
+  const toggleDay = (dayId) => {
+    setSelectedDays((prev) =>
+      prev.includes(dayId)
+        ? prev.filter((id) => id !== dayId)
+        : [...prev, dayId]
+    );
+  };
 
   const serviceToSearchValue = {
     boarding: "boarding",
@@ -157,10 +159,10 @@ export default function NewHeroSection() {
           <div className="px-4 pb-12 sm:pb-16 pt-6 sm:pt-8 text-center relative z-10 md:-top-25 ">
             <h1 className="font-bakso text-white mb-4">
               <span className="block text-3xl sm:text-4xl md:text-4xl  leading-tight">
-                Trusted Pet Care,
+                {t("hero.title")}
               </span>
               <span className="block text-3xl sm:text-4xl md:text-4xl leading-tight">
-                Whenever You Need It.
+                {t("hero.subtitle")}
               </span>
             </h1>
             <p className="text-white text-sm sm:text-base max-w-2xl mx-auto font-montserrat">
@@ -181,10 +183,10 @@ export default function NewHeroSection() {
           <div className="relative z-20 flex flex-col items-center justify-center px-4 text-center max-w-4xl mx-auto hero-1280-new-center">
             <h1 className="font-bakso text-white mb-4">
               <span className="block text-3xl lg:text-4xl xl:text-5xl leading-tight">
-                Trusted Pet Care,
+                {t("hero.title")}
               </span>
               <span className="block text-3xl lg:text-4xl xl:text-5xl leading-tight">
-                Whenever You Need It.
+                {t("hero.subtitle")}
               </span>
             </h1>
             <p className="text-white text-lg max-w-md xl:max-w-2xl font-montserrat">
@@ -209,11 +211,10 @@ export default function NewHeroSection() {
               <button
                 key={service.id}
                 onClick={() => setActiveService(service.id)}
-                className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${
-                  activeService === service.id
+                className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${activeService === service.id
                     ? "border-[#024B5E] bg-white"
                     : "border-gray-200 hover:border-gray-300"
-                }`}
+                  }`}
               >
                 <service.icon className="w-12 h-12 sm:w-16 sm:h-16 shrink-0" />
                 <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm font-bakso text-[#024B5E]">
@@ -320,21 +321,19 @@ export default function NewHeroSection() {
                 <div className="flex gap-2 flex-1">
                   <button
                     onClick={() => setSchedule("onetime")}
-                    className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium rounded-lg border-2 transition-all whitespace-nowrap ${
-                      schedule === "onetime"
+                    className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium rounded-lg border-2 transition-all whitespace-nowrap ${schedule === "onetime"
                         ? "bg-white text-[#024B5E] border-[#024B5E]"
                         : "bg-white text-gray-600 border-gray-200 hover:border-[#024B5E]"
-                    }`}
+                      }`}
                   >
                     One Time
                   </button>
                   <button
                     onClick={() => setSchedule("repeat")}
-                    className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium rounded-lg border-2 transition-all whitespace-nowrap ${
-                      schedule === "repeat"
+                    className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium rounded-lg border-2 transition-all whitespace-nowrap ${schedule === "repeat"
                         ? "bg-white text-[#024B5E] border-[#024B5E]"
                         : "bg-white text-gray-600 border-gray-200 hover:border-[#024B5E]"
-                    }`}
+                      }`}
                   >
                     Repeat Weekly
                   </button>
@@ -352,11 +351,10 @@ export default function NewHeroSection() {
                     <button
                       key={day.id}
                       onClick={() => toggleDay(day.id)}
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${
-                        selectedDays.includes(day.id)
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${selectedDays.includes(day.id)
                           ? "bg-[#024B5E] text-white"
                           : "bg-white text-[#024B5E] border-2 border-gray-200 hover:border-[#024B5E]"
-                      }`}
+                        }`}
                       title={day.full}
                     >
                       {day.label}
@@ -366,46 +364,46 @@ export default function NewHeroSection() {
               )}
             </div>
             <Link href={searchHref}>
-                <button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#024B5E] hover:bg-[#035F75] text-white px-8 sm:px-12 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-colors">
-              
+              <button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#024B5E] hover:bg-[#035F75] text-white px-8 sm:px-12 py-3 sm:py-4 rounded-lg sm:rounded-xl font-medium transition-colors">
+
                 <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="sm:w-6 sm:h-6"
-              >
-                <path
-                  d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M22 22L20 20"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              Search here
-            </button>
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="sm:w-6 sm:h-6"
+                >
+                  <path
+                    d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M22 22L20 20"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                Search here
+              </button>
             </Link>
-            
+
           </div>
         </div>
         {/* Dog Man Image - Below the card in teal background */}
-      {/* <div className="absolute top-2 left-75 -z-10  pb-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
+        {/* <div className="absolute top-2 left-75 -z-10  pb-12 px-4 sm:px-6 lg:px-8 flex justify-center items-start">
         <div className="  w-[300px] sm:w-[350px] md:w-[400px] lg:w-full xl:w-[11px]">
           <DogMan />
         </div>
       </div> */}
       </div>
 
-      
+
     </div>
   );
 }

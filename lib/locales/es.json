@@ -1,0 +1,14 @@
+{
+    "navbar": {
+        "home": "Inicio",
+        "services": "Servicios",
+        "become_sitter": "Ser cuidador",
+        "faqs": "Preguntas Frecuentes",
+        "sign_in": "Iniciar sesión",
+        "sign_up": "Registrarse"
+    },
+    "hero": {
+        "title": "Cuidado de Mascotas de Confianza,",
+        "subtitle": "Siempre que lo necesites."
+    }
+}
