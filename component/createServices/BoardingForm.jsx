@@ -8,10 +8,12 @@ import {
 } from "@/redux/serviceSlice";
 import { ChevronDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const BoardingForm = forwardRef((props, ref) => {
   const dispatch = useDispatch();
   const service = useSelector((state) => state.service);
+  const { t } = useTranslation();
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const timeSlots = ["6am - 11am", "11am - 3am", "3am - 10am", "None"];
@@ -29,12 +31,12 @@ const BoardingForm = forwardRef((props, ref) => {
       try {
         const resultAction = await dispatch(saveBoardingService());
         if (saveBoardingService.fulfilled.match(resultAction)) {
-          toast.success("Boarding service saved!");
+          toast.success(t("create_services.boarding.success"));
         } else {
-          toast.error("Save failed");
+          toast.error(t("create_services.boarding.error"));
         }
       } catch {
-        toast.error("Server error");
+        toast.error(t("create_services.boarding.server_error"));
       }
     },
   }));
@@ -60,10 +62,10 @@ const BoardingForm = forwardRef((props, ref) => {
           />
           <div>
             <span className="text-[#024B5E] font-medium">
-              Update my additional rates based on my base rate
+              {t("create_services.boarding.update_rates")}
             </span>
             <p className="text-sm text-[#024B5E] mt-1">
-              Turn off to adjust your rate manually
+              {t("create_services.boarding.update_rates_hint")}
             </p>
           </div>
         </label>
@@ -72,10 +74,10 @@ const BoardingForm = forwardRef((props, ref) => {
       {/* Base Rate */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-[#024B5E] mb-3">
-          Set your base rate
+          {t("create_services.boarding.base_rate")}
         </label>
         <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-          <span className="text-[#024B5E]">Per night</span>
+          <span className="text-[#024B5E]">{t("create_services.boarding.per_night")}</span>
           <div className="flex items-center">
             <span className="text-[#024B5E] font-semibold mr-1">$</span>
             <input
@@ -89,7 +91,7 @@ const BoardingForm = forwardRef((props, ref) => {
           </div>
         </div>
         <p className="text-sm text-[#024B5E] mt-2">
-          What you will earn per service: $
+          {t("create_services.boarding.earn_per_service")}
           {(parseFloat(service.baseRate || 0) * 0.86).toFixed(2)}
         </p>
       </div>
@@ -101,33 +103,32 @@ const BoardingForm = forwardRef((props, ref) => {
         }
         className="w-full px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2 mb-8"
       >
-        {service.showAdditionalRates ? "Hide additional rates" : "Show additional rates"}
+        {service.showAdditionalRates ? t("create_services.boarding.hide_additional") : t("create_services.boarding.show_additional")}
         <ChevronDown
-          className={`w-5 h-5 transition-transform ${
-            service.showAdditionalRates ? "rotate-180" : ""
-          }`}
+          className={`w-5 h-5 transition-transform ${service.showAdditionalRates ? "rotate-180" : ""
+            }`}
         />
       </button>
 
       {service.showAdditionalRates && (
         <div className="mb-8 space-y-6">
           <div>
-            <h4 className="text-base font-semibold text-[#024B5E] mb-3">60 minute rate</h4>
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">{t("create_services.boarding.60_min_rate")}</h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-[#024B5E]">Per night</span>
+              <span className="text-[#024B5E]">{t("create_services.boarding.per_night")}</span>
               <span className="text-[#024B5E] font-semibold">$45.00</span>
             </div>
-            <p className="text-sm text-[#024B5E] mt-2">You keep: $38.70</p>
+            <p className="text-sm text-[#024B5E] mt-2">{t("create_services.boarding.you_keep")}38.70</p>
           </div>
         </div>
       )}
 
       {/* Availability */}
       <div className="mb-8">
-        <h3 className="text-base font-semibold text-[#024B5E] mb-4">Availability</h3>
+        <h3 className="text-base font-semibold text-[#024B5E] mb-4">{t("create_services.boarding.availability")}</h3>
 
         <label className="block text-sm font-medium text-[#024B5E] mb-3">
-          Are you home full-time during the week?
+          {t("create_services.boarding.home_full_time")}
         </label>
         <div className="flex gap-4 mb-4">
           {["Yes", "No"].map((val) => (
@@ -142,7 +143,7 @@ const BoardingForm = forwardRef((props, ref) => {
                 }
                 className="w-4 h-4 text-[#035F75] focus:ring-[#035F75]"
               />
-              <span className="text-[#024B5E]">{val}</span>
+              <span className="text-[#024B5E]">{val === "Yes" ? t("create_services.boarding.yes") : t("create_services.boarding.no")}</span>
             </label>
           ))}
         </div>
@@ -153,20 +154,19 @@ const BoardingForm = forwardRef((props, ref) => {
             <button
               key={day}
               onClick={() => dispatch(toggleArrayField({ field: "selectedDays", value: day }))}
-              className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${
-                service.selectedDays.includes(day)
+              className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${service.selectedDays.includes(day)
                   ? "bg-[#035F75] text-white border-[#035F75]"
                   : "bg-white text-[#024B5E] border-gray-300 hover:bg-gray-50"
-              }`}
+                }`}
             >
-              {day}
+              {t(`create_services.boarding.days_of_week.${day}`)}
             </button>
           ))}
         </div>
 
         {/* Time Slots */}
         <label className="block text-sm font-medium text-[#024B5E] mb-3">
-          What times are you available for boarding check-in/check-out?
+          {t("create_services.boarding.times")}
         </label>
         <div className="grid grid-cols-2 gap-3 mb-8">
           {timeSlots.map((slot) => (
@@ -188,7 +188,7 @@ const BoardingForm = forwardRef((props, ref) => {
       {/* Cancellation Policy */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-[#024B5E] mb-3">
-          What is your cancellation policy for boarding?
+          {t("create_services.boarding.cancellation")}
         </label>
         <div className="space-y-3">
           {cancellationOptions.map((policy) => (
@@ -210,24 +210,22 @@ const BoardingForm = forwardRef((props, ref) => {
       {/* Location */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <label className="text-base font-semibold text-[#024B5E]">Use my home address</label>
+          <label className="text-base font-semibold text-[#024B5E]">{t("create_services.boarding.use_home_address")}</label>
           <button
             onClick={() =>
               dispatch(setField({ field: "useHomeAddress", value: !service.useHomeAddress }))
             }
-            className={`relative w-12 h-6 rounded-full transition-colors ${
-              service.useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"
-            }`}
+            className={`relative w-12 h-6 rounded-full transition-colors ${service.useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"
+              }`}
           >
             <div
-              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
-                service.useHomeAddress ? "translate-x-6" : ""
-              }`}
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${service.useHomeAddress ? "translate-x-6" : ""
+                }`}
             />
           </button>
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-2">Location</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">{t("create_services.boarding.location")}</label>
         <input
           type="text"
           value={service.location}
@@ -235,7 +233,7 @@ const BoardingForm = forwardRef((props, ref) => {
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75] focus:border-transparent mb-6"
         />
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-3">Distance type</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">{t("create_services.boarding.distance_type")}</label>
         <div className="flex gap-4 mb-4">
           {["Miles", "Minutes"].map((type) => (
             <label key={type} className="flex items-center gap-2 cursor-pointer">
@@ -254,7 +252,7 @@ const BoardingForm = forwardRef((props, ref) => {
           ))}
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-2">Service area (Radius)</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">{t("create_services.boarding.service_area")}</label>
         <div className="flex items-center gap-2 mb-4">
           <input
             type="number"
@@ -267,7 +265,7 @@ const BoardingForm = forwardRef((props, ref) => {
           <span className="text-[#024B5E]">{service.distanceType}</span>
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-3">Travel mode</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">{t("create_services.boarding.travel_mode")}</label>
         <div className="space-y-3 mb-8">
           {travelOptions.map((mode) => (
             <label key={mode} className="flex items-center gap-3 cursor-pointer">
@@ -286,7 +284,7 @@ const BoardingForm = forwardRef((props, ref) => {
       {/* Pet Types */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-[#024B5E] mb-3">
-          What type of pets can you host?
+          {t("create_services.boarding.pet_types")}
         </label>
         <div className="space-y-3 mb-6">
           {petSizeOptions.map((size) => (
@@ -303,7 +301,7 @@ const BoardingForm = forwardRef((props, ref) => {
         </div>
 
         <label className="block text-sm font-semibold text-[#024B5E] mb-3">
-          Do you accept puppies under 1 year old?
+          {t("create_services.boarding.accept_puppies")}
         </label>
         <div className="flex gap-4 mb-8">
           {["yes", "no"].map((val) => (
@@ -318,7 +316,7 @@ const BoardingForm = forwardRef((props, ref) => {
                 }
                 className="w-4 h-4 text-[#035F75] focus:ring-[#035F75]"
               />
-              <span className="text-[#024B5E]">{val === "yes" ? "Yes" : "No"}</span>
+              <span className="text-[#024B5E]">{val === "yes" ? t("create_services.boarding.yes") : t("create_services.boarding.no")}</span>
             </label>
           ))}
         </div>

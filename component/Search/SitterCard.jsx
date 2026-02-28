@@ -2,8 +2,10 @@ import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapPin, Star, RefreshCw, CheckCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const SitterCard = ({ sitter, serviceType = "boarding", searchContext = null }) => {
+  const { t } = useTranslation();
   const sitterId =
     typeof sitter?.sitterId === "string" || typeof sitter?.sitterId === "number"
       ? String(sitter.sitterId)
@@ -77,7 +79,7 @@ const SitterCard = ({ sitter, serviceType = "boarding", searchContext = null }) 
                     <Star className="w-3 h-3 sm:w-4 sm:h-4 fill-current text-[#024B5E]" />
                     <span className="font-semibold text-[#024B5E]">{sitter.rating}</span>
                     <span className="text-[#024B5E]">
-                      ({sitter.reviews} reviews)
+                      ({sitter.reviews} {t("search.sitter_card.reviews")})
                     </span>
                   </div>
                   {/* Repeat pet owners */}
@@ -97,7 +99,7 @@ const SitterCard = ({ sitter, serviceType = "boarding", searchContext = null }) 
                         fill="#024B5E"
                       />
                     </svg>
-                    <span>Repeat pet owners</span>
+                    <span>{t("search.sitter_card.repeat_owners")}</span>
                   </div>
                 </div>
 
@@ -115,7 +117,7 @@ const SitterCard = ({ sitter, serviceType = "boarding", searchContext = null }) 
                 {sitter.backgroundCheck && (
                   <div className="flex items-center gap-1 text-xs sm:text-sm bg-[#FCF0D994] text-orange-500 mb-0 sm:mb-2 px-2 py-1 rounded">
                     <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span>Background Check</span>
+                    <span>{t("search.sitter_card.background_check")}</span>
                   </div>
                 )}
               </div>
@@ -124,7 +126,7 @@ const SitterCard = ({ sitter, serviceType = "boarding", searchContext = null }) 
                   ${sitter.price}
                 </div>
                 <div className="text-xs text-[#024B5E]">
-                  Total per day
+                  {t("search.sitter_card.total_per_day")}
                 </div>
               </div>
             </div>

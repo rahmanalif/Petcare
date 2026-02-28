@@ -2,6 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 const HeroImage = ({ className }) => (
   <img src="/Hero01.png" className={className} alt="heroImage" />
@@ -75,22 +76,25 @@ const PawWhiteImage = ({ className }) => (
 
 export default function UpdatedHeroSection() {
   const router = useRouter();
+  const { t } = useTranslation();
   return (
     <>
       {/* Mobile Section */}
       <div className="md:hidden bg-[#F8F4EF] px-6 py-8">
         <div className="relative">
-          <div className="font-bakso text-[#024B5E] text-[32px] leading-tight mb-6">
-            GET PAID TO HANG <br />
-            OUT WITH PETS
-          </div>
+          <div
+            className="font-bakso text-[#024B5E] text-[32px] leading-tight mb-6"
+            dangerouslySetInnerHTML={{
+              __html: t("sitter_home.new_hero.title").replace(/\n/g, '<br />'),
+            }}
+          />
 
           <div className="font-montserrat text-[#024B5E] text-[14px] font-medium mb-6 leading-relaxed">
-            <p>Turn your free time into income doing something that feels good. Join the Wuffoos community of trusted pet care. Set your availability, connect with local pet parents, and earn money taking care of pets you'll love. Do what you enjoy. Get paid for it.</p>
+            <p>{t("sitter_home.new_hero.description")}</p>
           </div>
 
           <button className="flex items-center justify-center bg-[#FE6C5D] rounded-2xl gap-2 px-6 py-4 mb-8">
-            <div className="font-bakso text-white text-[18px]">Get started</div>
+            <div className="font-bakso text-white text-[18px]">{t("sitter_home.new_hero.get_started")}</div>
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -131,24 +135,22 @@ export default function UpdatedHeroSection() {
       {/* Desktop Section (md and up) */}
       <div className="hidden md:flex bg-[#F8F4EF] overflow-hidden">
         <div className="relative xl:py-50 xl:px-82 2xl:py-50 2xl:px-80 lg:py-52 lg:px-8 md:py-52 md:px-8 hero-1280-sitter-new">
-          <div className="font-bakso text-[#024B5E] md:text-[36px] lg:text-[26px] xl:text-[36px] 2xl:text-[66px]  ">
-              GET PAID TO HANG <br />
-              OUT WITH PETS
-          </div>
+          <div
+            className="font-bakso text-[#024B5E] md:text-[36px] lg:text-[26px] xl:text-[36px] 2xl:text-[66px]"
+            dangerouslySetInnerHTML={{
+              __html: t("sitter_home.new_hero.title").replace(/\n/g, '<br />'),
+            }}
+          />
 
           <div className="font-montserrat text-justify text-[#024B5E] lg:text-[10px] xl:text-[16px] 2xl:text-[16px] font-medium 2xl:py-8 xl:py-8 lg:py-4 ">
-              <p>Turn your free time into income doing something that feels good. Join the</p>
-              <p>Wuffoos community of trusted pet care. Set your availability, connect with</p>
-              <p>local pet parents, and earn money taking care of pets you'll love. Do what</p>
-              <p> you enjoy. Get paidfor it.</p>
-
+            <p>{t("sitter_home.new_hero.description")}</p>
           </div>
           <div className="absolute top-20 left-220">
             <PawGreenImage />
           </div>
           <Link href="/login">
             <button className="flex items-center justify-center bg-[#FE6C5D] rounded-2xl gap-2 w-50 h-15 ">
-              <div className="font-montserrat font-bold text-white text-[18px]">Get started</div>
+              <div className="font-montserrat font-bold text-white text-[18px]">{t("sitter_home.new_hero.get_started")}</div>
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

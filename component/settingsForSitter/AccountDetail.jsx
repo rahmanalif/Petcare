@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import { fetchProfile, updateProfileImage, updateProfileInfo } from "@/redux/userSlice";
 
@@ -49,6 +50,7 @@ const buildFormData = (data) => {
 };
 
 export default function AccountDetail() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { data: user, loading, updating } = useSelector((state) => state.user);
   const [isEditing, setIsEditing] = useState(false);
@@ -68,9 +70,9 @@ export default function AccountDetail() {
     if (!file) return;
     try {
       await dispatch(updateProfileImage(file)).unwrap();
-      toast.success("Profile picture updated!");
+      toast.success(t("settings.sitter_account.profile_updated"));
     } catch (error) {
-      toast.error(error || "Upload failed");
+      toast.error(error || t("settings.sitter_account.upload_failed"));
     }
   };
 
@@ -90,10 +92,10 @@ export default function AccountDetail() {
         homeSize: formData.homeSize,
         outdoorSpace: formData.outdoorSpace,
       })).unwrap();
-      toast.success("Profile updated successfully");
+      toast.success(t("settings.sitter_account.info_updated"));
       setIsEditing(false);
     } catch (error) {
-      toast.error(typeof error === "string" ? error : "An error occurred while updating");
+      toast.error(typeof error === "string" ? error : t("settings.sitter_account.update_error"));
     }
   };
 
@@ -112,7 +114,7 @@ export default function AccountDetail() {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
       <div className="flex justify-between items-center mb-6 sm:mb-8">
-        <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">Account</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">{t("settings.sitter_account.account")}</h2>
         <Button
           variant={isEditing ? "default" : "outline"}
           size="sm"
@@ -121,7 +123,7 @@ export default function AccountDetail() {
           className={isEditing ? "bg-[#024B5E] hover:bg-[#023b4a]" : "border-[#024B5E] text-[#024B5E]"}
         >
           {updating && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-          {isEditing ? "Save" : "Edit"}
+          {isEditing ? t("settings.sitter_account.save") : t("settings.sitter_account.edit")}
         </Button>
       </div>
 
@@ -156,41 +158,41 @@ export default function AccountDetail() {
 
         {/* Full Name */}
         <div>
-          <Label htmlFor="fullName" className="text-sm font-medium text-[#024B5E]">Full Name</Label>
-          <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} placeholder="Name" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+          <Label htmlFor="fullName" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.full_name")}</Label>
+          <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} placeholder={t("settings.sitter_account.full_name_placeholder")} className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
 
         {/* Email */}
         <div>
-          <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">E-mail address</Label>
-          <Input id="email" value={formData.email} disabled className="mt-1 text-[#024B5E] bg-gray-50 cursor-not-allowed" placeholder="E-mail address or phone number" />
+          <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.email")}</Label>
+          <Input id="email" value={formData.email} disabled className="mt-1 text-[#024B5E] bg-gray-50 cursor-not-allowed" placeholder={t("settings.sitter_account.email_placeholder")} />
         </div>
 
         {/* Phone */}
         <div>
-          <Label htmlFor="phone" className="text-sm font-medium text-[#024B5E]">Phone number</Label>
-          <Input id="phone" value={formData.phone} onChange={handleChange} disabled={!isEditing} placeholder="E-mail address or phone number" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+          <Label htmlFor="phone" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.phone")}</Label>
+          <Input id="phone" value={formData.phone} onChange={handleChange} disabled={!isEditing} placeholder={t("settings.sitter_account.phone_placeholder")} className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
 
         {/* Street */}
         <div>
-          <Label htmlFor="street" className="text-sm font-medium text-[#024B5E]">Street</Label>
-          <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} placeholder="Street Number and Name" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+          <Label htmlFor="street" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.street")}</Label>
+          <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} placeholder={t("settings.sitter_account.street_placeholder")} className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
 
         {/* State + Zip */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} placeholder="State" className="text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+            <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} placeholder={t("settings.sitter_account.state_placeholder")} className="text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
           </div>
           <div>
-            <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} placeholder="Zip Code" className="text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+            <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} placeholder={t("settings.sitter_account.zip_placeholder")} className="text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
           </div>
         </div>
 
         {/* About */}
         <div>
-          <Label htmlFor="about" className="text-sm font-medium text-[#024B5E]">About</Label>
+          <Label htmlFor="about" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.about")}</Label>
           <div className="relative mt-1">
             <textarea
               id="about"
@@ -199,7 +201,7 @@ export default function AccountDetail() {
               disabled={!isEditing}
               maxLength={500}
               rows={4}
-              placeholder="Introduce yourself to potential clients..."
+              placeholder={t("settings.sitter_account.about_placeholder")}
               className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200 text-[#024B5E] resize-none"
             />
             <span className="absolute bottom-2 right-3 text-xs text-gray-400">
@@ -210,13 +212,13 @@ export default function AccountDetail() {
 
         {/* Pet Number */}
         <div>
-          <Label htmlFor="petNumber" className="text-sm font-medium text-[#024B5E]">Pet number</Label>
-          <Input id="petNumber" value={formData.petNumber} onChange={handleChange} disabled={!isEditing} placeholder="0-3" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+          <Label htmlFor="petNumber" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.pet_number")}</Label>
+          <Input id="petNumber" value={formData.petNumber} onChange={handleChange} disabled={!isEditing} placeholder={t("settings.sitter_account.pet_number_placeholder")} className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
 
         {/* Home Type */}
         <div>
-          <Label htmlFor="homeType" className="text-sm font-medium text-[#024B5E]">Home Type</Label>
+          <Label htmlFor="homeType" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.home_type")}</Label>
           <select
             id="homeType"
             value={formData.homeType}
@@ -224,23 +226,23 @@ export default function AccountDetail() {
             disabled={!isEditing}
             className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200 text-[#024B5E]"
           >
-            <option>Apartment</option>
-            <option>House</option>
-            <option>Condo</option>
-            <option>Townhouse</option>
-            <option>Studio</option>
+            <option value="Apartment">{t("settings.sitter_account.home_types.apartment")}</option>
+            <option value="House">{t("settings.sitter_account.home_types.house")}</option>
+            <option value="Condo">{t("settings.sitter_account.home_types.condo")}</option>
+            <option value="Townhouse">{t("settings.sitter_account.home_types.townhouse")}</option>
+            <option value="Studio">{t("settings.sitter_account.home_types.studio")}</option>
           </select>
         </div>
 
         {/* Home Size */}
         <div>
-          <Label htmlFor="homeSize" className="text-sm font-medium text-[#024B5E]">Home Size (sq ft)</Label>
-          <Input id="homeSize" value={formData.homeSize} onChange={handleChange} disabled={!isEditing} placeholder="e.g. 800" className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
+          <Label htmlFor="homeSize" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.home_size")}</Label>
+          <Input id="homeSize" value={formData.homeSize} onChange={handleChange} disabled={!isEditing} placeholder={t("settings.sitter_account.home_size_placeholder")} className="mt-1 text-[#024B5E] disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200" />
         </div>
 
         {/* Outdoor Space */}
         <div>
-          <Label htmlFor="outdoorSpace" className="text-sm font-medium text-[#024B5E]">Outdoor Space</Label>
+          <Label htmlFor="outdoorSpace" className="text-sm font-medium text-[#024B5E]">{t("settings.sitter_account.outdoor_space")}</Label>
           <select
             id="outdoorSpace"
             value={formData.outdoorSpace}
@@ -248,11 +250,11 @@ export default function AccountDetail() {
             disabled={!isEditing}
             className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-transparent disabled:border-gray-200 text-[#024B5E]"
           >
-            <option>No outdoor space</option>
-            <option>Small yard</option>
-            <option>Large yard</option>
-            <option>Fenced yard</option>
-            <option>Balcony</option>
+            <option value="No outdoor space">{t("settings.sitter_account.outdoor_spaces.none")}</option>
+            <option value="Small yard">{t("settings.sitter_account.outdoor_spaces.small_yard")}</option>
+            <option value="Large yard">{t("settings.sitter_account.outdoor_spaces.large_yard")}</option>
+            <option value="Fenced yard">{t("settings.sitter_account.outdoor_spaces.fenced_yard")}</option>
+            <option value="Balcony">{t("settings.sitter_account.outdoor_spaces.balcony")}</option>
           </select>
         </div>
 

@@ -5,12 +5,14 @@ import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { changeSitterPassword } from "@/redux/sitter/sitterSlice"; 
-import { toast } from "sonner"; 
+import { changeSitterPassword } from "@/redux/sitter/sitterSlice";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export default function AccountDetail() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  
+
 
   const { updating } = useSelector((state) => state.sitter);
 
@@ -37,17 +39,17 @@ export default function AccountDetail() {
 
     // 1. Basic Validation
     if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("Please fill in all fields");
+      toast.error(t("settings.change_password.fill_all_fields"));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error("New passwords do not match");
+      toast.error(t("settings.change_password.passwords_do_not_match"));
       return;
     }
 
     if (newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error(t("settings.change_password.password_too_short"));
       return;
     }
 
@@ -60,10 +62,10 @@ export default function AccountDetail() {
     // 3. Dispatch Action
     try {
       const result = await dispatch(changeSitterPassword(payload)).unwrap();
-      
+
       // Success
-      toast.success(result.message || "Password changed successfully!");
-      
+      toast.success(result.message || t("settings.change_password.password_changed"));
+
       // Reset Form
       setFormData({
         currentPassword: "",
@@ -72,7 +74,7 @@ export default function AccountDetail() {
       });
     } catch (error) {
       // Error
-      toast.error(error || "Failed to change password");
+      toast.error(error || t("settings.change_password.change_failed"));
     }
   };
 
@@ -80,7 +82,7 @@ export default function AccountDetail() {
     <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
       <div className="flex justify-between items-center mb-6 md:mb-8 pb-2 border-b-2 border-grey-600">
         <h2 className="text-lg md:text-xl font-semibold text-gray-900">
-          Change Password
+          {t("settings.change_password.title")}
         </h2>
       </div>
 
@@ -91,7 +93,7 @@ export default function AccountDetail() {
             htmlFor="currentPassword"
             className="text-xs md:text-sm font-medium text-gray-700"
           >
-            Current Password
+            {t("settings.change_password.current_password")}
           </Label>
           <div className="relative mt-1">
             <Input
@@ -122,7 +124,7 @@ export default function AccountDetail() {
             htmlFor="newPassword"
             className="text-xs md:text-sm font-medium text-gray-700"
           >
-            New Password
+            {t("settings.change_password.new_password")}
           </Label>
           <div className="relative mt-1">
             <Input
@@ -153,7 +155,7 @@ export default function AccountDetail() {
             htmlFor="confirmPassword"
             className="text-xs md:text-sm font-medium text-gray-700"
           >
-            Confirm Password
+            {t("settings.change_password.confirm_password")}
           </Label>
           <div className="relative mt-1">
             <Input
@@ -180,12 +182,12 @@ export default function AccountDetail() {
 
         {/* Action Button */}
         <div className="pt-4">
-          <Button 
-            onClick={handleSubmit} 
+          <Button
+            onClick={handleSubmit}
             disabled={updating}
             className="w-full md:w-auto"
           >
-            {updating ? "Updating..." : "Save Password"}
+            {updating ? t("settings.change_password.updating") : t("settings.change_password.save_password")}
           </Button>
         </div>
       </div>

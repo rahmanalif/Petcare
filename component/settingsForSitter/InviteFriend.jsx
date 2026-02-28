@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTranslation } from "react-i18next";
 
 export default function InviteFriend() {
+  const { t } = useTranslation();
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
   };
@@ -13,27 +15,24 @@ export default function InviteFriend() {
     <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
       <div className="">
         <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">
-          Invite friends
+          {t("settings.invite_friend_sitter.title")}
         </h3>
         <div className="border-b-2 border-gray-600 mb-3 md:mb-4"></div>
 
         <div className="space-y-4 md:space-y-6">
           <div>
             <h4 className="text-sm md:text-base font-semibold text-gray-900 mb-2">
-              Share Wuffoos with a friend
+              {t("settings.invite_friend_sitter.share_wuffoos")}
             </h4>
-            <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4">
-              Invite a friend to book a setter on Wuffoos & you'll both receive
-              $10 in Wuffoos credit.
-              <br />
-              There are 10 ways to share.
+            <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4 whitespace-pre-line">
+              {t("settings.invite_friend_sitter.invite_description")}
             </p>
           </div>
 
           {/* QR Code Section */}
           <div>
             <p className="text-xs md:text-sm font-medium text-gray-900 mb-3 md:mb-4">
-              Scan your QR Code in person
+              {t("settings.invite_friend_sitter.scan_qr")}
             </p>
             <div className="flex justify-center bg-white border border-gray-200 rounded-lg p-4 md:p-6 lg:p-8 mb-4 md:mb-6">
               <div className="w-32 h-32 bg-white rounded-lg flex shadow-2xl items-center justify-center">
@@ -56,7 +55,7 @@ export default function InviteFriend() {
           {/* Referral Link Section */}
           <div>
             <p className="text-xs md:text-sm font-medium text-gray-900 mb-2 md:mb-3">
-              Share your referral link
+              {t("settings.invite_friend_sitter.share_link")}
             </p>
             <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
               <div className="flex items-center gap-2 flex-1 bg-gray-50 rounded-lg px-2 md:px-4 py-2 md:py-3 border border-gray-200">
@@ -100,7 +99,7 @@ export default function InviteFriend() {
             </div>
 
             <button className="w-full bg-[#035F75] hover:bg-[#03566b] text-white font-medium py-2.5 md:py-3 px-4 rounded-lg transition-colors text-sm md:text-base">
-              Share Now
+              {t("settings.invite_friend_sitter.share_now")}
             </button>
           </div>
         </div>

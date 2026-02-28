@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const HeroImage = ({ className }) => (
   <img src="/Hero01.png" className={className} alt="heroImage" />
@@ -74,27 +75,30 @@ const PawWhiteImage = ({ className }) => (
 
 export default function UpdatedHeroSection() {
   const router = useRouter();
+  const { t } = useTranslation();
   return (
     <div className="bg-[#F8F4EF] lg:flex justify-between  xl:h-screen  overflow-hidden">
-      
+
 
       <div className="font-bakso grid lg:items-center lg:justify-center lg:h-[700px] text-[#024B5E] mx-5 lg:mx-auto text-4xl lg:text-[66px] py-20 lg:py-50 lg:px-52 hero-1280-sitter-text">
-       <div>
-         GET PAID TO HANG <br />
-        OUT WITH PETS
-       </div>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: t("sitter_home.new_hero.title").replace(/\n/g, '<br />'),
+          }}
+        />
         <div className="font-montserrat text-[#024B5E] text-[16px] font-medium py-8 text-justify ">
-          Turn your free time into income doing something that feels good. Join
-          the <br /> Wuffoos community of trusted pet care. Set your
-          availability, connect with <br /> local pet parents, and earn money
-          taking care of pets you’ll love. Do what <br /> you enjoy. Get paid
-          for it.
+          {t("sitter_home.new_hero.description").split(". ").map((sentence, index) => (
+            <React.Fragment key={index}>
+              {sentence}{index !== t("sitter_home.new_hero.description").split(". ").length - 1 ? "." : ""}
+              <br />
+            </React.Fragment>
+          ))}
         </div>
         <div className="absolute hidden lg:block lg:top-20 lg:left-220">
           <PawGreenImage />
         </div>
         <button className="flex bg-[#FE6C5D] items-center justify-center rounded-2xl gap-2 px-6 py-6  w-50 h-15 ">
-          <div className="text-white text-[18px]">Get started</div>
+          <div className="text-white text-[18px]">{t("sitter_home.new_hero.get_started")}</div>
           <div>
             <svg
               xmlns="http://www.w3.org/2000/svg"

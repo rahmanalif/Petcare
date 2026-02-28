@@ -6,14 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { fetchServiceSettings, updateServiceSettings } from "@/redux/sitter/sitterSlice";
+import { useTranslation } from "react-i18next";
 
 // ✅ service name → API serviceType mapping
-const SERVICE_TYPES = [
+const getServiceTypes = (t) => [
   {
     id: "boarding",
-    name: "Boarding",
-    location: "In the sitter's home",
-    priceUnit: "Per day",
+    name: t("settings.services_sitter.boarding"),
+    location: t("settings.services_sitter.in_sitter_home"),
+    priceUnit: t("settings.services_sitter.per_day"),
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5" />
@@ -24,9 +25,9 @@ const SERVICE_TYPES = [
   },
   {
     id: "doggyDayCare",
-    name: "Doggy Day Care",
-    location: "In the sitter's home",
-    priceUnit: "Per visit",
+    name: t("settings.services_sitter.doggy_day_care"),
+    location: t("settings.services_sitter.in_sitter_home"),
+    priceUnit: t("settings.services_sitter.per_visit"),
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
@@ -36,9 +37,9 @@ const SERVICE_TYPES = [
   },
   {
     id: "dogWalking",
-    name: "Dog Walking",
-    location: "In your neighbourhood",
-    priceUnit: "Per walk",
+    name: t("settings.services_sitter.dog_walking"),
+    location: t("settings.services_sitter.in_your_neighbourhood"),
+    priceUnit: t("settings.services_sitter.per_walk"),
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M14 16C14 17.77 13.23 19 12 19C10.77 19 10 17.77 10 16C10 14.23 10.77 13 12 13C13.23 13 14 14.23 14 16Z" stroke="currentColor" strokeWidth="1.5" />
@@ -51,7 +52,9 @@ const SERVICE_TYPES = [
 ];
 
 export default function Services() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
+  const SERVICE_TYPES_TRANSLATED = getServiceTypes(t);
   const { services, servicesLoading, updating } = useSelector((state) => state.sitter);
 
   const [expandedService, setExpandedService] = useState(null);
@@ -60,12 +63,12 @@ export default function Services() {
 
   // ✅ সব service এর data fetch করো
   useEffect(() => {
-    SERVICE_TYPES.forEach((s) => {
+    SERVICE_TYPES_TRANSLATED.forEach((s) => {
       if (!services[s.id]) {
         dispatch(fetchServiceSettings(s.id));
       }
     });
-  }, [dispatch]);
+  }, [dispatch, t]);
 
   const handleServiceClick = (serviceId) => {
     if (expandedService === serviceId) {
@@ -73,20 +76,20 @@ export default function Services() {
     } else {
       setExpandedService(serviceId);
       // Edit form populate করো Redux data থেকে
-     // ✅ 2. form populate fix — handleServiceClick এ
-const serviceData = services[serviceId];
-if (serviceData) {
-  setEditForms((prev) => ({
-    ...prev,
-    [serviceId]: {
-      price: serviceData?.rates?.base || "",
-      duration: serviceData?.duration || "",
-      maxPets: serviceData?.petPreferences?.maxPetsPerDay || "",
-      description: serviceData?.description || "",
-      isActive: serviceData?.isActive ?? true,
-    },
-  }));
-}
+      // ✅ 2. form populate fix — handleServiceClick এ
+      const serviceData = services[serviceId];
+      if (serviceData) {
+        setEditForms((prev) => ({
+          ...prev,
+          [serviceId]: {
+            price: serviceData?.rates?.base || "",
+            duration: serviceData?.duration || "",
+            maxPets: serviceData?.petPreferences?.maxPetsPerDay || "",
+            description: serviceData?.description || "",
+            isActive: serviceData?.isActive ?? true,
+          },
+        }));
+      }
     }
   };
 
@@ -103,24 +106,24 @@ if (serviceData) {
         serviceType: serviceId,
         serviceData: editForms[serviceId],
       })).unwrap();
-      toast.success("Service updated successfully");
+      toast.success(t("settings.services_sitter.service_updated"));
       setExpandedService(null);
     } catch (error) {
-      toast.error(typeof error === "string" ? error : "Failed to update service");
+      toast.error(typeof error === "string" ? error : t("settings.services_sitter.update_failed"));
     }
   };
 
-const getServicePrice = (serviceId) => {
-  const data = services[serviceId];
-  const price = data?.rates?.base;
-  if (!price && price !== 0) return "—";
-  return `$${price}`;
-};
+  const getServicePrice = (serviceId) => {
+    const data = services[serviceId];
+    const price = data?.rates?.base;
+    if (!price && price !== 0) return "—";
+    return `$${price}`;
+  };
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8 max-w-3xl">
       <div className="mb-4 md:mb-6 pb-3 md:pb-4 border-b border-gray-200">
-        <h2 className="text-lg md:text-2xl font-medium text-gray-800">Services</h2>
+        <h2 className="text-lg md:text-2xl font-medium text-gray-800">{t("settings.services_sitter.title")}</h2>
       </div>
 
       {servicesLoading && Object.keys(services).length === 0 ? (
@@ -129,7 +132,7 @@ const getServicePrice = (serviceId) => {
         </div>
       ) : (
         <div className="space-y-3 md:space-y-4">
-          {SERVICE_TYPES.map((service) => {
+          {SERVICE_TYPES_TRANSLATED.map((service) => {
             const isExpanded = expandedService === service.id;
             const serviceData = services[service.id];
             const form = editForms[service.id] || {};
@@ -170,7 +173,7 @@ const getServicePrice = (serviceId) => {
 
                       {/* Active Toggle */}
                       <div className="flex items-center justify-between">
-                        <Label className="text-sm font-medium text-[#024B5E]">Service Active</Label>
+                        <Label className="text-sm font-medium text-[#024B5E]">{t("settings.services_sitter.service_active")}</Label>
                         <button
                           onClick={() => handleFormChange(service.id, "isActive", !form.isActive)}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.isActive ? "bg-[#035F75]" : "bg-gray-300"}`}
@@ -181,47 +184,47 @@ const getServicePrice = (serviceId) => {
 
                       {/* Price */}
                       <div>
-                        <Label className="text-sm font-medium text-[#024B5E]">Price ($)</Label>
+                        <Label className="text-sm font-medium text-[#024B5E]">{t("settings.services_sitter.price")}</Label>
                         <Input
                           type="number"
                           value={form.price || ""}
                           onChange={(e) => handleFormChange(service.id, "price", e.target.value)}
-                          placeholder="e.g. 99"
+                          placeholder={t("settings.services_sitter.price_placeholder")}
                           className="mt-1 bg-white text-[#024B5E]"
                         />
                       </div>
 
                       {/* Duration */}
                       <div>
-                        <Label className="text-sm font-medium text-[#024B5E]">Duration</Label>
+                        <Label className="text-sm font-medium text-[#024B5E]">{t("settings.services_sitter.duration")}</Label>
                         <Input
                           value={form.duration || ""}
                           onChange={(e) => handleFormChange(service.id, "duration", e.target.value)}
-                          placeholder="e.g. 1 hour"
+                          placeholder={t("settings.services_sitter.duration_placeholder")}
                           className="mt-1 bg-white text-[#024B5E]"
                         />
                       </div>
 
                       {/* Max Pets */}
                       <div>
-                        <Label className="text-sm font-medium text-[#024B5E]">Max Pets</Label>
+                        <Label className="text-sm font-medium text-[#024B5E]">{t("settings.services_sitter.max_pets")}</Label>
                         <Input
                           type="number"
                           value={form.maxPets || ""}
                           onChange={(e) => handleFormChange(service.id, "maxPets", e.target.value)}
-                          placeholder="e.g. 3"
+                          placeholder={t("settings.services_sitter.max_pets_placeholder")}
                           className="mt-1 bg-white text-[#024B5E]"
                         />
                       </div>
 
                       {/* Description */}
                       <div>
-                        <Label className="text-sm font-medium text-[#024B5E]">Description</Label>
+                        <Label className="text-sm font-medium text-[#024B5E]">{t("settings.services_sitter.description")}</Label>
                         <textarea
                           value={form.description || ""}
                           onChange={(e) => handleFormChange(service.id, "description", e.target.value)}
                           rows={3}
-                          placeholder="Describe this service..."
+                          placeholder={t("settings.services_sitter.description_placeholder")}
                           className="mt-1 flex w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-[#024B5E] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
                         />
                       </div>
@@ -232,7 +235,7 @@ const getServicePrice = (serviceId) => {
                           onClick={() => setExpandedService(null)}
                           className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
                         >
-                          Cancel
+                          {t("settings.services_sitter.cancel")}
                         </button>
                         <button
                           onClick={() => handleSave(service.id)}
@@ -240,7 +243,7 @@ const getServicePrice = (serviceId) => {
                           className="flex-1 px-4 py-2 bg-[#035F75] text-white rounded-lg text-sm font-medium hover:bg-[#024c5d] transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
                         >
                           {updating && <Loader2 className="w-4 h-4 animate-spin" />}
-                          Save
+                          {t("settings.services_sitter.save")}
                         </button>
                       </div>
                     </div>

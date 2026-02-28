@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { ChevronDown, MapPin, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { fetchWithAuth } from "@/lib/auth";
+import { useTranslation } from "react-i18next";
 
 export default function DoggyDayCareForm() {
   const [loading, setLoading] = useState(false);
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const { t } = useTranslation();
 
   const [baseRate, setBaseRate] = useState("35.00");
   const [updateRates, setUpdateRates] = useState(true);
@@ -80,10 +82,10 @@ export default function DoggyDayCareForm() {
             additionalRate: 28
           },
           availability: {
-             isHomeFullTime: false, 
-             availableDays: selectedDays,
-             timeSlots: selectedTimeSlots,
-             pottyBreakFrequency: "2-4 hours"
+            isHomeFullTime: false,
+            availableDays: selectedDays,
+            timeSlots: selectedTimeSlots,
+            pottyBreakFrequency: "2-4 hours"
           },
           serviceArea: {
             useHomeAddress,
@@ -99,9 +101,9 @@ export default function DoggyDayCareForm() {
           },
           cancellationPolicy: cancellationPolicies,
           homeDetails: {
-             homeType: ["Apartment"], 
-             yardType: ["No yard"],
-             homeAttributes: []
+            homeType: ["Apartment"],
+            yardType: ["No yard"],
+            homeAttributes: []
           }
         }
       };
@@ -117,13 +119,13 @@ export default function DoggyDayCareForm() {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("Daycare settings saved successfully!");
+        toast.success(t("create_services.daycare.success"));
       } else {
-        toast.error(data.message || "Failed to save settings");
+        toast.error(data.message || t("create_services.daycare.error"));
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong");
+      toast.error(t("create_services.daycare.server_error"));
     } finally {
       setLoading(false);
     }
@@ -142,10 +144,10 @@ export default function DoggyDayCareForm() {
           />
           <div>
             <span className="text-[#024B5E] font-medium">
-              Update my additional rates based on my base rate
+              {t("create_services.daycare.update_rates")}
             </span>
             <p className="text-sm text-[#024B5E] mt-1">
-              Turn off to adjust your rate manually
+              {t("create_services.daycare.update_rates_hint")}
             </p>
           </div>
         </label>
@@ -156,20 +158,20 @@ export default function DoggyDayCareForm() {
         onClick={() => setShowAdditionalRates(!showAdditionalRates)}
         className="w-full px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2 mb-8"
       >
-        {showAdditionalRates ? "Hide additional rates" : "Show additional rates"}
+        {showAdditionalRates ? t("create_services.daycare.hide_additional") : t("create_services.daycare.show_additional")}
         <ChevronDown className={`w-5 h-5 transition-transform ${showAdditionalRates ? "rotate-180" : ""}`} />
       </button>
 
       {/* Additional Rates Section */}
       {showAdditionalRates && (
         <div className="mb-8 space-y-6">
-           <div>
-            <h4 className="text-base font-semibold text-[#024B5E] mb-3">60 minute rate</h4>
+          <div>
+            <h4 className="text-base font-semibold text-[#024B5E] mb-3">{t("create_services.daycare.60_min_rate")}</h4>
             <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-              <span className="text-[#024B5E]">Per day</span>
+              <span className="text-[#024B5E]">{t("create_services.daycare.per_day")}</span>
               <span className="text-[#024B5E] font-semibold">$35.00</span>
             </div>
-            <p className="text-sm text-[#024B5E] mt-2">You keep: $30.00</p>
+            <p className="text-sm text-[#024B5E] mt-2">{t("create_services.daycare.you_keep")}30.00</p>
           </div>
           {/* ... other rates ... */}
         </div>
@@ -178,34 +180,34 @@ export default function DoggyDayCareForm() {
       {/* Base Rate Section */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-[#024B5E] mb-3">
-          Set your base rate
+          {t("create_services.daycare.base_rate")}
         </label>
         <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
-          <span className="text-[#024B5E]">Per day</span>
+          <span className="text-[#024B5E]">{t("create_services.daycare.per_day")}</span>
           <div className="flex items-center">
-             <span className="text-[#024B5E] font-semibold mr-1">$</span>
-             <input 
-               type="number" 
-               value={baseRate} 
-               onChange={(e) => setBaseRate(e.target.value)}
-               className="w-20 bg-transparent text-[#024B5E] font-semibold focus:outline-none"
-             />
+            <span className="text-[#024B5E] font-semibold mr-1">$</span>
+            <input
+              type="number"
+              value={baseRate}
+              onChange={(e) => setBaseRate(e.target.value)}
+              className="w-20 bg-transparent text-[#024B5E] font-semibold focus:outline-none"
+            />
           </div>
         </div>
         <p className="text-sm text-[#024B5E] mt-2">
-          What you will earn per service: ${(parseFloat(baseRate || 0) * 0.86).toFixed(2)}
+          {t("create_services.daycare.earn_per_service")} {(parseFloat(baseRate || 0) * 0.86).toFixed(2)}
         </p>
       </div>
 
       {/* Availability Section */}
       <div className="mb-8">
-        <h3 className="text-base font-semibold text-[#024B5E] mb-4">Availability</h3>
+        <h3 className="text-base font-semibold text-[#024B5E] mb-4">{t("create_services.daycare.availability")}</h3>
 
         <label className="block text-sm font-medium text-[#024B5E] mb-3">
-          How many pets can you care for per day?
+          {t("create_services.daycare.pets_per_day")}
         </label>
         <div className="flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white mb-4">
-          <span className="text-[#024B5E]">Per day</span>
+          <span className="text-[#024B5E]">{t("create_services.daycare.per_day")}</span>
           <input
             type="number"
             value={petsPerDay}
@@ -222,11 +224,11 @@ export default function DoggyDayCareForm() {
               key={day}
               onClick={() => toggleDay(day)}
               className={`flex-1 px-3 py-2 border rounded-lg text-sm font-medium transition-colors ${selectedDays.includes(day)
-                  ? "bg-[#035F75] text-white border-[#035F75]"
-                  : "bg-white text-[#024B5E] border-gray-300 hover:bg-gray-50"
+                ? "bg-[#035F75] text-white border-[#035F75]"
+                : "bg-white text-[#024B5E] border-gray-300 hover:bg-gray-50"
                 }`}
             >
-              {day}
+              {t(`create_services.daycare.days_of_week.${day}`)}
             </button>
           ))}
         </div>
@@ -250,7 +252,7 @@ export default function DoggyDayCareForm() {
       {/* Cancellation Policy */}
       <div className="mb-8">
         <label className="block text-base font-semibold text-[#024B5E] mb-3">
-          Cancellation policy
+          {t("create_services.daycare.cancellation_policy")}
         </label>
         <div className="space-y-3">
           {cancellationOptions.map((policy) => (
@@ -270,34 +272,34 @@ export default function DoggyDayCareForm() {
       {/* Location Section */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <label className="text-base font-semibold text-[#024B5E]">Use my home address</label>
+          <label className="text-base font-semibold text-[#024B5E]">{t("create_services.daycare.use_home_address")}</label>
           <button onClick={() => setUseHomeAddress(!useHomeAddress)} className={`relative w-12 h-6 rounded-full transition-colors ${useHomeAddress ? "bg-[#035F75]" : "bg-gray-300"}`}>
             <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${useHomeAddress ? "translate-x-6" : ""}`} />
           </button>
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-2">Location</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">{t("create_services.daycare.location")}</label>
         <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75] mb-6" />
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-3">Distance type</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">{t("create_services.daycare.distance_type")}</label>
         <div className="flex gap-4 mb-4">
-           <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-2 cursor-pointer">
             <input type="radio" name="distanceType" value="miles" checked={distanceType === "miles"} onChange={(e) => setDistanceType(e.target.value)} className="w-4 h-4 text-[#035F75]" />
             <span className="text-[#024B5E]">Miles</span>
-           </label>
-           <label className="flex items-center gap-2 cursor-pointer">
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
             <input type="radio" name="distanceType" value="minutes" checked={distanceType === "minutes"} onChange={(e) => setDistanceType(e.target.value)} className="w-4 h-4 text-[#035F75]" />
             <span className="text-[#024B5E]">Minutes</span>
-           </label>
+          </label>
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-2">Service area</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-2">{t("create_services.daycare.service_area")}</label>
         <div className="flex items-center gap-2 mb-4">
           <input type="text" value={serviceArea} onChange={(e) => setServiceArea(e.target.value)} className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#035F75]" />
           <span className="text-[#024B5E] capitalize">{distanceType}</span>
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-3">Travel mode</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">{t("create_services.daycare.travel_mode")}</label>
         <div className="space-y-3 mb-8">
           {travelOptions.map((mode) => (
             <label key={mode} className="flex items-center gap-3 cursor-pointer">
@@ -310,7 +312,7 @@ export default function DoggyDayCareForm() {
 
       {/* Pet Types Section */}
       <div className="mb-8">
-        <label className="block text-base font-semibold text-[#024B5E] mb-3">Pet preferences</label>
+        <label className="block text-base font-semibold text-[#024B5E] mb-3">{t("create_services.daycare.pet_preferences")}</label>
         <div className="space-y-3 mb-6">
           {petSizeOptions.map((size) => (
             <label key={size} className="flex items-center gap-3 cursor-pointer">
@@ -320,15 +322,15 @@ export default function DoggyDayCareForm() {
           ))}
         </div>
 
-        <label className="block text-sm font-semibold text-[#024B5E] mb-3">Accept puppies?</label>
+        <label className="block text-sm font-semibold text-[#024B5E] mb-3">{t("create_services.daycare.accept_puppies")}</label>
         <div className="flex gap-4 mb-8">
           <label className="flex items-center gap-2 cursor-pointer">
-             <input type="radio" name="acceptPuppiesDaycare" value="yes" checked={acceptPuppies === "yes"} onChange={(e) => setAcceptPuppies(e.target.value)} className="w-4 h-4 text-[#035F75]" />
-             <span className="text-[#024B5E]">Yes</span>
+            <input type="radio" name="acceptPuppiesDaycare" value="yes" checked={acceptPuppies === "yes"} onChange={(e) => setAcceptPuppies(e.target.value)} className="w-4 h-4 text-[#035F75]" />
+            <span className="text-[#024B5E]">{t("create_services.daycare.yes")}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
-             <input type="radio" name="acceptPuppiesDaycare" value="no" checked={acceptPuppies === "no"} onChange={(e) => setAcceptPuppies(e.target.value)} className="w-4 h-4 text-[#035F75]" />
-             <span className="text-[#024B5E]">No</span>
+            <input type="radio" name="acceptPuppiesDaycare" value="no" checked={acceptPuppies === "no"} onChange={(e) => setAcceptPuppies(e.target.value)} className="w-4 h-4 text-[#035F75]" />
+            <span className="text-[#024B5E]">{t("create_services.daycare.no")}</span>
           </label>
         </div>
       </div>
@@ -340,7 +342,7 @@ export default function DoggyDayCareForm() {
           disabled={loading}
           className="w-full px-6 py-4 bg-[#035F75] text-white text-lg font-bold rounded-lg hover:bg-[#024a5c] transition-colors flex items-center justify-center gap-2"
         >
-          {loading ? <Loader2 className="animate-spin" /> : "Save Daycare Settings"}
+          {loading ? <Loader2 className="animate-spin" /> : t("create_services.daycare.save_settings")}
         </button>
       </div>
     </>

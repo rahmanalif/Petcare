@@ -7,16 +7,18 @@ import { Dog, Cat, Camera, Heart, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { fetchWithAuth } from '@/lib/auth';
+import { useTranslation } from "react-i18next";
 
 export default function PetDetailsForm() {
   const router = useRouter();
   const fileInputRef = useRef(null);
-  
+  const { t } = useTranslation();
+
   // API States
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [petId, setPetId] = useState("6987bf7d4038a7d08c9285d6");
-  const [gallery, setGallery] = useState([]); 
+  const [gallery, setGallery] = useState([]);
   // NEW: State for showing image immediately
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -55,8 +57,8 @@ export default function PetDetailsForm() {
     setImagePreview(objectUrl);
 
     if (!petId) {
-        toast.error("Pet ID missing provided, only preview shown.");
-        return;
+      toast.error(t("settings.add_pet_info.error_pet_id"));
+      return;
     }
 
     const data = new FormData();
@@ -73,13 +75,13 @@ export default function PetDetailsForm() {
       const result = await res.json();
       if (res.ok) {
         setGallery(result.gallery || []);
-        toast.success("Image uploaded successfully");
+        toast.success(t("settings.add_pet_info.success_image"));
       } else {
-        toast.error("Failed to upload to server, showing preview only.");
+        toast.error(t("settings.add_pet_info.error_image_server"));
       }
     } catch (error) {
       console.error(error);
-      toast.error("Upload failed");
+      toast.error(t("settings.add_pet_info.error_upload"));
     } finally {
       setUploading(false);
     }
@@ -127,13 +129,13 @@ export default function PetDetailsForm() {
       const result = await res.json();
       if (res.ok) {
         setPetId(result.pet._id);
-        toast.success("Pet profile saved");
+        toast.success(t("settings.add_pet_info.success_profile"));
         router.push('/settings');
       } else {
-        toast.error(result.message || "Failed to save");
+        toast.error(result.message || t("settings.add_pet_info.error_save"));
       }
     } catch (error) {
-      toast.error("An error occurred");
+      toast.error(t("settings.add_pet_info.error_general"));
     } finally {
       setLoading(false);
     }
@@ -141,7 +143,7 @@ export default function PetDetailsForm() {
 
   // Helper function to decide which image to show
   const getDisplayImage = () => {
-    if (imagePreview) return imagePreview; 
+    if (imagePreview) return imagePreview;
     if (gallery && gallery.length > 0) return `${API_BASE}/${gallery[gallery.length - 1]}`;
     return "https://images.unsplash.com/photo-1568393691622-c7ba131d63b4?w=1200&h=400&fit=crop";
   };
@@ -152,7 +154,7 @@ export default function PetDetailsForm() {
         <button onClick={() => router.back()} className="text-[#024B5E] hover:text-teal-800">
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
         </button>
-        <h1 className="text-xl font-semibold text-[#024B5E]">Pet Profile Edit</h1>
+        <h1 className="text-xl font-semibold text-[#024B5E]">{t("settings.add_pet_info.title")}</h1>
       </div>
 
       <div className="relative mb-6 mx-6">
@@ -162,11 +164,11 @@ export default function PetDetailsForm() {
             alt="Pet"
             className="w-full h-full object-cover transition-opacity duration-300"
           />
-          <button 
-             onClick={() => fileInputRef.current.click()}
-             className="absolute bottom-6 right-6 bg-gray-800/70 hover:bg-gray-800/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+          <button
+            onClick={() => fileInputRef.current.click()}
+            className="absolute bottom-6 right-6 bg-gray-800/70 hover:bg-gray-800/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
             {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
-            Update Pet Photo
+            {t("settings.add_pet_info.update_photo")}
           </button>
           <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
         </div>
@@ -177,13 +179,13 @@ export default function PetDetailsForm() {
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
             <Dog className="w-5 h-5 text-[#024B5E]" />
-            <h2 className="text-xl font-semibold text-[#024B5E]">Pet details</h2>
+            <h2 className="text-xl font-semibold text-[#024B5E]">{t("settings.add_pet_info.pet_details")}</h2>
           </div>
-          <p className="text-sm text-[#024B5E]">Provide your sitter with a description of your pet</p>
+          <p className="text-sm text-[#024B5E]">{t("settings.add_pet_info.pet_details_desc")}</p>
         </div>
 
         <div className="mb-6">
-          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">What type of pet?</Label>
+          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">{t("settings.add_pet_info.pet_type")}</Label>
           <div className="grid grid-cols-2 gap-4">
             <button onClick={() => setSelectedPetType('dog')} className={`p-6 border-2 rounded-lg transition-all ${selectedPetType === 'dog' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200 hover:border-gray-300 text-[#024B5E]'}`}><Dog className="w-12 h-12 mx-auto" /></button>
             <button onClick={() => setSelectedPetType('cat')} className={`p-6 border-2 rounded-lg transition-all ${selectedPetType === 'cat' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200 hover:border-gray-300 text-[#024B5E]'}`}><Cat className="w-12 h-12 mx-auto" /></button>
@@ -191,59 +193,59 @@ export default function PetDetailsForm() {
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="name" className="text-sm font-medium text-[#024B5E] mb-2 block">Name</Label>
-          <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Pet Name" className="w-full text-[#024B5E]" />
+          <Label htmlFor="name" className="text-sm font-medium text-[#024B5E] mb-2 block">{t("settings.add_pet_info.name")}</Label>
+          <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("settings.add_pet_info.name_placeholder")} className="w-full text-[#024B5E]" />
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
-            <Label htmlFor="weight" className="text-sm font-medium text-[#024B5E] mb-2 block">Weight (kg)</Label>
-            <Input id="weight" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="8kg" className="w-full text-[#024B5E]" />
+            <Label htmlFor="weight" className="text-sm font-medium text-[#024B5E] mb-2 block">{t("settings.add_pet_info.weight")}</Label>
+            <Input id="weight" value={weight} onChange={(e) => setWeight(e.target.value)} placeholder={t("settings.add_pet_info.weight_placeholder")} className="w-full text-[#024B5E]" />
           </div>
           <div>
-            <Label htmlFor="age" className="text-sm font-medium text-[#024B5E] mb-2 block">Age (Year)</Label>
-            <Input id="age" value={age} onChange={(e) => setAge(e.target.value)} placeholder="3" className="w-full text-[#024B5E]" />
+            <Label htmlFor="age" className="text-sm font-medium text-[#024B5E] mb-2 block">{t("settings.add_pet_info.age_year")}</Label>
+            <Input id="age" value={age} onChange={(e) => setAge(e.target.value)} placeholder={t("settings.add_pet_info.age_year_placeholder")} className="w-full text-[#024B5E]" />
           </div>
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="ageMonths" className="text-sm font-medium text-[#024B5E] mb-2 block">Age (Month)</Label>
-          <Input id="ageMonths" value={ageMonths} onChange={(e) => setAgeMonths(e.target.value)} placeholder="4" className="w-full text-[#024B5E]" />
+          <Label htmlFor="ageMonths" className="text-sm font-medium text-[#024B5E] mb-2 block">{t("settings.add_pet_info.age_month")}</Label>
+          <Input id="ageMonths" value={ageMonths} onChange={(e) => setAgeMonths(e.target.value)} placeholder={t("settings.add_pet_info.age_month_placeholder")} className="w-full text-[#024B5E]" />
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="dob" className="text-sm font-medium text-[#024B5E] mb-2 block">Dates of birth</Label>
+          <Label htmlFor="dob" className="text-sm font-medium text-[#024B5E] mb-2 block">{t("settings.add_pet_info.dob")}</Label>
           <div className="relative">
             <Input id="dob" type="date" value={dob} onChange={(e) => setDob(e.target.value)} className="w-full pr-10 text-[#024B5E]" />
           </div>
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="breed" className="text-sm font-medium text-[#024B5E] mb-2 block">Breed</Label>
-          <Input id="breed" value={breed} onChange={(e) => setBreed(e.target.value)} placeholder="Mix" className="w-full text-[#024B5E]" />
+          <Label htmlFor="breed" className="text-sm font-medium text-[#024B5E] mb-2 block">{t("settings.add_pet_info.breed")}</Label>
+          <Input id="breed" value={breed} onChange={(e) => setBreed(e.target.value)} placeholder={t("settings.add_pet_info.breed_placeholder")} className="w-full text-[#024B5E]" />
         </div>
 
         <div className="mb-6">
-          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">Gender</Label>
+          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">{t("settings.add_pet_info.gender")}</Label>
           <div className="grid grid-cols-2 gap-4">
-            <button onClick={() => setGender('male')} className={`py-3 border-2 rounded-lg font-medium transition-all ${gender === 'male' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200 text-[#024B5E]'}`}>Male</button>
-            <button onClick={() => setGender('female')} className={`py-3 border-2 rounded-lg font-medium transition-all ${gender === 'female' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200 text-[#024B5E]'}`}>Female</button>
+            <button onClick={() => setGender('male')} className={`py-3 border-2 rounded-lg font-medium transition-all ${gender === 'male' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200 text-[#024B5E]'}`}>{t("settings.add_pet_info.male")}</button>
+            <button onClick={() => setGender('female')} className={`py-3 border-2 rounded-lg font-medium transition-all ${gender === 'female' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200 text-[#024B5E]'}`}>{t("settings.add_pet_info.female")}</button>
           </div>
         </div>
 
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-[#024B5E] mb-4">Additional details</h3>
+          <h3 className="text-lg font-semibold text-[#024B5E] mb-4">{t("settings.add_pet_info.additional_details")}</h3>
           <div className="mb-4">
-            <Label className="text-sm font-medium text-[#024B5E] mb-3 block">Microchipped?</Label>
+            <Label className="text-sm font-medium text-[#024B5E] mb-3 block">{t("settings.add_pet_info.microchipped")}</Label>
             <div className="flex gap-3">
-              <button onClick={() => setMicrochipped('microchipped')} className={`px-4 py-2 border-2 rounded-lg text-sm font-medium ${microchipped === 'microchipped' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>Microchipped</button>
-              <button onClick={() => setMicrochipped('not-microchipped')} className={`px-4 py-2 border-2 rounded-lg text-sm font-medium ${microchipped === 'not-microchipped' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>Not microchipped</button>
+              <button onClick={() => setMicrochipped('microchipped')} className={`px-4 py-2 border-2 rounded-lg text-sm font-medium ${microchipped === 'microchipped' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>{t("settings.add_pet_info.is_microchipped")}</button>
+              <button onClick={() => setMicrochipped('not-microchipped')} className={`px-4 py-2 border-2 rounded-lg text-sm font-medium ${microchipped === 'not-microchipped' ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>{t("settings.add_pet_info.not_microchipped")}</button>
             </div>
           </div>
 
           <div className="mb-4">
-            <Label htmlFor="about" className="text-sm font-medium text-[#024B5E] mb-2 block">About your pet</Label>
-            <Textarea id="about" value={about} onChange={(e) => setAbout(e.target.value)} placeholder="Add a description" className="w-full min-h-[100px] resize-none" />
+            <Label htmlFor="about" className="text-sm font-medium text-[#024B5E] mb-2 block">{t("settings.add_pet_info.about")}</Label>
+            <Textarea id="about" value={about} onChange={(e) => setAbout(e.target.value)} placeholder={t("settings.add_pet_info.about_placeholder")} className="w-full min-h-[100px] resize-none" />
           </div>
         </div>
       </div>
@@ -252,42 +254,42 @@ export default function PetDetailsForm() {
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
             <Heart className="w-5 h-5 text-[#024B5E]" />
-            <h2 className="text-xl font-semibold text-[#024B5E]">Care Info</h2>
+            <h2 className="text-xl font-semibold text-[#024B5E]">{t("settings.add_pet_info.care_info")}</h2>
           </div>
         </div>
 
         <div className="mb-6">
-          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">Potty break</Label>
+          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">{t("settings.add_pet_info.potty_break")}</Label>
           <div className="space-y-2">
-            {['every-hour', 'every-2-hours', 'every-4-hours'].map((opt) => (
-              <button key={opt} onClick={() => setPottyBreak(opt)} className={`w-full px-4 py-3 border-2 rounded-lg text-sm text-left font-medium ${pottyBreak === opt ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>{opt.replace(/-/g, ' ')}</button>
+            {['every_hour', 'every_2_hours', 'every_4_hours'].map((opt) => (
+              <button key={opt} onClick={() => setPottyBreak(opt)} className={`w-full px-4 py-3 border-2 rounded-lg text-sm text-left font-medium ${pottyBreak === opt ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>{t(`settings.add_pet_info.${opt}`)}</button>
             ))}
           </div>
         </div>
 
         <div className="mb-6">
-          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">Medications</Label>
+          <Label className="text-sm font-medium text-[#024B5E] mb-3 block">{t("settings.add_pet_info.medications")}</Label>
           <div className="flex gap-3 mb-3">
             {['pill', 'topical', 'injection'].map(opt => (
-              <button key={opt} onClick={() => setMedicationType(opt)} className={`px-4 py-3 border-2 rounded-lg text-sm ${medicationType === opt ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>{opt}</button>
+              <button key={opt} onClick={() => setMedicationType(opt)} className={`px-4 py-3 border-2 rounded-lg text-sm ${medicationType === opt ? 'border-[#024B5E] bg-[#024B5E] text-white' : 'border-gray-200'}`}>{t(`settings.add_pet_info.${opt}`)}</button>
             ))}
           </div>
-          <Input value={medicationName} onChange={(e) => setMedicationName(e.target.value)} placeholder="Name of the pill..." className="w-full" />
+          <Input value={medicationName} onChange={(e) => setMedicationName(e.target.value)} placeholder={t("settings.add_pet_info.medication_placeholder")} className="w-full" />
         </div>
       </div>
 
       <div className="bg-white mx-6 rounded-2xl shadow-sm p-6 mt-6 mb-6">
-        <h2 className="text-xl font-semibold text-[#024B5E] mb-4">Health info</h2>
-        <Label className="text-sm font-medium mb-2 block">Veterinary info</Label>
-        <Textarea value={vetInfo} onChange={(e) => setVetInfo(e.target.value)} placeholder="Vet details" className="w-full min-h-[120px] mb-4" />
-        <Label className="text-sm font-medium mb-2 block">Insurance Provider</Label>
-        <Input value={insurance} onChange={(e) => setInsurance(e.target.value)} placeholder="Insurance" className="w-full" />
+        <h2 className="text-xl font-semibold text-[#024B5E] mb-4">{t("settings.add_pet_info.health_info")}</h2>
+        <Label className="text-sm font-medium mb-2 block">{t("settings.add_pet_info.vet_info")}</Label>
+        <Textarea value={vetInfo} onChange={(e) => setVetInfo(e.target.value)} placeholder={t("settings.add_pet_info.vet_info_placeholder")} className="w-full min-h-[120px] mb-4" />
+        <Label className="text-sm font-medium mb-2 block">{t("settings.add_pet_info.insurance")}</Label>
+        <Input value={insurance} onChange={(e) => setInsurance(e.target.value)} placeholder={t("settings.add_pet_info.insurance_placeholder")} className="w-full" />
       </div>
 
       <div className="mx-6 mb-8">
         <button onClick={handleSave} disabled={loading} className="w-full bg-[#024B5E] hover:bg-[#023b4a] text-white py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors">
           {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-          {loading ? "Saving..." : "Save Changes"}
+          {loading ? t("settings.add_pet_info.saving") : t("settings.add_pet_info.save_changes")}
         </button>
       </div>
     </div>

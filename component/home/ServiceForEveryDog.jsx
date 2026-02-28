@@ -2,27 +2,29 @@
 import { Calendar, Home, Footprints, Shield } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
-const TickIcon = ({className}) => (
+const TickIcon = ({ className }) => (
   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="13"
-                    viewBox="0 0 16 13"
-                    fill="none"
-                    className="shrink-0 mt-1"
-                  >
-                    <path
-                      d="M0.75 8.25C0.75 8.25 2.25 8.25 4.25 11.75C4.25 11.75 9.80882 2.58333 14.75 0.75"
-                      stroke="#FE6C5D"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="13"
+    viewBox="0 0 16 13"
+    fill="none"
+    className="shrink-0 mt-1"
+  >
+    <path
+      d="M0.75 8.25C0.75 8.25 2.25 8.25 4.25 11.75C4.25 11.75 9.80882 2.58333 14.75 0.75"
+      stroke="#FE6C5D"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
 )
 
 export default function ServicesSection() {
+  const { t } = useTranslation();
   return (
     <div
       id="services"
@@ -34,9 +36,9 @@ export default function ServicesSection() {
           <div>
             <h2
               className="text-2xl md:text-3xl lg:text-4xl text-[#024B5E] mb-8 md:mb-12 tracking-wide font-bakso"
-              //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+            //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
             >
-              Services
+              {t("service_for_dog.title")}
             </h2>
 
             {/* Dog Boarding */}
@@ -53,13 +55,12 @@ export default function ServicesSection() {
               <div>
                 <h3
                   className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
-                  //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+                //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
-                  Dog Boarding
+                  {t("service_for_dog.boarding_title")}
                 </h3>
                 <p className="text-sm md:text-base text-[#024B5E] leading-relaxed">
-                  Your pets stay overnight in your sitter's home. They'll be
-                  treated like part of the family in a familiar environment.
+                  {t("service_for_dog.boarding_desc")}
                 </p>
               </div>
             </div>
@@ -78,13 +79,12 @@ export default function ServicesSection() {
               <div>
                 <h3
                   className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
-                  //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+                //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
-                  Doggy Day Care
+                  {t("service_for_dog.daycare_title")}
                 </h3>
                 <p className="text-sm md:text-base text-[#024B5E] leading-relaxed">
-                  Your dog spends the day at your sitter's home. Drop them off
-                  in the morning and pick your pup in the evening.
+                  {t("service_for_dog.daycare_desc")}
                 </p>
               </div>
             </div>
@@ -103,13 +103,12 @@ export default function ServicesSection() {
               <div>
                 <h3
                   className="text-lg md:text-xl text-[#024B5E] mb-2 font-bakso"
-                  //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
+                //   style={{ fontFamily: 'Comic Sans MS, cursive' }}
                 >
-                  Dog Walking
+                  {t("service_for_dog.walking_title")}
                 </h3>
                 <p className="text-sm md:text-base text-[#024B5E] leading-relaxed">
-                  Your dog gets a walk around your neighborhood. Perfect for
-                  busy days and dogs with extra energy to burn.
+                  {t("service_for_dog.walking_desc")}
                 </p>
               </div>
             </div>
@@ -138,86 +137,52 @@ export default function ServicesSection() {
                 </div>
                 <h3
                   className="text-xl md:text-2xl text-[#024B5E] font-bakso"
-                  //   style={{ fontFamily: "Comic Sans MS, cursive" }}
+                //   style={{ fontFamily: "Comic Sans MS, cursive" }}
                 >
-                  Built for safety and trust
+                  {t("service_for_dog.protect_title")}
                 </h3>
               </div>
 
               <p className="text-[#024B5E] mb-6 text-lg md:text-2xl font-bakso">
                 {/* Find peace of mind with every
                 <br className="hidden sm:block" /> */}
-                <span className="sm:hidden"> </span>
-                booking.
+                {t("service_for_dog.protect_subtitle")}
               </p>
 
               {/* Features List */}
               <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
                 <div className="flex items-start gap-2 md:gap-3">
-                  <TickIcon/>
+                  <TickIcon />
                   <p className="text-sm md:text-base text-[#024B5E]">
-                    {/* <span className="text-[#357F91] font-semibold">
-                      Screened pet sitters
-                    </span>{" "}
-                    have already passed a third-party background check and show
-                    verified reviews from other pet parents, like you. */}
-                    Peace of mind for pet parents, confidence for sitters.
+                    {t("service_for_dog.features.1")}
                   </p>
                 </div>
 
                 <div className="flex item-start gap-2 md:gap-3">
-                  <TickIcon/>
+                  <TickIcon />
                   <p className="text-sm md:text-base text-[#024B5E]">
-                    {/* <span className="text-[#357F91] font-semibold">
-                      Messaging & photo updates
-                    </span>{" "}
-                    from your sitter during each stay. */}
-                    Clear safety standards for every booking.
+                    {t("service_for_dog.features.2")}
                   </p>
                 </div>
 
                 <div className="flex items-start gap-2 md:gap-3">
-                  <TickIcon/>
+                  <TickIcon />
                   <p className="text-sm md:text-base text-[#024B5E]">
-                    {/* {/* <span className="text-[#357F91] font-semibold">
-                      The Rover Guarantee
-                    </span>{" "}
-                    can protect you and your pet for up to $25,000 in eligible
-                    vet care.{" "}
-                    <span className="text-[#357F91] underline cursor-pointer">
-                      Learn more 
-                    </span> */}
-                    Secure payments from start to finish.
+                    {t("service_for_dog.features.3")}
                   </p>
                 </div>
 
                 <div className="flex items-start gap-2 md:gap-3">
-                  <TickIcon/>
+                  <TickIcon />
                   <p className="text-sm md:text-base text-[#024B5E]">
-                    {/* {/* <span className="text-[#357F91] font-semibold">
-                      The Rover Guarantee
-                    </span>{" "}
-                    can protect you and your pet for up to $25,000 in eligible
-                    vet care.{" "}
-                    <span className="text-[#357F91] underline cursor-pointer">
-                      Learn more 
-                    </span> */}
-                    Support that’s there when it matters most.
+                    {t("service_for_dog.features.4")}
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-2 md:gap-3">
-                  <TickIcon/>
+                  <TickIcon />
                   <p className="text-sm md:text-base text-[#024B5E]">
-                    {/* {/* <span className="text-[#357F91] font-semibold">
-                      The Rover Guarantee
-                    </span>{" "}
-                    can protect you and your pet for up to $25,000 in eligible
-                    vet care.{" "}
-                    <span className="text-[#357F91] underline cursor-pointer">
-                      Learn more 
-                    </span> */}
-                    Resources and education to level up your pet care.
+                    {t("service_for_dog.features.5")}
                   </p>
                 </div>
 
@@ -233,7 +198,7 @@ export default function ServicesSection() {
                 href="/signup"
                 className="w-full bg-[#035F75] hover:bg-[#024d5e] text-white font-semibold py-3 md:py-4 rounded-xl transition-all hover:shadow-lg block text-center text-sm md:text-base"
               >
-                Start creating your profile
+                {t("service_for_dog.create_profile")}
               </Link>
             </div>
           </div>

@@ -1,13 +1,15 @@
 "use client";
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function MobileAppSection() {
+  const { t } = useTranslation();
   return (
     <div className="bg-[#F8F4EF] px-4 sm:px-6 md:px-8 lg:px-12 pb-0">
       <div className="max-w-7xl mx-auto pb-0">
         {/* Header */}
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-center text-[#024B5E] mb-4 sm:mb-6 md:mb-8 lg:mb-10 font-bakso leading-tight">
-          Connect Anywhere with the Wuffoos App
+          {t("mobile_app.title")}
         </h1>
 
         {/* Content Container */}

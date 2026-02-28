@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSitterProfile } from "@/redux/sitter/sitterSlice";
 import { createConnectAccount, fetchOnboardingLink, fetchEarningsHistory } from "@/redux/paymentSlice";
-import { Loader2, ExternalLink, CheckCircle, Trash2, ShieldCheck } from "lucide-react";
+import { CheckCircle, ShieldCheck, Trash2, Loader2, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTranslation } from "react-i18next";
 
 export default function Payments() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const { profile: sitterData, loading } = useSelector((state) => state.sitter);
@@ -91,7 +93,7 @@ export default function Payments() {
   return (
     <>
       <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
-        <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-6">Payments</h2>
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-6">{t("settings.payments_sitter.title")}</h2>
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-md text-sm">{error}</div>
@@ -122,30 +124,30 @@ export default function Payments() {
                   </button>
                 </div>
                 <button onClick={() => setShowModal(true)} className="w-full px-6 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024c5d] transition-colors text-sm">
-                  Add Default Payment Method
+                  {t("settings.payments_sitter.add_default_method")}
                 </button>
               </div>
             ) : (
               <button onClick={() => setShowModal(true)} className="w-full px-6 py-3 border-2 border-[#035F75] text-[#035F75] rounded-lg font-medium hover:bg-[#E7F4F6] transition-colors text-sm">
-                Add or Modify a payment Method
+                {t("settings.payments_sitter.add_modify_method")}
               </button>
             )}
 
             {/* Stripe */}
             <div className="pt-4 border-t border-gray-100">
-              <h3 className="text-sm font-medium text-gray-700 mb-3">Payout Configuration</h3>
+              <h3 className="text-sm font-medium text-gray-700 mb-3">{t("settings.payments_sitter.payout_configuration")}</h3>
               {isStripeConnected ? (
                 <div className="flex items-center p-3 bg-green-50 text-green-700 rounded-lg border border-green-200">
                   <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-sm">Bank Account Connected</p>
-                    <p className="text-xs text-green-600 mt-0.5">Your payouts are set up and ready.</p>
+                    <p className="font-medium text-sm">{t("settings.payments_sitter.bank_connected")}</p>
+                    <p className="text-xs text-green-600 mt-0.5">{t("settings.payments_sitter.payouts_ready")}</p>
                   </div>
                 </div>
               ) : (
                 <div>
                   <p className="text-sm text-gray-500 mb-3">
-                    To receive payments, please connect your bank account via Stripe.
+                    {t("settings.payments_sitter.connect_bank")}
                   </p>
                   <button
                     onClick={handleSetupPayouts}
@@ -153,9 +155,9 @@ export default function Payments() {
                     className="w-full px-6 py-3 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024c5d] transition-colors text-sm flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {paymentLoading ? (
-                      <><Loader2 className="w-4 h-4 animate-spin" /> Processing...</>
+                      <><Loader2 className="w-4 h-4 animate-spin" /> {t("settings.payments_sitter.processing")}</>
                     ) : (
-                      <>Setup Payouts (Stripe Connect) <ExternalLink className="w-4 h-4" /></>
+                      <>{t("settings.payments_sitter.setup_payouts")} <ExternalLink className="w-4 h-4" /></>
                     )}
                   </button>
                 </div>
@@ -165,20 +167,20 @@ export default function Payments() {
 
           {/* Right Column — Payment History from API */}
           <div>
-            <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">Payment History</h3>
+            <h3 className="text-base md:text-lg font-semibold text-gray-900 mb-4">{t("settings.payments_sitter.payment_history")}</h3>
 
             {earningsLoading ? (
               <div className="flex justify-center py-8">
                 <Loader2 className="animate-spin w-6 h-6 text-[#035F75]" />
               </div>
             ) : earningsHistory?.length === 0 ? (
-              <p className="text-sm text-gray-400 text-center py-8">No payment history yet.</p>
+              <p className="text-sm text-gray-400 text-center py-8">{t("settings.payments_sitter.no_history")}</p>
             ) : (
               <>
                 {/* Pending */}
                 {pendingEarnings.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-[#035F75] font-medium text-sm mb-3">Pending</p>
+                    <p className="text-[#035F75] font-medium text-sm mb-3">{t("settings.payments_sitter.pending")}</p>
                     <div className="space-y-4">
                       {pendingEarnings.map((item) => (
                         <div key={item.id} className="border-b border-gray-200 pb-4 last:border-b-0">
@@ -187,7 +189,7 @@ export default function Payments() {
                             <span className="text-base font-semibold text-gray-900">${item.amount?.toFixed(2)}</span>
                           </div>
                           <p className="text-xs font-semibold text-gray-900 mb-1">{item.description}</p>
-                          <span className="text-xs text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-full">Pending</span>
+                          <span className="text-xs text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded-full">{t("settings.payments_sitter.pending")}</span>
                         </div>
                       ))}
                     </div>
@@ -197,7 +199,7 @@ export default function Payments() {
                 {/* Completed */}
                 {completedEarnings.length > 0 && (
                   <div>
-                    <p className="text-[#035F75] font-medium text-sm mb-3">Completed</p>
+                    <p className="text-[#035F75] font-medium text-sm mb-3">{t("settings.payments_sitter.completed")}</p>
                     <div className="space-y-4">
                       {completedEarnings.map((item) => (
                         <div key={item.id} className="border-b border-gray-200 pb-4 last:border-b-0">
@@ -206,7 +208,7 @@ export default function Payments() {
                             <span className="text-base font-semibold text-gray-900">${item.amount?.toFixed(2)}</span>
                           </div>
                           <p className="text-xs font-semibold text-gray-900 mb-1">{item.description}</p>
-                          <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">Completed</span>
+                          <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full">{t("settings.payments_sitter.completed")}</span>
                         </div>
                       ))}
                     </div>
@@ -223,75 +225,75 @@ export default function Payments() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-2xl w-full max-w-sm mx-4 p-6 max-h-[90vh] overflow-y-auto">
             <h3 className="text-base font-semibold text-gray-900 mb-5">
-              Please enter payment information
+              {t("settings.payments_sitter.enter_payment_info")}
             </h3>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="name" className="text-sm text-gray-700">Name on Card</Label>
-                <Input id="name" placeholder="Name on card" value={cardForm.name} onChange={handleCardFormChange} className="mt-1" />
+                <Label htmlFor="name" className="text-sm text-gray-700">{t("settings.payments_sitter.name_on_card")}</Label>
+                <Input id="name" placeholder={t("settings.payments_sitter.name_on_card_placeholder")} value={cardForm.name} onChange={handleCardFormChange} className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="cardNumber" className="text-sm text-gray-700">Card Number</Label>
-                <Input id="cardNumber" placeholder="1234 5678 9101 1121" value={cardForm.cardNumber} onChange={handleCardFormChange} className="mt-1" />
+                <Label htmlFor="cardNumber" className="text-sm text-gray-700">{t("settings.payments_sitter.card_number")}</Label>
+                <Input id="cardNumber" placeholder={t("settings.payments_sitter.card_number_placeholder")} value={cardForm.cardNumber} onChange={handleCardFormChange} className="mt-1" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label htmlFor="expiry" className="text-sm text-gray-700">Expiration Date</Label>
-                  <Input id="expiry" placeholder="MM/YY" value={cardForm.expiry} onChange={handleCardFormChange} className="mt-1" />
+                  <Label htmlFor="expiry" className="text-sm text-gray-700">{t("settings.payments_sitter.expiration_date")}</Label>
+                  <Input id="expiry" placeholder={t("settings.payments_sitter.expiration_placeholder")} value={cardForm.expiry} onChange={handleCardFormChange} className="mt-1" />
                 </div>
                 <div>
-                  <Label htmlFor="cvv" className="text-sm text-gray-700">CVV</Label>
-                  <Input id="cvv" placeholder="123" value={cardForm.cvv} onChange={handleCardFormChange} className="mt-1" />
+                  <Label htmlFor="cvv" className="text-sm text-gray-700">{t("settings.payments_sitter.cvv")}</Label>
+                  <Input id="cvv" placeholder={t("settings.payments_sitter.cvv_placeholder")} value={cardForm.cvv} onChange={handleCardFormChange} className="mt-1" />
                 </div>
               </div>
               <div>
-                <Label htmlFor="country" className="text-sm text-gray-700">Country</Label>
+                <Label htmlFor="country" className="text-sm text-gray-700">{t("settings.payments_sitter.country")}</Label>
                 <select
                   id="country"
                   value={cardForm.country}
                   onChange={(e) => setCardForm((prev) => ({ ...prev, country: e.target.value }))}
                   className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
-                  <option>Bangladesh</option>
-                  <option>United States</option>
-                  <option>United Kingdom</option>
-                  <option>Canada</option>
-                  <option>Australia</option>
+                  <option value="Bangladesh">{t("settings.payments_sitter.countries.bangladesh")}</option>
+                  <option value="United States">{t("settings.payments_sitter.countries.us")}</option>
+                  <option value="United Kingdom">{t("settings.payments_sitter.countries.uk")}</option>
+                  <option value="Canada">{t("settings.payments_sitter.countries.canada")}</option>
+                  <option value="Australia">{t("settings.payments_sitter.countries.australia")}</option>
                 </select>
               </div>
               <div>
-                <Label htmlFor="street" className="text-sm text-gray-700">Street Name And Number</Label>
-                <Input id="street" placeholder="Street Name And Number" value={cardForm.street} onChange={handleCardFormChange} className="mt-1" />
+                <Label htmlFor="street" className="text-sm text-gray-700">{t("settings.payments_sitter.street")}</Label>
+                <Input id="street" placeholder={t("settings.payments_sitter.street_placeholder")} value={cardForm.street} onChange={handleCardFormChange} className="mt-1" />
               </div>
               <div>
-                <Label htmlFor="addressExtra" className="text-sm text-gray-700">Additional Address Details (optional)</Label>
-                <Input id="addressExtra" placeholder="Additional Address Details (optional)" value={cardForm.addressExtra} onChange={handleCardFormChange} className="mt-1" />
+                <Label htmlFor="addressExtra" className="text-sm text-gray-700">{t("settings.payments_sitter.address_extra")}</Label>
+                <Input id="addressExtra" placeholder={t("settings.payments_sitter.address_extra_placeholder")} value={cardForm.addressExtra} onChange={handleCardFormChange} className="mt-1" />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label htmlFor="city" className="text-sm text-gray-700">City/Town</Label>
-                  <Input id="city" placeholder="City" value={cardForm.city} onChange={handleCardFormChange} className="mt-1" />
+                  <Label htmlFor="city" className="text-sm text-gray-700">{t("settings.payments_sitter.city")}</Label>
+                  <Input id="city" placeholder={t("settings.payments_sitter.city_placeholder")} value={cardForm.city} onChange={handleCardFormChange} className="mt-1" />
                 </div>
                 <div>
-                  <Label htmlFor="postcode" className="text-sm text-gray-700">Postcode</Label>
-                  <Input id="postcode" placeholder="10000" value={cardForm.postcode} onChange={handleCardFormChange} className="mt-1" />
+                  <Label htmlFor="postcode" className="text-sm text-gray-700">{t("settings.payments_sitter.postcode")}</Label>
+                  <Input id="postcode" placeholder={t("settings.payments_sitter.postcode_placeholder")} value={cardForm.postcode} onChange={handleCardFormChange} className="mt-1" />
                 </div>
               </div>
 
               <div className="flex items-start gap-3 bg-[#E7F4F6] rounded-lg p-3">
                 <ShieldCheck className="w-8 h-8 text-[#035F75] flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-xs font-semibold text-gray-800">Your information is secure</p>
-                  <p className="text-xs text-gray-500 mt-0.5">We use bank-level encryption and Stripe to protect your payment information</p>
+                  <p className="text-xs font-semibold text-gray-800">{t("settings.payments_sitter.info_secure")}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{t("settings.payments_sitter.secure_desc")}</p>
                 </div>
               </div>
 
               <div className="flex gap-3 pt-1">
                 <button onClick={() => setShowModal(false)} className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors">
-                  Cancel
+                  {t("settings.payments_sitter.cancel")}
                 </button>
                 <button onClick={handleSaveCard} className="flex-1 px-4 py-3 bg-[#035F75] text-white rounded-lg font-medium text-sm hover:bg-[#024c5d] transition-colors">
-                  Save
+                  {t("settings.payments_sitter.save")}
                 </button>
               </div>
             </div>

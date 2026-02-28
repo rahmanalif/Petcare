@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export default function HeroSection() {
   const router = useRouter();
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-[#F8F4EF]">
       {/* Hero Section with Background Image */}
@@ -21,17 +23,17 @@ export default function HeroSection() {
         <div className="relative h-full flex items-center justify-center px-4 mt-24">
           <div className="backdrop-blur-md bg-white/30 border border-white/40 rounded-2xl shadow-2xl p-8 md:p-12 max-w-2xl w-full">
             <h1 className="text-4xl md:text-4xl font-bold text-[#024B5E] mb-4 text-center leading-tight font-bakso">
-              GET PAID TO PLAY WITH PETS
+              {t("sitter_home.hero.title")}
             </h1>
             <p className="text-[#024B5E] text-center text-lg mb-8 leading-relaxed font-normal font-montserra">
-              Wuffoos makes it <span className="font-normal font-montserrat">easy</span> and promotes you to the nation's largest network of pet owners, delivering dog-walking, connecting you love.
+              {t("sitter_home.hero.subtitle").split("easy")[0]}<span className="font-normal font-montserrat">easy</span>{t("sitter_home.hero.subtitle").split("easy")[1]}
             </p>
             <div className="flex justify-center">
               <button
                 onClick={() => router.push('/signup?role=pet_sitter')}
                 className="bg-[#035F75] hover:bg-[#044c5e] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105"
               >
-                Get started
+                {t("sitter_home.hero.get_started")}
               </button>
             </div>
           </div>
@@ -44,7 +46,7 @@ export default function HeroSection() {
           {/* Left Column */}
           <div>
             <h2 className="text-3xl font-bold text-[#024B5E] mb-8 font-montserrat">
-              Flexibility puts you in control
+              {t("sitter_home.hero.flexibility_title")}
             </h2>
             <div className="space-y-6">
               <div className="flex gap-4">
@@ -54,7 +56,7 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
-                  Set your own schedule and prices
+                  {t("sitter_home.hero.flexibility_1")}
                 </p>
               </div>
 
@@ -65,7 +67,7 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
-                  Offer any combination of pet care services
+                  {t("sitter_home.hero.flexibility_2")}
                 </p>
               </div>
 
@@ -76,7 +78,7 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
-                  Set the, age, and other pet preferences that work for you
+                  {t("sitter_home.hero.flexibility_3")}
                 </p>
               </div>
             </div>
@@ -85,7 +87,7 @@ export default function HeroSection() {
           {/* Right Column */}
           <div>
             <h2 className="text-3xl font-bold text-[#024B5E] mb-8">
-              The tools to succeed
+              {t("sitter_home.hero.tools_title")}
             </h2>
             <div className="space-y-6">
               <div className="flex gap-4">
@@ -96,7 +98,7 @@ export default function HeroSection() {
                 </div>
                 <div>
                   <p className="text-[#024B5E] text-lg leading-relaxed ">
-                    <span className="text-teal-600 font-semibold font-montserrat">The Wuffoos Guarantee</span> which includes up to $25,000 in vet cost reimbursement
+                    <span className="text-teal-600 font-semibold font-montserrat">{t("sitter_home.hero.tools_1")}</span> {t("sitter_home.hero.tools_1_desc")}
                   </p>
                 </div>
               </div>
@@ -108,7 +110,7 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
-                  Manage your pet sitting schedule and more with the Wuffoos app
+                  {t("sitter_home.hero.tools_2")}
                 </p>
               </div>
 
@@ -119,7 +121,7 @@ export default function HeroSection() {
                   </svg>
                 </div>
                 <p className="text-[#024B5E] text-lg leading-relaxed font-montserrat">
-                  24/7 support, including vet assistance
+                  {t("sitter_home.hero.tools_3")}
                 </p>
               </div>
             </div>

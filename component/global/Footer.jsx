@@ -2,8 +2,10 @@
 import React from 'react';
 import { Facebook, Instagram } from 'lucide-react';
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export default function WuffoosFooter() {
+  const { t } = useTranslation();
   return (
     <footer className="bg-[#D4E8EC] py-16 px-8">
       <div className="max-w-7xl mx-auto">
@@ -24,39 +26,39 @@ export default function WuffoosFooter() {
           {/* Right Section - Quick Links */}
           <div className="md:text-right">
             <h3 className="text-xl text-[#024B5E] mb-6 font-bakso uppercase tracking-wider">
-              Quick Links
+              {t("footer.quick_links")}
             </h3>
             <ul className="space-y-3 mb-8">
               <li>
                 <a href="#" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
-                  Home
+                  {t("footer.home")}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
-                  Services
+                  {t("footer.services")}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
-                  Testimonial
+                  {t("footer.testimonial")}
                 </a>
               </li>
               <li>
                 <a href="/terms" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
-                  Terms & Condition
+                  {t("footer.terms")}
                 </a>
               </li>
               <li>
                 <a href="/privacy" className="text-[#024B5E] hover:text-[#035F75] transition-colors font-montserrat">
-                  Privacy Policy
+                  {t("footer.privacy")}
                 </a>
               </li>
             </ul>
 
             {/* Social Media */}
             <div className="md:flex md:flex-col md:items-end">
-              <h4 className="text-[#024B5E] font-montserrat font-medium mb-4">Follow Us</h4>
+              <h4 className="text-[#024B5E] font-montserrat font-medium mb-4">{t("footer.follow_us")}</h4>
               <div className="flex gap-3 md:justify-end">
                 <a
                   href="#"

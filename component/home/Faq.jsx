@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const faqs = [
   {
@@ -36,6 +37,7 @@ const faqs = [
 ];
 
 export default function Faq() {
+  const { t } = useTranslation();
   const [openFaq, setOpenFaq] = useState(null);
 
   const toggleFaq = (index) => {
@@ -47,10 +49,10 @@ export default function Faq() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-[#024B5E] sm:text-4xl font-bakso">
-            Frequently Asked Questions
+            {t("faq.title")}
           </h2>
           <p className="mt-4 text-lg leading-8 text-[#024B5E]">
-            This section gives you clear and simple answers about how our AI assistant helps your business handle calls, messages, and customer requests more efficiently.
+            {t("faq.subtitle")}
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-3xl">
@@ -58,27 +60,24 @@ export default function Faq() {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className={`border rounded-lg p-6 transition-colors duration-300 ${
-                  openFaq === index
+                className={`border rounded-lg p-6 transition-colors duration-300 ${openFaq === index
                     ? "bg-[#035F75] divide-white/20"
                     : "bg-[#F8F4EF] divide-gray-900/10"
-                }`}
+                  }`}
               >
                 <dt>
                   <button
                     onClick={() => toggleFaq(index)}
                     className="flex w-full items-start justify-between text-left"
                   >
-                    <span className={`text-base font-semibold leading-7 ${
-                      openFaq === index ? "text-white" : "text-[#024B5E]"
-                    }`}>
+                    <span className={`text-base font-semibold leading-7 ${openFaq === index ? "text-white" : "text-[#024B5E]"
+                      }`}>
                       {faq.question}
                     </span>
                     <span className="ml-6 flex h-7 items-center">
                       <ChevronDown
-                        className={`h-6 w-6 transition-transform duration-300 ${
-                          openFaq === index ? "rotate-180 text-white" : "text-[#024B5E]"
-                        }`}
+                        className={`h-6 w-6 transition-transform duration-300 ${openFaq === index ? "rotate-180 text-white" : "text-[#024B5E]"
+                          }`}
                         aria-hidden="true"
                       />
                     </span>

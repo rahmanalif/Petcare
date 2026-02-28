@@ -9,8 +9,10 @@ import {
   removePromoCode,
   clearPromoError,
 } from "@/redux/bookingSlice";
+import { useTranslation } from "react-i18next";
 
 export default function ApplyPromo() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { appliedPromos, promoLoading, promoError } = useSelector(
     (state) => state.booking
@@ -30,15 +32,15 @@ export default function ApplyPromo() {
   };
 
   const formatDiscount = (item) => {
-    if (item.discountType === "percentage") return `${item.discountValue}% off`;
-    if (item.discountType === "flat") return `৳${item.discountValue} off`;
-    return "Discount applied";
+    if (item.discountType === "percentage") return t("settings.apply_promo.off_percentage", { value: item.discountValue });
+    if (item.discountType === "flat") return t("settings.apply_promo.off_flat", { value: item.discountValue });
+    return t("settings.apply_promo.discount_applied");
   };
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 lg:p-8">
       <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">
-        Apply promo codes
+        {t("settings.apply_promo.title")}
       </h2>
 
       {/* Input Section */}
@@ -47,12 +49,12 @@ export default function ApplyPromo() {
           htmlFor="promo"
           className="text-xs md:text-sm font-medium text-gray-700 mb-2 block"
         >
-          Promo Code
+          {t("settings.apply_promo.promo_code")}
         </Label>
         <div className="flex gap-2">
           <Input
             id="promo"
-            placeholder="Enter promo code"
+            placeholder={t("settings.apply_promo.enter_promo")}
             value={promoCode}
             onChange={(e) => {
               setPromoCode(e.target.value);
@@ -69,7 +71,7 @@ export default function ApplyPromo() {
             disabled={promoLoading || !promoCode.trim()}
             className="bg-teal-600 hover:bg-teal-700 text-white text-xs md:text-sm px-3 md:px-4 disabled:opacity-50"
           >
-            {promoLoading ? "Checking..." : "Apply"}
+            {promoLoading ? t("settings.apply_promo.checking") : t("settings.apply_promo.apply")}
           </Button>
         </div>
 
@@ -83,7 +85,7 @@ export default function ApplyPromo() {
       {appliedPromos.length > 0 && (
         <div>
           <h3 className="text-xs md:text-sm font-medium text-gray-700 mb-3 md:mb-4">
-            Applied Codes
+            {t("settings.apply_promo.applied_codes")}
           </h3>
           <div className="space-y-2">
             {appliedPromos.map((item) => (
@@ -106,7 +108,7 @@ export default function ApplyPromo() {
                   onClick={() => handleRemovePromo(item.code)}
                   className="px-2 md:px-3 py-1 text-xs md:text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
                 >
-                  Remove
+                  {t("settings.apply_promo.remove")}
                 </button>
               </div>
             ))}
@@ -117,7 +119,7 @@ export default function ApplyPromo() {
       {appliedPromos.length === 0 && !promoLoading && (
         <div className="text-center py-8 md:py-12">
           <p className="text-gray-500 text-sm md:text-base">
-            No promo codes applied yet.
+            {t("settings.apply_promo.no_promos")}
           </p>
         </div>
       )}

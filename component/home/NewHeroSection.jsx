@@ -88,9 +88,9 @@ export default function NewHeroSection() {
   const { t } = useTranslation();
 
   const services = [
-    { id: "boarding", label: "Boarding", icon: BoardingIcon },
-    { id: "daycare", label: "Doggy Day Care", icon: DaycareIcon },
-    { id: "walking", label: "Dog Walking", icon: WalkingIcon },
+    { id: "boarding", label: t("hero.services.boarding"), icon: BoardingIcon },
+    { id: "daycare", label: t("hero.services.daycare"), icon: DaycareIcon },
+    { id: "walking", label: t("hero.services.walking"), icon: WalkingIcon },
   ];
 
   const daysOfWeek = [
@@ -166,8 +166,7 @@ export default function NewHeroSection() {
               </span>
             </h1>
             <p className="text-white text-sm sm:text-base max-w-2xl mx-auto font-montserrat">
-              Trusted sitters, flexible bookings, and quality pet care—all in one
-              place.
+              {t("hero.description")}
             </p>
           </div>
         </div>
@@ -190,8 +189,7 @@ export default function NewHeroSection() {
               </span>
             </h1>
             <p className="text-white text-lg max-w-md xl:max-w-2xl font-montserrat">
-              Trusted sitters, flexible bookings, and quality pet care—all in one
-              place.
+              {t("hero.description")}
             </p>
           </div>
 
@@ -212,8 +210,8 @@ export default function NewHeroSection() {
                 key={service.id}
                 onClick={() => setActiveService(service.id)}
                 className={`flex flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${activeService === service.id
-                    ? "border-[#024B5E] bg-white"
-                    : "border-gray-200 hover:border-gray-300"
+                  ? "border-[#024B5E] bg-white"
+                  : "border-gray-200 hover:border-gray-300"
                   }`}
               >
                 <service.icon className="w-12 h-12 sm:w-16 sm:h-16 shrink-0" />
@@ -230,7 +228,7 @@ export default function NewHeroSection() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-3 sm:mb-4 border-2 border-gray-200 shadow-amber-50 rounded-lg p-3 sm:p-4">
               <div className="space-y-1">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                  Start date
+                  {t("hero.form.start_date")}
                 </label>
                 <DatePicker
                   value={startDate}
@@ -240,7 +238,7 @@ export default function NewHeroSection() {
               </div>
               <div className="space-y-1">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                  End date
+                  {t("hero.form.end_date")}
                 </label>
                 <DatePicker
                   value={endDate}
@@ -250,7 +248,7 @@ export default function NewHeroSection() {
               </div>
               <div className="space-y-1">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                  Start time
+                  {t("hero.form.start_time")}
                 </label>
                 <TimePicker
                   value={startTime}
@@ -260,7 +258,7 @@ export default function NewHeroSection() {
               </div>
               <div className="space-y-1">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                  End time
+                  {t("hero.form.end_time")}
                 </label>
                 <TimePicker
                   value={endTime}
@@ -275,7 +273,7 @@ export default function NewHeroSection() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 border-2 border-gray-200 shadow-amber-50 rounded-lg p-2 sm:p-3 lg:col-span-4">
                 <div className="space-y-1">
                   <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                    Start date
+                    {t("hero.form.start_date")}
                   </label>
                   <DatePicker
                     value={startDate}
@@ -285,7 +283,7 @@ export default function NewHeroSection() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                    End date
+                    {t("hero.form.end_date")}
                   </label>
                   <DatePicker
                     value={endDate}
@@ -295,7 +293,7 @@ export default function NewHeroSection() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                    Start time
+                    {t("hero.form.start_time")}
                   </label>
                   <TimePicker
                     value={startTime}
@@ -305,7 +303,7 @@ export default function NewHeroSection() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                    End time
+                    {t("hero.form.end_time")}
                   </label>
                   <TimePicker
                     value={endTime}
@@ -316,26 +314,26 @@ export default function NewHeroSection() {
               </div>
               <div className="space-y-1 border-2 border-gray-200 rounded-lg p-2 sm:p-3 h-full flex flex-col lg:col-span-2">
                 <label className="text-xs sm:text-sm text-[#024B5E] font-medium mb-2">
-                  Schedule
+                  {t("hero.form.schedule")}
                 </label>
                 <div className="flex gap-2 flex-1">
                   <button
                     onClick={() => setSchedule("onetime")}
                     className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium rounded-lg border-2 transition-all whitespace-nowrap ${schedule === "onetime"
-                        ? "bg-white text-[#024B5E] border-[#024B5E]"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-[#024B5E]"
+                      ? "bg-white text-[#024B5E] border-[#024B5E]"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-[#024B5E]"
                       }`}
                   >
-                    One Time
+                    {t("hero.form.one_time")}
                   </button>
                   <button
                     onClick={() => setSchedule("repeat")}
                     className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium rounded-lg border-2 transition-all whitespace-nowrap ${schedule === "repeat"
-                        ? "bg-white text-[#024B5E] border-[#024B5E]"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-[#024B5E]"
+                      ? "bg-white text-[#024B5E] border-[#024B5E]"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-[#024B5E]"
                       }`}
                   >
-                    Repeat Weekly
+                    {t("hero.form.repeat_weekly")}
                   </button>
                 </div>
               </div>
@@ -352,8 +350,8 @@ export default function NewHeroSection() {
                       key={day.id}
                       onClick={() => toggleDay(day.id)}
                       className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${selectedDays.includes(day.id)
-                          ? "bg-[#024B5E] text-white"
-                          : "bg-white text-[#024B5E] border-2 border-gray-200 hover:border-[#024B5E]"
+                        ? "bg-[#024B5E] text-white"
+                        : "bg-white text-[#024B5E] border-2 border-gray-200 hover:border-[#024B5E]"
                         }`}
                       title={day.full}
                     >
@@ -389,7 +387,7 @@ export default function NewHeroSection() {
                     strokeLinejoin="round"
                   />
                 </svg>
-                Search here
+                {t("hero.form.search_btn")}
               </button>
             </Link>
 

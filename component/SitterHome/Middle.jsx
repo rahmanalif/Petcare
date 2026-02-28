@@ -3,9 +3,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export default function HowItWorks() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <div className="bg-[#F8F4EF] py-12 md:py-16 px-4">
@@ -22,7 +24,7 @@ export default function HowItWorks() {
             {/* Speech Bubble */}
             <div className="absolute -bottom-15 right-12 md:right-12 max-w-[280px] z-10 hidden md:block">
               <div className=" bg-[#FE6C5D] text-[#FFF] p-6 rounded-2xl shadow-lg text-sm font-medium leading-relaxed relative">
-                It's easy. Go to the calendar and mark yourself as available when you want to be
+                {t("sitter_home.middle.speech_left")}
                 {/* Triangle Tail */}
                 {/* <div className="absolute -bottom-2 right-0 w-4 h-4 bg-[#FF6E61] transform rotate-45 translate-x-[-50%] translate-y-[-50%]"></div> */}
               </div>
@@ -30,7 +32,7 @@ export default function HowItWorks() {
             {/* Mobile Speech Bubble (Adjusted position) */}
             <div className="absolute bottom-4 right-4 max-w-60 z-10 md:hidden">
               <div className="bg-[#FE6C5D] text-[#FFF] p-4 rounded-xl  shadow-lg text-xs font-medium leading-relaxed relative">
-                It's easy. Go to the calendar and mark yourself as available when you want to be
+                {t("sitter_home.middle.speech_left")}
               </div>
             </div>
           </div>
@@ -47,13 +49,13 @@ export default function HowItWorks() {
             {/* Speech Bubble */}
             <div className="absolute -bottom-17 left-8 md:left-12 max-w-[280px] z-10 hidden md:block">
               <div className="bg-[#FF6E61] text-[#FFF] p-6 text-justify rounded-2xl  shadow-lg text-sm font-medium leading-relaxed">
-                With Wuffoos you can build trust from the first visit to the last by staying connected with pet parents by sharing photos, videos, and live location updates
+                {t("sitter_home.middle.speech_right")}
               </div>
             </div>
             {/* Mobile Speech Bubble */}
             <div className="absolute bottom-4 left-4 max-w-60 z-10 md:hidden">
               <div className="bg-[#FF6E61] text-white p-4 rounded-xl  shadow-lg text-xs font-medium leading-relaxed">
-                With Wuffoos you can build trust from the first visit to the last by staying connected with pet parents by sharing photos, videos, and live location updates
+                {t("sitter_home.middle.speech_right")}
               </div>
             </div>
           </div>
@@ -63,7 +65,7 @@ export default function HowItWorks() {
         <div className="bg-[#E7F4F6] py-16 px-8 md:px-16 pt-20">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-[#035F75] mb-12 font-bakso">
-              HOW iT WORKS
+              {t("sitter_home.middle.how_it_works")}
             </h2>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-6 xl:gap-8 text-left mb-12">
@@ -74,10 +76,10 @@ export default function HowItWorks() {
                     {/* Placeholder for Paw Icon */}
                     <img src="/paw.png" alt="paw" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Join a trusted care community</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">{t("sitter_home.middle.step_1_title")}</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
-                  Sign up, then complete your $199 MXN document validation + background check in seconds.
+                  {t("sitter_home.middle.step_1_desc")}
                 </p>
               </div>
 
@@ -87,10 +89,10 @@ export default function HowItWorks() {
                   <div className="w-6 h-6 flex items-center justify-center">
                     <img src="/iconos.png" alt="W" className="w-full h-full object-contain" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Accept requests</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">{t("sitter_home.middle.step_2_title")}</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
-                  Review each request, confirm the details, and accept the bookings that fit your schedule and preferences.
+                  {t("sitter_home.middle.step_2_desc")}
                 </p>
               </div>
 
@@ -101,10 +103,10 @@ export default function HowItWorks() {
                     {/* Placeholder for Paw Icon */}
                     <img src="/paw.png" alt="paw" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Get paid</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">{t("sitter_home.middle.step_3_title")}</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
-                  Payments are sent directly to your bank once you have completed a service.
+                  {t("sitter_home.middle.step_3_desc")}
                 </p>
               </div>
 
@@ -115,10 +117,10 @@ export default function HowItWorks() {
                     {/* Placeholder for Profile Icon */}
                     <img src="/people.png" alt="people" />
                   </div>
-                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">Create your profile</h3>
+                  <h3 className="text-base md:text-lg font-bold text-[#035F75] font-bakso">{t("sitter_home.middle.step_4_title")}</h3>
                 </div>
                 <p className="text-slate-600 leading-relaxed text-xs md:text-sm text-justify">
-                  Tell us a little about yourself and what pet services you want to offer.
+                  {t("sitter_home.middle.step_4_desc")}
                 </p>
               </div>
             </div>
@@ -127,7 +129,7 @@ export default function HowItWorks() {
               onClick={() => router.push('/signup?role=pet_sitter')}
               className="bg-[#035F75] hover:bg-[#034e61] text-white font-medium px-10 py-3 rounded-lg shadow-md transition-transform duration-200 hover:scale-105 text-sm md:text-base"
             >
-              Get started
+              {t("sitter_home.middle.get_started")}
             </button>
           </div>
         </div>

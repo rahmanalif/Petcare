@@ -9,10 +9,10 @@ import {
   createBookingIntent,
   transferToSitter,
   createConnectAccount,
-  fetchOnboardingLink,
   resetConnectAccount,
 } from "@/redux/paymentSlice"; // ✅ path adjust করো
 import BookingPayment from "@/component/settings/Bookingpayment"; // ✅ path adjust করো
+import { useTranslation } from "react-i18next";
 
 const formatCurrency = (amount, currency = "USD") => {
   return new Intl.NumberFormat("en-US", {
@@ -39,6 +39,7 @@ export default function Payments() {
     error,
   } = useSelector((state) => state.payment);
 
+  const { t } = useTranslation();
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [savedCard, setSavedCard] = useState(null);
@@ -75,7 +76,7 @@ export default function Payments() {
   const handleSaveCard = (e) => {
     e.preventDefault();
     if (!formData.cardNumber || !formData.nameOnCard) {
-      toast.error("Please fill in the required fields");
+      toast.error(t("settings.payments.fill_required"));
       return;
     }
     setSavedCard({
@@ -85,12 +86,12 @@ export default function Payments() {
       name: formData.nameOnCard,
     });
     setShowModal(false);
-    toast.success("Payment method added successfully");
+    toast.success(t("settings.payments.payment_added"));
   };
 
   const handleDeleteCard = () => {
     setSavedCard(null);
-    toast.success("Payment method removed");
+    toast.success(t("settings.payments.payment_removed"));
   };
 
   const handleConnectStripe = () => {
@@ -110,7 +111,7 @@ export default function Payments() {
         setSelectedBooking(booking);
       })
       .catch((err) => {
-        toast.error(err || "Failed to initiate payment");
+        toast.error(err || t("settings.payments.payment_failed"));
       })
       .finally(() => setPayingBookingId(null));
   };
@@ -118,8 +119,8 @@ export default function Payments() {
   const handleTransfer = (bookingId) => {
     dispatch(transferToSitter(bookingId))
       .unwrap()
-      .then(() => toast.success("Transfer successful!"))
-      .catch((err) => toast.error(err || "Transfer failed"));
+      .then(() => toast.success(t("settings.payments.transfer_success")))
+      .catch((err) => toast.error(err || t("settings.payments.transfer_failed")));
   };
 
   if (paymentHistoryLoading) {
@@ -140,17 +141,17 @@ export default function Payments() {
           {/* ✅ Stripe Connect Status */}
           <div className={`rounded-lg p-4 border ${stripeConnected ? "border-green-300 bg-green-50" : "border-orange-300 bg-orange-50"}`}>
             <p className={`text-sm font-semibold ${stripeConnected ? "text-green-700" : "text-orange-700"}`}>
-              {stripeConnected ? "✅ Stripe Connected" : "⚠️ Stripe Not Connected"}
+              {stripeConnected ? t("settings.payments.stripe_connected") : t("settings.payments.stripe_not_connected")}
             </p>
             <p className="text-xs text-gray-500 mt-1">
-              {stripeConnected ? "You can receive payments." : "Connect Stripe to receive payouts."}
+              {stripeConnected ? t("settings.payments.stripe_connected_desc") : t("settings.payments.stripe_not_connected_desc")}
             </p>
             <button
               onClick={handleConnectStripe}
               disabled={loading}
               className="mt-2 text-xs font-medium text-[#035F75] underline disabled:opacity-50"
             >
-              {loading ? "Loading..." : stripeConnected ? "Manage Account" : "Connect Stripe"}
+              {loading ? t("settings.payments.loading") : stripeConnected ? t("settings.payments.manage_account") : t("settings.payments.connect_stripe")}
             </button>
           </div>
 
@@ -160,7 +161,7 @@ export default function Payments() {
               onClick={() => setShowModal(true)}
               className="w-full py-3 px-4 border border-[#035F75] text-[#035F75] rounded-lg font-medium hover:bg-[#E7F4F6] transition-colors"
             >
-              Add or Modify a payment Method
+              {t("settings.payments.add_modify_payment_method")}
             </button>
           ) : (
             <div className="space-y-4">
@@ -179,7 +180,7 @@ export default function Payments() {
                       </button>
                     </div>
                     <div className="mt-3">
-                      <span className="bg-gray-200 text-gray-600 text-xs font-bold px-3 py-1 rounded">DEFAULT</span>
+                      <span className="bg-gray-200 text-gray-600 text-xs font-bold px-3 py-1 rounded">{t("settings.payments.default")}</span>
                     </div>
                   </div>
                 </div>
@@ -189,7 +190,7 @@ export default function Payments() {
                 onClick={() => setShowModal(true)}
                 className="w-full py-3 px-4 bg-[#035F75] text-white rounded-lg font-medium hover:bg-[#024B5E] transition-colors shadow-sm"
               >
-                Add Default Payment Method
+                {t("settings.payments.add_default_payment_method")}
               </button>
             </div>
           )}
@@ -197,14 +198,14 @@ export default function Payments() {
 
         {/* RIGHT COLUMN: Payment History */}
         <div className="lg:col-span-7 border-l border-gray-100 pl-0 lg:pl-8">
-          <h3 className="text-lg font-bold text-[#035F75] mb-4">Payment History</h3>
+          <h3 className="text-lg font-bold text-[#035F75] mb-4">{t("settings.payments.payment_history")}</h3>
 
           {error && (
             <p className="text-red-500 text-sm mb-4">{error}</p>
           )}
 
           {paymentHistory.length === 0 ? (
-            <p className="text-gray-400 text-sm">No payment history available.</p>
+            <p className="text-gray-400 text-sm">{t("settings.payments.no_history")}</p>
           ) : (
             <div className="space-y-6">
               {paymentHistory.map((booking) => (
@@ -219,20 +220,20 @@ export default function Payments() {
                   </div>
 
                   <div className="text-sm text-[#035F75] font-medium mb-2">
-                    {booking.pets?.[0]?.name || "Pet"}'s stay with {booking.sitter?.fullName || "Sitter"} from{" "}
-                    {new Date(booking.startDate).toLocaleDateString()} to{" "}
+                    {booking.pets?.[0]?.name || "Pet"}{t("settings.payments.stay_with")}{booking.sitter?.fullName || "Sitter"}{t("settings.payments.from")}
+                    {new Date(booking.startDate).toLocaleDateString()}{t("settings.payments.to")}
                     {new Date(booking.endDate).toLocaleDateString()}
                   </div>
 
                   <div className="space-y-1 text-xs text-gray-500 mb-3">
-                    <p>Tip: $0.00</p>
+                    <p>{t("settings.payments.tip")}</p>
                     {savedCard ? (
                       <p>{savedCard.brand} XXXX-{savedCard.last4}: {formatCurrency(booking.totalPrice)}</p>
                     ) : (
-                      <p>Card: {formatCurrency(booking.totalPrice)}</p>
+                      <p>{t("settings.payments.card")}{formatCurrency(booking.totalPrice)}</p>
                     )}
                     <p className={`capitalize font-medium ${booking.paymentStatus === "paid" ? "text-green-600" : "text-orange-500"}`}>
-                      Status: {booking.paymentStatus || "pending"}
+                      {t("settings.payments.status")}{booking.paymentStatus || t("settings.payments.pending")}
                     </p>
                   </div>
 
@@ -244,7 +245,7 @@ export default function Payments() {
                         disabled={payingBookingId === booking._id}
                         className="text-xs bg-[#035F75] text-white px-3 py-1.5 rounded-md hover:bg-[#024B5E] disabled:opacity-50"
                       >
-                        {payingBookingId === booking._id ? "Processing..." : "Pay Now"}
+                        {payingBookingId === booking._id ? t("settings.payments.processing") : t("settings.payments.pay_now")}
                       </button>
                     )}
                     {booking.paymentStatus === "paid" && booking.status === "completed" && (
@@ -253,7 +254,7 @@ export default function Payments() {
                         disabled={transferLoading}
                         className="text-xs border border-[#035F75] text-[#035F75] px-3 py-1.5 rounded-md hover:bg-[#E7F4F6] disabled:opacity-50"
                       >
-                        {transferLoading ? "Transferring..." : "Transfer to Sitter"}
+                        {transferLoading ? t("settings.payments.transferring") : t("settings.payments.transfer_to_sitter")}
                       </button>
                     )}
                   </div>
@@ -269,33 +270,33 @@ export default function Payments() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-xl w-full max-w-lg shadow-2xl overflow-hidden relative max-h-[90vh] overflow-y-auto">
             <div className="p-6 pb-2">
-              <h2 className="text-xl font-bold text-gray-700">Please enter payment information</h2>
+              <h2 className="text-xl font-bold text-gray-700">{t("settings.payments.enter_payment_info")}</h2>
             </div>
 
             <form onSubmit={handleSaveCard} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Name on Card</label>
-                <input name="nameOnCard" value={formData.nameOnCard} onChange={handleInputChange} type="text" placeholder="Name on card" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.name_on_card")}</label>
+                <input name="nameOnCard" value={formData.nameOnCard} onChange={handleInputChange} type="text" placeholder={t("settings.payments.name_on_card_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Card Number</label>
-                <input name="cardNumber" value={formData.cardNumber} onChange={handleInputChange} type="text" placeholder="1234 5678 9101 1121" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.card_number")}</label>
+                <input name="cardNumber" value={formData.cardNumber} onChange={handleInputChange} type="text" placeholder={t("settings.payments.card_number_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Expiration Date</label>
-                  <input name="expiryDate" value={formData.expiryDate} onChange={handleInputChange} type="text" placeholder="MM/YY" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.expiration_date")}</label>
+                  <input name="expiryDate" value={formData.expiryDate} onChange={handleInputChange} type="text" placeholder={t("settings.payments.expiration_date_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">CVV</label>
-                  <input name="cvv" value={formData.cvv} onChange={handleInputChange} type="text" placeholder="123" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.cvv")}</label>
+                  <input name="cvv" value={formData.cvv} onChange={handleInputChange} type="text" placeholder={t("settings.payments.cvv_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Country</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.country")}</label>
                 <select name="country" value={formData.country} onChange={handleInputChange} className="w-full border border-gray-300 rounded-md p-3 bg-white focus:outline-none focus:ring-1 focus:ring-[#035F75]">
                   <option value="Bangladesh">Bangladesh</option>
                   <option value="USA">USA</option>
@@ -304,39 +305,39 @@ export default function Payments() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Street Name And Number</label>
-                <input name="street" value={formData.street} onChange={handleInputChange} type="text" placeholder="Street Name And Number" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.street")}</label>
+                <input name="street" value={formData.street} onChange={handleInputChange} type="text" placeholder={t("settings.payments.street_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Additional Address Details (optional)</label>
-                <input name="additional" value={formData.additional} onChange={handleInputChange} type="text" placeholder="Additional Address Details (optional)" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.additional")}</label>
+                <input name="additional" value={formData.additional} onChange={handleInputChange} type="text" placeholder={t("settings.payments.additional_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">City/Town</label>
-                <input name="city" value={formData.city} onChange={handleInputChange} type="text" placeholder="City" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.city")}</label>
+                <input name="city" value={formData.city} onChange={handleInputChange} type="text" placeholder={t("settings.payments.city_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Postcode</label>
-                <input name="postcode" value={formData.postcode} onChange={handleInputChange} type="text" placeholder="10000" className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
+                <label className="block text-sm font-semibold text-gray-700 mb-1">{t("settings.payments.postcode")}</label>
+                <input name="postcode" value={formData.postcode} onChange={handleInputChange} type="text" placeholder={t("settings.payments.postcode_placeholder")} className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-[#035F75]" />
               </div>
 
               <div className="bg-[#E7F4F6] rounded-lg p-4 flex items-start gap-3">
                 <User className="text-[#035F75] mt-1" size={20} />
                 <div>
-                  <h4 className="font-bold text-gray-800 text-sm">Your information is secure</h4>
-                  <p className="text-xs text-gray-600 mt-1">We use bank-level encryption and Stripe to protect your payment information</p>
+                  <h4 className="font-bold text-gray-800 text-sm">{t("settings.payments.secure_info")}</h4>
+                  <p className="text-xs text-gray-600 mt-1">{t("settings.payments.secure_desc")}</p>
                 </div>
               </div>
 
               <div className="pt-2">
                 <button type="submit" className="w-full bg-[#035F75] text-white font-bold py-3 rounded-lg hover:bg-[#024B5E] transition-colors">
-                  Save
+                  {t("settings.payments.save")}
                 </button>
                 <button type="button" onClick={() => setShowModal(false)} className="w-full mt-3 text-gray-500 font-medium py-2 hover:text-gray-700">
-                  Cancel
+                  {t("settings.payments.cancel")}
                 </button>
               </div>
             </form>

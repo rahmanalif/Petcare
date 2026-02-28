@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { fetchProfile } from "@/redux/userSlice";
+import { useTranslation } from "react-i18next";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
@@ -22,6 +23,7 @@ export default function SitterNavbar() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const profileData = useSelector((state) => state.user?.data);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -63,19 +65,19 @@ export default function SitterNavbar() {
               href="/sitterdashboard"
               className="text-[#024B5E] hover:text-teal-600 transition font-medium"
             >
-              Home
+              {t("sitter_navbar.home")}
             </Link>
             <Link
               href="/create-services"
               className="text-[#024B5E] hover:text-teal-600 transition font-medium"
             >
-              Create service
+              {t("sitter_navbar.create_service")}
             </Link>
             <Link
               href="/bookingHistory"
               className="text-[#024B5E] hover:text-teal-600 transition font-medium"
             >
-              Bookings
+              {t("sitter_navbar.bookings")}
             </Link>
           </div>
 
@@ -102,7 +104,7 @@ export default function SitterNavbar() {
           ) : (
             <Link href="/login" className="hidden md:block">
               <button className="bg-red-400 hover:bg-red-500 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg">
-                Sign Up
+                {t("sitter_navbar.sign_up")}
               </button>
             </Link>
           )}
@@ -129,26 +131,26 @@ export default function SitterNavbar() {
               className="text-gray-700 hover:text-teal-600 transition font-medium py-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Home
+              {t("sitter_navbar.home")}
             </Link>
             <Link
               href="/createOrder"
               className="text-gray-700 hover:text-teal-600 transition font-medium py-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Create service
+              {t("sitter_navbar.create_service")}
             </Link>
             <Link
               href="/bookingHistory"
               className="text-gray-700 hover:text-teal-600 transition font-medium py-2"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Bookings
+              {t("sitter_navbar.bookings")}
             </Link>
             {!isAuthenticated && (
               <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                 <button className="w-full bg-red-400 hover:bg-red-500 text-white px-6 py-2.5 rounded-full font-medium transition-all hover:shadow-lg">
-                  Sign Up
+                  {t("sitter_navbar.sign_up")}
                 </button>
               </Link>
             )}

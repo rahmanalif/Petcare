@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { fetchWithAuth } from "@/lib/auth";
+import { useTranslation } from "react-i18next";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -32,6 +33,7 @@ const formatPrice = (amount, currency = "MXN") => {
 };
 
 export default function BookingHistory() {
+  const { t } = useTranslation();
   const [activeStatus, setActiveStatus] = useState("ongoing");
   const [bookingData, setBookingData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -39,18 +41,18 @@ export default function BookingHistory() {
   const router = useRouter();
 
   const statuses = [
-    { key: "ongoing", label: "On going" },
-    { key: "upcoming", label: "Upcoming" },
-    { key: "completed", label: "Completed" },
-    { key: "cancelled", label: "Cancelled" },
-    { key: "rejected", label: "Rejected" },
+    { key: "ongoing", label: t("settings.booking_history.tabs.ongoing") },
+    { key: "upcoming", label: t("settings.booking_history.tabs.upcoming") },
+    { key: "completed", label: t("settings.booking_history.tabs.completed") },
+    { key: "cancelled", label: t("settings.booking_history.tabs.cancelled") },
+    { key: "rejected", label: t("settings.booking_history.tabs.rejected") },
   ];
 
   useEffect(() => {
     const loadBookings = async () => {
       if (!API_BASE) {
         setBookingData([]);
-        setLoadError("API base URL is not configured.");
+        setLoadError(t("settings.booking_history.error_api"));
         return;
       }
       setLoading(true);
@@ -65,12 +67,12 @@ export default function BookingHistory() {
         );
         const result = await response.json();
         if (!response.ok || !result?.success) {
-          throw new Error(result?.message || "Failed to fetch bookings.");
+          throw new Error(result?.message || t("settings.booking_history.error_fetch"));
         }
         setBookingData(Array.isArray(result?.data) ? result.data : []);
       } catch (error) {
         setBookingData([]);
-        setLoadError(error?.message || "Failed to fetch bookings.");
+        setLoadError(error?.message || t("settings.booking_history.error_fetch"));
       } finally {
         setLoading(false);
       }
@@ -82,12 +84,12 @@ export default function BookingHistory() {
     () =>
       bookingData.map((booking) => ({
         id: booking?._id || Math.random().toString(36),
-        sitterName: booking?.sitter?.fullName || "Unknown Sitter",
+        sitterName: booking?.sitter?.fullName || t("settings.booking_history.unknown_sitter"),
         sitterImage: resolveImage(booking?.sitter?.profilePicture),
         rating: Number(booking?.sitter?.averageRating ?? 0),
         ratingCount: booking?.sitter?.reviewsCount ?? 0,
         date: formatDate(booking?.startDate),
-        service: booking?.serviceType || "Service",
+        service: booking?.serviceType || t("settings.booking_history.service"),
         price: formatPrice(booking?.totalPrice, booking?.currency || "MXN"),
         priceType: "Total",
         contact: booking?.sitter?.phoneNumber || "N/A",
@@ -95,7 +97,7 @@ export default function BookingHistory() {
         dropoffTime: booking?.endTime || "N/A",
         status: String(booking?.status || activeStatus).toLowerCase(),
       })),
-    [bookingData, activeStatus]
+    [bookingData, activeStatus, t]
   );
 
   const getStatusColor = (status) => {
@@ -111,8 +113,12 @@ export default function BookingHistory() {
 
   const formatStatusLabel = (status) => {
     const normalized = String(status || "").toLowerCase();
-    if (normalized === "ongoing") return "On going";
-    return normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : "Unknown";
+    if (normalized === "ongoing") return t("settings.booking_history.status.ongoing");
+    if (normalized === "upcoming") return t("settings.booking_history.status.upcoming");
+    if (normalized === "completed") return t("settings.booking_history.status.completed");
+    if (normalized === "cancelled") return t("settings.booking_history.status.cancelled");
+    if (normalized === "rejected") return t("settings.booking_history.status.rejected");
+    return normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : t("settings.booking_history.status.unknown");
   };
 
   // ✅ Status অনুযায়ী সঠিক page এ navigate করো
@@ -129,7 +135,7 @@ export default function BookingHistory() {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
-      <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E] mb-4 sm:mb-6">Order history</h2>
+      <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E] mb-4 sm:mb-6">{t("settings.booking_history.title")}</h2>
 
       {/* Status Tabs */}
       <div className="flex flex-wrap w-full gap-1 sm:gap-2 mb-4 sm:mb-8">
@@ -139,11 +145,10 @@ export default function BookingHistory() {
             <button
               key={status.key}
               onClick={() => setActiveStatus(status.key)}
-              className={`flex-1 min-w-[88px] sm:min-w-[110px] px-1 sm:px-3 py-2 rounded-md text-[9px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${
-                isActive
+              className={`flex-1 min-w-[88px] sm:min-w-[110px] px-1 sm:px-3 py-2 rounded-md text-[9px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${isActive
                   ? "bg-[#024B5E] text-white"
                   : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
-              }`}
+                }`}
             >
               {status.label}
             </button>
@@ -210,7 +215,7 @@ export default function BookingHistory() {
               </div>
 
               {/* Contact */}
-              <div className="text-sm font-semibold text-[#024B5E] mb-2">Contact</div>
+              <div className="text-sm font-semibold text-[#024B5E] mb-2">{t("settings.booking_history.contact")}</div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
                 {/* Column 1 */}
@@ -235,10 +240,10 @@ export default function BookingHistory() {
                 {/* Column 2 */}
                 <div className="space-y-2">
                   <div className="text-sm text-[#024B5E]">
-                    Pick-up time: <span className="font-semibold">{booking.pickupTime}</span>
+                    {t("settings.booking_history.pickup_time")}<span className="font-semibold">{booking.pickupTime}</span>
                   </div>
                   <div className="text-sm text-[#024B5E]">
-                    Drop-off time: <span className="font-semibold">{booking.dropoffTime}</span>
+                    {t("settings.booking_history.dropoff_time")}<span className="font-semibold">{booking.dropoffTime}</span>
                   </div>
                 </div>
 
@@ -253,7 +258,7 @@ export default function BookingHistory() {
           ))
         ) : (
           <div className="text-center py-12">
-            <p className="text-[#024B5E]">No bookings found for this status.</p>
+            <p className="text-[#024B5E]">{t("settings.booking_history.no_bookings")}</p>
           </div>
         )}
       </div>

@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import { fetchProfile, updateProfileImage, updateProfileInfo, changePassword } from "@/redux/userSlice";
 
 export default function AccountDetail() {
   const dispatch = useDispatch();
-  
+  const { t } = useTranslation();
+
 
   const { data: user, loading, updating } = useSelector((state) => state.user);
 
@@ -76,9 +78,9 @@ export default function AccountDetail() {
     try {
       // unwrap() ব্যবহার করা হয়েছে যাতে error catch করা যায়
       await dispatch(updateProfileImage(file)).unwrap();
-      toast.success("Profile picture updated!");
+      toast.success(t("settings.account_detail.success_image"));
     } catch (error) {
-      toast.error(error || "Upload failed");
+      toast.error(error || t("settings.account_detail.error_upload"));
     }
   };
 
@@ -92,15 +94,15 @@ export default function AccountDetail() {
     // পাসওয়ার্ড ভ্যালিডেশন
     if (formData.newPassword || formData.currentPassword) {
       if (!formData.currentPassword) {
-        toast.error("Please enter your current password");
+        toast.error(t("settings.account_detail.error_current_password_required"));
         return;
       }
       if (!formData.newPassword) {
-        toast.error("Please enter a new password");
+        toast.error(t("settings.account_detail.error_new_password_required"));
         return;
       }
       if (formData.newPassword !== formData.confirmPassword) {
-        toast.error("New password and confirm password do not match");
+        toast.error(t("settings.account_detail.error_password_mismatch"));
         return;
       }
     }
@@ -121,8 +123,8 @@ export default function AccountDetail() {
           currentPassword: formData.currentPassword,
           newPassword: formData.newPassword
         })).unwrap();
-        
-        toast.success("Password changed successfully");
+
+        toast.success(t("settings.account_detail.success_password_change"));
         // পাসওয়ার্ড ফিল্ড ক্লিয়ার করা
         setFormData(prev => ({
           ...prev,
@@ -132,12 +134,12 @@ export default function AccountDetail() {
         }));
       }
 
-      toast.success("Profile updated successfully");
+      toast.success(t("settings.account_detail.success_profile_update"));
       setIsEditing(false);
 
     } catch (error) {
       console.error(error);
-      toast.error(typeof error === 'string' ? error : "An error occurred while updating");
+      toast.error(typeof error === 'string' ? error : t("settings.account_detail.error_update"));
     }
   };
 
@@ -153,7 +155,7 @@ export default function AccountDetail() {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
       <div className="flex justify-between items-center mb-6 sm:mb-8">
-        <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">Account</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E]">{t("settings.account_detail.title")}</h2>
         <Button
           variant={isEditing ? "default" : "outline"}
           size="sm"
@@ -161,7 +163,7 @@ export default function AccountDetail() {
           disabled={updating} // Redux updating state
         >
           {updating && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-          {isEditing ? "Save" : "Edit"}
+          {isEditing ? t("settings.account_detail.save") : t("settings.account_detail.edit")}
         </Button>
       </div>
 
@@ -195,72 +197,72 @@ export default function AccountDetail() {
       {/* Form Fields (Same as before, simplified slightly) */}
       <div className="space-y-4 sm:space-y-6 max-w-2xl mx-auto">
         <div>
-          <Label htmlFor="fullName" className="text-sm font-medium text-[#024B5E]">Full Name</Label>
+          <Label htmlFor="fullName" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.full_name")}</Label>
           <Input id="fullName" value={formData.fullName} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
         </div>
 
         <div>
-          <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">E-mail address or phone number</Label>
+          <Label htmlFor="email" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.email_phone")}</Label>
           <Input id="email" value={formData.email} disabled={true} className="mt-1 text-[#024B5E] bg-gray-50" />
         </div>
 
         <div>
-          <Label htmlFor="street" className="text-sm font-medium text-[#024B5E]">Street</Label>
+          <Label htmlFor="street" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.street")}</Label>
           <Input id="street" value={formData.street} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="state" className="text-sm font-medium text-[#024B5E]">State</Label>
+            <Label htmlFor="state" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.state")}</Label>
             <Input id="state" value={formData.state} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
           </div>
           <div>
-            <Label htmlFor="zipCode" className="text-sm font-medium text-[#024B5E]">Zip Code</Label>
+            <Label htmlFor="zipCode" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.zip_code")}</Label>
             <Input id="zipCode" value={formData.zipCode} onChange={handleChange} disabled={!isEditing} className="mt-1 text-[#024B5E]" />
           </div>
         </div>
 
         <div>
-          <Label htmlFor="dob" className="text-sm font-medium text-[#024B5E]">Date of birth</Label>
+          <Label htmlFor="dob" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.dob")}</Label>
           <div className="relative mt-1">
             <Input id="dob" type="date" value={formData.dob} onChange={handleChange} disabled={!isEditing} className="text-[#024B5E] block w-full" />
           </div>
         </div>
 
         <div className="pt-4 border-t border-gray-100">
-            <h3 className="text-md font-semibold text-[#024B5E] mb-4">Change Password</h3>
-            <div className="space-y-4">
-                {/* Password Fields - Same as original */}
-                <div>
-                <Label htmlFor="currentPassword" className="text-sm font-medium text-[#024B5E]">Current Password</Label>
-                <div className="relative mt-1">
-                    <Input id="currentPassword" type={showCurrentPassword ? "text" : "password"} value={formData.currentPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
-                    <button type="button" onClick={() => setShowCurrentPassword(!showCurrentPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
-                    {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
-                </div>
-                </div>
-
-                <div>
-                <Label htmlFor="newPassword" className="text-sm font-medium text-[#024B5E]">New Password</Label>
-                <div className="relative mt-1">
-                    <Input id="newPassword" type={showNewPassword ? "text" : "password"} value={formData.newPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
-                    <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
-                    {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
-                </div>
-                </div>
-
-                <div>
-                <Label htmlFor="confirmPassword" className="text-sm font-medium text-[#024B5E]">Confirm Password</Label>
-                <div className="relative mt-1">
-                    <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
-                    <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
-                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
-                </div>
-                </div>
+          <h3 className="text-md font-semibold text-[#024B5E] mb-4">{t("settings.account_detail.change_password")}</h3>
+          <div className="space-y-4">
+            {/* Password Fields - Same as original */}
+            <div>
+              <Label htmlFor="currentPassword" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.current_password")}</Label>
+              <div className="relative mt-1">
+                <Input id="currentPassword" type={showCurrentPassword ? "text" : "password"} value={formData.currentPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
+                <button type="button" onClick={() => setShowCurrentPassword(!showCurrentPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
+                  {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
+
+            <div>
+              <Label htmlFor="newPassword" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.new_password")}</Label>
+              <div className="relative mt-1">
+                <Input id="newPassword" type={showNewPassword ? "text" : "password"} value={formData.newPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
+                <button type="button" onClick={() => setShowNewPassword(!showNewPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
+                  {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="confirmPassword" className="text-sm font-medium text-[#024B5E]">{t("settings.account_detail.confirm_password")}</Label>
+              <div className="relative mt-1">
+                <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} disabled={!isEditing} placeholder="••••••••" className="pr-10 text-[#024B5E]" />
+                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#024B5E]">
+                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

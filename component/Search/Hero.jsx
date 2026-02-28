@@ -1,5 +1,5 @@
-"use client";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -119,6 +119,7 @@ const CheckedIcon = ({ className = "" }) => (
 
 
 export default function FindMatchSection() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const [shouldAutoSearch, setShouldAutoSearch] = useState(false);
@@ -609,11 +610,10 @@ export default function FindMatchSection() {
         {/* Header */}
         <div className="mb-4 sm:mb-6">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#024B5E] mb-2 font-bakso">
-            Find a Match
+            {t("search.title")}
           </h1>
           <p className="text-sm sm:text-base text-[#024B5E] font-medium">
-            Add dates to see sitters who'll be available for your need. These
-            are sitters in your area, but they might not be available.
+            {t("search.subtitle")}
           </p>
         </div>
 
@@ -627,23 +627,23 @@ export default function FindMatchSection() {
                   <Button
                     variant="outline"
                     className={`flex-1 sm:flex-none border-2 text-sm sm:text-base ${!showMap
-                        ? 'bg-[#024B5E] text-white border-[#024B5E]'
-                        : 'bg-white text-[#024B5E] border-[#024B5E]'
+                      ? 'bg-[#024B5E] text-white border-[#024B5E]'
+                      : 'bg-white text-[#024B5E] border-[#024B5E]'
                       }`}
                     onClick={() => setShowMap(false)}
                   >
-                    Filter
+                    {t("search.filter")}
                     <FilterIcon />
                   </Button>
                   <Button
                     variant="outline"
                     className={`flex-1 sm:flex-none border-2 text-sm sm:text-base border-[#024B5E] ${showMap
-                        ? 'bg-[#024B5E] text-white'
-                        : 'bg-white text-[#024B5E]'
+                      ? 'bg-[#024B5E] text-white'
+                      : 'bg-white text-[#024B5E]'
                       }`}
                     onClick={() => setShowMap(true)}
                   >
-                    Location
+                    {t("search.location")}
                     <LocationIcon />
                   </Button>
                 </div>
@@ -657,15 +657,15 @@ export default function FindMatchSection() {
 
                       {/* Render found sitters on map */}
                       {sitters.map((sitter, idx) => (
-                         <MapMarker key={idx} position={[currentLocation.lat + (Math.random() * 0.02 - 0.01), currentLocation.lng + (Math.random() * 0.02 - 0.01)]}>
-                            <MapPopup>
-                              <div className="">
-                                <div className="font-semibold">{sitter.name}</div>
-                                <div className="text-sm text-[#024B5E]">{sitter.location}</div>
-                                <div className="text-sm font-semibold text-[#024B5E] mt-1">${sitter.price}/day</div>
-                              </div>
-                            </MapPopup>
-                         </MapMarker>
+                        <MapMarker key={idx} position={[currentLocation.lat + (Math.random() * 0.02 - 0.01), currentLocation.lng + (Math.random() * 0.02 - 0.01)]}>
+                          <MapPopup>
+                            <div className="">
+                              <div className="font-semibold">{sitter.name}</div>
+                              <div className="text-sm text-[#024B5E]">{sitter.location}</div>
+                              <div className="text-sm font-semibold text-[#024B5E] mt-1">${sitter.price}/day</div>
+                            </div>
+                          </MapPopup>
+                        </MapMarker>
                       ))}
                     </Map>
                   </div>
@@ -674,7 +674,7 @@ export default function FindMatchSection() {
                     {/* Looking For */}
                     <div>
                       <label className="block text-sm font-semibold mb-2">
-                        Looking For
+                        {t("search.looking_for")}
                       </label>
                       <Select value={lookingFor} onValueChange={setLookingFor} className="">
                         <SelectTrigger className="w-full flex items-center justify-between px-4 py-3 border rounded-lg">
@@ -683,15 +683,15 @@ export default function FindMatchSection() {
                         <SelectContent>
                           <SelectItem value="boarding" className={""}>
                             <img src="/icons/boardingIcon.png" alt="Boarding" className="inline-block mr-2 w-6 h-6" />
-                            Boarding
+                            {t("search.boarding")}
                           </SelectItem>
                           <SelectItem value="Doggy Day Care" className={""}>
                             <img src="/icons/doggy.png" alt="Doggy Day Care" className="inline-block mr-2 w-6 h-6" />
-                            Doggy Day Care
+                            {t("search.daycare")}
                           </SelectItem>
                           <SelectItem value="Dog Walking" className={""}>
                             <img src="/icons/walking.png" alt="Dog Walking" className="inline-block mr-2 w-6 h-6" />
-                            Dog Walking
+                            {t("search.walking")}
                           </SelectItem>
                         </SelectContent>
                       </Select>
@@ -710,8 +710,8 @@ export default function FindMatchSection() {
                             <div
                               onClick={() => setSchedule("oneTime")}
                               className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${schedule === "oneTime"
-                                  ? "border-[#024B5E] bg-[#024B5E]/5"
-                                  : "border-gray-200 hover:border-[#024B5E]"
+                                ? "border-[#024B5E] bg-[#024B5E]/5"
+                                : "border-gray-200 hover:border-[#024B5E]"
                                 }`}
                             >
                               <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
@@ -720,8 +720,8 @@ export default function FindMatchSection() {
                             <div
                               onClick={() => setSchedule("repeatWeekly")}
                               className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${schedule === "repeatWeekly"
-                                  ? "border-[#024B5E] bg-[#024B5E]/5"
-                                  : "border-gray-200 hover:border-[#024B5E]"
+                                ? "border-[#024B5E] bg-[#024B5E]/5"
+                                : "border-gray-200 hover:border-[#024B5E]"
                                 }`}
                             >
                               <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
@@ -734,7 +734,7 @@ export default function FindMatchSection() {
                         {schedule === "repeatWeekly" && (
                           <div>
                             <label className="block text-xs sm:text-sm font-semibold mb-2">
-                              Days of the week
+                              {t("search.days_of_week")}
                             </label>
                             <div className="flex gap-1 sm:gap-2 justify-between">
                               {[
@@ -754,8 +754,8 @@ export default function FindMatchSection() {
                                     }))
                                   }
                                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-colors ${selectedDays[day.key]
-                                      ? "bg-[#024B5E] text-white"
-                                      : "bg-gray-200 text-[#024B5E] hover:bg-gray-300"
+                                    ? "bg-[#024B5E] text-white"
+                                    : "bg-gray-200 text-[#024B5E] hover:bg-gray-300"
                                     }`}
                                 >
                                   {day.label}
@@ -772,7 +772,7 @@ export default function FindMatchSection() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                               <div>
                                 <label className="block text-xs font-semibold mb-1">
-                                  Start date
+                                  {t("search.start_date")}
                                 </label>
                                 <Input
                                   type="date"
@@ -783,7 +783,7 @@ export default function FindMatchSection() {
                               </div>
                               <div>
                                 <label className="block text-xs font-semibold mb-1">
-                                  End date
+                                  {t("search.end_date")}
                                 </label>
                                 <Input
                                   type="date"
@@ -798,7 +798,7 @@ export default function FindMatchSection() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                               <div>
                                 <label className="block text-xs font-semibold mb-1">
-                                  Start time
+                                  {t("search.start_time")}
                                 </label>
                                 <Input
                                   type="time"
@@ -809,7 +809,7 @@ export default function FindMatchSection() {
                               </div>
                               <div>
                                 <label className="block text-xs font-semibold mb-1">
-                                  End time
+                                  {t("search.end_time")}
                                 </label>
                                 <Input
                                   type="time"
@@ -828,28 +828,28 @@ export default function FindMatchSection() {
                         {/* Schedule */}
                         <div>
                           <label className="block text-xs sm:text-sm font-semibold mb-2">
-                            Schedule
+                            {t("search.schedule")}
                           </label>
                           <div className="grid grid-cols-2 gap-2 sm:gap-3">
                             <div
                               onClick={() => setSchedule("oneTime")}
                               className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${schedule === "oneTime"
-                                  ? "border-[#024B5E] bg-[#024B5E]/5"
-                                  : "border-gray-200 hover:border-[#024B5E]"
+                                ? "border-[#024B5E] bg-[#024B5E]/5"
+                                : "border-gray-200 hover:border-[#024B5E]"
                                 }`}
                             >
                               <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
-                              <label className="cursor-pointer">One Time</label>
+                              <label className="cursor-pointer">{t("search.one_time")}</label>
                             </div>
                             <div
                               onClick={() => setSchedule("repeatWeekly")}
                               className={`p-2 sm:p-3 border-2 rounded-lg text-center text-xs sm:text-sm cursor-pointer flex flex-col items-center transition-colors ${schedule === "repeatWeekly"
-                                  ? "border-[#024B5E] bg-[#024B5E]/5"
-                                  : "border-gray-200 hover:border-[#024B5E]"
+                                ? "border-[#024B5E] bg-[#024B5E]/5"
+                                : "border-gray-200 hover:border-[#024B5E]"
                                 }`}
                             >
                               <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 mb-1 sm:mb-2" />
-                              <label className="cursor-pointer">Repeat Weekly</label>
+                              <label className="cursor-pointer">{t("search.repeat_weekly")}</label>
                             </div>
                           </div>
                         </div>
@@ -858,7 +858,7 @@ export default function FindMatchSection() {
                         {schedule === "repeatWeekly" && (
                           <div>
                             <label className="block text-xs sm:text-sm font-semibold mb-2">
-                              Days of the week
+                              {t("search.days_of_week")}
                             </label>
                             <div className="flex gap-1 sm:gap-2 justify-between">
                               {[
@@ -878,8 +878,8 @@ export default function FindMatchSection() {
                                     }))
                                   }
                                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold transition-colors ${selectedDays[day.key]
-                                      ? "bg-[#024B5E] text-white"
-                                      : "bg-gray-200 text-[#024B5E] hover:bg-gray-300"
+                                    ? "bg-[#024B5E] text-white"
+                                    : "bg-gray-200 text-[#024B5E] hover:bg-gray-300"
                                     }`}
                                 >
                                   {day.label}
@@ -894,7 +894,7 @@ export default function FindMatchSection() {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                               <label className="block text-xs font-semibold mb-1">
-                                Start date
+                                {t("search.start_date")}
                               </label>
                               <Input
                                 type="date"
@@ -905,7 +905,7 @@ export default function FindMatchSection() {
                             </div>
                             <div>
                               <label className="block text-xs font-semibold mb-1">
-                                End date
+                                {t("search.end_date")}
                               </label>
                               <Input
                                 type="date"
@@ -920,7 +920,7 @@ export default function FindMatchSection() {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                               <label className="block text-xs font-semibold mb-1">
-                                Start time
+                                {t("search.start_time")}
                               </label>
                               <Input
                                 type="time"
@@ -931,7 +931,7 @@ export default function FindMatchSection() {
                             </div>
                             <div>
                               <label className="block text-xs font-semibold mb-1">
-                                End time
+                                {t("search.end_time")}
                               </label>
                               <Input
                                 type="time"
@@ -951,7 +951,7 @@ export default function FindMatchSection() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
                             <label className="block text-xs font-semibold mb-1">
-                              Start date
+                              {t("search.start_date")}
                             </label>
                             <Input
                               type="date"
@@ -962,7 +962,7 @@ export default function FindMatchSection() {
                           </div>
                           <div>
                             <label className="block text-xs font-semibold mb-1">
-                              End date
+                              {t("search.end_date")}
                             </label>
                             <Input
                               type="date"
@@ -977,7 +977,7 @@ export default function FindMatchSection() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           <div>
                             <label className="block text-xs font-semibold mb-1">
-                              Start time
+                              {t("search.start_time")}
                             </label>
                             <Input
                               type="time"
@@ -988,7 +988,7 @@ export default function FindMatchSection() {
                           </div>
                           <div>
                             <label className="block text-xs font-semibold mb-1">
-                              End time
+                              {t("search.end_time")}
                             </label>
                             <Input
                               type="time"
@@ -1004,10 +1004,10 @@ export default function FindMatchSection() {
                     {/* Pet Selection */}
                     <div>
                       <label className="block text-sm font-semibold mb-2">
-                        Pet
+                        {t("search.pet")}
                       </label>
                       <div className="mb-3">
-                        <span className="text-sm text-[#024B5E] font-medium">Your pets</span>
+                        <span className="text-sm text-[#024B5E] font-medium">{t("search.your_pets")}</span>
                       </div>
 
                       {/* Display Selected Pets */}
@@ -1032,7 +1032,7 @@ export default function FindMatchSection() {
                                 aria-label="Remove pet"
                               >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                  <path d="M6.75 3.25V3.5H9.25V3.25C9.25 2.91848 9.1183 2.60054 8.88388 2.36612C8.64946 2.1317 8.33152 2 8 2C7.66848 2 7.35054 2.1317 7.11612 2.36612C6.8817 2.60054 6.75 2.91848 6.75 3.25ZM5.75 3.5V3.25C5.75 2.65326 5.98705 2.08097 6.40901 1.65901C6.83097 1.23705 7.40326 1 8 1C8.59674 1 9.16903 1.23705 9.59099 1.65901C10.0129 2.08097 10.25 2.65326 10.25 3.25V3.5H14C14.1326 3.5 14.2598 3.55268 14.3536 3.64645C14.4473 3.74021 14.5 3.86739 14.5 4C14.5 4.13261 14.4473 4.25979 14.3536 4.35355C14.2598 4.44732 14.1326 4.5 14 4.5H13.246L12.3 12.784C12.2302 13.3941 11.9384 13.9572 11.4801 14.3659C11.0218 14.7746 10.4291 15.0003 9.815 15H6.185C5.57093 15.0003 4.97823 14.7746 4.51993 14.3659C4.06162 13.9572 3.76976 13.3941 3.7 12.784L2.754 4.5H2C1.86739 4.5 1.74021 4.44732 1.64645 4.35355C1.55268 4.25979 1.5 4.13261 1.5 4C1.5 3.86739 1.55268 3.74021 1.64645 3.64645C1.74021 3.55268 1.86739 3.5 2 3.5H5.75ZM4.694 12.67C4.73574 13.036 4.91068 13.3738 5.18546 13.619C5.46025 13.8643 5.81567 13.9999 6.184 14H9.8155C10.1838 13.9999 10.5393 13.8643 10.814 13.619C11.0888 13.3738 11.2638 13.036 11.3055 12.67L12.24 4.5H3.7605L4.694 12.67ZM6.5 6.25C6.63261 6.25 6.75979 6.30268 6.85355 6.39645C6.94732 6.49021 7 6.61739 7 6.75V11.75C7 11.8826 6.94732 12.0098 6.85355 12.1036C6.75979 12.1973 6.63261 12.25 6.5 12.25C6.36739 12.25 6.24021 12.1973 6.14645 12.1036C6.05268 12.0098 6 11.8826 6 11.75V6.75C6 6.61739 6.05268 6.49021 6.14645 6.39645C6.24021 6.30268 6.36739 6.25 6.5 6.25ZM10 6.75C10 6.61739 9.94732 6.49021 9.85355 6.39645C9.75979 6.30268 9.63261 6.25 9.5 6.25C9.36739 6.25 9.24021 6.30268 9.14645 6.39645C9.05268 6.49021 9 6.61739 9 6.75V11.75C9 11.8826 9.05268 12.0098 9.14645 12.1036C9.24021 12.1973 9.36739 12.25 9.5 12.25C9.63261 12.25 9.75979 12.1973 9.85355 12.1036C9.94732 12.0098 10 11.8826 10 11.75V6.75Z" fill="#F34F4F"/>
+                                  <path d="M6.75 3.25V3.5H9.25V3.25C9.25 2.91848 9.1183 2.60054 8.88388 2.36612C8.64946 2.1317 8.33152 2 8 2C7.66848 2 7.35054 2.1317 7.11612 2.36612C6.8817 2.60054 6.75 2.91848 6.75 3.25ZM5.75 3.5V3.25C5.75 2.65326 5.98705 2.08097 6.40901 1.65901C6.83097 1.23705 7.40326 1 8 1C8.59674 1 9.16903 1.23705 9.59099 1.65901C10.0129 2.08097 10.25 2.65326 10.25 3.25V3.5H14C14.1326 3.5 14.2598 3.55268 14.3536 3.64645C14.4473 3.74021 14.5 3.86739 14.5 4C14.5 4.13261 14.4473 4.25979 14.3536 4.35355C14.2598 4.44732 14.1326 4.5 14 4.5H13.246L12.3 12.784C12.2302 13.3941 11.9384 13.9572 11.4801 14.3659C11.0218 14.7746 10.4291 15.0003 9.815 15H6.185C5.57093 15.0003 4.97823 14.7746 4.51993 14.3659C4.06162 13.9572 3.76976 13.3941 3.7 12.784L2.754 4.5H2C1.86739 4.5 1.74021 4.44732 1.64645 4.35355C1.55268 4.25979 1.5 4.13261 1.5 4C1.5 3.86739 1.55268 3.74021 1.64645 3.64645C1.74021 3.55268 1.86739 3.5 2 3.5H5.75ZM4.694 12.67C4.73574 13.036 4.91068 13.3738 5.18546 13.619C5.46025 13.8643 5.81567 13.9999 6.184 14H9.8155C10.1838 13.9999 10.5393 13.8643 10.814 13.619C11.0888 13.3738 11.2638 13.036 11.3055 12.67L12.24 4.5H3.7605L4.694 12.67ZM6.5 6.25C6.63261 6.25 6.75979 6.30268 6.85355 6.39645C6.94732 6.49021 7 6.61739 7 6.75V11.75C7 11.8826 6.94732 12.0098 6.85355 12.1036C6.75979 12.1973 6.63261 12.25 6.5 12.25C6.36739 12.25 6.24021 12.1973 6.14645 12.1036C6.05268 12.0098 6 11.8826 6 11.75V6.75C6 6.61739 6.05268 6.49021 6.14645 6.39645C6.24021 6.30268 6.36739 6.25 6.5 6.25ZM10 6.75C10 6.61739 9.94732 6.49021 9.85355 6.39645C9.75979 6.30268 9.63261 6.25 9.5 6.25C9.36739 6.25 9.24021 6.30268 9.14645 6.39645C9.05268 6.49021 9 6.61739 9 6.75V11.75C9 11.8826 9.05268 12.0098 9.14645 12.1036C9.24021 12.1973 9.36739 12.25 9.5 12.25C9.63261 12.25 9.75979 12.1973 9.85355 12.1036C9.94732 12.0098 10 11.8826 10 11.75V6.75Z" fill="#F34F4F" />
                                 </svg>
                               </button>
                             </div>
@@ -1045,7 +1045,7 @@ export default function FindMatchSection() {
                         <SelectTrigger className="text-[#024B5E] border-2 border-dashed border-[#024B5E] rounded-lg px-15 py-4 hover:bg-[#E7F4F6] transition-colors h-auto min-h-[60px]">
                           <div className="flex items-center justify-center gap-2 w-full">
                             <span className="text-xl font-medium">+</span>
-                            <span className="text-base font-medium">Add your pet</span>
+                            <span className="text-base font-medium">{t("search.add_pet")}</span>
                           </div>
                         </SelectTrigger>
                         <SelectContent>
@@ -1068,13 +1068,13 @@ export default function FindMatchSection() {
                       </Select>
 
                       <p className="text-xs text-[#024B5E] mt-2">
-                        Select at least one pet to ensure a more accurate search
+                        {t("search.select_pet_hint")}
                       </p>
                     </div>
 
                     {/* Filters Section */}
                     <div className="border-t pt-4">
-                      <h3 className="font-semibold mb-4">Filters</h3>
+                      <h3 className="font-semibold mb-4">{t("search.filters_title")}</h3>
 
                       {lookingFor === "Dog Walking" ? (
                         /* Dog Walking Filters */
@@ -1083,7 +1083,7 @@ export default function FindMatchSection() {
                           <div>
 
                             <FilterOption
-                              label="Dog first aid / CPR"
+                              label={t("search.filters.dog_first_aid")}
                               checked={walkingFilters.dogFirstAid}
                               onToggle={() => toggleWalkingFilter("dogFirstAid")}
                             />
@@ -1095,20 +1095,20 @@ export default function FindMatchSection() {
                           {/* Day care type */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Day care type
+                              {t("search.filters.day_care_type")}
                             </h4>
                             <FilterOption
-                              label="In a sitter's home"
+                              label={t("search.filters.sitters_home")}
                               checked={daycareFilters.sitterAtHome}
                               onToggle={() => toggleDaycareFilter("sitterAtHome")}
                             />
                             <FilterOption
-                              label="At a sitter's facility"
+                              label={t("search.filters.sitters_facility")}
                               checked={daycareFilters.atSittersFacility}
                               onToggle={() => toggleDaycareFilter("atSittersFacility")}
                             />
                             <FilterOption
-                              label="At your home"
+                              label={t("search.filters.your_home")}
                               checked={daycareFilters.atYourHome}
                               onToggle={() => toggleDaycareFilter("atYourHome")}
                             />
@@ -1117,20 +1117,20 @@ export default function FindMatchSection() {
                           {/* Type of home */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Type of home
+                              {t("search.filters.type_of_home")}
                             </h4>
                             <FilterOption
-                              label="Home"
+                              label={t("search.filters.home")}
                               checked={daycareFilters.home}
                               onToggle={() => toggleDaycareFilter("home")}
                             />
                             <FilterOption
-                              label="Flats"
+                              label={t("search.filters.flats")}
                               checked={daycareFilters.flats}
                               onToggle={() => toggleDaycareFilter("flats")}
                             />
                             <FilterOption
-                              label="All types"
+                              label={t("search.filters.all_types")}
                               checked={daycareFilters.allTypes}
                               onToggle={() => toggleDaycareFilter("allTypes")}
                             />
@@ -1139,15 +1139,15 @@ export default function FindMatchSection() {
                           {/* Daytime availability */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Daytime availability
+                              {t("search.filters.daytime_availability")}
                             </h4>
                             <FilterOption
-                              label="Sitter is home full time"
+                              label={t("search.filters.sitter_home_full_time")}
                               checked={daycareFilters.sitterHomeFullTime}
                               onToggle={() => toggleDaycareFilter("sitterHomeFullTime")}
                             />
                             <FilterOption
-                              label="Other is at home full time"
+                              label={t("search.filters.other_home_full_time")}
                               checked={daycareFilters.otherAtHomeFullTime}
                               onToggle={() => toggleDaycareFilter("otherAtHomeFullTime")}
                             />
@@ -1156,20 +1156,20 @@ export default function FindMatchSection() {
                           {/* Home features */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Home features
+                              {t("search.filters.home_features")}
                             </h4>
                             <FilterOption
-                              label="Has fenced garden"
+                              label={t("search.filters.fenced_garden")}
                               checked={daycareFilters.hasFencedGarden}
                               onToggle={() => toggleDaycareFilter("hasFencedGarden")}
                             />
                             <FilterOption
-                              label="Pets allowed on furniture"
+                              label={t("search.filters.pets_allowed_furniture")}
                               checked={daycareFilters.petsAllowedOnFurniture}
                               onToggle={() => toggleDaycareFilter("petsAllowedOnFurniture")}
                             />
                             <FilterOption
-                              label="No smoking home"
+                              label={t("search.filters.no_smoking")}
                               checked={daycareFilters.noSmokingHome}
                               onToggle={() => toggleDaycareFilter("noSmokingHome")}
                             />
@@ -1178,25 +1178,25 @@ export default function FindMatchSection() {
                           {/* Pets in the home */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Pets in the home
+                              {t("search.filters.pets_in_home")}
                             </h4>
                             <FilterOption
-                              label="Doesn't own dogs"
+                              label={t("search.filters.no_dogs")}
                               checked={daycareFilters.doesntOwnDogs}
                               onToggle={() => toggleDaycareFilter("doesntOwnDogs")}
                             />
                             <FilterOption
-                              label="Doesn't own cats"
+                              label={t("search.filters.no_cats")}
                               checked={daycareFilters.doesntOwnCats}
                               onToggle={() => toggleDaycareFilter("doesntOwnCats")}
                             />
                             <FilterOption
-                              label="Accepts only one booking at a time"
+                              label={t("search.filters.only_one_booking")}
                               checked={daycareFilters.onlyOneBooking}
                               onToggle={() => toggleDaycareFilter("onlyOneBooking")}
                             />
                             <FilterOption
-                              label="Does not own caged pets"
+                              label={t("search.filters.no_caged_pets")}
                               checked={daycareFilters.doesntOwnCagedPets}
                               onToggle={() => toggleDaycareFilter("doesntOwnCagedPets")}
                             />
@@ -1205,20 +1205,20 @@ export default function FindMatchSection() {
                           {/* Children in the home */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Children in the home
+                              {t("search.filters.children_in_home")}
                             </h4>
                             <FilterOption
-                              label="Has no children"
+                              label={t("search.filters.no_children")}
                               checked={daycareFilters.hasNoChildren}
                               onToggle={() => toggleDaycareFilter("hasNoChildren")}
                             />
                             <FilterOption
-                              label="Has no children 0-3 years old"
+                              label={t("search.filters.no_children_0_3")}
                               checked={daycareFilters.hasNoChildren0to3}
                               onToggle={() => toggleDaycareFilter("hasNoChildren0to3")}
                             />
                             <FilterOption
-                              label="Has no children 6-12 years old"
+                              label={t("search.filters.no_children_6_12")}
                               checked={daycareFilters.hasNoChildren6to12}
                               onToggle={() => toggleDaycareFilter("hasNoChildren6to12")}
                             />
@@ -1226,24 +1226,24 @@ export default function FindMatchSection() {
 
                           {/* Others */}
                           <div>
-                            <h4 className="text-sm font-semibold mb-2">Others</h4>
+                            <h4 className="text-sm font-semibold mb-2">{t("search.filters.others")}</h4>
                             <FilterOption
-                              label="Accepts non-spayed female dogs"
+                              label={t("search.filters.non_spayed_females")}
                               checked={daycareFilters.acceptsNonSpayed}
                               onToggle={() => toggleDaycareFilter("acceptsNonSpayed")}
                             />
                             <FilterOption
-                              label="Accepts non-neutered male dogs"
+                              label={t("search.filters.non_neutered_males")}
                               checked={daycareFilters.acceptsNonNeutered}
                               onToggle={() => toggleDaycareFilter("acceptsNonNeutered")}
                             />
                             <FilterOption
-                              label="Bathing/Grooming"
+                              label={t("search.filters.bathing_grooming")}
                               checked={daycareFilters.bathingGrooming}
                               onToggle={() => toggleDaycareFilter("bathingGrooming")}
                             />
                             <FilterOption
-                              label="Dog first aid / CPR"
+                              label={t("search.filters.dog_first_aid")}
                               checked={daycareFilters.dogFirstAid}
                               onToggle={() => toggleDaycareFilter("dogFirstAid")}
                             />
@@ -1255,10 +1255,10 @@ export default function FindMatchSection() {
                           {/* Daytime availability */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Daytime availability
+                              {t("search.filters.daytime_availability")}
                             </h4>
                             <FilterOption
-                              label="Sitter is home full-time"
+                              label={t("search.filters.sitter_home_full_time")}
                               checked={filters.sitterAtHome}
                               onToggle={() => toggleFilter("sitterAtHome")}
                             />
@@ -1267,25 +1267,25 @@ export default function FindMatchSection() {
                           {/* Home features */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Home features
+                              {t("search.filters.home_features")}
                             </h4>
                             <FilterOption
-                              label="Has fenced garden"
+                              label={t("search.filters.fenced_garden")}
                               checked={filters.hasFencedGarden}
                               onToggle={() => toggleFilter("hasFencedGarden")}
                             />
                             <FilterOption
-                              label="Pets allowed on furniture"
+                              label={t("search.filters.pets_allowed_furniture")}
                               checked={filters.petsAllowed}
                               onToggle={() => toggleFilter("petsAllowed")}
                             />
                             <FilterOption
-                              label="No smoking home"
+                              label={t("search.filters.no_smoking")}
                               checked={filters.noSmokingHome}
                               onToggle={() => toggleFilter("noSmokingHome")}
                             />
                             <FilterOption
-                              label="All types"
+                              label={t("search.filters.all_types")}
                               checked={filters.allTypes}
                               onToggle={() => toggleFilter("allTypes")}
                             />
@@ -1294,25 +1294,25 @@ export default function FindMatchSection() {
                           {/* Pets in the home */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Pets in the home
+                              {t("search.filters.pets_in_home")}
                             </h4>
                             <FilterOption
-                              label="Doesn't own dogs"
+                              label={t("search.filters.no_dogs")}
                               checked={filters.doesntOwnDogs}
                               onToggle={() => toggleFilter("doesntOwnDogs")}
                             />
                             <FilterOption
-                              label="Doesn't own cats"
+                              label={t("search.filters.no_cats")}
                               checked={filters.doesntOwnCats}
                               onToggle={() => toggleFilter("doesntOwnCats")}
                             />
                             <FilterOption
-                              label="Accepts only one booking at a time"
+                              label={t("search.filters.only_one_booking")}
                               checked={filters.onlyOneBooking}
                               onToggle={() => toggleFilter("onlyOneBooking")}
                             />
                             <FilterOption
-                              label="Does not own caged pets"
+                              label={t("search.filters.no_caged_pets")}
                               checked={filters.doesntOwnCagedPets}
                               onToggle={() => toggleFilter("doesntOwnCagedPets")}
                             />
@@ -1321,20 +1321,20 @@ export default function FindMatchSection() {
                           {/* Children in the home */}
                           <div className="mb-4">
                             <h4 className="text-sm font-semibold mb-2">
-                              Children in the home
+                              {t("search.filters.children_in_home")}
                             </h4>
                             <FilterOption
-                              label="Has no children"
+                              label={t("search.filters.no_children")}
                               checked={filters.hasNoChildren}
                               onToggle={() => toggleFilter("hasNoChildren")}
                             />
                             <FilterOption
-                              label="Has no children 0-3 years old"
+                              label={t("search.filters.no_children_0_3")}
                               checked={filters.hasNoChildren0to3}
                               onToggle={() => toggleFilter("hasNoChildren0to3")}
                             />
                             <FilterOption
-                              label="Has no children 6-12 years old"
+                              label={t("search.filters.no_children_6_12")}
                               checked={filters.hasNoChildren6to12}
                               onToggle={() => toggleFilter("hasNoChildren6to12")}
                             />
@@ -1342,24 +1342,24 @@ export default function FindMatchSection() {
 
                           {/* Others */}
                           <div>
-                            <h4 className="text-sm font-semibold mb-2">Others</h4>
+                            <h4 className="text-sm font-semibold mb-2">{t("search.filters.others")}</h4>
                             <FilterOption
-                              label="Accepts non-spayed female dogs"
+                              label={t("search.filters.non_spayed_females")}
                               checked={filters.acceptsNonSpayed}
                               onToggle={() => toggleFilter("acceptsNonSpayed")}
                             />
                             <FilterOption
-                              label="Accepts non-neutered male dogs"
+                              label={t("search.filters.non_neutered_males")}
                               checked={filters.acceptsNonNeutered}
                               onToggle={() => toggleFilter("acceptsNonNeutered")}
                             />
                             <FilterOption
-                              label="Bathing/Grooming"
+                              label={t("search.filters.bathing_grooming")}
                               checked={filters.bathingGrooming}
                               onToggle={() => toggleFilter("bathingGrooming")}
                             />
                             <FilterOption
-                              label="Dog first aid / CPR"
+                              label={t("search.filters.dog_first_aid")}
                               checked={filters.dogFirstAid}
                               onToggle={() => toggleFilter("dogFirstAid")}
                             />
@@ -1376,7 +1376,7 @@ export default function FindMatchSection() {
                         className="w-full bg-[#024B5E] hover:bg-[#024a5c] text-white font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
                       >
                         {uiLoading && <Loader2 className="animate-spin w-4 h-4" />}
-                        Apply filters
+                        {t("search.apply_filters")}
                       </Button>
                     </div>
                   </>
@@ -1388,37 +1388,37 @@ export default function FindMatchSection() {
           {/* Right Section - Sitter Cards */}
           <div className="flex-1 space-y-4 sm:space-y-6">
             {uiLoading ? (
-                <div className="flex justify-center items-center h-40">
-                    <Loader2 className="animate-spin text-[#024B5E] w-8 h-8" />
-                </div>
+              <div className="flex justify-center items-center h-40">
+                <Loader2 className="animate-spin text-[#024B5E] w-8 h-8" />
+              </div>
             ) : sitters.length > 0 ? (
-                sitters.map((sitter, index) => (
-                    <SitterCard
-                      key={index}
-                      sitter={sitter}
-                      serviceType={lookingFor}
-                      searchContext={{
-                        lookingFor,
-                        startDate,
-                        endDate,
-                        startTime,
-                        endTime,
-                        schedule,
-                        selectedDays,
-                        selectedPets,
-                        filters:
-                          lookingFor === "boarding"
-                            ? filters
-                            : lookingFor === "Dog Walking"
-                              ? walkingFilters
-                              : daycareFilters,
-                      }}
-                    />
-                ))
+              sitters.map((sitter, index) => (
+                <SitterCard
+                  key={index}
+                  sitter={sitter}
+                  serviceType={lookingFor}
+                  searchContext={{
+                    lookingFor,
+                    startDate,
+                    endDate,
+                    startTime,
+                    endTime,
+                    schedule,
+                    selectedDays,
+                    selectedPets,
+                    filters:
+                      lookingFor === "boarding"
+                        ? filters
+                        : lookingFor === "Dog Walking"
+                          ? walkingFilters
+                          : daycareFilters,
+                  }}
+                />
+              ))
             ) : (
-                <div className="text-center py-10 text-gray-500">
-                    No sitters found matching your criteria.
-                </div>
+              <div className="text-center py-10 text-gray-500">
+                {t("search.no_sitters_found")}
+              </div>
             )}
           </div>
         </div>
