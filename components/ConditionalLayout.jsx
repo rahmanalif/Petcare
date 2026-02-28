@@ -5,6 +5,7 @@ import Navbar from '../component/global/Navbar';
 import SitterNavbar from '../component/global/SitterNavbar';
 import Footer from '../component/global/Footer';
 
+
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
   const { role } = useSelector((state) => state.auth);

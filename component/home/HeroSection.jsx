@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Search } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 // Custom icons to match the design
 const BoardingIcon = ({ className }) => (
@@ -46,10 +46,13 @@ const PawIcon = ({ className }) => (
 );
 
 export default function HeroSection() {
+  const { t } = useTranslation("common");
+
   const today = new Date();
   const todayFormatted = `${String(today.getMonth() + 1).padStart(2, "0")}/${String(
     today.getDate()
   ).padStart(2, "0")}/${today.getFullYear()}`;
+
   const [activeService, setActiveService] = useState("boarding");
   const [startDate, setStartDate] = useState(todayFormatted);
   const [endDate, setEndDate] = useState(todayFormatted);
@@ -59,19 +62,19 @@ export default function HeroSection() {
   const [selectedDays, setSelectedDays] = useState([]);
 
   const services = [
-    { id: "boarding", label: "Boarding", icon: BoardingIcon },
-    { id: "daycare", label: "Doggy Day Care", icon: DaycareIcon },
-    { id: "walking", label: "Dog Walking", icon: WalkingIcon },
+    { id: "boarding", label: t("hero.boarding"), icon: BoardingIcon },
+    { id: "daycare", label: t("hero.daycare"), icon: DaycareIcon },
+    { id: "walking", label: t("hero.walking"), icon: WalkingIcon },
   ];
 
   const daysOfWeek = [
-    { id: "S", label: "S", full: "Sunday" },
-    { id: "M", label: "M", full: "Monday" },
-    { id: "T", label: "T", full: "Tuesday" },
-    { id: "W", label: "W", full: "Wednesday" },
-    { id: "Th", label: "T", full: "Thursday" },
-    { id: "F", label: "F", full: "Friday" },
-    { id: "Sa", label: "S", full: "Saturday" },
+    { id: "S",  label: "S", full: t("hero.sunday") },
+    { id: "M",  label: "M", full: t("hero.monday") },
+    { id: "T",  label: "T", full: t("hero.tuesday") },
+    { id: "W",  label: "W", full: t("hero.wednesday") },
+    { id: "Th", label: "T", full: t("hero.thursday") },
+    { id: "F",  label: "F", full: t("hero.friday") },
+    { id: "Sa", label: "S", full: t("hero.saturday") },
   ];
 
   const toggleDay = (dayId) => {
@@ -102,15 +105,13 @@ export default function HeroSection() {
     },
   };
 
-  // Render form fields based on active service
   const renderFormFields = () => {
     if (activeService === "boarding") {
-      // Boarding: 4 columns - Start date, End date, Start time, End time
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6 border-2 border-gray-200 shadow-amber-50 rounded-lg p-7 sm:p-7">
-          <div className="space-y-2 ">
+          <div className="space-y-2">
             <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-              Start date
+              {t("hero.startDate")}
             </label>
             <input
               type="text"
@@ -121,7 +122,7 @@ export default function HeroSection() {
           </div>
           <div className="space-y-2">
             <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-              End date
+              {t("hero.endDate")}
             </label>
             <input
               type="text"
@@ -132,7 +133,7 @@ export default function HeroSection() {
           </div>
           <div className="space-y-2">
             <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-              Start time
+              {t("hero.startTime")}
             </label>
             <input
               type="text"
@@ -143,7 +144,7 @@ export default function HeroSection() {
           </div>
           <div className="space-y-2">
             <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-              End time
+              {t("hero.endTime")}
             </label>
             <input
               type="text"
@@ -155,13 +156,12 @@ export default function HeroSection() {
         </div>
       );
     } else {
-      // Daycare & Walking: 5 columns - Start date, End date, Start time, End time, Schedule
       return (
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6 items-stretch">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 border-2 border-gray-200 shadow-amber-50 rounded-lg p-3 sm:p-4 lg:col-span-4">
             <div className="space-y-2">
               <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                Start date
+                {t("hero.startDate")}
               </label>
               <input
                 type="text"
@@ -172,7 +172,7 @@ export default function HeroSection() {
             </div>
             <div className="space-y-2">
               <label className="text-xs sm:text-sm text-gray-500 font-medium">
-                End date
+                {t("hero.endDate")}
               </label>
               <input
                 type="text"
@@ -183,7 +183,7 @@ export default function HeroSection() {
             </div>
             <div className="space-y-2">
               <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                Start time
+                {t("hero.startTime")}
               </label>
               <input
                 type="text"
@@ -194,7 +194,7 @@ export default function HeroSection() {
             </div>
             <div className="space-y-2">
               <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-                End time
+                {t("hero.endTime")}
               </label>
               <input
                 type="text"
@@ -206,26 +206,28 @@ export default function HeroSection() {
           </div>
           <div className="space-y-2 border-2 border-gray-200 rounded-lg p-3 sm:p-4 h-full flex flex-col">
             <label className="text-xs sm:text-sm text-[#024B5E] font-medium">
-              Schedule
+              {t("hero.schedule")}
             </label>
             <div className="flex border border-gray-200 rounded-lg overflow-hidden flex-1">
               <button
                 onClick={() => setSchedule("onetime")}
-                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${schedule === "onetime"
-                  ? "bg-white text-[#024B5E] border-r border-gray-200"
-                  : "bg-gray-50 text-[#024B5E] border-r border-gray-200 hover:bg-gray-100"
-                  }`}
+                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
+                  schedule === "onetime"
+                    ? "bg-white text-[#024B5E] border-r border-gray-200"
+                    : "bg-gray-50 text-[#024B5E] border-r border-gray-200 hover:bg-gray-100"
+                }`}
               >
-                One Time
+                {t("hero.oneTime")}
               </button>
               <button
                 onClick={() => setSchedule("repeat")}
-                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${schedule === "repeat"
-                  ? "bg-white text-[#024B5E]"
-                  : "bg-gray-50 text-[#024B5E] hover:bg-gray-100"
-                  }`}
+                className={`flex-1 px-2 py-2 text-xs sm:text-sm font-medium transition-colors ${
+                  schedule === "repeat"
+                    ? "bg-white text-[#024B5E]"
+                    : "bg-gray-50 text-[#024B5E] hover:bg-gray-100"
+                }`}
               >
-                Repeat Weekly
+                {t("hero.repeatWeekly")}
               </button>
             </div>
           </div>
@@ -238,31 +240,28 @@ export default function HeroSection() {
     <div className="bg-[#F8F4EF] w-full">
       <div className="relative w-full max-w-[1669px] mx-auto pb-8 px-4 sm:px-6 lg:px-8">
         {/* Background Image Container */}
-        <div
-          className="w-full h-[600px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-size-[100%_auto] bg-bottom md:bg-cover md:bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl bg-[url('/MobileIMAGE%20.png')] md:bg-[url('/IMAGE%20(2).png')]"
-        >
+        <div className="w-full h-[600px] sm:h-[500px] md:h-[600px] lg:h-[777px] bg-size-[100%_auto] bg-bottom md:bg-cover md:bg-center bg-no-repeat rounded-lg sm:rounded-xl lg:rounded-2xl bg-[url('/MobileIMAGE%20.png')] md:bg-[url('/IMAGE%20(2).png')]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 md:pt-6 lg:pt-4 pb-8 sm:pb-12 lg:pb-16 hero-1280-up-outer">
-            {/* Left Content */}
             <div className="max-w-xl py-6 sm:py-10 md:py-12 lg:pt-6 lg:pb-20 hero-1280-up-inner">
               <h1 className="mb-4 sm:mb-6 font-bakso">
                 <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
-                  trusted Pet Care,
+                  {t("hero.headline1")}
                 </span>
                 <br />
                 <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#024B5E] leading-tight">
-                  Whenever You Need It.
+                  {t("hero.headline2")}
                 </span>
               </h1>
               <p className="text-[#024B5E] text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 font-montserrat">
-                <span className=" tracking-wide font-bakso text-[#024B5E]">
-                  Find reliable sitters, walkers, and groomers near you—book in minutes.
+                <span className="tracking-wide font-bakso text-[#024B5E]">
+                  {t("hero.subheadline")}
                 </span>
               </p>
             </div>
           </div>
         </div>
 
-        {/* Service Selection Cards - positioned to overlap the background */}
+        {/* Service Selection Cards */}
         <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 max-w-5xl mx-auto -mt-16 sm:-mt-20 md:-mt-24 lg:-mt-32 relative z-10">
           {/* Service Tabs */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -270,17 +269,13 @@ export default function HeroSection() {
               <button
                 key={service.id}
                 onClick={() => setActiveService(service.id)}
-                className={`flex flex-row sm:flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${activeService === service.id
-                  ? "border-teal-600 bg-white"
-                  : "border-gray-200 hover:border-gray-300"
-                  }`}
+                className={`flex flex-row sm:flex-col items-center justify-center gap-3 p-4 sm:p-6 rounded-lg sm:rounded-xl border-2 transition-all ${
+                  activeService === service.id
+                    ? "border-teal-600 bg-white"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
               >
-                <service.icon
-                  className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${activeService === service.id
-                    ? "text-teal-600"
-                    : "text-teal-600"
-                    }`}
-                />
+                <service.icon className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 text-teal-600" />
                 <span className="font-semibold uppercase tracking-wide text-xs sm:text-sm font-bakso text-[#024B5E]">
                   {service.label}
                 </span>
@@ -291,7 +286,7 @@ export default function HeroSection() {
           {/* Dynamic Form Fields */}
           {renderFormFields()}
 
-          {/* Bottom row with paw, day selector (for daycare), and search button */}
+          {/* Bottom row */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4">
             <div className="flex items-center gap-4">
               <div className="hidden sm:block">
@@ -303,10 +298,11 @@ export default function HeroSection() {
                     <button
                       key={day.id}
                       onClick={() => toggleDay(day.id)}
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${selectedDays.includes(day.id)
-                        ? "bg-[#024B5E] text-white"
-                        : "bg-white text-[#024B5E] border-2 border-gray-200 hover:border-[#024B5E]"
-                        }`}
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-medium text-sm sm:text-base transition-colors ${
+                        selectedDays.includes(day.id)
+                          ? "bg-[#024B5E] text-white"
+                          : "bg-white text-[#024B5E] border-2 border-gray-200 hover:border-[#024B5E]"
+                      }`}
                       title={day.full}
                     >
                       {day.label}
@@ -342,7 +338,7 @@ export default function HeroSection() {
                   strokeLinejoin="round"
                 />
               </svg>
-              Search here
+              {t("hero.searchHere")}
             </Link>
           </div>
         </div>

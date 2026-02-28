@@ -4,6 +4,7 @@ import "./globals.css";
 import ReduxProvider from "../components/providers/ReduxProvider";
 import ConditionalLayout from "../components/ConditionalLayout";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -62,7 +63,7 @@ export default function RootLayout({ children }) {
        >
         <ReduxProvider>
           <ConditionalLayout>
-            {children}
+              {children}
           </ConditionalLayout>
         </ReduxProvider>
       </body>
