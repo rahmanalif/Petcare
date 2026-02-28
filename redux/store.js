@@ -11,10 +11,10 @@ import daycareSearchReducer from './daycareSearchSlice';
 import sitterProfileReducer from './sitterProfileSlice';
 
 // New Import
-import bookingReducer from './sitter/bookingSlice';
+import bookingReducer from './bookingSlice';
 import chatReducer from './chat/chatSlice';
 import sitterReducer from './sitter/sitterSlice';
-import paymentReducer from './sitter/paymentSlice';
+import paymentReducer from './paymentSlice';
 import settingReducer from './settingSlice';
 
 

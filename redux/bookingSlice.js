@@ -107,6 +107,23 @@ export const validatePromoCode = createAsyncThunk(
   }
 );
 
+export const cancelBooking = createAsyncThunk(
+  'booking/cancelBooking',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/api/bookings/${id}/cancel`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'Failed to cancel booking');
+      return result.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const bookingSlice = createSlice({
   name: 'booking',
   initialState: {
@@ -188,7 +205,16 @@ const bookingSlice = createSlice({
       .addCase(validatePromoCode.rejected, (state, action) => {
         state.promoLoading = false;
         state.promoError = action.payload;
-      });
+      })
+      .addCase(cancelBooking.pending, (state) => { state.actionLoading = true; state.error = null; })
+.addCase(cancelBooking.fulfilled, (state) => {
+  state.actionLoading = false;
+  state.successMessage = "Booking cancelled successfully!";
+})
+.addCase(cancelBooking.rejected, (state, action) => {
+  state.actionLoading = false;
+  state.error = action.payload;
+})
   },
 });
 

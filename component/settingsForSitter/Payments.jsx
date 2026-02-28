@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSitterProfile } from "@/redux/sitter/sitterSlice";
-import { createConnectAccount, fetchOnboardingLink, fetchEarningsHistory } from "@/redux/sitter/paymentSlice";
+import { createConnectAccount, fetchOnboardingLink, fetchEarningsHistory } from "@/redux/paymentSlice";
 import { Loader2, ExternalLink, CheckCircle, Trash2, ShieldCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

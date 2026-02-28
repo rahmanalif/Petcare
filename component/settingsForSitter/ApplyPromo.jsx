@@ -8,7 +8,7 @@ import {
   validatePromoCode,
   removePromoCode,
   clearPromoError,
-} from "@/redux/sitter/bookingSlice";
+} from "@/redux/bookingSlice";
 
 export default function ApplyPromo() {
   const dispatch = useDispatch();

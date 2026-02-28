@@ -53,7 +53,6 @@ export default function BookingHistory() {
         setLoadError("API base URL is not configured.");
         return;
       }
-
       setLoading(true);
       setLoadError("");
       try {
@@ -76,7 +75,6 @@ export default function BookingHistory() {
         setLoading(false);
       }
     };
-
     loadBookings();
   }, [activeStatus]);
 
@@ -95,25 +93,19 @@ export default function BookingHistory() {
         contact: booking?.sitter?.phoneNumber || "N/A",
         pickupTime: booking?.startTime || "N/A",
         dropoffTime: booking?.endTime || "N/A",
-        status: String(booking?.type || activeStatus).toLowerCase(),
+        status: String(booking?.status || activeStatus).toLowerCase(),
       })),
     [bookingData, activeStatus]
   );
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "ongoing":
-        return "text-[#024B5E] border-b-2 border-[#024B5E] rounded-none";
-      case "completed":
-        return "bg-gray-200 text-[#024B5E]";
-      case "cancelled":
-        return "bg-red-100 text-red-700";
-      case "upcoming":
-        return "bg-blue-100 text-blue-700";
-      case "rejected":
-        return "bg-rose-100 text-rose-700";
-      default:
-        return "bg-gray-200 text-[#024B5E]";
+      case "ongoing": return "bg-[#D9F5FC] text-[#024B5E]";
+      case "completed": return "bg-gray-200 text-[#024B5E]";
+      case "cancelled": return "bg-red-100 text-red-700";
+      case "upcoming": return "bg-blue-100 text-blue-700";
+      case "rejected": return "bg-rose-100 text-rose-700";
+      default: return "bg-gray-200 text-[#024B5E]";
     }
   };
 
@@ -123,8 +115,19 @@ export default function BookingHistory() {
     return normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : "Unknown";
   };
 
-  return (
+  // ✅ Status অনুযায়ী সঠিক page এ navigate করো
+  const handleBookingClick = (booking) => {
+    const status = booking.status;
+    if (status === "ongoing") {
+      router.push(`/settings/ongoing?id=${booking.id}`);
+    } else if (status === "upcoming" || status === "confirmed") {
+      router.push(`/settings/upcoming?id=${booking.id}`);
+    } else {
+      router.push(`/settings/ongoing?id=${booking.id}`);
+    }
+  };
 
+  return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6 md:p-8">
       <h2 className="text-lg sm:text-xl font-semibold text-[#024B5E] mb-4 sm:mb-6">Order history</h2>
 
@@ -136,17 +139,17 @@ export default function BookingHistory() {
             <button
               key={status.key}
               onClick={() => setActiveStatus(status.key)}
-              className={`flex-1 min-w-[88px] sm:min-w-[110px] px-1 sm:px-3 py-2 rounded-md text-[9px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${isActive
-                ? "bg-[#024B5E] text-white"
-                : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
-                }`}
+              className={`flex-1 min-w-[88px] sm:min-w-[110px] px-1 sm:px-3 py-2 rounded-md text-[9px] sm:text-sm font-medium transition-colors whitespace-nowrap text-center ${
+                isActive
+                  ? "bg-[#024B5E] text-white"
+                  : "bg-gray-100 text-[#024B5E] hover:bg-gray-200"
+              }`}
             >
               {status.label}
             </button>
           );
         })}
       </div>
-
 
       {/* Bookings List */}
       <div className="space-y-4">
@@ -162,7 +165,7 @@ export default function BookingHistory() {
           normalizedBookings.map((booking) => (
             <div
               key={booking.id}
-              onClick={() => router.push('/settings/ongoing')}
+              onClick={() => handleBookingClick(booking)}
               className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow bg-white cursor-pointer"
             >
               {/* Header Row */}
@@ -182,7 +185,8 @@ export default function BookingHistory() {
                     <div className="flex items-center gap-1 text-xs sm:text-sm">
                       <span className="text-yellow-400">★</span>
                       <span className="font-medium">
-                        {Number.isFinite(booking.rating) ? booking.rating.toFixed(1) : "0.0"}({booking.ratingCount})
+                        {Number.isFinite(booking.rating) ? booking.rating.toFixed(1) : "0.0"}
+                        ({booking.ratingCount})
                       </span>
                     </div>
                   </div>
@@ -205,47 +209,42 @@ export default function BookingHistory() {
                 {booking.service}
               </div>
 
-              {/* Contact and Date Info */}
+              {/* Contact */}
               <div className="text-sm font-semibold text-[#024B5E] mb-2">Contact</div>
 
-              {/* 3 Column Grid Layout */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
-                {/* Column 1: Contact and Date */}
+                {/* Column 1 */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm text-[#024B5E]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                     </svg>
                     <span>{booking.contact}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-[#024B5E]">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                      <line x1="16" y1="2" x2="16" y2="6"></line>
-                      <line x1="8" y1="2" x2="8" y2="6"></line>
-                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
                     </svg>
                     <span>{booking.date}</span>
                   </div>
                 </div>
 
-                {/* Column 2: Pick-up and Drop-off times */}
+                {/* Column 2 */}
                 <div className="space-y-2">
                   <div className="text-sm text-[#024B5E]">
-                    Pick-up time: <span className="font-semibold text-[#024B5E]">{booking.pickupTime}</span>
+                    Pick-up time: <span className="font-semibold">{booking.pickupTime}</span>
                   </div>
                   <div className="text-sm text-[#024B5E]">
-                    Drop-off time: <span className="font-semibold text-[#024B5E]">{booking.dropoffTime}</span>
+                    Drop-off time: <span className="font-semibold">{booking.dropoffTime}</span>
                   </div>
                 </div>
 
-                {/* Column 3: Status Badge */}
+                {/* Column 3: Status */}
                 <div className="flex justify-start md:justify-end items-start">
-                  <span
-                    className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium whitespace-nowrap ${getStatusColor(
-                      booking.status
-                    )}`}
-                  >
+                  <span className={`px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium whitespace-nowrap ${getStatusColor(booking.status)}`}>
                     {formatStatusLabel(booking.status)}
                   </span>
                 </div>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllBookings } from "@/redux/sitter/bookingSlice";
+import { fetchAllBookings } from "@/redux/bookingSlice";
 import { 
   ArrowLeft, 
   MapPin, 

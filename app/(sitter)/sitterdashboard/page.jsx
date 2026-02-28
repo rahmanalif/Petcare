@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllBookings,
   updateBookingStatus
-} from "@/redux/sitter/bookingSlice";
+} from "@/redux/bookingSlice";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
