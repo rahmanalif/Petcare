@@ -837,5 +837,19 @@
         "create_service": "Create Service",
         "save_success": "Service settings saved successfully!",
         "save_error": "Failed to save settings"
+    },
+    "sitter_ongoing": {
+        "loading": "Loading details...",
+        "not_found": "Booking not found",
+        "ongoing_details": "Ongoing details",
+        "availability": "Availability",
+        "chat_with_owner": "Chat with Owner",
+        "chat_header": "Chat with {{name}}",
+        "live": "Live",
+        "connecting": "Connecting...",
+        "sending": "sending...",
+        "message_placeholder": "Message...",
+        "send": "Send",
+        "back": "Back"
     }
 }

@@ -18,6 +18,7 @@ import {
   addMessage,
   addOptimisticMessage,
 } from "@/redux/chat/chatSlice";
+import { useTranslation } from "react-i18next";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -47,6 +48,7 @@ const SectionHeading = ({ title, icon }) => (
 );
 
 export default function SitterOngoingDetails() {
+  const { t } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -174,8 +176,8 @@ export default function SitterOngoingDetails() {
     }
   };
 
-  if (loading) return <div className="p-10 text-center text-[#024B5E]">Loading details...</div>;
-  if (!booking) return <div className="p-10 text-center text-red-500">Booking not found</div>;
+  if (loading) return <div className="p-10 text-center text-[#024B5E]">{t("sitter_ongoing.loading")}</div>;
+  if (!booking) return <div className="p-10 text-center text-red-500">{t("sitter_ongoing.not_found")}</div>;
 
   const owner = booking.owner;
 
@@ -190,14 +192,14 @@ export default function SitterOngoingDetails() {
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-xl font-bold text-[#024B5E]">Ongoing details</h1>
+          <h1 className="text-xl font-bold text-[#024B5E]">{t("sitter_ongoing.ongoing_details")}</h1>
         </div>
 
         {/* Details View */}
         {activeView === "details" && (
           <div className="flex flex-col lg:flex-row gap-8 items-start">
             <div className="w-full lg:w-1/3 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-              <h2 className="text-[#024B5E] font-semibold mb-2">Availability</h2>
+              <h2 className="text-[#024B5E] font-semibold mb-2">{t("sitter_ongoing.availability")}</h2>
             </div>
             <div className="w-full lg:w-2/3 space-y-4">
               <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
@@ -207,7 +209,7 @@ export default function SitterOngoingDetails() {
                     onClick={() => setActiveView("chat")}
                     className="bg-[#035F75] text-white px-8 py-2.5 rounded-lg hover:bg-[#024B5E] transition"
                   >
-                    Chat with Owner
+                    {t("sitter_ongoing.chat_with_owner")}
                   </button>
                 </div>
               </div>
@@ -220,9 +222,9 @@ export default function SitterOngoingDetails() {
           <div className="max-w-2xl mx-auto bg-white rounded-lg shadow h-[600px] flex flex-col mt-4">
 
             <div className="p-4 border-b font-bold text-[#024B5E] flex justify-between items-center">
-              <span>Chat with {owner?.fullName}</span>
+              <span>{t("sitter_ongoing.chat_header", { name: owner?.fullName })}</span>
               <span className={`text-xs font-normal flex items-center gap-1 ${isSocketConnected ? "text-green-600" : "text-gray-400"}`}>
-                ● {isSocketConnected ? "Live" : "Connecting..."}
+                ● {isSocketConnected ? t("sitter_ongoing.live") : t("sitter_ongoing.connecting")}
               </span>
             </div>
 
@@ -236,18 +238,17 @@ export default function SitterOngoingDetails() {
 
                 return (
                   <div key={m._id || m.tempId || i} className={`flex ${isMine ? "justify-end" : "justify-start"}`}>
-                    <div className={`p-2 px-3 rounded-lg max-w-[80%] text-sm ${
-                      isMine
+                    <div className={`p-2 px-3 rounded-lg max-w-[80%] text-sm ${isMine
                         ? `bg-[#035F75] text-white rounded-br-none ${m.isOptimistic ? "opacity-70" : ""}`
                         : "bg-gray-200 text-gray-800 rounded-bl-none"
-                    }`}>
+                      }`}>
                       {m.messageType === "image" || isImageUrl(m.content) ? (
                         <img src={getImageUrl(m.content)} alt="sent" className="w-48 rounded-lg" />
                       ) : (
                         <span>{m.content || m.message}</span>
                       )}
                       {m.isOptimistic && (
-                        <span className="text-xs opacity-60 ml-2">sending...</span>
+                        <span className="text-xs opacity-60 ml-2">{t("sitter_ongoing.sending")}</span>
                       )}
                     </div>
                   </div>
@@ -259,7 +260,7 @@ export default function SitterOngoingDetails() {
             <form onSubmit={handleSendMessage} className="p-4 border-t flex gap-2">
               <input
                 className="flex-1 border p-2 rounded focus:outline-none focus:border-[#035F75]"
-                placeholder="Message..."
+                placeholder={t("sitter_ongoing.message_placeholder")}
                 value={messageText}
                 onChange={(e) => setMessageText(e.target.value)}
                 disabled={sending}
@@ -269,10 +270,10 @@ export default function SitterOngoingDetails() {
                 className="bg-[#035F75] text-white px-4 py-2 rounded hover:bg-[#024B5E] disabled:opacity-50"
                 disabled={!messageText.trim() || sending}
               >
-                Send
+                {t("sitter_ongoing.send")}
               </button>
               <button type="button" onClick={() => setActiveView("details")} className="text-gray-500 underline text-sm">
-                Back
+                {t("sitter_ongoing.back")}
               </button>
             </form>
           </div>

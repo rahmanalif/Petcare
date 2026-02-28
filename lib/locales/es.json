@@ -836,5 +836,19 @@
         "create_service": "Crear Servicio",
         "save_success": "¡Configuración del servicio guardada exitosamente!",
         "save_error": "Error al guardar la configuración"
+    },
+    "sitter_ongoing": {
+        "loading": "Cargando detalles...",
+        "not_found": "Reserva no encontrada",
+        "ongoing_details": "Detalles en curso",
+        "availability": "Disponibilidad",
+        "chat_with_owner": "Chatear con el dueño",
+        "chat_header": "Chat con {{name}}",
+        "live": "En vivo",
+        "connecting": "Conectando...",
+        "sending": "enviando...",
+        "message_placeholder": "Mensaje...",
+        "send": "Enviar",
+        "back": "Volver"
     }
 }
