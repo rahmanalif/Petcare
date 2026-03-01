@@ -86,6 +86,16 @@ const GlassSurface = ({
 
 // Main Register Component
 export default function WuffoosRegister() {
+  const allowedReferralSources = [
+    "Facebook",
+    "Instagram",
+    "LinkedIn",
+    "Twitter",
+    "YouTube",
+    "TikTok",
+    "Other",
+  ];
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
@@ -95,7 +105,7 @@ export default function WuffoosRegister() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [acceptPrivacy, setAcceptPrivacy] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('english');
-  const [userRole, setUserRole] = useState('pet_owner'); // Default to pet_owner
+  const [userRole, setUserRole] = useState('pet_owner'); // Default to pet owner
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -108,8 +118,11 @@ export default function WuffoosRegister() {
   // Check URL parameter for role
   useEffect(() => {
     const roleParam = searchParams.get('role');
-    if (roleParam === 'pet_sitter') {
-      setUserRole('pet_sitter');
+    if (roleParam === 'pet_sitter' || roleParam === 'sitter') {
+      setUserRole('sitter');
+    }
+    if (roleParam === 'pet_owner' || roleParam === 'owner') {
+      setUserRole('pet_owner');
     }
   }, [searchParams]);
 
@@ -126,9 +139,29 @@ export default function WuffoosRegister() {
     return;
   }
 
+  if (!formData.referralSource) {
+    setErrorMessage("Please select how you heard about us.");
+    return;
+  }
+
   dispatch(loginStart());
 
   try {
+    if (!allowedReferralSources.includes(formData.referralSource)) {
+      setErrorMessage("Please select a valid referral source.");
+      return;
+    }
+
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      password: formData.password,
+      language: selectedLanguage === "spanish" ? "Spanish" : "English",
+      referralSource: formData.referralSource,
+      role: userRole,
+      acceptPrivacy,
+    };
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/register`,
       {
@@ -137,15 +170,7 @@ export default function WuffoosRegister() {
           "Content-Type": "application/json",
         },
         credentials: "include", // 🔥 refresh token cookie
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          email: formData.email,
-          phoneNumber: formData.phoneNumber,
-          password: formData.password,
-          language: selectedLanguage,
-          referralSource: formData.referralSource,
-          role: userRole,
-        }),
+        body: JSON.stringify(payload),
       }
     );
 
@@ -175,12 +200,12 @@ export default function WuffoosRegister() {
       localStorage.setItem("refreshToken", data.refreshToken);
     }
 
-    // Role based redirect
-    if (data.role === "pet_sitter" || data.role === "sitter") {
-      router.push("/sitterdashboard");
-    } else {
-      router.push("/");
-    }
+    // Redirect to email verification after registration
+    const verifiedEmail = data.email || formData.email;
+    const verifiedRole = data.role || userRole;
+    router.push(
+      `/verify-email?email=${encodeURIComponent(verifiedEmail)}&role=${encodeURIComponent(verifiedRole)}`
+    );
 
   } catch (error) {
     const message = "Unable to create your account. Please try again.";
@@ -270,6 +295,33 @@ export default function WuffoosRegister() {
                 />
               </div>
 
+              {/* Role Selection */}
+              <div>
+                <label className="block text-white text-sm mb-2">
+                  Select your role
+                </label>
+                <select
+                  value={userRole}
+                  onChange={(e) => {
+                    setUserRole(e.target.value);
+                    if (errorMessage) setErrorMessage("");
+                  }}
+                  className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:border-white/60 transition-colors appearance-none cursor-pointer"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 1rem center',
+                  }}
+                >
+                  <option value="pet_owner" className="bg-[#0C6478] text-white">
+                    Pet Owner
+                  </option>
+                  <option value="sitter" className="bg-[#0C6478] text-white">
+                    Pet Sitter
+                  </option>
+                </select>
+              </div>
+
               {/* Password Field */}
               <div>
                 <label className="block text-white text-sm mb-2">
@@ -335,9 +387,14 @@ export default function WuffoosRegister() {
               {/* How did you hear about us */}
               <div>
                 <label className="block text-white text-sm mb-2">
-                  How did you hear about us? (Optional)
+                  How did you hear about us?
                 </label>
                 <select
+                  value={formData.referralSource}
+                  onChange={(e) => {
+                    setFormData({ ...formData, referralSource: e.target.value });
+                    if (errorMessage) setErrorMessage("");
+                  }}
                   className="w-full px-4 py-3 rounded-lg bg-transparent border border-white/30 text-white focus:outline-none focus:border-white/60 transition-colors appearance-none cursor-pointer"
                   style={{
                     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
@@ -346,20 +403,13 @@ export default function WuffoosRegister() {
                   }}
                 >
                   <option value="" className="bg-[#0C6478] text-white">Select an option</option>
-                  <option value="facebook" className="bg-[#0C6478] text-white">Facebook</option>
-                  <option value="instagram" className="bg-[#0C6478] text-white">Instagram</option>
-                  <option value="twitter" className="bg-[#0C6478] text-white">Twitter / X</option>
-                  <option value="tiktok" className="bg-[#0C6478] text-white">TikTok</option>
-                  <option value="youtube" className="bg-[#0C6478] text-white">YouTube</option>
-                  <option value="linkedin" className="bg-[#0C6478] text-white">LinkedIn</option>
-                  <option value="reddit" className="bg-[#0C6478] text-white">Reddit</option>
-                  <option value="pinterest" className="bg-[#0C6478] text-white">Pinterest</option>
-                  <option value="whatsapp" className="bg-[#0C6478] text-white">WhatsApp</option>
-                  <option value="telegram" className="bg-[#0C6478] text-white">Telegram</option>
-                  <option value="snapchat" className="bg-[#0C6478] text-white">Snapchat</option>
-                  <option value="google" className="bg-[#0C6478] text-white">Google Search</option>
-                  <option value="friend" className="bg-[#0C6478] text-white">Friend / Family</option>
-                  <option value="other" className="bg-[#0C6478] text-white">Other</option>
+                  <option value="Facebook" className="bg-[#0C6478] text-white">Facebook</option>
+                  <option value="Instagram" className="bg-[#0C6478] text-white">Instagram</option>
+                  <option value="Twitter" className="bg-[#0C6478] text-white">Twitter</option>
+                  <option value="TikTok" className="bg-[#0C6478] text-white">TikTok</option>
+                  <option value="YouTube" className="bg-[#0C6478] text-white">YouTube</option>
+                  <option value="LinkedIn" className="bg-[#0C6478] text-white">LinkedIn</option>
+                  <option value="Other" className="bg-[#0C6478] text-white">Other</option>
                 </select>
               </div>
 

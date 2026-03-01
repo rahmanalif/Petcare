@@ -47,6 +47,16 @@ const toDisplayLocation = (profile) =>
   [profile?.street, profile?.state, profile?.zipCode].filter(Boolean).join(", ") ||
   "New York, NY";
 
+const DEFAULT_COORDINATES = [40.7128, -74.006];
+const getProfileCoordinates = (profile) => {
+  const lat = Number(profile?.coordinates?.lat);
+  const lng = Number(profile?.coordinates?.lng);
+  if (Number.isFinite(lat) && Number.isFinite(lng)) {
+    return [lat, lng];
+  }
+  return DEFAULT_COORDINATES;
+};
+
 const defaultServices = [
   {
     title: "Boarding",
@@ -120,6 +130,10 @@ export default function BoardingProfile({ sitterName = "Seam Rahman", sitterId =
 
   const displayName = profile?.fullName || sitterName;
   const displayLocation = toDisplayLocation(profile);
+  const profileCoordinates = useMemo(
+    () => getProfileCoordinates(profile),
+    [profile?.coordinates?.lat, profile?.coordinates?.lng]
+  );
   const displayAvatar = resolveImage(profile?.profilePicture);
   const skills = Array.isArray(profile?.skills) ? profile.skills : [];
   const homeDetails = Array.isArray(profile?.homeDetails) ? profile.homeDetails : [];
@@ -770,13 +784,17 @@ export default function BoardingProfile({ sitterName = "Seam Rahman", sitterId =
                       <h3 className="font-semibold mb-4">
                         Location{" "}
                         <span className="text-sm font-normal text-gray-500">
-                          - New York, NY
+                          - {displayLocation}
                         </span>
                       </h3>
                       <div className="w-full h-48 rounded overflow-hidden">
-                        <Map center={[40.7128, -74.006]} zoom={13}>
+                        <Map
+                          key={`${profileCoordinates[0]}-${profileCoordinates[1]}`}
+                          center={profileCoordinates}
+                          zoom={13}
+                        >
                           <MapTileLayer />
-                          <MapMarker position={[40.7128, -74.006]} />
+                          <MapMarker position={profileCoordinates} />
                         </Map>
                       </div>
                     </CardContent>

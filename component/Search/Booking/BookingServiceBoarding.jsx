@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchPets } from "@/redux/petSlice";
 import { fetchWithAuth } from "@/lib/auth";
 import BookingStatusModal from "./BookingStatusModal";
+import BookingPaymentModal from "./BookingPaymentModal";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 const WEEK_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -365,6 +366,8 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
     type: "success",
     message: "",
   });
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentIntentData, setPaymentIntentData] = useState(null);
 
   const openResultModal = (type, message) => {
     setResultModal({ open: true, type, message });
@@ -516,7 +519,32 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
       if (!response.ok || result?.success === false) {
         throw new Error(result?.message || "Failed to create booking.");
       }
-      openResultModal("success", result?.message || "Booking created successfully.");
+      const bookingId = String(
+        result?.data?._id || result?.data?.id || result?._id || result?.booking?._id || ""
+      ).trim();
+
+      if (!bookingId) {
+        throw new Error("Booking created, but booking ID was not returned.");
+      }
+
+      const paymentResponse = await fetchWithAuth(
+        `${API_BASE}/api/payments/create-booking-intent`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ bookingId }),
+        }
+      );
+      const paymentResult = await paymentResponse.json();
+      if (!paymentResponse.ok || paymentResult?.success === false || !paymentResult?.clientSecret) {
+        throw new Error(paymentResult?.message || "Booking created, but payment intent failed.");
+      }
+
+      setPaymentIntentData({
+        ...paymentResult,
+        bookingId,
+      });
+      setPaymentModalOpen(true);
     } catch (error) {
       openResultModal("error", error?.message || "Failed to create booking.");
     } finally {
@@ -1050,6 +1078,15 @@ export default function BookingModalBoarding({ isOpen, onClose, providerData }) 
           const isSuccess = resultModal.type === "success";
           setResultModal((prev) => ({ ...prev, open: false }));
           if (isSuccess) onClose?.();
+        }}
+      />
+      <BookingPaymentModal
+        open={paymentModalOpen}
+        intentData={paymentIntentData}
+        onClose={() => setPaymentModalOpen(false)}
+        onSuccess={(message) => {
+          setPaymentModalOpen(false);
+          openResultModal("success", message || "Booking payment completed.");
         }}
       />
     </>

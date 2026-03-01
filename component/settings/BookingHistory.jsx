@@ -83,7 +83,7 @@ export default function BookingHistory() {
   const normalizedBookings = useMemo(
     () =>
       bookingData.map((booking) => ({
-        id: booking?._id || Math.random().toString(36),
+        id: booking?._id || "",
         sitterName: booking?.sitter?.fullName || "Unknown Sitter",
         sitterImage: resolveImage(booking?.sitter?.profilePicture),
         rating: Number(booking?.sitter?.averageRating ?? 0),
@@ -162,8 +162,13 @@ export default function BookingHistory() {
           normalizedBookings.map((booking) => (
             <div
               key={booking.id}
-              onClick={() => router.push('/settings/ongoing')}
-              className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow bg-white cursor-pointer"
+              onClick={() => {
+                if (!booking.id) return;
+                router.push(`/settings/ongoing?id=${booking.id}`);
+              }}
+              className={`border border-gray-200 rounded-lg p-4 sm:p-6 transition-shadow bg-white ${
+                booking.id ? "hover:shadow-md cursor-pointer" : "opacity-70 cursor-not-allowed"
+              }`}
             >
               {/* Header Row */}
               <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
