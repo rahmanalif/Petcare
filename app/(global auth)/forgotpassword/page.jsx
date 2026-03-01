@@ -33,7 +33,7 @@ export default function WuffoosRecovery() {
       }
 
       alert(data.message); // "Reset code sent to email"
-      router.push('/changepassword');
+      router.push(`/verifycode?email=${encodeURIComponent(email)}`);
 
     } catch (error) {
       alert(error.message || 'Failed to send recovery email');

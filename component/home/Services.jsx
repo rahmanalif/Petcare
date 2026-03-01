@@ -3,9 +3,7 @@
 import Image from "next/image";
 
 const handleBookNowClick = () => {
-    console.log('BOOK NOW clicked');
     const element = document.getElementById('booking-section');
-    console.log('Found element:', element);
 
     if (element) {
         // Get the element's position
