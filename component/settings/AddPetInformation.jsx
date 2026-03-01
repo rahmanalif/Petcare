@@ -17,6 +17,11 @@ export default function PetDetailsForm() {
   const [uploading, setUploading] = useState(false);
   const [petId, setPetId] = useState("6987bf7d4038a7d08c9285d6");
   const [gallery, setGallery] = useState([]); 
+  const [saveModal, setSaveModal] = useState({
+    open: false,
+    type: "success",
+    message: "",
+  });
   // NEW: State for showing image immediately
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -128,12 +133,26 @@ export default function PetDetailsForm() {
       if (res.ok) {
         setPetId(result.pet._id);
         toast.success("Pet profile saved");
-        router.push('/settings');
+        setSaveModal({
+          open: true,
+          type: "success",
+          message: "Your pet profile has been updated successfully.",
+        });
       } else {
         toast.error(result.message || "Failed to save");
+        setSaveModal({
+          open: true,
+          type: "error",
+          message: result.message || "Failed to save pet profile.",
+        });
       }
     } catch (error) {
       toast.error("An error occurred");
+      setSaveModal({
+        open: true,
+        type: "error",
+        message: "An error occurred while saving. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -290,6 +309,86 @@ export default function PetDetailsForm() {
           {loading ? "Saving..." : "Save Changes"}
         </button>
       </div>
+
+      {saveModal.open ? (
+        <div className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-2xl border border-[#D9E8EC] bg-white p-6 shadow-2xl">
+            <div
+              className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${
+                saveModal.type === "success"
+                  ? "bg-[#E7F4F6] text-[#024B5E]"
+                  : "bg-red-100 text-red-600"
+              }`}
+            >
+              {saveModal.type === "success" ? (
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.75 12.5L10.58 15.33L16.25 9.66998"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 8V12"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  <circle cx="12" cy="16" r="1" fill="currentColor" />
+                </svg>
+              )}
+            </div>
+            <h3 className="text-center text-xl font-semibold text-[#024B5E]">
+              {saveModal.type === "success" ? "Changes Saved" : "Save Failed"}
+            </h3>
+            <p className="mt-2 text-center text-sm text-[#3D6470]">
+              {saveModal.message}
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setSaveModal((prev) => ({ ...prev, open: false }))}
+                className="flex-1 rounded-xl border border-[#024B5E]/30 px-4 py-2 text-sm font-medium text-[#024B5E] hover:bg-[#F3FAFC]"
+              >
+                Stay Here
+              </button>
+              {saveModal.type === "success" ? (
+                <button
+                  type="button"
+                  onClick={() => router.push('/settings')}
+                  className="flex-1 rounded-xl bg-[#024B5E] px-4 py-2 text-sm font-medium text-white hover:bg-[#023b4a]"
+                >
+                  Go to Settings
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="flex-1 rounded-xl bg-[#024B5E] px-4 py-2 text-sm font-medium text-white hover:bg-[#023b4a]"
+                >
+                  Try Again
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

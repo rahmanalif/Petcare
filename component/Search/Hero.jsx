@@ -149,6 +149,8 @@ export default function FindMatchSection() {
   // Search Results State
   const [sitters, setSitters] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [mapSitters, setMapSitters] = useState([]);
+  const [mapLoading, setMapLoading] = useState(false);
   const [currentLocation, setCurrentLocation] = useState({ lat: 40.7128, lng: -74.0060 }); // Default to NY
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
   const { loading: boardingLoading } = useSelector((state) => state.boardingSearch);
@@ -407,6 +409,74 @@ export default function FindMatchSection() {
     }
   };
 
+  const getSitterSearchSlug = () => {
+    switch (lookingFor) {
+      case "Dog Walking":
+        return "dog-walking";
+      case "Doggy Day Care":
+        return "doggy-day-care";
+      case "boarding":
+      default:
+        return "dog-boarding";
+    }
+  };
+
+  const fetchSitterMapData = async () => {
+    if (!API_BASE) {
+      setMapSitters([]);
+      return;
+    }
+
+    try {
+      setMapLoading(true);
+      const params = new URLSearchParams({
+        serviceType: getSitterSearchSlug(),
+        lat: String(currentLocation?.lat ?? ""),
+        lng: String(currentLocation?.lng ?? ""),
+        radius: "50",
+      });
+
+      const response = await fetch(
+        `${API_BASE}/api/sitters/search?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const result = await response.json();
+
+      if (!response.ok || !result?.success || !Array.isArray(result?.data)) {
+        setMapSitters([]);
+        return;
+      }
+
+      const mapped = result.data
+        .map((sitter, index) => {
+          const lat = Number(sitter?.coordinates?.lat);
+          const lng = Number(sitter?.coordinates?.lng);
+          return {
+            id: sitter?.sitterId || sitter?._id || sitter?.id || `map-sitter-${index}`,
+            name: sitter?.fullName || sitter?.name || "Sitter",
+            location: sitter?.address || "Unknown location",
+            price: Number(sitter?.price ?? 0),
+            currency: sitter?.currency || "MXN",
+            lat,
+            lng,
+          };
+        })
+        .filter((sitter) => Number.isFinite(sitter.lat) && Number.isFinite(sitter.lng));
+
+      setMapSitters(mapped);
+    } catch (error) {
+      console.error("Failed to fetch sitter map data", error);
+      setMapSitters([]);
+    } finally {
+      setMapLoading(false);
+    }
+  };
+
   const fetchSitters = async (options = {}) => {
     const minimalMode = Boolean(options.minimalMode);
 
@@ -603,6 +673,11 @@ export default function FindMatchSection() {
     selectedDays,
   ]);
 
+  useEffect(() => {
+    if (!showMap) return;
+    fetchSitterMapData();
+  }, [showMap, lookingFor, currentLocation?.lat, currentLocation?.lng]);
+
   return (
     <div className="min-h-screen bg-[#F8F4EF] py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 text-[#024B5E]">
       <div className="max-w-7xl mx-auto">
@@ -656,17 +731,29 @@ export default function FindMatchSection() {
                       <MapZoomControl />
 
                       {/* Render found sitters on map */}
-                      {sitters.map((sitter, idx) => (
-                         <MapMarker key={idx} position={[currentLocation.lat + (Math.random() * 0.02 - 0.01), currentLocation.lng + (Math.random() * 0.02 - 0.01)]}>
+                      {mapSitters.map((sitter) => (
+                         <MapMarker key={sitter.id} position={[sitter.lat, sitter.lng]}>
                             <MapPopup>
                               <div className="">
                                 <div className="font-semibold">{sitter.name}</div>
                                 <div className="text-sm text-[#024B5E]">{sitter.location}</div>
-                                <div className="text-sm font-semibold text-[#024B5E] mt-1">${sitter.price}/day</div>
+                                <div className="text-sm font-semibold text-[#024B5E] mt-1">
+                                  ${sitter.price} {sitter.currency}
+                                </div>
                               </div>
                             </MapPopup>
                          </MapMarker>
                       ))}
+                      {mapLoading ? (
+                        <MapMarker position={[currentLocation.lat, currentLocation.lng]}>
+                          <MapPopup>
+                            <div className="flex items-center gap-2 text-sm text-[#024B5E]">
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              Loading nearby sitters...
+                            </div>
+                          </MapPopup>
+                        </MapMarker>
+                      ) : null}
                     </Map>
                   </div>
                 ) : (

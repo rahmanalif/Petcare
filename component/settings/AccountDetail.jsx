@@ -7,13 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-// Import thunks from slice
 import { fetchProfile, updateProfileImage, updateProfileInfo, changePassword } from "@/redux/userSlice";
 
 export default function AccountDetail() {
   const dispatch = useDispatch();
   
-  // Redux state থেকে ডাটা আনা
+
   const { data: user, loading, updating } = useSelector((state) => state.user);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -44,18 +43,15 @@ export default function AccountDetail() {
     return date.toISOString().split('T')[0];
   };
 
-  // ১. কম্পোনেন্ট লোড হলে ডাটা ফেচ করুন (যদি Redux এ ডাটা না থাকে)
   useEffect(() => {
     if (!user) {
       dispatch(fetchProfile());
     }
   }, [dispatch, user]);
 
-  // ২. Redux থেকে ডাটা আসলে ফর্ম আপডেট করুন
   useEffect(() => {
     if (user) {
       let profilePic = user.profilePicture || "";
-      // ইমেজ URL ঠিক করা
       if (profilePic && !profilePic.startsWith("http")) {
         profilePic = `${process.env.NEXT_PUBLIC_API_BASE_URL}/${profilePic.replace(/\\/g, '/')}`;
       }
@@ -73,7 +69,6 @@ export default function AccountDetail() {
     }
   }, [user]);
 
-  // ইমেজ আপলোড হ্যান্ডলার
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;

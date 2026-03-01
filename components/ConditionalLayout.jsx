@@ -12,6 +12,9 @@ export default function ConditionalLayout({ children }) {
   // Check if current path is an auth page
   const isAuthPage = pathname?.startsWith('/login') ||
                      pathname?.startsWith('/signup') ||
+                     pathname?.startsWith('/verifycode') ||
+                     pathname?.startsWith('/verify-email') ||
+                     pathname?.startsWith('/verify-identity') ||
                      pathname?.startsWith('/forgotpassword') ||
                      pathname?.startsWith('/changepassword');
 

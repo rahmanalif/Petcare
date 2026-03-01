@@ -58,7 +58,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${baksoSapi.variable} ${montserrat.variable} font-montserrat antialiased`}
-      >
+       suppressHydrationWarning={true} 
+       >
         <ReduxProvider>
           <ConditionalLayout>
             {children}
